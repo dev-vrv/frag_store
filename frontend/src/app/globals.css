@@ -1,0 +1,162 @@
+@import "tailwindcss";
+
+:root {
+  color-scheme: dark;
+}
+
+html,
+body {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  background: #050507;
+  color: #f4f4f5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+button,
+[role="button"],
+a,
+summary,
+select,
+label,
+input[type="button"],
+input[type="submit"],
+input[type="reset"] {
+  cursor: pointer;
+}
+
+button:disabled,
+[aria-disabled="true"],
+input:disabled,
+select:disabled {
+  cursor: not-allowed;
+}
+
+.cyber-grid {
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.08) 1px, transparent 1px);
+  background-size: 42px 42px;
+  mask-image: linear-gradient(to bottom, black 0%, black 62%, transparent 100%);
+}
+
+.cyber-scanline {
+  background-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 0.035) 50%,
+    transparent 100%
+  );
+  background-size: 100% 7px;
+  animation: cyber-scanline 7s linear infinite;
+}
+
+.cyber-reveal {
+  opacity: 0;
+  transform: translateY(26px) scale(0.98);
+  filter: blur(12px);
+  animation: cyber-reveal 900ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.cyber-reveal-delay-1 {
+  animation-delay: 80ms;
+}
+
+.cyber-reveal-delay-2 {
+  animation-delay: 180ms;
+}
+
+.cyber-reveal-delay-3 {
+  animation-delay: 300ms;
+}
+
+.cyber-reveal-delay-4 {
+  animation-delay: 430ms;
+}
+
+.cyber-reveal-delay-5 {
+  animation-delay: 560ms;
+}
+
+.cyber-glitch-text {
+  position: relative;
+  filter: drop-shadow(0 0 24px rgba(34, 211, 238, 0.24));
+  animation: cyber-text-pulse 4.5s ease-in-out infinite;
+}
+
+.cyber-hero-device {
+  opacity: 0;
+  transform: perspective(900px) rotateX(8deg) rotateY(-16deg) translateY(34px);
+  animation:
+    cyber-device-enter 1100ms cubic-bezier(0.16, 1, 0.3, 1) 260ms forwards,
+    cyber-device-float 6s ease-in-out 1500ms infinite;
+}
+
+@keyframes cyber-reveal {
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+  }
+}
+
+@keyframes cyber-device-enter {
+  to {
+    opacity: 1;
+    transform: perspective(900px) rotateX(0deg) rotateY(-7deg) translateY(0);
+  }
+}
+
+@keyframes cyber-device-float {
+  0%,
+  100% {
+    transform: perspective(900px) rotateX(0deg) rotateY(-7deg) translateY(0);
+  }
+
+  50% {
+    transform: perspective(900px) rotateX(1deg) rotateY(-5deg) translateY(-14px);
+  }
+}
+
+@keyframes cyber-scanline {
+  from {
+    background-position-y: 0;
+  }
+
+  to {
+    background-position-y: 56px;
+  }
+}
+
+@keyframes cyber-text-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 20px rgba(34, 211, 238, 0.24));
+  }
+
+  50% {
+    filter: drop-shadow(0 0 32px rgba(217, 70, 239, 0.28));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cyber-scanline,
+  .cyber-reveal,
+  .cyber-glitch-text,
+  .cyber-hero-device {
+    animation: none;
+  }
+
+  .cyber-reveal,
+  .cyber-hero-device {
+    opacity: 1;
+    transform: none;
+    filter: none;
+  }
+}
