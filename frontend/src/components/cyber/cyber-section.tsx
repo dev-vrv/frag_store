@@ -55,11 +55,11 @@ const CyberSection = React.forwardRef<HTMLElement, CyberSectionProps>(
               )}
             </div>
           ) : null}
-          <h2 className="text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+          <h2 className="font-display text-4xl font-normal tracking-[0.04em] text-white sm:text-5xl">
             {title}
           </h2>
           {subtitle ? (
-            <p className="mt-4 max-w-2xl text-base leading-7 text-zinc-400 sm:text-lg">
+            <p className="mt-4 max-w-2xl text-lg leading-8 text-zinc-400 sm:text-xl">
               {subtitle}
             </p>
           ) : null}

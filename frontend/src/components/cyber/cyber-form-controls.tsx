@@ -28,7 +28,7 @@ const CyberNativeSelect = React.forwardRef<HTMLSelectElement, CyberNativeSelectP
         {label ? (
           <label
             htmlFor={selectId}
-            className="block font-mono text-xs font-semibold uppercase tracking-[0.16em] text-zinc-300"
+            className="font-tech block text-sm font-semibold uppercase tracking-[0.1em] text-zinc-300"
           >
             {label}
           </label>
@@ -38,7 +38,7 @@ const CyberNativeSelect = React.forwardRef<HTMLSelectElement, CyberNativeSelectP
             ref={ref}
             id={selectId}
             className={cn(
-              "cyber-cut-small h-12 w-full appearance-none border border-lime-300/35 bg-black/45 px-4 pr-10 font-mono text-xs uppercase tracking-[0.14em] text-lime-100 outline-none shadow-[inset_0_0_18px_rgba(190,242,100,0.05)] transition focus-visible:border-lime-300/80 focus-visible:ring-2 focus-visible:ring-lime-300/25 disabled:cursor-not-allowed disabled:opacity-50",
+              "cyber-cut-small font-tech h-13 w-full appearance-none border border-lime-300/35 bg-black/45 px-4 pr-10 text-sm uppercase tracking-[0.1em] text-lime-100 outline-none shadow-[inset_0_0_18px_rgba(190,242,100,0.05)] transition focus-visible:border-lime-300/80 focus-visible:ring-2 focus-visible:ring-lime-300/25 disabled:cursor-not-allowed disabled:opacity-50",
               className,
             )}
             {...props}
@@ -56,7 +56,7 @@ const CyberNativeSelect = React.forwardRef<HTMLSelectElement, CyberNativeSelectP
           </select>
           <ChevronDown className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-lime-200" />
         </div>
-        {helperText ? <p className="font-mono text-xs text-zinc-500">{helperText}</p> : null}
+        {helperText ? <p className="font-tech text-sm text-zinc-500">{helperText}</p> : null}
       </div>
     );
   },
@@ -77,11 +77,11 @@ export interface CyberDropdownProps {
 function CyberDropdown({ label, items, className }: CyberDropdownProps) {
   return (
     <details className={cn("group relative w-full", className)}>
-      <summary className="cyber-cut-button flex h-12 list-none items-center justify-between border-2 border-lime-300/65 bg-zinc-950/30 px-7 font-mono text-xs font-black uppercase tracking-[0.18em] text-lime-100 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)] outline-none transition hover:bg-lime-300/10 [&::-webkit-details-marker]:hidden">
+      <summary className="cyber-cut-button font-display flex h-13 list-none items-center justify-between border-2 border-lime-300/65 bg-zinc-950/30 px-7 text-sm font-normal uppercase tracking-[0.08em] text-lime-100 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)] outline-none transition hover:bg-lime-300/10 [&::-webkit-details-marker]:hidden">
         {label}
         <ChevronDown className="size-4 transition group-open:rotate-180" />
       </summary>
-      <div className="cyber-cut-surface absolute left-0 top-[calc(100%+0.5rem)] z-40 w-64 border border-lime-300/30 bg-zinc-950/95 p-2 font-mono text-xs uppercase tracking-[0.12em] shadow-[0_0_36px_rgba(190,242,100,0.16)]">
+      <div className="cyber-cut-surface font-tech absolute left-0 top-[calc(100%+0.5rem)] z-40 w-72 border border-lime-300/30 bg-zinc-950/95 p-2 text-sm uppercase tracking-[0.08em] shadow-[0_0_36px_rgba(190,242,100,0.16)]">
         {items.map((item, index) => (
           <button
             key={index}

@@ -39,14 +39,14 @@ export function Hero() {
               </CyberBadge>
             </div>
 
-            <h1 className="cyber-reveal cyber-reveal-delay-2 mt-7 max-w-4xl text-5xl font-semibold tracking-tight text-white sm:text-7xl lg:text-8xl">
+            <h1 className="cyber-reveal cyber-reveal-delay-2 font-display mt-7 max-w-4xl text-5xl font-normal tracking-[0.03em] text-white sm:text-7xl lg:text-8xl">
               Gear up for the{" "}
               <span className="cyber-glitch-text bg-gradient-to-r from-cyan-200 via-fuchsia-200 to-lime-200 bg-clip-text text-transparent">
                 future arena
               </span>
             </h1>
 
-            <p className="cyber-reveal cyber-reveal-delay-3 mt-6 max-w-2xl text-base leading-8 text-zinc-400 sm:text-lg">
+            <p className="cyber-reveal cyber-reveal-delay-3 mt-6 max-w-2xl text-lg leading-9 text-zinc-400 sm:text-xl">
               Premium cyberpunk interface for gaming commerce: neon hardware
               drops, high-contrast dashboards, techwear-grade product cards,
               and fast conversion flows.
@@ -69,10 +69,10 @@ export function Hero() {
                   key={label}
                   className="rounded-lg border border-white/10 bg-white/[0.055] p-3 backdrop-blur-xl"
                 >
-                  <div className="font-mono text-[0.65rem] uppercase tracking-[0.16em] text-zinc-500">
+                  <div className="font-tech text-sm uppercase tracking-[0.1em] text-zinc-500">
                     {label}
                   </div>
-                  <div className="mt-1 font-mono text-lg font-semibold text-cyan-100">
+                  <div className="font-tech mt-1 text-xl font-bold text-cyan-100">
                     {value}
                   </div>
                 </div>
@@ -96,19 +96,19 @@ export function Hero() {
                   className="rounded-xl border border-cyan-300/15 bg-white/[0.055] p-5 shadow-[inset_0_0_24px_rgba(34,211,238,0.05)]"
                 >
                   <Icon className="size-5 text-cyan-200" />
-                  <div className="mt-5 font-mono text-xs uppercase tracking-[0.16em] text-zinc-500">
+                  <div className="font-tech mt-5 text-sm uppercase tracking-[0.1em] text-zinc-500">
                     {label}
                   </div>
-                  <div className="mt-2 text-2xl font-semibold text-white">{value}</div>
+                  <div className="font-display mt-2 text-3xl font-normal text-white">{value}</div>
                 </div>
               ))}
             </div>
             <div className="absolute bottom-12 left-12 right-12 overflow-hidden rounded-2xl border border-fuchsia-300/20 bg-fuchsia-400/10 p-5 shadow-[0_0_50px_rgba(217,70,239,0.16)]">
               <div className="mb-4 flex items-center justify-between">
-                <span className="font-mono text-xs uppercase tracking-[0.18em] text-fuchsia-100">
+                <span className="font-tech text-sm uppercase tracking-[0.1em] text-fuchsia-100">
                   Drop Timeline
                 </span>
-                <span className="font-mono text-xs text-lime-200">Live</span>
+                <span className="font-tech text-sm text-lime-200">Live</span>
               </div>
               <div className="space-y-3">
                 {[82, 54, 92].map((width, index) => (
@@ -125,7 +125,7 @@ export function Hero() {
         </div>
 
         <div className="cyber-reveal cyber-reveal-delay-5 absolute bottom-6 left-1/2 hidden -translate-x-1/2 flex-col items-center gap-2 text-zinc-500 sm:flex">
-          <span className="font-mono text-[0.62rem] uppercase tracking-[0.24em]">
+          <span className="font-tech text-xs uppercase tracking-[0.16em]">
             Scroll
           </span>
           <ChevronDown className="size-4 animate-bounce text-cyan-200" />

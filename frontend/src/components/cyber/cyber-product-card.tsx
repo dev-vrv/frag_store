@@ -75,9 +75,9 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
         </div>
         <div className="flex flex-1 flex-col gap-3">
           <div className="space-y-2">
-            <h3 className="text-lg font-semibold tracking-tight text-white">{title}</h3>
+            <h3 className="font-display text-2xl font-normal tracking-[0.04em] text-white">{title}</h3>
             {description ? (
-              <p className="line-clamp-2 text-sm leading-6 text-zinc-400">
+              <p className="line-clamp-2 text-base leading-7 text-zinc-400">
                 {description}
               </p>
             ) : null}
@@ -85,15 +85,15 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
           {typeof rating === "number" ? (
             <div className="flex items-center gap-1.5 text-sm text-zinc-400">
               <Star className="size-4 fill-lime-300 text-lime-300" aria-hidden="true" />
-              <span className="font-mono text-lime-100">{rating.toFixed(1)}</span>
+              <span className="font-tech text-lime-100">{rating.toFixed(1)}</span>
               <span className="text-zinc-600">/ 5</span>
             </div>
           ) : null}
           <div className="mt-auto flex items-end justify-between gap-4">
             <div>
-              <div className="font-mono text-2xl font-semibold text-red-100">{price}</div>
+              <div className="font-display text-3xl font-normal text-lime-100">{price}</div>
               {oldPrice ? (
-                <div className="font-mono text-sm text-zinc-600 line-through">{oldPrice}</div>
+                <div className="font-tech text-base text-zinc-600 line-through">{oldPrice}</div>
               ) : null}
             </div>
           </div>

@@ -1,5 +1,11 @@
 @import "tailwindcss";
 
+@theme inline {
+  --font-sans: var(--font-exo);
+  --font-mono: var(--font-jetbrains-mono);
+  --font-display: var(--font-russo);
+}
+
 :root {
   color-scheme: dark;
 }
@@ -9,10 +15,18 @@ body {
   min-height: 100%;
 }
 
+html {
+  font-size: 17px;
+}
+
 body {
   margin: 0;
   background: #050507;
   color: #f4f4f5;
+  font-family: var(--font-exo), system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.6;
+  text-rendering: geometricPrecision;
 }
 
 * {
@@ -36,6 +50,14 @@ button:disabled,
 input:disabled,
 select:disabled {
   cursor: not-allowed;
+}
+
+.font-display {
+  font-family: var(--font-russo), var(--font-exo), system-ui, sans-serif;
+}
+
+.font-tech {
+  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
 }
 
 .cyber-grid {

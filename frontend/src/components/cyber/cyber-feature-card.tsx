@@ -39,8 +39,8 @@ const CyberFeatureCard = React.forwardRef<HTMLDivElement, CyberFeatureCardProps>
         >
           {icon}
         </div>
-        <h3 className="text-lg font-semibold text-white">{title}</h3>
-        <p className="mt-3 text-sm leading-6 text-zinc-400">{description}</p>
+        <h3 className="font-display text-2xl font-normal tracking-[0.04em] text-white">{title}</h3>
+        <p className="mt-3 text-base leading-7 text-zinc-400">{description}</p>
       </CyberCardContent>
     </CyberCard>
   ),

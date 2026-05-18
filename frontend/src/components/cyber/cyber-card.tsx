@@ -54,7 +54,17 @@ const CyberCard = React.forwardRef<HTMLDivElement, CyberCardProps>(
 CyberCard.displayName = "CyberCard";
 
 const CyberCardHeader = CardHeader;
-const CyberCardTitle = CardTitle;
+const CyberCardTitle = React.forwardRef<
+  HTMLDivElement,
+  React.ComponentProps<typeof CardTitle>
+>(({ className, ...props }, ref) => (
+  <CardTitle
+    ref={ref}
+    className={cn("font-display text-xl font-normal tracking-[0.04em]", className)}
+    {...props}
+  />
+));
+CyberCardTitle.displayName = "CyberCardTitle";
 const CyberCardDescription = CardDescription;
 const CyberCardContent = CardContent;
 const CyberCardFooter = CardFooter;
