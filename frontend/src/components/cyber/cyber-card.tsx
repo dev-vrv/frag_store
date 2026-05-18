@@ -24,10 +24,10 @@ const cyberCardVariants = cva(
         glass:
           "border-white/12 bg-white/[0.065] shadow-2xl shadow-black/30 backdrop-blur-xl",
         product:
-          "border-white/10 bg-[linear-gradient(180deg,rgba(39,39,42,0.82),rgba(9,9,11,0.96))] shadow-2xl shadow-black/30 hover:border-red-300/35 hover:shadow-[0_0_38px_rgba(248,113,113,0.16)]",
+          "border-white/10 bg-[linear-gradient(180deg,rgba(39,39,42,0.82),rgba(9,9,11,0.96))] shadow-2xl shadow-black/30 hover:shadow-[0_0_38px_rgba(248,113,113,0.16)]",
       },
       hover: {
-        true: "hover:-translate-y-1 hover:border-red-300/35",
+        true: "hover:-translate-y-1",
         false: "",
       },
     },

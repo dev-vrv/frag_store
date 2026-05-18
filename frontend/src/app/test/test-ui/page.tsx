@@ -20,6 +20,7 @@ import {
   CyberFeatureCard,
   CyberHero,
   CyberInput,
+  CyberLaserText,
   CyberProductCard,
   CyberSection,
   CyberTabs,
@@ -186,6 +187,58 @@ export default function TestUiPage() {
         glow
       >
         <TestUiFormControls />
+      </CyberSection>
+
+      <CyberSection
+        title="CyberLaserText"
+        subtitle="Animated text reveal with a laser engraving beam, per-character burn-in and reduced-motion fallback."
+        badge="Text FX"
+        grid
+        glow
+      >
+        <div className="grid gap-6 lg:grid-cols-2">
+          <CyberCard variant="glass" hover>
+            <CyberCardHeader>
+              <CyberCardTitle>Hero engraving</CyberCardTitle>
+              <CyberCardDescription>Large headline-grade laser reveal.</CyberCardDescription>
+            </CyberCardHeader>
+            <CyberCardContent>
+              <CyberLaserText
+                as="h2"
+                text="FRAG STORE"
+                className="text-5xl text-red-100 sm:text-7xl"
+                speedMs={58}
+              />
+            </CyberCardContent>
+          </CyberCard>
+
+          <CyberCard variant="glowing" hover>
+            <CyberCardHeader>
+              <CyberCardTitle>Interface labels</CyberCardTitle>
+              <CyberCardDescription>Short UI strings with faster engraving.</CyberCardDescription>
+            </CyberCardHeader>
+            <CyberCardContent className="space-y-5">
+              <CyberLaserText
+                text="SYSTEM ONLINE"
+                className="text-3xl text-red-100"
+                speedMs={34}
+              />
+              <CyberLaserText
+                text="LOADOUT CALIBRATED"
+                className="block text-2xl text-rose-100"
+                speedMs={28}
+                delayMs={220}
+              />
+              <CyberLaserText
+                text="NO BEAM MODE"
+                className="block text-xl text-zinc-200"
+                speedMs={24}
+                delayMs={420}
+                beam={false}
+              />
+            </CyberCardContent>
+          </CyberCard>
+        </div>
       </CyberSection>
 
       <CyberSection

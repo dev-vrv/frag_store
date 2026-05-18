@@ -6,6 +6,7 @@ export * from "./cyber-feature-card";
 export * from "./cyber-form-controls";
 export * from "./cyber-hero";
 export * from "./cyber-input";
+export * from "./cyber-laser-text";
 export * from "./cyber-product-card";
 export * from "./cyber-section";
 export * from "./cyber-tabs";

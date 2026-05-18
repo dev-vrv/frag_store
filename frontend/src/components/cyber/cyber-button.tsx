@@ -8,7 +8,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const cyberButtonVariants = cva(
-  "cyber-cut-button font-display group relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 overflow-hidden border-2 font-normal uppercase tracking-[0.08em] text-sm outline-none transition-all duration-200 before:absolute before:inset-0 before:opacity-0 before:transition-opacity after:pointer-events-none after:absolute after:right-2 after:top-2 after:h-5 after:w-5 after:border-t-2 after:border-r-2 active:translate-y-px disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-45 focus-visible:ring-2 focus-visible:ring-lime-300/50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "cyber-cut-button font-display group relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 overflow-hidden border-2 font-normal uppercase tracking-[0.08em] text-sm outline-none transition-all duration-200 before:absolute before:inset-0 before:opacity-0 before:transition-opacity after:pointer-events-none after:absolute after:right-3 after:top-2 after:h-5 after:w-5 after:border-t-2 after:border-r-2 active:translate-y-px disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-45 focus-visible:ring-2 focus-visible:ring-lime-300/50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -26,9 +26,9 @@ const cyberButtonVariants = cva(
           "border-lime-300/65 bg-zinc-950/30 text-lime-100 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)] before:bg-lime-300/10 after:border-lime-300 hover:border-lime-200 hover:bg-lime-300/10 hover:shadow-[0_0_28px_rgba(190,242,100,0.22)]",
       },
       size: {
-        sm: "h-10 px-5 text-xs",
-        md: "h-12 px-7",
-        lg: "h-14 px-9 text-base",
+        sm: "h-10 px-7 text-xs",
+        md: "h-12 px-10",
+        lg: "h-14 px-12 text-base",
         icon: "size-12 p-0 tracking-normal",
       },
     },
@@ -66,7 +66,7 @@ const CyberButton = React.forwardRef<HTMLButtonElement, CyberButtonProps>(
       return (
         <Comp
           ref={ref}
-          className={cn(cyberButtonVariants({ variant, size }), className)}
+          className={cn(cyberButtonVariants({ variant, size }), "[&_span]:px-3 [&_span]:py-1", className)}
           aria-busy={loading || undefined}
           {...props}
         >
@@ -84,7 +84,9 @@ const CyberButton = React.forwardRef<HTMLButtonElement, CyberButtonProps>(
         {...props}
       >
         {loading ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}
-        <span className="relative z-10 inline-flex items-center gap-2">{children}</span>
+        <span className="relative z-10 inline-flex items-center gap-2 px-3 py-1">
+          {children}
+        </span>
       </Comp>
     );
   },

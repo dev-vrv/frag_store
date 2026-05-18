@@ -29,11 +29,19 @@ export interface CyberFeatureCardProps
 
 const CyberFeatureCard = React.forwardRef<HTMLDivElement, CyberFeatureCardProps>(
   ({ className, icon, title, description, accent, ...props }, ref) => (
-    <CyberCard ref={ref} variant="glass" hover className={cn("h-full", className)} {...props}>
+    <CyberCard
+      ref={ref}
+      variant="glass"
+      className={cn(
+        "h-full transition-transform duration-300 hover:-translate-y-1 hover:shadow-[0_0_34px_rgba(248,113,113,0.12)]",
+        className,
+      )}
+      {...props}
+    >
       <CyberCardContent className="p-5">
         <div
           className={cn(
-            "mb-5 flex size-12 items-center justify-center rounded-lg border border-white/10 bg-white/7 shadow-2xl [&_svg]:size-5",
+            "cyber-cut-small mb-5 flex size-13 items-center justify-center border border-white/10 bg-white/7 shadow-xl transition-shadow duration-300 [&_svg]:size-6",
             featureAccentVariants({ accent }),
           )}
         >

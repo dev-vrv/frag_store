@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Exo_2, JetBrains_Mono, Russo_One } from "next/font/google";
 
+import { CyberLoader } from "@/components/Loaders/CyberLoader";
 import "./globals.css";
 
 const exo = Exo_2({
@@ -37,6 +38,7 @@ export default function RootLayout({
       <body
         className={`${exo.variable} ${russo.variable} ${jetbrainsMono.variable} flex min-h-full flex-col antialiased`}
       >
+        <CyberLoader />
         {children}
       </body>
     </html>
