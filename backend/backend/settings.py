@@ -63,6 +63,13 @@ INSTALLED_APPS = [
     'allauth.socialaccount',
     'dj_rest_auth',
     'dj_rest_auth.registration',
+
+    'ai',
+    'cart',
+    'content',
+    'mails',
+    'orders',
+    'payments',
 ]
 
 MIDDLEWARE = [
@@ -146,7 +153,7 @@ STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-MEDIA_URL = 'media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 CORS_ALLOWED_ORIGINS = env('CORS_ALLOWED_ORIGINS')

@@ -29,6 +29,7 @@ urlpatterns = [
     path('api/auth/jwt/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/jwt/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/accounts/', include('allauth.urls')),
+    path('api/content/', include('content.urls')),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
 ]

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FaUserAstronaut } from "react-icons/fa";
 
 import { CyberButton } from "@/components/cyber";
 import { LocaleSwitcher } from "@/components/Header/LocaleSwitcher";
@@ -25,20 +26,17 @@ export function Header({ locale, dictionary }: HeaderProps) {
         <Nav
           className="hidden lg:flex"
           items={dictionary.nav}
+          info={dictionary.info}
           locale={locale}
           ariaLabel={dictionary.navAriaLabel}
         />
 
         <div className="flex items-center gap-3">
           <LocaleSwitcher locale={locale} label="Сменить язык" />
-          <CyberButton asChild variant="ghost" size="sm">
-            <Link href={localizePath("/login", locale)}>
-              <span>{dictionary.login}</span>
-            </Link>
-          </CyberButton>
           <CyberButton asChild variant="primary" size="sm">
-            <Link href={localizePath("/register", locale)}>
-              <span>{dictionary.register}</span>
+            <Link href={localizePath("/auth", locale)}>
+              <FaUserAstronaut aria-hidden="true" />
+              <span>{dictionary.auth}</span>
             </Link>
           </CyberButton>
         </div>
@@ -47,6 +45,7 @@ export function Header({ locale, dictionary }: HeaderProps) {
         <Nav
           className="justify-center"
           items={dictionary.nav}
+          info={dictionary.info}
           locale={locale}
           ariaLabel={dictionary.navAriaLabel}
         />

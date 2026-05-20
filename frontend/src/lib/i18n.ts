@@ -15,6 +15,11 @@ export interface NavItemDictionary {
   label: string;
 }
 
+export interface NavDropdownDictionary {
+  label: string;
+  items: NavItemDictionary[];
+}
+
 export interface Dictionary {
   locale: Locale;
   metadata: {
@@ -25,8 +30,29 @@ export interface Dictionary {
     logo: string;
     navAriaLabel: string;
     nav: NavItemDictionary[];
-    login: string;
-    register: string;
+    info: NavDropdownDictionary;
+    auth: string;
+  };
+  auth: {
+    brand: string;
+    loginTab: string;
+    registerTab: string;
+    loginWelcomeTitle: string;
+    loginWelcomeText: string;
+    registerWelcomeTitle: string;
+    registerWelcomeText: string;
+    emailLabel: string;
+    emailPlaceholder: string;
+    passwordLabel: string;
+    passwordPlaceholder: string;
+    nameLabel: string;
+    namePlaceholder: string;
+    confirmPasswordLabel: string;
+    confirmPasswordPlaceholder: string;
+    loginSubmit: string;
+    registerSubmit: string;
+    loginHint: string;
+    registerHint: string;
   };
   hero: {
     eyebrow: string;
@@ -43,7 +69,7 @@ export interface Dictionary {
     scroll: string;
   };
   pages: Record<
-    "catalog" | "contacts" | "about" | "faq" | "login" | "register",
+    "catalog" | "contacts" | "about" | "faq" | "auth" | "blog",
     {
       title: string;
       subtitle: string;
@@ -66,12 +92,40 @@ const dictionaries: Record<Locale, Dictionary> = {
       nav: [
         { href: "/", label: "Главная" },
         { href: "/catalog", label: "Каталог" },
-        { href: "/contacts", label: "Контакты" },
-        { href: "/about", label: "О нас" },
-        { href: "/faq", label: "FAQ" },
+        { href: "/blog", label: "Блог" },
       ],
-      login: "Войти",
-      register: "Регистрация",
+      info: {
+        label: "Info",
+        items: [
+          { href: "/about", label: "О нас" },
+          { href: "/faq", label: "FAQ" },
+          { href: "/contacts", label: "Контакты" },
+        ],
+      },
+      auth: "Войти",
+    },
+    auth: {
+      brand: "Frag Store",
+      loginTab: "Вход",
+      registerTab: "Регистрация",
+      loginWelcomeTitle: "С возвращением в Frag Store",
+      loginWelcomeText:
+        "Авторизуйся, чтобы открыть профиль, избранные сборки и быстрый доступ к cyber-drop уведомлениям.",
+      registerWelcomeTitle: "Подключайся к Frag Store",
+      registerWelcomeText:
+        "Создай аккаунт для персонального loadout, истории заказов и раннего доступа к новым игровым девайсам.",
+      emailLabel: "Email",
+      emailPlaceholder: "you@frag.store",
+      passwordLabel: "Пароль",
+      passwordPlaceholder: "Введите пароль",
+      nameLabel: "Имя игрока",
+      namePlaceholder: "Например, Neon Runner",
+      confirmPasswordLabel: "Повтор пароля",
+      confirmPasswordPlaceholder: "Повторите пароль",
+      loginSubmit: "Войти",
+      registerSubmit: "Создать аккаунт",
+      loginHint: "Доступ к профилю и сохраненным сетапам.",
+      registerHint: "Регистрация займет меньше минуты.",
     },
     hero: {
       eyebrow: "Frag Store // Техника онлайн",
@@ -136,24 +190,23 @@ const dictionaries: Record<Locale, Dictionary> = {
           description: "Ответы на частые вопросы Frag Store.",
         },
       },
-      login: {
-        title: "ВХОД",
+      blog: {
+        title: "БЛОГ",
         subtitle:
-          "Здесь будет форма входа для пользователей, профилей сборок, избранного и истории заказов.",
-        badge: "Access",
+          "Новости, обзоры и материалы Frag Store о gaming-девайсах, сетапах и cyber-drop коллекциях.",
+        badge: "Лента",
         metadata: {
-          title: "Вход | Frag Store",
-          description: "Вход в аккаунт Frag Store.",
+          title: "Блог | Frag Store",
+          description: "Блог Frag Store с новостями и обзорами gaming-девайсов.",
         },
       },
-      register: {
-        title: "РЕГИСТРАЦИЯ",
-        subtitle:
-          "Скоро здесь появится создание аккаунта с доступом к персональным loadout-настройкам и drop-уведомлениям.",
-        badge: "Join",
+      auth: {
+        title: "AUTH",
+        subtitle: "Вход и регистрация Frag Store.",
+        badge: "Access",
         metadata: {
-          title: "Регистрация | Frag Store",
-          description: "Регистрация аккаунта Frag Store.",
+          title: "Auth | Frag Store",
+          description: "Вход и регистрация аккаунта Frag Store.",
         },
       },
     },
@@ -170,12 +223,40 @@ const dictionaries: Record<Locale, Dictionary> = {
       nav: [
         { href: "/", label: "Home" },
         { href: "/catalog", label: "Catalog" },
-        { href: "/contacts", label: "Contacts" },
-        { href: "/about", label: "About" },
-        { href: "/faq", label: "FAQ" },
+        { href: "/blog", label: "Blog" },
       ],
-      login: "Log in",
-      register: "Register",
+      info: {
+        label: "Info",
+        items: [
+          { href: "/about", label: "About" },
+          { href: "/faq", label: "FAQ" },
+          { href: "/contacts", label: "Contacts" },
+        ],
+      },
+      auth: "Log in",
+    },
+    auth: {
+      brand: "Frag Store",
+      loginTab: "Log in",
+      registerTab: "Register",
+      loginWelcomeTitle: "Welcome back to Frag Store",
+      loginWelcomeText:
+        "Sign in to open your profile, saved builds, and fast access to cyber-drop alerts.",
+      registerWelcomeTitle: "Join Frag Store",
+      registerWelcomeText:
+        "Create an account for a personal loadout, order history, and early access to new gaming gear.",
+      emailLabel: "Email",
+      emailPlaceholder: "you@frag.store",
+      passwordLabel: "Password",
+      passwordPlaceholder: "Enter password",
+      nameLabel: "Player name",
+      namePlaceholder: "For example, Neon Runner",
+      confirmPasswordLabel: "Confirm password",
+      confirmPasswordPlaceholder: "Repeat password",
+      loginSubmit: "Log in",
+      registerSubmit: "Create account",
+      loginHint: "Access your profile and saved setups.",
+      registerHint: "Registration takes less than a minute.",
     },
     hero: {
       eyebrow: "Frag Store // Gear online",
@@ -240,24 +321,23 @@ const dictionaries: Record<Locale, Dictionary> = {
           description: "Frag Store frequently asked questions.",
         },
       },
-      login: {
-        title: "LOG IN",
+      blog: {
+        title: "BLOG",
         subtitle:
-          "The account login for profiles, saved builds, favorites, and order history will be here.",
-        badge: "Access",
+          "News, reviews, and Frag Store notes about gaming gear, setups, and cyber-drop collections.",
+        badge: "Feed",
         metadata: {
-          title: "Log in | Frag Store",
-          description: "Log in to Frag Store.",
+          title: "Blog | Frag Store",
+          description: "Frag Store blog with gaming gear news and reviews.",
         },
       },
-      register: {
-        title: "REGISTER",
-        subtitle:
-          "Account creation with personal loadouts and drop notifications is coming soon.",
-        badge: "Join",
+      auth: {
+        title: "AUTH",
+        subtitle: "Frag Store login and registration.",
+        badge: "Access",
         metadata: {
-          title: "Register | Frag Store",
-          description: "Create a Frag Store account.",
+          title: "Auth | Frag Store",
+          description: "Log in or create a Frag Store account.",
         },
       },
     },
@@ -274,12 +354,40 @@ const dictionaries: Record<Locale, Dictionary> = {
       nav: [
         { href: "/", label: "Башкы" },
         { href: "/catalog", label: "Каталог" },
-        { href: "/contacts", label: "Байланыш" },
-        { href: "/about", label: "Биз жөнүндө" },
-        { href: "/faq", label: "FAQ" },
+        { href: "/blog", label: "Блог" },
       ],
-      login: "Кирүү",
-      register: "Катталуу",
+      info: {
+        label: "Info",
+        items: [
+          { href: "/about", label: "Биз жөнүндө" },
+          { href: "/faq", label: "FAQ" },
+          { href: "/contacts", label: "Байланыш" },
+        ],
+      },
+      auth: "Кирүү",
+    },
+    auth: {
+      brand: "Frag Store",
+      loginTab: "Кирүү",
+      registerTab: "Катталуу",
+      loginWelcomeTitle: "Frag Store'го кайра кош келиңиз",
+      loginWelcomeText:
+        "Профилди, сакталган сетаптарды жана cyber-drop билдирүүлөрүн ачуу үчүн кириңиз.",
+      registerWelcomeTitle: "Frag Store'го кошулуңуз",
+      registerWelcomeText:
+        "Жеке loadout, заказ тарыхы жана жаңы gaming жабдыктарга эрте жетүү үчүн аккаунт түзүңүз.",
+      emailLabel: "Email",
+      emailPlaceholder: "you@frag.store",
+      passwordLabel: "Сыр сөз",
+      passwordPlaceholder: "Сыр сөздү жазыңыз",
+      nameLabel: "Оюнчу аты",
+      namePlaceholder: "Мисалы, Neon Runner",
+      confirmPasswordLabel: "Сыр сөздү кайталоо",
+      confirmPasswordPlaceholder: "Сыр сөздү кайталаңыз",
+      loginSubmit: "Кирүү",
+      registerSubmit: "Аккаунт түзүү",
+      loginHint: "Профиль жана сакталган сетаптарга кирүү.",
+      registerHint: "Катталуу бир мүнөттөн аз убакыт алат.",
     },
     hero: {
       eyebrow: "Frag Store // Техника онлайн",
@@ -344,24 +452,23 @@ const dictionaries: Record<Locale, Dictionary> = {
           description: "Frag Store боюнча көп берилген суроолор.",
         },
       },
-      login: {
-        title: "КИРҮҮ",
+      blog: {
+        title: "БЛОГ",
         subtitle:
-          "Профиль, сакталган сборкалар, favorites жана заказ тарыхы үчүн кирүү формасы бул жерде болот.",
-        badge: "Access",
+          "Gaming жабдыктары, сетаптар жана cyber-drop коллекциялар жөнүндө Frag Store жаңылыктары жана материалдары.",
+        badge: "Тасма",
         metadata: {
-          title: "Кирүү | Frag Store",
-          description: "Frag Store аккаунтуна кирүү.",
+          title: "Блог | Frag Store",
+          description: "Frag Store gaming жаңылыктары жана обзорлору.",
         },
       },
-      register: {
-        title: "КАТТАЛУУ",
-        subtitle:
-          "Жеке loadout жана drop-кабарламалар менен аккаунт түзүү жакында кошулат.",
-        badge: "Join",
+      auth: {
+        title: "AUTH",
+        subtitle: "Frag Store аккаунтуна кирүү жана катталуу.",
+        badge: "Access",
         metadata: {
-          title: "Катталуу | Frag Store",
-          description: "Frag Store аккаунтун түзүү.",
+          title: "Auth | Frag Store",
+          description: "Frag Store аккаунтуна кирүү же жаңы аккаунт түзүү.",
         },
       },
     },
