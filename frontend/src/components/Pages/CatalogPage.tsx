@@ -437,61 +437,6 @@ export function CatalogPage({ locale, dictionary }: CatalogPageProps) {
       <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_20%_18%,rgba(255,23,68,0.13),transparent_30%),radial-gradient(circle_at_80%_16%,rgba(34,211,238,0.08),transparent_28%),linear-gradient(180deg,#050507,#000)]" />
       <div className="cyber-grid absolute inset-0 -z-10 opacity-35" />
 
-      <section className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[minmax(0,1fr)_21rem]">
-        <div>
-          <CyberBadge variant="red" glow>
-            {page.badge}
-          </CyberBadge>
-          <CyberLaserText
-            as="h1"
-            text={page.title}
-            className="mt-7 block text-5xl text-red-100 sm:text-7xl"
-            speedMs={44}
-          />
-          <p className="mt-6 max-w-3xl text-xl leading-9 text-zinc-400">
-            {page.subtitle}
-          </p>
-        </div>
-
-        <CyberCard variant="glass" className="h-fit">
-          <CyberCardContent className="space-y-4 p-5">
-            <div>
-              <h2 className="font-display text-2xl uppercase text-red-100">
-                {text.featured}
-              </h2>
-              <p className="font-tech mt-1 text-xs uppercase tracking-[0.1em] text-zinc-500">
-                {text.setupIncludes}
-              </p>
-            </div>
-            <div className="space-y-3">
-              {text.setups.map((setup, index) => {
-                const Icon = setupIcons[index] ?? Sparkles;
-
-                return (
-                  <div
-                    key={setup.title}
-                    className="grid grid-cols-[2.75rem_minmax(0,1fr)] gap-3 border border-white/10 bg-black/28 p-3"
-                  >
-                    <div className="grid size-11 place-items-center border border-lime-300/20 bg-lime-300/8 text-lime-100">
-                      <Icon className="size-5" aria-hidden="true" />
-                    </div>
-                    <div className="min-w-0">
-                      <div className="font-tech text-sm uppercase tracking-[0.08em] text-zinc-200">
-                        {setup.title}
-                      </div>
-                      <div className="mt-1 text-sm leading-5 text-zinc-500">{setup.items}</div>
-                      <div className="mt-2 font-display text-xl text-lime-100">
-                        {setup.price}
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </CyberCardContent>
-        </CyberCard>
-      </section>
-
       <section className="mx-auto mt-10 max-w-7xl">
         <CyberCard variant="glass">
           <CyberCardContent className="space-y-5 p-5 sm:p-6">
