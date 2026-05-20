@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { PlaceholderPage } from "@/components/Pages/PlaceholderPage";
+import { AboutPage as AboutContentPage } from "@/components/Pages/AboutPage";
 import { defaultLocale, getDictionary } from "@/lib/i18n";
 
 const dictionary = getDictionary(defaultLocale);
@@ -9,13 +9,5 @@ const page = dictionary.pages.about;
 export const metadata: Metadata = page.metadata;
 
 export default function AboutPage() {
-  return (
-    <PlaceholderPage
-      locale={defaultLocale}
-      dictionary={dictionary}
-      title={page.title}
-      subtitle={page.subtitle}
-      badge={page.badge}
-    />
-  );
+  return <AboutContentPage locale={defaultLocale} dictionary={dictionary} />;
 }

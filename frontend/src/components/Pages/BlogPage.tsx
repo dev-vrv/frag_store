@@ -8,6 +8,7 @@ import {
   CyberCardContent,
   CyberLaserText,
 } from "@/components/cyber";
+import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
 import { getBlogPosts, getLocalizedBlogPost } from "@/lib/blog";
 import { type Dictionary, type Locale, localizePath } from "@/lib/i18n";
@@ -96,6 +97,7 @@ export async function BlogPage({ locale, dictionary }: BlogPageProps) {
           </CyberCard>
         )}
       </section>
+      <Footer locale={locale} dictionary={dictionary} className="-mx-4 sm:-mx-6 lg:-mx-8" />
     </main>
   );
 }

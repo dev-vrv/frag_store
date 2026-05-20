@@ -30,6 +30,42 @@ body {
 }
 
 * {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 23, 68, 0.72) rgba(5, 5, 7, 0.92);
+}
+
+*::-webkit-scrollbar {
+  width: 12px;
+  height: 12px;
+}
+
+*::-webkit-scrollbar-track {
+  background:
+    linear-gradient(180deg, rgba(255, 23, 68, 0.08), transparent 28%),
+    #050507;
+  border-left: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+*::-webkit-scrollbar-thumb {
+  min-height: 44px;
+  border: 3px solid #050507;
+  background:
+    linear-gradient(180deg, rgba(34, 211, 238, 0.75), rgba(255, 23, 68, 0.9));
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.16),
+    0 0 14px rgba(255, 23, 68, 0.28);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background:
+    linear-gradient(180deg, rgba(190, 242, 100, 0.82), rgba(255, 23, 68, 0.95));
+}
+
+*::-webkit-scrollbar-corner {
+  background: #050507;
+}
+
+* {
   box-sizing: border-box;
 }
 
@@ -300,6 +336,83 @@ select:disabled {
     cyber-device-float 6s ease-in-out 1500ms infinite;
 }
 
+.contacts-cyber-backdrop {
+  background:
+    radial-gradient(ellipse at 18% 12%, rgba(255, 23, 68, 0.08), transparent 34%),
+    radial-gradient(ellipse at 78% 18%, rgba(34, 211, 238, 0.055), transparent 32%),
+    radial-gradient(ellipse at 50% 92%, rgba(132, 204, 22, 0.035), transparent 36%),
+    linear-gradient(180deg, #050507 0%, #07070a 46%, #000 100%);
+  animation: contacts-backdrop-drift 16s ease-in-out infinite;
+}
+
+.contacts-cyber-grid {
+  opacity: 0.22;
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.04) 1px, transparent 1px),
+    linear-gradient(rgba(255, 23, 68, 0.035) 1px, transparent 1px);
+  background-size:
+    46px 46px,
+    46px 46px,
+    100% 140px;
+  mask-image: linear-gradient(to bottom, black 0%, black 70%, transparent 100%);
+  animation: contacts-grid-drift 18s linear infinite;
+}
+
+.contacts-cyber-rails {
+  display: none;
+}
+
+.contacts-cyber-scan {
+  opacity: 0.1;
+  background-image: linear-gradient(
+    to bottom,
+    transparent 0%,
+    rgba(255, 255, 255, 0.028) 50%,
+    transparent 100%
+  );
+  background-size: 100% 9px;
+  mix-blend-mode: screen;
+  animation: contacts-scanline 8s linear infinite;
+}
+
+.contact-panel {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(255, 255, 255, 0.045);
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.28),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(20px) saturate(1.1);
+}
+
+.contact-panel::before {
+  display: none;
+}
+
+.contact-panel::after {
+  content: "";
+  position: absolute;
+  inset: 1px;
+  pointer-events: none;
+  background:
+    repeating-linear-gradient(
+      180deg,
+      transparent 0 18px,
+      rgba(255, 255, 255, 0.018) 18px 19px
+    );
+  opacity: 0.34;
+}
+
+.contact-panel__content {
+  position: relative;
+  z-index: 1;
+  min-height: 100%;
+  background: rgba(3, 3, 5, 0.5);
+}
+
 @keyframes cyber-reveal {
   to {
     opacity: 1;
@@ -357,6 +470,58 @@ select:disabled {
   50% {
     opacity: 1;
     transform: scaleX(1);
+  }
+}
+
+@keyframes contacts-backdrop-drift {
+  0%,
+  100% {
+    filter: saturate(1) brightness(1);
+    transform: scale(1);
+  }
+
+  50% {
+    filter: saturate(1.05) brightness(1.02);
+    transform: scale(1.015);
+  }
+}
+
+@keyframes contacts-grid-drift {
+  from {
+    background-position:
+      0 0,
+      0 0,
+      0 0;
+  }
+
+  to {
+    background-position:
+      46px 46px,
+      46px 46px,
+      0 140px;
+  }
+}
+
+@keyframes contacts-rails-pulse {
+  0%,
+  100% {
+    opacity: 0.25;
+    transform: translateX(-1.5%);
+  }
+
+  50% {
+    opacity: 0.45;
+    transform: translateX(1.5%);
+  }
+}
+
+@keyframes contacts-scanline {
+  from {
+    background-position-y: 0;
+  }
+
+  to {
+    background-position-y: 72px;
   }
 }
 
@@ -424,6 +589,10 @@ select:disabled {
 
 @media (prefers-reduced-motion: reduce) {
   .cyber-scanline,
+  .contacts-cyber-backdrop,
+  .contacts-cyber-grid,
+  .contacts-cyber-rails,
+  .contacts-cyber-scan,
   .cyber-reveal,
   .cyber-glitch-text,
   .cyber-hero-device,

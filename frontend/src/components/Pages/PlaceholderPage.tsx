@@ -1,6 +1,9 @@
 import { CyberBadge, CyberCard, CyberCardContent, CyberLaserText } from "@/components/cyber";
+import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
+import { ContactCyberBackground } from "@/components/Pages/ContactsPage/ContactCyberBackground";
 import { type Dictionary, type Locale } from "@/lib/i18n";
+import { cn } from "@/lib/utils";
 
 export interface PlaceholderPageProps {
   locale: Locale;
@@ -8,6 +11,7 @@ export interface PlaceholderPageProps {
   title: string;
   subtitle: string;
   badge?: string;
+  animatedBackground?: boolean;
 }
 
 export function PlaceholderPage({
@@ -16,13 +20,25 @@ export function PlaceholderPage({
   title,
   subtitle,
   badge = "Раздел",
+  animatedBackground = false,
 }: PlaceholderPageProps) {
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
+    <main
+      className={cn(
+        "relative min-h-screen overflow-hidden bg-black px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8",
+        animatedBackground && "isolate",
+      )}
+    >
       <Header locale={locale} dictionary={dictionary.header} />
-      <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_20%_18%,rgba(255,23,68,0.2),transparent_30%),radial-gradient(circle_at_80%_16%,rgba(217,70,239,0.12),transparent_28%),linear-gradient(180deg,#050507,#000)]" />
-      <div className="cyber-grid absolute inset-0 -z-10 opacity-60" />
-      <section className="mx-auto flex min-h-[calc(100vh-9rem)] max-w-7xl items-center">
+      {animatedBackground ? (
+        <ContactCyberBackground />
+      ) : (
+        <>
+          <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_20%_18%,rgba(255,23,68,0.2),transparent_30%),radial-gradient(circle_at_80%_16%,rgba(217,70,239,0.12),transparent_28%),linear-gradient(180deg,#050507,#000)]" />
+          <div className="cyber-grid absolute inset-0 -z-10 opacity-60" />
+        </>
+      )}
+      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-9rem)] max-w-7xl items-center">
         <CyberCard variant="glass" className="w-full max-w-4xl p-2">
           <CyberCardContent className="p-8 sm:p-10">
             <CyberBadge variant="red" glow>
@@ -38,6 +54,7 @@ export function PlaceholderPage({
           </CyberCardContent>
         </CyberCard>
       </section>
+      <Footer locale={locale} dictionary={dictionary} className="-mx-4 sm:-mx-6 lg:-mx-8" />
     </main>
   );
 }

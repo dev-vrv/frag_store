@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 
-import { PlaceholderPage } from "@/components/Pages/PlaceholderPage";
+import { FaqPage as FaqContentPage } from "@/components/Pages/FaqPage";
 import { defaultLocale, getDictionary } from "@/lib/i18n";
 
 const dictionary = getDictionary(defaultLocale);
@@ -9,13 +9,5 @@ const page = dictionary.pages.faq;
 export const metadata: Metadata = page.metadata;
 
 export default function FaqPage() {
-  return (
-    <PlaceholderPage
-      locale={defaultLocale}
-      dictionary={dictionary}
-      title={page.title}
-      subtitle={page.subtitle}
-      badge={page.badge}
-    />
-  );
+  return <FaqContentPage locale={defaultLocale} dictionary={dictionary} />;
 }

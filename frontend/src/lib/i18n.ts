@@ -31,6 +31,8 @@ export interface Dictionary {
     navAriaLabel: string;
     nav: NavItemDictionary[];
     info: NavDropdownDictionary;
+    cart: string;
+    comparison: string;
     auth: string;
   };
   auth: {
@@ -69,7 +71,16 @@ export interface Dictionary {
     scroll: string;
   };
   pages: Record<
-    "catalog" | "contacts" | "about" | "faq" | "auth" | "blog",
+    | "catalog"
+    | "contacts"
+    | "about"
+    | "faq"
+    | "auth"
+    | "blog"
+    | "cart"
+    | "comparison"
+    | "privacy"
+    | "offer",
     {
       title: string;
       subtitle: string;
@@ -95,13 +106,17 @@ const dictionaries: Record<Locale, Dictionary> = {
         { href: "/blog", label: "Блог" },
       ],
       info: {
-        label: "Info",
+        label: "Инфо",
         items: [
           { href: "/about", label: "О нас" },
           { href: "/faq", label: "FAQ" },
           { href: "/contacts", label: "Контакты" },
+          { href: "/privacy", label: "Политика конфиденциальности" },
+          { href: "/offer", label: "Договор оферты" },
         ],
       },
+      cart: "Корзина",
+      comparison: "Избранное",
       auth: "Войти",
     },
     auth: {
@@ -154,7 +169,7 @@ const dictionaries: Record<Locale, Dictionary> = {
         title: "КАТАЛОГ",
         subtitle:
           "Скоро здесь появится витрина игровых девайсов, комплектующих и лимитированных cyber-drop коллекций.",
-        badge: "Store",
+        badge: "Магазин",
         metadata: {
           title: "Каталог | Frag Store",
           description: "Каталог gaming-девайсов Frag Store.",
@@ -163,8 +178,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       contacts: {
         title: "КОНТАКТЫ",
         subtitle:
-          "Раздел для связи, поддержки, заявок на сборки и партнерских запросов находится в разработке.",
-        badge: "Comms",
+          "Свяжитесь с Frag Store по вопросам заказов, игровых сборок, наличия и партнерских предложений.",
+        badge: "Связь",
         metadata: {
           title: "Контакты | Frag Store",
           description: "Контакты и поддержка Frag Store.",
@@ -173,8 +188,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       about: {
         title: "О НАС",
         subtitle:
-          "Frag Store собирает премиальную gaming-экосистему с cyberpunk эстетикой, быстрым UX и фокусом на железо.",
-        badge: "Identity",
+          "FRAGSTORE - магазин игровой техники, комплектующих, компьютеров и периферии для продуманного сетапа.",
+        badge: "О бренде",
         metadata: {
           title: "О нас | Frag Store",
           description: "О Frag Store и нашей cyberpunk gaming-экосистеме.",
@@ -183,8 +198,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       faq: {
         title: "FAQ",
         subtitle:
-          "Ответы по доставке, оплате, гарантиям, сборкам и кастомным заказам будут добавлены в этот раздел.",
-        badge: "Support",
+          "Ответы на частые вопросы о заказах, доставке, гарантии, возврате и подборе игровой техники.",
+        badge: "Поддержка",
         metadata: {
           title: "FAQ | Frag Store",
           description: "Ответы на частые вопросы Frag Store.",
@@ -200,10 +215,50 @@ const dictionaries: Record<Locale, Dictionary> = {
           description: "Блог Frag Store с новостями и обзорами gaming-девайсов.",
         },
       },
+      cart: {
+        title: "КОРЗИНА",
+        subtitle:
+          "Здесь будут выбранные игровые девайсы, аксессуары и быстрый переход к оформлению заказа.",
+        badge: "Заказ",
+        metadata: {
+          title: "Корзина | Frag Store",
+          description: "Корзина заказов Frag Store.",
+        },
+      },
+      comparison: {
+        title: "ИЗБРАННОЕ",
+        subtitle:
+          "Сохраняйте любимые товары, собирайте шортлист сетапа и возвращайтесь к выбранным девайсам перед покупкой.",
+        badge: "Выбор",
+        metadata: {
+          title: "Избранное | Frag Store",
+          description: "Избранные gaming-девайсы Frag Store.",
+        },
+      },
+      privacy: {
+        title: "ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ",
+        subtitle:
+          "Как Frag Store обрабатывает контактные данные, заявки, сообщения и информацию о заказах.",
+        badge: "Документы",
+        metadata: {
+          title: "Политика конфиденциальности | Frag Store",
+          description: "Политика конфиденциальности Frag Store.",
+        },
+      },
+      offer: {
+        title: "ДОГОВОР ОФЕРТЫ",
+        subtitle:
+          "Основные условия покупки игровой техники, комплектующих, аксессуаров и готовых сетапов в Frag Store.",
+        badge: "Документы",
+        metadata: {
+          title: "Договор оферты | Frag Store",
+          description: "Договор оферты интернет-магазина Frag Store.",
+        },
+      },
       auth: {
         title: "AUTH",
         subtitle: "Вход и регистрация Frag Store.",
-        badge: "Access",
+        badge: "Доступ",
         metadata: {
           title: "Auth | Frag Store",
           description: "Вход и регистрация аккаунта Frag Store.",
@@ -226,13 +281,17 @@ const dictionaries: Record<Locale, Dictionary> = {
         { href: "/blog", label: "Blog" },
       ],
       info: {
-        label: "Info",
+        label: "Маалымат",
         items: [
           { href: "/about", label: "About" },
           { href: "/faq", label: "FAQ" },
           { href: "/contacts", label: "Contacts" },
+          { href: "/privacy", label: "Privacy Policy" },
+          { href: "/offer", label: "Public Offer" },
         ],
       },
+      cart: "Cart",
+      comparison: "Favorites",
       auth: "Log in",
     },
     auth: {
@@ -285,7 +344,7 @@ const dictionaries: Record<Locale, Dictionary> = {
         title: "CATALOG",
         subtitle:
           "A storefront for gaming devices, components, and limited cyber-drop collections is coming soon.",
-        badge: "Store",
+        badge: "Дүкөн",
         metadata: {
           title: "Catalog | Frag Store",
           description: "Frag Store gaming gear catalog.",
@@ -294,8 +353,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       contacts: {
         title: "CONTACTS",
         subtitle:
-          "Support, build requests, and partnership contacts will be available here soon.",
-        badge: "Comms",
+          "Contact Frag Store about orders, gaming builds, stock availability, and partnership requests.",
+        badge: "Contacts",
         metadata: {
           title: "Contacts | Frag Store",
           description: "Frag Store contacts and support.",
@@ -304,8 +363,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       about: {
         title: "ABOUT",
         subtitle:
-          "Frag Store builds a premium gaming ecosystem with cyberpunk aesthetics, fast UX, and a hardware-first focus.",
-        badge: "Identity",
+          "FRAGSTORE is a gaming gear, components, computers, and peripherals store for carefully planned setups.",
+        badge: "Бренд",
         metadata: {
           title: "About | Frag Store",
           description: "About Frag Store and our cyberpunk gaming ecosystem.",
@@ -314,7 +373,7 @@ const dictionaries: Record<Locale, Dictionary> = {
       faq: {
         title: "FAQ",
         subtitle:
-          "Answers about delivery, payments, warranty, builds, and custom orders will appear here.",
+          "Answers to common questions about orders, delivery, warranty, returns, and gaming gear selection.",
         badge: "Support",
         metadata: {
           title: "FAQ | Frag Store",
@@ -331,10 +390,50 @@ const dictionaries: Record<Locale, Dictionary> = {
           description: "Frag Store blog with gaming gear news and reviews.",
         },
       },
+      cart: {
+        title: "CART",
+        subtitle:
+          "Selected gaming gear, accessories, and a quick path to checkout will appear here.",
+        badge: "Order",
+        metadata: {
+          title: "Cart | Frag Store",
+          description: "Frag Store shopping cart.",
+        },
+      },
+      comparison: {
+        title: "FAVORITES",
+        subtitle:
+          "Save favorite products, build a setup shortlist, and return to selected gear before checkout.",
+        badge: "Choice",
+        metadata: {
+          title: "Favorites | Frag Store",
+          description: "Frag Store favorite gaming gear.",
+        },
+      },
+      privacy: {
+        title: "PRIVACY POLICY",
+        subtitle:
+          "How Frag Store processes contact details, requests, messages, and order information.",
+        badge: "Docs",
+        metadata: {
+          title: "Privacy Policy | Frag Store",
+          description: "Frag Store privacy policy.",
+        },
+      },
+      offer: {
+        title: "PUBLIC OFFER",
+        subtitle:
+          "Core purchase terms for gaming gear, components, accessories, and ready setups at Frag Store.",
+        badge: "Docs",
+        metadata: {
+          title: "Public Offer | Frag Store",
+          description: "Frag Store public offer agreement.",
+        },
+      },
       auth: {
         title: "AUTH",
         subtitle: "Frag Store login and registration.",
-        badge: "Access",
+        badge: "Кирүү",
         metadata: {
           title: "Auth | Frag Store",
           description: "Log in or create a Frag Store account.",
@@ -357,13 +456,17 @@ const dictionaries: Record<Locale, Dictionary> = {
         { href: "/blog", label: "Блог" },
       ],
       info: {
-        label: "Info",
+        label: "Маалымат",
         items: [
           { href: "/about", label: "Биз жөнүндө" },
           { href: "/faq", label: "FAQ" },
           { href: "/contacts", label: "Байланыш" },
+          { href: "/privacy", label: "Купуялык саясаты" },
+          { href: "/offer", label: "Оферта келишими" },
         ],
       },
+      cart: "Себет",
+      comparison: "Тандалгандар",
       auth: "Кирүү",
     },
     auth: {
@@ -416,7 +519,7 @@ const dictionaries: Record<Locale, Dictionary> = {
         title: "КАТАЛОГ",
         subtitle:
           "Жакында бул жерде gaming түзмөктөрү, комплекттер жана лимиттелген cyber-drop коллекциялар чыгат.",
-        badge: "Store",
+        badge: "Дүкөн",
         metadata: {
           title: "Каталог | Frag Store",
           description: "Frag Store gaming жабдыктарынын каталогу.",
@@ -425,8 +528,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       contacts: {
         title: "БАЙЛАНЫШ",
         subtitle:
-          "Колдоо, сборка боюнча сурамдар жана өнөктөштүк байланыштар бул бөлүмдө болот.",
-        badge: "Comms",
+          "Заказдар, gaming сборкалар, товарлардын бар-жогу жана өнөктөштүк боюнча Frag Store менен байланышыңыз.",
+        badge: "Байланыш",
         metadata: {
           title: "Байланыш | Frag Store",
           description: "Frag Store байланыштары жана колдоо.",
@@ -435,8 +538,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       about: {
         title: "БИЗ ЖӨНҮНДӨ",
         subtitle:
-          "Frag Store cyberpunk эстетикасы, тез UX жана hardware фокусу бар премиум gaming экосистема курат.",
-        badge: "Identity",
+          "FRAGSTORE - ойлонулган сетап үчүн gaming техника, комплекттер, компьютерлер жана периферия дүкөнү.",
+        badge: "Бренд",
         metadata: {
           title: "Биз жөнүндө | Frag Store",
           description: "Frag Store жана биздин cyberpunk gaming экосистема.",
@@ -445,8 +548,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       faq: {
         title: "FAQ",
         subtitle:
-          "Жеткирүү, төлөм, кепилдик, сборка жана custom заказдар боюнча жооптор бул жерде болот.",
-        badge: "Support",
+          "Заказ, жеткирүү, кепилдик, кайтаруу жана gaming техникасын тандоо боюнча көп берилген суроолорго жооптор.",
+        badge: "Колдоо",
         metadata: {
           title: "FAQ | Frag Store",
           description: "Frag Store боюнча көп берилген суроолор.",
@@ -462,10 +565,50 @@ const dictionaries: Record<Locale, Dictionary> = {
           description: "Frag Store gaming жаңылыктары жана обзорлору.",
         },
       },
+      cart: {
+        title: "СЕБЕТ",
+        subtitle:
+          "Тандалган gaming девайстар, аксессуарлар жана заказды тез жол-жоболоштуруу бул жерде чыгат.",
+        badge: "Заказ",
+        metadata: {
+          title: "Себет | Frag Store",
+          description: "Frag Store заказ себети.",
+        },
+      },
+      comparison: {
+        title: "ТАНДАЛГАНДАР",
+        subtitle:
+          "Жактырган товарларды сактап, сетап үчүн шортлист түзүп, сатып алардан мурун тандалган девайстарга кайтыңыз.",
+        badge: "Тандоо",
+        metadata: {
+          title: "Тандалгандар | Frag Store",
+          description: "Frag Store тандалган gaming девайстары.",
+        },
+      },
+      privacy: {
+        title: "КУПУЯЛЫК САЯСАТЫ",
+        subtitle:
+          "Frag Store байланыш маалыматтарын, билдирүүлөрдү, заявкаларды жана заказ маалыматтарын кантип иштетет.",
+        badge: "Документтер",
+        metadata: {
+          title: "Купуялык саясаты | Frag Store",
+          description: "Frag Store купуялык саясаты.",
+        },
+      },
+      offer: {
+        title: "ОФЕРТА КЕЛИШИМИ",
+        subtitle:
+          "Frag Store дүкөнүнөн gaming техника, комплекттер, аксессуарлар жана даяр сетаптарды сатып алуунун негизги шарттары.",
+        badge: "Документтер",
+        metadata: {
+          title: "Оферта келишими | Frag Store",
+          description: "Frag Store интернет-дүкөнүнүн оферта келишими.",
+        },
+      },
       auth: {
         title: "AUTH",
         subtitle: "Frag Store аккаунтуна кирүү жана катталуу.",
-        badge: "Access",
+        badge: "Кирүү",
         metadata: {
           title: "Auth | Frag Store",
           description: "Frag Store аккаунтуна кирүү же жаңы аккаунт түзүү.",

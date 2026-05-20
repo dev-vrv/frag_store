@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Exo_2, JetBrains_Mono } from "next/font/google";
 
 import { CyberLoader } from "@/components/Loaders/CyberLoader";
+import { ContactProvider } from "@/components/Contacts/ContactProvider";
+import { getContactInfos } from "@/lib/contacts";
 import "./globals.css";
 
 const exo = Exo_2({
@@ -21,18 +23,20 @@ export const metadata: Metadata = {
   description: "Frag Store interface",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const contacts = await getContactInfos();
+
   return (
     <html lang="ru" className="h-full">
       <body
         className={`${exo.variable} ${jetbrainsMono.variable} flex min-h-full flex-col antialiased`}
       >
         <CyberLoader />
-        {children}
+        <ContactProvider contacts={contacts}>{children}</ContactProvider>
       </body>
     </html>
   );

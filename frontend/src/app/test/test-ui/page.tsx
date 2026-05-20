@@ -28,8 +28,11 @@ import {
   CyberTabsList,
   CyberTabsTrigger,
 } from "@/components/cyber";
+import { Footer } from "@/components/Footer/Footer";
+import { Header } from "@/components/Header/Header";
 import { TestUiFormControls } from "@/app/test/test-ui/test-ui-form-controls";
 import { TestUiOverlays } from "@/app/test/test-ui/test-ui-overlays";
+import { defaultLocale, getDictionary } from "@/lib/i18n";
 
 const isDebugUi =
   process.env.NODE_ENV !== "production" ||
@@ -47,8 +50,11 @@ export default function TestUiPage() {
     notFound();
   }
 
+  const dictionary = getDictionary(defaultLocale);
+
   return (
     <main className="min-h-screen overflow-hidden bg-black text-zinc-50">
+      <Header locale={defaultLocale} dictionary={dictionary.header} />
       <CyberHero
         eyebrow="Debug UI Lab"
         title="Cyber component"
@@ -349,6 +355,7 @@ export default function TestUiPage() {
       >
         <TestUiOverlays />
       </CyberSection>
+      <Footer locale={defaultLocale} dictionary={dictionary} />
     </main>
   );
 }

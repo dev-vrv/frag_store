@@ -1,6 +1,28 @@
 from rest_framework import serializers
 
-from .models import BlogPost
+from .models import BlogPost, ContactInfo
+
+
+class ContactInfoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContactInfo
+        fields = (
+            'id',
+            'locale',
+            'phone',
+            'email',
+            'address',
+            'working_hours',
+            'whatsapp',
+            'telegram',
+            'instagram',
+            'facebook',
+            'youtube',
+            'tiktok',
+            'x',
+            'extra_contacts',
+            'updated_at',
+        )
 
 
 class BlogPostSerializer(serializers.ModelSerializer):

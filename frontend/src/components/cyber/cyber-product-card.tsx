@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Star } from "lucide-react";
+import { Heart, Star } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { CyberBadge, type CyberBadgeProps } from "./cyber-badge";
@@ -25,7 +25,11 @@ export interface CyberProductCardProps
   badges?: CyberProductBadge[];
   rating?: number;
   ctaLabel?: React.ReactNode;
+  detailsLabel?: React.ReactNode;
+  favoriteLabel?: string;
   onCtaClick?: () => void;
+  onDetailsClick?: () => void;
+  onFavoriteClick?: () => void;
 }
 
 const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>(
@@ -40,7 +44,11 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
       badges = [],
       rating,
       ctaLabel = "Buy now",
+      detailsLabel = "Details",
+      favoriteLabel = "Add to favorites",
       onCtaClick,
+      onDetailsClick,
+      onFavoriteClick,
       ...props
     },
     ref,
@@ -72,6 +80,14 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
               ))}
             </div>
           ) : null}
+          <button
+            type="button"
+            onClick={onFavoriteClick}
+            aria-label={favoriteLabel}
+            className="absolute right-3 top-3 z-20 grid size-10 place-items-center border border-white/15 bg-black/55 text-zinc-200 backdrop-blur transition hover:border-red-300/55 hover:bg-red-500/12 hover:text-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/30"
+          >
+            <Heart className="size-4" aria-hidden="true" />
+          </button>
         </div>
         <div className="flex flex-1 flex-col gap-3">
           <div className="space-y-2">
@@ -99,8 +115,11 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
           </div>
         </div>
       </CyberCardContent>
-      <CyberCardFooter className="px-4 pb-4 pt-0">
-        <CyberButton className="w-full" variant="primary" onClick={onCtaClick}>
+      <CyberCardFooter className="grid grid-cols-2 gap-3 px-4 pb-4 pt-0">
+        <CyberButton className="w-full px-4" variant="ghost" onClick={onDetailsClick}>
+          {detailsLabel}
+        </CyberButton>
+        <CyberButton className="w-full px-4" variant="primary" onClick={onCtaClick}>
           {ctaLabel}
         </CyberButton>
       </CyberCardFooter>

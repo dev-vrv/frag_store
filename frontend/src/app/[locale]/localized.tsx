@@ -55,8 +55,10 @@ export async function getLocalizedMetadata(
 export async function LocalizedPlaceholderPage({
   params,
   page,
+  animatedBackground,
 }: LocalePageProps & {
   page: keyof Dictionary["pages"];
+  animatedBackground?: boolean;
 }) {
   const locale = await getLocale(params);
   const dictionary = getDictionary(locale);
@@ -69,6 +71,7 @@ export async function LocalizedPlaceholderPage({
       title={pageDictionary.title}
       subtitle={pageDictionary.subtitle}
       badge={pageDictionary.badge}
+      animatedBackground={animatedBackground}
     />
   );
 }
