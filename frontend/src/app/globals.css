@@ -3,7 +3,7 @@
 @theme inline {
   --font-sans: var(--font-exo);
   --font-mono: var(--font-jetbrains-mono);
-  --font-display: var(--font-russo);
+  --font-display: var(--font-exo);
 }
 
 :root {
@@ -53,7 +53,7 @@ select:disabled {
 }
 
 .font-display {
-  font-family: var(--font-russo), var(--font-exo), system-ui, sans-serif;
+  font-family: var(--font-exo), system-ui, sans-serif;
 }
 
 .font-tech {
@@ -160,7 +160,7 @@ select:disabled {
 }
 
 .cyber-loader__mark {
-  font-family: var(--font-russo), system-ui, sans-serif;
+  font-family: var(--font-exo), system-ui, sans-serif;
   font-size: clamp(2.2rem, 8vw, 5rem);
   line-height: 0.9;
   text-align: center;
@@ -258,30 +258,11 @@ select:disabled {
 }
 
 .cyber-laser-char::after {
-  content: attr(data-char);
-  position: absolute;
-  inset: 0;
-  color: rgba(255, 23, 68, 0);
-  background-image: radial-gradient(
-    circle,
-    rgba(255, 23, 68, 0.96) 0 28%,
-    transparent 31%
-  );
-  background-size: 0.22em 0.22em;
-  background-position: 0.02em 0.02em;
-  background-clip: text;
-  -webkit-background-clip: text;
-  opacity: 0;
-  pointer-events: none;
+  display: none;
 }
 
 .cyber-laser-text[data-visible="true"] .cyber-laser-char {
   animation: cyber-laser-engrave 520ms cubic-bezier(0.16, 1, 0.3, 1)
-    var(--char-delay) forwards;
-}
-
-.cyber-laser-text[data-visible="true"] .cyber-laser-char::after {
-  animation: cyber-laser-dots 560ms cubic-bezier(0.16, 1, 0.3, 1)
     var(--char-delay) forwards;
 }
 

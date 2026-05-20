@@ -45,8 +45,8 @@ export interface Dictionary {
     emailPlaceholder: string;
     passwordLabel: string;
     passwordPlaceholder: string;
-    nameLabel: string;
-    namePlaceholder: string;
+    phoneLabel: string;
+    phonePlaceholder: string;
     confirmPasswordLabel: string;
     confirmPasswordPlaceholder: string;
     loginSubmit: string;
@@ -118,8 +118,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       emailPlaceholder: "you@frag.store",
       passwordLabel: "Пароль",
       passwordPlaceholder: "Введите пароль",
-      nameLabel: "Имя игрока",
-      namePlaceholder: "Например, Neon Runner",
+      phoneLabel: "Телефон",
+      phonePlaceholder: "+996 000 000 000",
       confirmPasswordLabel: "Повтор пароля",
       confirmPasswordPlaceholder: "Повторите пароль",
       loginSubmit: "Войти",
@@ -249,8 +249,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       emailPlaceholder: "you@frag.store",
       passwordLabel: "Password",
       passwordPlaceholder: "Enter password",
-      nameLabel: "Player name",
-      namePlaceholder: "For example, Neon Runner",
+      phoneLabel: "Phone",
+      phonePlaceholder: "+1 555 000 0000",
       confirmPasswordLabel: "Confirm password",
       confirmPasswordPlaceholder: "Repeat password",
       loginSubmit: "Log in",
@@ -380,8 +380,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       emailPlaceholder: "you@frag.store",
       passwordLabel: "Сыр сөз",
       passwordPlaceholder: "Сыр сөздү жазыңыз",
-      nameLabel: "Оюнчу аты",
-      namePlaceholder: "Мисалы, Neon Runner",
+      phoneLabel: "Телефон",
+      phonePlaceholder: "+996 700 000 000",
       confirmPasswordLabel: "Сыр сөздү кайталоо",
       confirmPasswordPlaceholder: "Сыр сөздү кайталаңыз",
       loginSubmit: "Кирүү",

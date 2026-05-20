@@ -42,7 +42,7 @@ const CyberInput = React.forwardRef<HTMLInputElement, CyberInputProps>(
             id={inputId}
             aria-invalid={invalid || undefined}
             className={cn(
-              "cyber-cut-small font-tech h-13 border-lime-300/25 bg-black/35 text-base shadow-[inset_0_0_18px_rgba(190,242,100,0.05)] placeholder:text-zinc-600 focus-visible:border-lime-300/80 focus-visible:ring-lime-300/25",
+              "cyber-cut-small font-tech h-13 rounded-none border-lime-300/30 bg-black/40 text-base shadow-[inset_0_0_0_1px_rgba(190,242,100,0.04),inset_0_0_18px_rgba(190,242,100,0.05)] placeholder:text-zinc-600 focus-visible:border-lime-300/80 focus-visible:ring-lime-300/25",
               icon && "pl-10",
               invalid &&
                 "border-red-400/60 focus-visible:border-red-300 focus-visible:ring-red-400/20",
@@ -93,7 +93,7 @@ const CyberTextarea = React.forwardRef<HTMLTextAreaElement, CyberTextareaProps>(
           id={textareaId}
           aria-invalid={invalid || undefined}
           className={cn(
-            "cyber-cut-surface font-tech min-h-36 resize-y border-lime-300/25 bg-black/35 text-base shadow-[inset_0_0_18px_rgba(190,242,100,0.05)] placeholder:text-zinc-600 focus-visible:border-lime-300/80 focus-visible:ring-lime-300/25",
+            "cyber-cut-surface font-tech min-h-36 resize-y rounded-none border-lime-300/30 bg-black/40 text-base shadow-[inset_0_0_0_1px_rgba(190,242,100,0.04),inset_0_0_18px_rgba(190,242,100,0.05)] placeholder:text-zinc-600 focus-visible:border-lime-300/80 focus-visible:ring-lime-300/25",
             invalid &&
               "border-red-400/60 focus-visible:border-red-300 focus-visible:ring-red-400/20",
             className,

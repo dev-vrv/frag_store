@@ -72,7 +72,7 @@ export function CyberLaserText({
       ref={ref as never}
       data-visible={isVisible}
       className={cn(
-        "cyber-laser-text font-display relative inline-block overflow-hidden text-white",
+        "cyber-laser-text font-display relative inline-block pb-[0.14em] leading-[1.12] text-white",
         className,
       )}
       style={

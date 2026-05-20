@@ -4,7 +4,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const cyberBadgeVariants = cva(
-  "cyber-cut-small font-tech inline-flex w-fit items-center gap-1 border px-3 py-1.5 text-xs font-bold uppercase leading-none tracking-[0.12em]",
+  "cyber-cut-small font-sans inline-flex w-fit items-center gap-3 border px-7 py-3 text-sm font-bold uppercase leading-none tracking-[0.08em]",
   {
     variants: {
       variant: {

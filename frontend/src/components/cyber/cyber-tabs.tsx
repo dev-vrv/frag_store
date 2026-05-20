@@ -36,7 +36,7 @@ function CyberTabsTrigger({
   return (
     <TabsTrigger
       className={cn(
-        "cyber-cut-small font-tech px-5 py-3 text-sm uppercase tracking-[0.1em] text-zinc-400 data-[state=active]:border-lime-300/35 data-[state=active]:bg-lime-300/10 data-[state=active]:text-lime-100 data-[state=active]:shadow-[0_0_22px_rgba(190,242,100,0.18)]",
+        "cyber-cut-small font-tech px-8 py-4 text-sm uppercase tracking-[0.1em] text-zinc-400 data-[state=active]:border-lime-300/35 data-[state=active]:bg-lime-300/10 data-[state=active]:text-lime-100 data-[state=active]:shadow-[0_0_22px_rgba(190,242,100,0.18)]",
         className,
       )}
       {...props}

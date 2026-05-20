@@ -1,7 +1,8 @@
 "use client";
 
+import Link from "next/link";
 import { useState } from "react";
-import { FaLock, FaRegEnvelope, FaUserAstronaut } from "react-icons/fa";
+import { FaLock, FaPhoneAlt, FaRegEnvelope } from "react-icons/fa";
 
 import {
   CyberBadge,
@@ -15,8 +16,7 @@ import {
   CyberTabsList,
   CyberTabsTrigger,
 } from "@/components/cyber";
-import { Header } from "@/components/Header/Header";
-import { type Dictionary, type Locale } from "@/lib/i18n";
+import { type Dictionary, type Locale, localizePath } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export interface AuthPageProps {
@@ -31,13 +31,15 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
   const auth = dictionary.auth;
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
-      <Header locale={locale} dictionary={dictionary.header} />
-      <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_18%_22%,rgba(255,23,68,0.22),transparent_31%),radial-gradient(circle_at_82%_14%,rgba(34,211,238,0.14),transparent_29%),linear-gradient(180deg,#050507,#000)]" />
-      <div className="cyber-grid absolute inset-0 -z-10 opacity-70" />
+    <main className="relative isolate min-h-screen overflow-hidden bg-black text-zinc-50">
+      <div className="absolute inset-0 -z-30 bg-[radial-gradient(circle_at_18%_24%,rgba(255,23,68,0.3),transparent_31%),radial-gradient(circle_at_78%_18%,rgba(127,29,29,0.42),transparent_30%),radial-gradient(circle_at_58%_78%,rgba(217,70,239,0.08),transparent_24%),linear-gradient(180deg,#050507_0%,#120507_48%,#000_100%)]" />
+      <div className="cyber-grid absolute inset-0 -z-20 opacity-70" />
+      <div className="cyber-scanline absolute inset-0 -z-10 opacity-35" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-400/85 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-red-500/70 to-transparent" />
 
-      <section className="mx-auto grid min-h-[calc(100vh-8rem)] w-full max-w-7xl items-center gap-8 py-10 lg:grid-cols-[0.9fr_1.1fr]">
-        <div className="relative min-h-72 overflow-hidden">
+      <section className="grid min-h-screen w-full items-center gap-8 px-4 py-24 sm:px-6 lg:grid-cols-[minmax(0,1fr)_minmax(520px,44vw)] lg:px-0 lg:py-0">
+        <div className="relative min-h-[26rem] overflow-hidden lg:ml-8 lg:min-h-[34rem] lg:max-w-3xl xl:ml-16">
           <div
             className={cn(
               "absolute inset-0 transition-all duration-500",
@@ -89,21 +91,32 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
           </div>
         </div>
 
-        <CyberCard variant="glass" className="p-2">
-          <CyberCardContent className="p-5 sm:p-7">
+        <CyberCard
+          variant="glass"
+          className="rounded-none p-2 lg:flex lg:min-h-screen lg:items-center"
+        >
+          <CyberCardContent className="w-full p-5 sm:p-7 lg:px-10">
+            <Link
+              href={localizePath("/", locale)}
+              className="font-display mb-8 inline-flex flex-col items-start leading-none tracking-[0.08em] transition hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/35"
+              aria-label="Frag Store"
+            >
+              <span className="text-3xl font-normal text-red-500 sm:text-4xl">FRAG</span>
+              <span className="mt-1 text-2xl font-normal text-white sm:text-3xl">STORE</span>
+            </Link>
             <CyberTabs
               value={mode}
               onValueChange={(value) => setMode(value as AuthMode)}
               className="w-full"
             >
-              <CyberTabsList className="grid w-full grid-cols-2">
+              <CyberTabsList className="grid w-full grid-cols-2 rounded-none">
                 <CyberTabsTrigger value="login">{auth.loginTab}</CyberTabsTrigger>
                 <CyberTabsTrigger value="register">{auth.registerTab}</CyberTabsTrigger>
               </CyberTabsList>
 
               <CyberTabsContent
                 value="login"
-                className="mt-5 animate-in fade-in-50 slide-in-from-bottom-2 duration-300"
+                className="mt-5 animate-in rounded-none fade-in-50 slide-in-from-bottom-2 duration-300"
               >
                 <form className="space-y-5">
                   <CyberInput
@@ -129,14 +142,15 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
 
               <CyberTabsContent
                 value="register"
-                className="mt-5 animate-in fade-in-50 slide-in-from-bottom-2 duration-300"
+                className="mt-5 animate-in rounded-none fade-in-50 slide-in-from-bottom-2 duration-300"
               >
                 <form className="space-y-5">
                   <CyberInput
-                    label={auth.nameLabel}
-                    placeholder={auth.namePlaceholder}
-                    icon={<FaUserAstronaut aria-hidden="true" />}
-                    autoComplete="nickname"
+                    label={auth.phoneLabel}
+                    type="tel"
+                    placeholder={auth.phonePlaceholder}
+                    icon={<FaPhoneAlt aria-hidden="true" />}
+                    autoComplete="tel"
                   />
                   <CyberInput
                     label={auth.emailLabel}
