@@ -105,7 +105,7 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
               <span className="text-zinc-600">/ 5</span>
             </div>
           ) : null}
-          <div className="mt-auto flex items-end justify-between gap-4">
+          <div className="flex items-end justify-between gap-4">
             <div>
               <div className="font-display text-3xl font-normal text-lime-100">{price}</div>
               {oldPrice ? (
