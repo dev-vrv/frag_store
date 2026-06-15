@@ -1,8 +1,11 @@
+"use client";
+
 import * as React from "react";
 import { Heart, Star } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import { CyberBadge, type CyberBadgeProps } from "./cyber-badge";
+import { cyberButtonVariants } from "./cyber-button";
 import {
   CyberCard,
   CyberCardContent,
@@ -27,6 +30,8 @@ export interface CyberProductCardProps
   ctaLabel?: React.ReactNode;
   detailsLabel?: React.ReactNode;
   favoriteLabel?: string;
+  ctaHref?: string;
+  detailsHref?: string;
   onCtaClick?: () => void;
   onDetailsClick?: () => void;
   onFavoriteClick?: () => void;
@@ -46,6 +51,8 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
       ctaLabel = "Buy now",
       detailsLabel = "Details",
       favoriteLabel = "Add to favorites",
+      ctaHref,
+      detailsHref,
       onCtaClick,
       onDetailsClick,
       onFavoriteClick,
@@ -53,8 +60,14 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
     },
     ref,
   ) => (
-    <CyberCard ref={ref} variant="product" hover className={cn("h-full", className)} {...props}>
-      <CyberCardContent className="relative flex h-full flex-col gap-5 p-4">
+    <CyberCard
+      ref={ref}
+      variant="product"
+      hover
+      className={cn("flex h-full flex-col", className)}
+      {...props}
+    >
+      <CyberCardContent className="relative flex flex-1 flex-col gap-5 p-4">
         <div className="relative aspect-[4/3] overflow-hidden rounded-md border border-white/10 bg-[radial-gradient(circle_at_30%_20%,rgba(248,113,113,0.22),transparent_32%),linear-gradient(135deg,rgba(113,113,122,0.28),rgba(9,9,11,0.92))]">
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:22px_22px] opacity-40" />
           {typeof image === "string" ? (
@@ -115,13 +128,35 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
           </div>
         </div>
       </CyberCardContent>
-      <CyberCardFooter className="grid grid-cols-2 gap-3 px-4 pb-4 pt-0">
-        <CyberButton className="w-full px-4" variant="ghost" onClick={onDetailsClick}>
-          {detailsLabel}
-        </CyberButton>
-        <CyberButton className="w-full px-4" variant="primary" onClick={onCtaClick}>
-          {ctaLabel}
-        </CyberButton>
+      <CyberCardFooter className="mt-auto grid grid-cols-2 gap-3 px-4 pb-4 pt-0">
+        {detailsHref ? (
+          <a
+            href={detailsHref}
+            className={cn(cyberButtonVariants({ variant: "ghost" }), "w-full")}
+          >
+            <span className="relative z-10 inline-flex items-center gap-2 px-3 py-1">
+              {detailsLabel}
+            </span>
+          </a>
+        ) : (
+          <CyberButton className="w-full px-4" variant="ghost" onClick={onDetailsClick}>
+            {detailsLabel}
+          </CyberButton>
+        )}
+        {ctaHref ? (
+          <a
+            href={ctaHref}
+            className={cn(cyberButtonVariants({ variant: "primary" }), "w-full")}
+          >
+            <span className="relative z-10 inline-flex items-center gap-2 px-3 py-1">
+              {ctaLabel}
+            </span>
+          </a>
+        ) : (
+          <CyberButton className="w-full px-4" variant="primary" onClick={onCtaClick}>
+            {ctaLabel}
+          </CyberButton>
+        )}
       </CyberCardFooter>
     </CyberCard>
   ),

@@ -179,31 +179,73 @@ export interface CyberDropdownProps {
 }
 
 function CyberDropdown({ label, items, className }: CyberDropdownProps) {
+  const wrapperRef = React.useRef<HTMLDivElement | null>(null);
+  const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    if (!open) {
+      return;
+    }
+
+    function handlePointerDown(event: PointerEvent) {
+      if (!wrapperRef.current?.contains(event.target as Node)) {
+        setOpen(false);
+      }
+    }
+
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") {
+        setOpen(false);
+      }
+    }
+
+    document.addEventListener("pointerdown", handlePointerDown);
+    document.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [open]);
+
   return (
-    <details className={cn("group relative w-full", className)}>
-      <summary className="cyber-cut-button font-display flex h-13 list-none items-center justify-between border-2 border-lime-300/65 bg-zinc-950/30 px-7 text-sm font-normal uppercase tracking-[0.08em] text-lime-100 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)] outline-none transition hover:bg-lime-300/10 [&::-webkit-details-marker]:hidden">
+    <div ref={wrapperRef} className={cn("group relative w-full", className)}>
+      <button
+        type="button"
+        onClick={() => setOpen((current) => !current)}
+        aria-haspopup="menu"
+        aria-expanded={open}
+        className="cyber-cut-button font-display flex h-13 w-full list-none items-center justify-between border-2 border-lime-300/65 bg-zinc-950/30 px-7 text-sm font-normal uppercase tracking-[0.08em] text-lime-100 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)] outline-none transition hover:bg-lime-300/10"
+      >
         {label}
-        <ChevronDown className="size-4 transition group-open:rotate-180" />
-      </summary>
-      <div className="cyber-cut-surface font-tech absolute left-0 top-[calc(100%+0.5rem)] z-40 w-72 border border-lime-300/30 bg-zinc-950/95 p-2 text-sm uppercase tracking-[0.08em] shadow-[0_0_36px_rgba(190,242,100,0.16)]">
-        {items.map((item, index) => (
-          <button
-            key={index}
-            type="button"
-            disabled={item.disabled}
-            className={cn(
-              "cyber-cut-small flex w-full items-center gap-2 border border-transparent px-3 py-2 text-left text-zinc-300 outline-none transition hover:border-lime-300/25 hover:bg-lime-300/10 hover:text-lime-100 disabled:cursor-not-allowed disabled:opacity-45",
-              item.danger && "text-red-300 hover:border-red-300/25 hover:bg-red-300/10",
-            )}
-          >
-            <span className="flex size-4 items-center justify-center">
-              {item.checked ? <Check className="size-3.5 text-lime-200" /> : null}
-            </span>
-            {item.label}
-          </button>
-        ))}
-      </div>
-    </details>
+        <ChevronDown className={cn("size-4 transition", open && "rotate-180")} />
+      </button>
+      {open ? (
+        <div
+          className="cyber-cut-surface font-tech absolute left-0 top-[calc(100%+0.5rem)] z-40 w-72 border border-lime-300/30 bg-zinc-950/95 p-2 text-sm uppercase tracking-[0.08em] shadow-[0_0_36px_rgba(190,242,100,0.16)]"
+          role="menu"
+        >
+          {items.map((item, index) => (
+            <button
+              key={index}
+              type="button"
+              role="menuitem"
+              disabled={item.disabled}
+              onClick={() => setOpen(false)}
+              className={cn(
+                "cyber-cut-small flex w-full items-center gap-2 border border-transparent px-3 py-2 text-left text-zinc-300 outline-none transition hover:border-lime-300/25 hover:bg-lime-300/10 hover:text-lime-100 disabled:cursor-not-allowed disabled:opacity-45",
+                item.danger && "text-red-300 hover:border-red-300/25 hover:bg-red-300/10",
+              )}
+            >
+              <span className="flex size-4 items-center justify-center">
+                {item.checked ? <Check className="size-3.5 text-lime-200" /> : null}
+              </span>
+              {item.label}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
   );
 }
 

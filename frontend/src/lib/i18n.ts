@@ -64,11 +64,66 @@ export interface Dictionary {
     primaryCta: string;
     secondaryCta: string;
     metrics: Array<[string, string]>;
-    systemCards: Array<[string, string]>;
-    loadoutCore: string;
-    timeline: string;
-    live: string;
+    featurePills: string[];
+    showcaseEyebrow: string;
+    showcaseTitle: string;
+    showcaseSubtitle: string;
+    showcaseSpecs: Array<[string, string]>;
+    spotlightLabel: string;
+    spotlightValue: string;
+    availabilityLabel: string;
+    availabilityValue: string;
     scroll: string;
+  };
+  loadout: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    primaryCta: string;
+    secondaryCta: string;
+    signalLabel: string;
+    categoryCta: string;
+    categoryAriaLabel: string;
+    cards: Array<{
+      title: string;
+      description: string;
+      signal: string;
+      stat: string;
+    }>;
+  };
+  service: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    metrics: Array<[string, string]>;
+    cards: Array<{
+      title: string;
+      description: string;
+      signal: string;
+    }>;
+  };
+  featured: {
+    eyebrow: string;
+    title: string;
+    subtitle: string;
+    primaryCta: string;
+    secondaryCta: string;
+    priceLabel: string;
+    productCta: string;
+    detailsCta: string;
+    favoriteLabel: string;
+    products: Array<{
+      name: string;
+      category: string;
+      description: string;
+      price: string;
+      oldPrice?: string;
+      visual: "mice" | "keyboards" | "headsets" | "components" | "accessories" | "setups";
+      badges: Array<{
+        label: string;
+        variant: "green" | "violet" | "red" | "cyan";
+      }>;
+    }>;
   };
   pages: Record<
     | "catalog"
@@ -143,26 +198,170 @@ const dictionaries: Record<Locale, Dictionary> = {
       registerHint: "Регистрация займет меньше минуты.",
     },
     hero: {
-      eyebrow: "Frag Store // Техника онлайн",
-      titleStart: "Игровая техника для",
-      titleHighlight: "точного фрага",
+      eyebrow: "Frag Store // Киберпанк-магазин сетапов",
+      titleStart: "Собери сетап, который",
+      titleHighlight: "давит с первого клика",
       subtitle:
-        "Мышки, клавиатуры, гарнитуры, коврики и аксессуары для ПК в темном cyberpunk-стиле. Собирай сетап, который выглядит агрессивно и играет быстро.",
-      primaryCta: "В каталог",
-      secondaryCta: "Смотреть новинки",
+        "Гарнитуры, клавиатуры, мыши и control-аксессуары для ПК и гейминга. Отбираем периферию, которая выглядит как оружие, а работает как апгрейд для ранговой игры.",
+      primaryCta: "Собрать loadout",
+      secondaryCta: "Смотреть хиты",
       metrics: [
-        ["Мышки", "120+"],
-        ["Клавиатуры", "80+"],
-        ["Аксессуары", "24/7"],
+        ["SKU", "280+"],
+        ["Доставка", "24/7"],
+        ["Хиты", "48 ч"],
       ],
-      systemCards: [
-        ["Игровые мышки", "120+"],
-        ["Клавиатуры", "80+"],
+      featurePills: [
+        "Official gear",
+        "Low-latency audio",
+        "Rapid trigger",
+        "Control accessories",
       ],
-      loadoutCore: "Центр сетапа",
-      timeline: "Новинки недели",
-      live: "В наличии",
+      showcaseEyebrow: "Флагман недели",
+      showcaseTitle: "HX-7 Phantom Loadout",
+      showcaseSubtitle:
+        "Комбинация из гарнитуры, клавиатуры и легкой мыши для FPS, ranked и долгих ночных сессий.",
+      showcaseSpecs: [
+        ["Аудио", "7.1 / Detachable Mic"],
+        ["Клавиши", "Rapid Trigger / TKL"],
+        ["Мышь", "49 g / 26K DPI"],
+      ],
+      spotlightLabel: "Главный сигнал",
+      spotlightValue: "Hit Drop // Ready",
+      availabilityLabel: "Состояние витрины",
+      availabilityValue: "В наличии сейчас",
       scroll: "Листай",
+    },
+    loadout: {
+      eyebrow: "Loadout Zones",
+      title: "Категории, с которых начинается сильный сетап",
+      subtitle:
+        "Следующей после hero должна идти секция с ключевыми товарными направлениями. Она сразу показывает ассортимент, помогает выбрать сценарий покупки и ведет в каталог без лишнего скролла.",
+      primaryCta: "Открыть каталог",
+      secondaryCta: "Связаться с нами",
+      signalLabel: "Сигнал",
+      categoryCta: "Открыть категорию",
+      categoryAriaLabel: "Открыть категорию в каталоге",
+      cards: [
+        {
+          title: "Гарнитуры",
+          description:
+            "Закрытые и открытые модели для чистого позиционирования, командной связи и длинных игровых сессий.",
+          signal: "7.1 / Noise Cancel",
+          stat: "24 модели",
+        },
+        {
+          title: "Клавиатуры",
+          description:
+            "Механика и low-profile решения с быстрым откликом, хотсвапом и агрессивной RGB-подачей.",
+          signal: "Hot Swap / RGB",
+          stat: "18 серий",
+        },
+        {
+          title: "Мыши",
+          description:
+            "Легкие корпуса, точные сенсоры и формы под claw, palm и fingertip для соревновательной игры.",
+          signal: "49 g / 26K DPI",
+          stat: "32 варианта",
+        },
+        {
+          title: "Control-аксессуары",
+          description:
+            "Коврики, стойки, USB-хабы и кабели, которые собирают рабочую зону в цельный cyberpunk-loadout.",
+          signal: "Desk Flow / Cable Sync",
+          stat: "40+ позиций",
+        },
+      ],
+    },
+    service: {
+      eyebrow: "Протокол сервиса",
+      title: "Почему здесь удобно покупать",
+      subtitle:
+        "Здесь важны простые вещи: оригинальный товар, гарантия, быстрая доставка и помощь с подбором под ваш бюджет и стиль игры.",
+      metrics: [
+        ["Оригинальная техника", "100%"],
+        ["Гарантия", "12 мес"],
+        ["Поддержка", "7 дней"],
+      ],
+      cards: [
+        {
+          title: "Проверенные бренды",
+          description:
+            "Работаем только с актуальными линейками gaming-периферии и аксессуаров без серого ассортимента.",
+          signal: "Официальные поставки",
+        },
+        {
+          title: "Подбор под сетап",
+          description:
+            "Помогаем собрать совместимый loadout: гарнитура, коврик, мышь, клавиатура и полезные desktop-аксессуары.",
+          signal: "Синхронный подбор",
+        },
+        {
+          title: "Быстрая логистика",
+          description:
+            "Фокус на наличии и понятной доставке, чтобы клиент видел не только стиль, но и реальную готовность к заказу.",
+          signal: "Быстрая отгрузка",
+        },
+      ],
+    },
+    featured: {
+      eyebrow: "Hot Drop",
+      title: "Хиты, с которых чаще всего собирают игровой loadout",
+      subtitle:
+        "После блока доверия нужна витрина товаров. Она возвращает пользователя к конкретным позициям и дает быстрый вход в покупку через эмоционально сильные модели.",
+      primaryCta: "Смотреть каталог",
+      secondaryCta: "Все новинки",
+      priceLabel: "Цена",
+      productCta: "Открыть",
+      detailsCta: "Подробнее",
+      favoriteLabel: "В избранное",
+      products: [
+        {
+          name: "HX-7 Phantom",
+          category: "Игровая гарнитура",
+          description: "Гарнитура 7.1 с низкой задержкой, съемным микрофоном и точным позиционированием в шутерах.",
+          price: "12 990 сом",
+          oldPrice: "14 490 сом",
+          visual: "headsets",
+          badges: [
+            { label: "Хит", variant: "red" },
+            { label: "Скидка", variant: "green" },
+          ],
+        },
+        {
+          name: "Kurai TKL",
+          category: "Механическая клавиатура",
+          description: "TKL-клавиатура с hot-swap, rapid trigger и плотной сборкой для соревновательной игры.",
+          price: "9 490 сом",
+          oldPrice: "10 990 сом",
+          visual: "keyboards",
+          badges: [
+            { label: "Pro", variant: "violet" },
+            { label: "Скидка", variant: "green" },
+          ],
+        },
+        {
+          name: "Vanta Air Pro",
+          category: "Беспроводная мышь",
+          description: "Легкая мышь 49 г с сенсором 26K и быстрым откликом для claw и fingertip хвата.",
+          price: "7 990 сом",
+          visual: "mice",
+          badges: [
+            { label: "Новинка", variant: "cyan" },
+            { label: "Хит", variant: "red" },
+          ],
+        },
+        {
+          name: "Zero Drag Mat XL",
+          category: "Игровой коврик",
+          description: "Большой коврик с контролируемым скольжением и стабильной поверхностью под резкие флики.",
+          price: "3 490 сом",
+          oldPrice: "3 990 сом",
+          visual: "accessories",
+          badges: [
+            { label: "Скидка", variant: "green" },
+          ],
+        },
+      ],
     },
     pages: {
       catalog: {
@@ -318,26 +517,170 @@ const dictionaries: Record<Locale, Dictionary> = {
       registerHint: "Registration takes less than a minute.",
     },
     hero: {
-      eyebrow: "Frag Store // Gear online",
-      titleStart: "Gaming hardware for",
-      titleHighlight: "clean frags",
+      eyebrow: "Frag Store // Cyberpunk loadout store",
+      titleStart: "Build a setup that",
+      titleHighlight: "hits from the first click",
       subtitle:
-        "Mice, keyboards, headsets, mousepads, and PC accessories in a dark cyberpunk style. Build a setup that looks aggressive and plays fast.",
-      primaryCta: "Enter catalog",
-      secondaryCta: "New arrivals",
+        "Headsets, keyboards, mice, and control accessories for PC and gaming. We curate gear that looks weaponized and performs like a serious ranked upgrade.",
+      primaryCta: "Build loadout",
+      secondaryCta: "See bestsellers",
       metrics: [
-        ["Mice", "120+"],
-        ["Keyboards", "80+"],
-        ["Accessories", "24/7"],
+        ["SKUs", "280+"],
+        ["Dispatch", "24/7"],
+        ["Hot drops", "48h"],
       ],
-      systemCards: [
-        ["Gaming mice", "120+"],
-        ["Keyboards", "80+"],
+      featurePills: [
+        "Official gear",
+        "Low-latency audio",
+        "Rapid trigger",
+        "Control accessories",
       ],
-      loadoutCore: "Setup Core",
-      timeline: "Weekly Drops",
-      live: "In stock",
+      showcaseEyebrow: "Flagship of the week",
+      showcaseTitle: "HX-7 Phantom Loadout",
+      showcaseSubtitle:
+        "A headset, keyboard, and lightweight mouse combo tuned for FPS, ranked sessions, and long night runs.",
+      showcaseSpecs: [
+        ["Audio", "7.1 / Detachable Mic"],
+        ["Keys", "Rapid Trigger / TKL"],
+        ["Mouse", "49 g / 26K DPI"],
+      ],
+      spotlightLabel: "Primary signal",
+      spotlightValue: "Hit Drop // Ready",
+      availabilityLabel: "Showcase status",
+      availabilityValue: "In stock now",
       scroll: "Scroll",
+    },
+    loadout: {
+      eyebrow: "Loadout Zones",
+      title: "The categories that start a serious setup",
+      subtitle:
+        "The section right after the hero should surface the core product lanes. It turns visual interest into shopping intent and helps users jump into the catalog with less friction.",
+      primaryCta: "Open catalog",
+      secondaryCta: "Contact us",
+      signalLabel: "Frag Signal",
+      categoryCta: "Open category",
+      categoryAriaLabel: "Open category in catalog",
+      cards: [
+        {
+          title: "Headsets",
+          description:
+            "Closed and open-back options for clean positioning, clear comms, and long gaming sessions.",
+          signal: "7.1 / Noise Cancel",
+          stat: "24 models",
+        },
+        {
+          title: "Keyboards",
+          description:
+            "Mechanical and low-profile boards with fast actuation, hot swap support, and aggressive RGB character.",
+          signal: "Hot Swap / RGB",
+          stat: "18 lines",
+        },
+        {
+          title: "Mice",
+          description:
+            "Lightweight shells, precise sensors, and shapes tuned for claw, palm, and fingertip playstyles.",
+          signal: "49 g / 26K DPI",
+          stat: "32 options",
+        },
+        {
+          title: "Control Accessories",
+          description:
+            "Mousepads, stands, USB hubs, and cables that complete the desk zone into one cyberpunk loadout.",
+          signal: "Desk Flow / Cable Sync",
+          stat: "40+ items",
+        },
+      ],
+    },
+    service: {
+      eyebrow: "Service Protocol",
+      title: "Why this store is easy to buy from and easy to recommend",
+      subtitle:
+        "After the category block, the page should answer rational buying questions: authenticity, warranty, delivery speed, and help choosing gear by budget, genre, and playstyle.",
+      metrics: [
+        ["Authentic gear", "100%"],
+        ["Warranty", "12 mo"],
+        ["Support", "7 days"],
+      ],
+      cards: [
+        {
+          title: "Verified brands",
+          description:
+            "We focus on current gaming peripheral lines and accessories instead of gray-market assortment.",
+          signal: "Official Supply",
+        },
+        {
+          title: "Setup guidance",
+          description:
+            "We help users build a compatible loadout across headsets, pads, mice, keyboards, and desk accessories.",
+          signal: "Setup Match",
+        },
+        {
+          title: "Fast logistics",
+          description:
+            "The offer is built around stock visibility and clear delivery expectations, not just atmosphere and visuals.",
+          signal: "Fast Dispatch",
+        },
+      ],
+    },
+    featured: {
+      eyebrow: "Hot Drop",
+      title: "The pieces most setups start with",
+      subtitle:
+        "After the trust block, the page needs a product showcase. It brings users back to concrete offers and gives them a fast route into high-intent shopping.",
+      primaryCta: "Browse catalog",
+      secondaryCta: "All new arrivals",
+      priceLabel: "Drop Price",
+      productCta: "Open",
+      detailsCta: "Details",
+      favoriteLabel: "Add to favorites",
+      products: [
+        {
+          name: "HX-7 Phantom",
+          category: "Gaming Headset",
+          description: "A 7.1 headset with low latency, detachable mic, and clean positional audio for shooters.",
+          price: "KGS 12,990",
+          oldPrice: "KGS 14,490",
+          visual: "headsets",
+          badges: [
+            { label: "Hit", variant: "red" },
+            { label: "Sale", variant: "green" },
+          ],
+        },
+        {
+          name: "Kurai TKL",
+          category: "Mechanical Keyboard",
+          description: "A TKL board with hot-swap support, rapid trigger response, and a dense competitive build.",
+          price: "KGS 9,490",
+          oldPrice: "KGS 10,990",
+          visual: "keyboards",
+          badges: [
+            { label: "Pro", variant: "violet" },
+            { label: "Sale", variant: "green" },
+          ],
+        },
+        {
+          name: "Vanta Air Pro",
+          category: "Wireless Mouse",
+          description: "A 49 g wireless mouse with a 26K sensor and fast response for claw and fingertip play.",
+          price: "KGS 7,990",
+          visual: "mice",
+          badges: [
+            { label: "New", variant: "cyan" },
+            { label: "Hit", variant: "red" },
+          ],
+        },
+        {
+          name: "Zero Drag Mat XL",
+          category: "Gaming Mousepad",
+          description: "A large control surface built for stable tracking and confident flicks in tactical FPS play.",
+          price: "KGS 3,490",
+          oldPrice: "KGS 3,990",
+          visual: "accessories",
+          badges: [
+            { label: "Sale", variant: "green" },
+          ],
+        },
+      ],
     },
     pages: {
       catalog: {
@@ -493,26 +836,170 @@ const dictionaries: Record<Locale, Dictionary> = {
       registerHint: "Катталуу бир мүнөттөн аз убакыт алат.",
     },
     hero: {
-      eyebrow: "Frag Store // Техника онлайн",
-      titleStart: "Так фраг үчүн",
-      titleHighlight: "gaming техника",
+      eyebrow: "Frag Store // Cyberpunk loadout store",
+      titleStart: "Биринчи басуудан эле",
+      titleHighlight: "басым кылган сетап",
       subtitle:
-        "ПК үчүн мышкалар, клавиатуралар, гарнитуралар, ковриктер жана аксессуарлар. Кара-кызыл cyberpunk стилинде агрессивдүү жана тез сетап чогулт.",
-      primaryCta: "Каталогго",
-      secondaryCta: "Жаңы товарлар",
+        "ПК жана гейминг үчүн гарнитуралар, клавиатуралар, чычкандар жана control-аксессуарлар. Биз тандаган периферия агрессивдүү көрүнөт жана ranked оюнда чыныгы артыкчылык берет.",
+      primaryCta: "Loadout чогултуу",
+      secondaryCta: "Хиттерди көрүү",
       metrics: [
-        ["Мышкалар", "120+"],
-        ["Клавиатура", "80+"],
-        ["Аксессуар", "24/7"],
+        ["SKU", "280+"],
+        ["Жеткирүү", "24/7"],
+        ["Хиттер", "48 с"],
       ],
-      systemCards: [
-        ["Gaming мышкалар", "120+"],
-        ["Клавиатуралар", "80+"],
+      featurePills: [
+        "Official gear",
+        "Low-latency audio",
+        "Rapid trigger",
+        "Control accessories",
       ],
-      loadoutCore: "Сетап борбору",
-      timeline: "Аптанын жаңылыктары",
-      live: "Бар",
+      showcaseEyebrow: "Аптанын флагманы",
+      showcaseTitle: "HX-7 Phantom Loadout",
+      showcaseSubtitle:
+        "FPS, ranked жана узак түнкү оюн сессиялары үчүн гарнитура, клавиатура жана жеңил чычкан топтому.",
+      showcaseSpecs: [
+        ["Аудио", "7.1 / Detachable Mic"],
+        ["Клавиш", "Rapid Trigger / TKL"],
+        ["Чычкан", "49 g / 26K DPI"],
+      ],
+      spotlightLabel: "Негизги сигнал",
+      spotlightValue: "Hit Drop // Ready",
+      availabilityLabel: "Витрина абалы",
+      availabilityValue: "Азыр бар",
       scroll: "Төмөн",
+    },
+    loadout: {
+      eyebrow: "Loadout Zones",
+      title: "Күчтүү сетап башталуучу негизги категориялар",
+      subtitle:
+        "Hero'дон кийинки эң туура секция бул негизги товар категориялары. Ал ассортиментти дароо көрсөтүп, сатып алуу сценарийин түшүндүрөт жана колдонуучуну каталогго алып барат.",
+      primaryCta: "Каталогду ачуу",
+      secondaryCta: "Бизге жазуу",
+      signalLabel: "Сигнал",
+      categoryCta: "Категорияны ачуу",
+      categoryAriaLabel: "Каталогдогу категорияны ачуу",
+      cards: [
+        {
+          title: "Гарнитуралар",
+          description:
+            "Так позициялоо, таза үн байланышы жана узак оюн сессиялары үчүн жабык жана ачык моделдер.",
+          signal: "7.1 / Noise Cancel",
+          stat: "24 модель",
+        },
+        {
+          title: "Клавиатуралар",
+          description:
+            "Тез жооп берген, hot swap колдогон жана күчтүү RGB мүнөзү бар механикалык жана low-profile чечимдер.",
+          signal: "Hot Swap / RGB",
+          stat: "18 серия",
+        },
+        {
+          title: "Чычкандар",
+          description:
+            "Жеңил корпус, так сенсор жана claw, palm, fingertip стилине ылайык формалар.",
+          signal: "49 g / 26K DPI",
+          stat: "32 вариант",
+        },
+        {
+          title: "Control-аксессуарлар",
+          description:
+            "Килемчелер, стенддер, USB-хабдар жана кабелдер жумуш аймагын толук cyberpunk-loadout кылып чогултат.",
+          signal: "Desk Flow / Cable Sync",
+          stat: "40+ позиция",
+        },
+      ],
+    },
+    service: {
+      eyebrow: "Сервис протоколу",
+      title: "Бул дүкөндөн сатып алуу эмнеге ыңгайлуу жана ишенимдүү",
+      subtitle:
+        "Категориялардан кийинки блок рационалдуу суроолорду жабышы керек: товар оригиналдуубу, кепилдик барбы, жеткирүү канчалык тез жана тандоого ким жардам берет.",
+      metrics: [
+        ["Оригинал техника", "100%"],
+        ["Кепилдик", "12 ай"],
+        ["Колдоо", "7 күн"],
+      ],
+      cards: [
+        {
+          title: "Текшерилген бренддер",
+          description:
+            "Биз актуалдуу gaming-периферия жана аксессуар линиялары менен иштейбиз, күмөндүү ассортименти жок.",
+          signal: "Расмий жеткирүү",
+        },
+        {
+          title: "Сетап тандоо",
+          description:
+            "Гарнитура, килемче, чычкан, клавиатура жана desk-аксессуарларды бир-бирине тууралап тандоого жардам беребиз.",
+          signal: "Туура шайкештик",
+        },
+        {
+          title: "Тез логистика",
+          description:
+            "Сунуш товар бар экенин жана жеткирүү шарттарын түшүнүктүү көрсөтүүгө курулган.",
+          signal: "Тез жөнөтүү",
+        },
+      ],
+    },
+    featured: {
+      eyebrow: "Hot Drop",
+      title: "Көпчүлүк gaming loadout ушулардан башталат",
+      subtitle:
+        "Ишеним блогунан кийин товар витринасы керек. Ал колдонуучуну кайра конкреттүү позицияларга алып келип, сатып алууга жакын моделдерди көрсөтөт.",
+      primaryCta: "Каталогду көрүү",
+      secondaryCta: "Бардык жаңылыктар",
+      priceLabel: "Баасы",
+      productCta: "Ачуу",
+      detailsCta: "Кененирээк",
+      favoriteLabel: "Тандалгандарга",
+      products: [
+        {
+          name: "HX-7 Phantom",
+          category: "Gaming гарнитура",
+          description: "Төмөн кечигүү, алынуучу микрофон жана так позициялоо менен 7.1 гарнитура.",
+          price: "12 990 сом",
+          oldPrice: "14 490 сом",
+          visual: "headsets",
+          badges: [
+            { label: "Хит", variant: "red" },
+            { label: "Арзан", variant: "green" },
+          ],
+        },
+        {
+          name: "Kurai TKL",
+          category: "Механикалык клавиатура",
+          description: "Hot-swap жана rapid trigger колдоосу бар TKL-клавиатура, атаандаштык оюнга ылайыкталган.",
+          price: "9 490 сом",
+          oldPrice: "10 990 сом",
+          visual: "keyboards",
+          badges: [
+            { label: "Pro", variant: "violet" },
+            { label: "Арзан", variant: "green" },
+          ],
+        },
+        {
+          name: "Vanta Air Pro",
+          category: "Зымсыз чычкан",
+          description: "26K сенсор жана тез жооп менен claw жана fingertip үчүн жеңил 49 г чычкан.",
+          price: "7 990 сом",
+          visual: "mice",
+          badges: [
+            { label: "Жаңы", variant: "cyan" },
+            { label: "Хит", variant: "red" },
+          ],
+        },
+        {
+          name: "Zero Drag Mat XL",
+          category: "Gaming килемче",
+          description: "Так кыймыл жана туруктуу флик үчүн чоң control-килемче.",
+          price: "3 490 сом",
+          oldPrice: "3 990 сом",
+          visual: "accessories",
+          badges: [
+            { label: "Арзан", variant: "green" },
+          ],
+        },
+      ],
     },
     pages: {
       catalog: {

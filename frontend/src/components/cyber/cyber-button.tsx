@@ -66,7 +66,7 @@ const CyberButton = React.forwardRef<HTMLButtonElement, CyberButtonProps>(
       return (
         <Comp
           ref={ref}
-          className={cn(cyberButtonVariants({ variant, size }), "[&_span]:px-3 [&_span]:py-1", className)}
+          className={cn(cyberButtonVariants({ variant, size }), className)}
           aria-busy={loading || undefined}
           {...props}
         >
