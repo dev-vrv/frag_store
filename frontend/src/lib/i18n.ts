@@ -58,21 +58,18 @@ export interface Dictionary {
   };
   hero: {
     eyebrow: string;
-    titleStart: string;
-    titleHighlight: string;
+    title: string;
     subtitle: string;
     primaryCta: string;
     secondaryCta: string;
-    metrics: Array<[string, string]>;
-    featurePills: string[];
-    showcaseEyebrow: string;
-    showcaseTitle: string;
-    showcaseSubtitle: string;
-    showcaseSpecs: Array<[string, string]>;
-    spotlightLabel: string;
-    spotlightValue: string;
-    availabilityLabel: string;
-    availabilityValue: string;
+    microcopy: string;
+    chips: string[];
+    panelEyebrow: string;
+    panelTitle: string;
+    panelText: string;
+    orbitLabels: string[];
+    signalLabel: string;
+    signalValue: string;
     scroll: string;
   };
   loadout: {
@@ -198,44 +195,29 @@ const dictionaries: Record<Locale, Dictionary> = {
       registerHint: "Регистрация займет меньше минуты.",
     },
     hero: {
-      eyebrow: "Frag Store // Киберпанк-магазин сетапов",
-      titleStart: "Собери сетап, который",
-      titleHighlight: "давит с первого клика",
+      eyebrow: "Frag Store // Gaming Gear",
+      title: "Техника для гейминга и сильного сетапа",
       subtitle:
-        "Гарнитуры, клавиатуры, мыши и control-аксессуары для ПК и гейминга. Отбираем периферию, которая выглядит как оружие, а работает как апгрейд для ранговой игры.",
-      primaryCta: "Собрать loadout",
-      secondaryCta: "Смотреть хиты",
-      metrics: [
-        ["SKU", "280+"],
-        ["Доставка", "24/7"],
-        ["Хиты", "48 ч"],
-      ],
-      featurePills: [
-        "Official gear",
-        "Low-latency audio",
-        "Rapid trigger",
-        "Control accessories",
-      ],
-      showcaseEyebrow: "Флагман недели",
-      showcaseTitle: "HX-7 Phantom Loadout",
-      showcaseSubtitle:
-        "Комбинация из гарнитуры, клавиатуры и легкой мыши для FPS, ranked и долгих ночных сессий.",
-      showcaseSpecs: [
-        ["Аудио", "7.1 / Detachable Mic"],
-        ["Клавиши", "Rapid Trigger / TKL"],
-        ["Мышь", "49 g / 26K DPI"],
-      ],
-      spotlightLabel: "Главный сигнал",
-      spotlightValue: "Hit Drop // Ready",
-      availabilityLabel: "Состояние витрины",
-      availabilityValue: "В наличии сейчас",
+        "Мыши, клавиатуры, гарнитуры, коврики и аксессуары, которые реально влияют на комфорт, реакцию и контроль в игре.",
+      primaryCta: "Перейти в каталог",
+      secondaryCta: "Открыть блог",
+      microcopy:
+        "Собираем сетап под жанр, бюджет и стиль игры: от одного девайса до полностью укомплектованного рабочего места.",
+      chips: ["FPS", "Ranked", "Low Latency", "RGB Control"],
+      panelEyebrow: "Combat sync",
+      panelTitle: "Enter the match",
+      panelText:
+        "Быстрый вход в категории и железо, которое ощущается как часть игрового рефлекса, а не просто витрина.",
+      orbitLabels: ["Headsets", "Keyboards", "Mice", "Mousepads"],
+      signalLabel: "Статус сигнала",
+      signalValue: "Target locked",
       scroll: "Листай",
     },
     loadout: {
-      eyebrow: "Loadout Zones",
-      title: "Категории, с которых начинается сильный сетап",
+      eyebrow: "Ключевые категории",
+      title: "С чего обычно собирают сильный игровой сетап",
       subtitle:
-        "Следующей после hero должна идти секция с ключевыми товарными направлениями. Она сразу показывает ассортимент, помогает выбрать сценарий покупки и ведет в каталог без лишнего скролла.",
+        "Начните с нужной категории: звук, управление, точность и порядок на столе.",
       primaryCta: "Открыть каталог",
       secondaryCta: "Связаться с нами",
       signalLabel: "Сигнал",
@@ -273,10 +255,10 @@ const dictionaries: Record<Locale, Dictionary> = {
       ],
     },
     service: {
-      eyebrow: "Протокол сервиса",
-      title: "Почему здесь удобно покупать",
+      eyebrow: "Почему покупают у нас",
+      title: "Покупка без лишнего риска",
       subtitle:
-        "Здесь важны простые вещи: оригинальный товар, гарантия, быстрая доставка и помощь с подбором под ваш бюджет и стиль игры.",
+        "Оригинальная техника, понятная гарантия, живое наличие и помощь с выбором, если нужен сетап под конкретные игры и бюджет.",
       metrics: [
         ["Оригинальная техника", "100%"],
         ["Гарантия", "12 мес"],
@@ -304,12 +286,12 @@ const dictionaries: Record<Locale, Dictionary> = {
       ],
     },
     featured: {
-      eyebrow: "Hot Drop",
-      title: "Хиты, с которых чаще всего собирают игровой loadout",
+      eyebrow: "Лидеры продаж",
+      title: "Модели, которые чаще всего берут для гейминга и сетапа",
       subtitle:
-        "После блока доверия нужна витрина товаров. Она возвращает пользователя к конкретным позициям и дает быстрый вход в покупку через эмоционально сильные модели.",
-      primaryCta: "Смотреть каталог",
-      secondaryCta: "Все новинки",
+        "Проверенные хиты, сильные новинки и позиции, с которых удобно начать покупку или собрать полный комплект.",
+      primaryCta: "Смотреть все товары",
+      secondaryCta: "Смотреть новинки",
       priceLabel: "Цена",
       productCta: "Открыть",
       detailsCta: "Подробнее",
@@ -517,44 +499,29 @@ const dictionaries: Record<Locale, Dictionary> = {
       registerHint: "Registration takes less than a minute.",
     },
     hero: {
-      eyebrow: "Frag Store // Cyberpunk loadout store",
-      titleStart: "Build a setup that",
-      titleHighlight: "hits from the first click",
+      eyebrow: "Frag Store // Gaming Gear",
+      title: "Gear for gaming and a stronger setup",
       subtitle:
-        "Headsets, keyboards, mice, and control accessories for PC and gaming. We curate gear that looks weaponized and performs like a serious ranked upgrade.",
-      primaryCta: "Build loadout",
-      secondaryCta: "See bestsellers",
-      metrics: [
-        ["SKUs", "280+"],
-        ["Dispatch", "24/7"],
-        ["Hot drops", "48h"],
-      ],
-      featurePills: [
-        "Official gear",
-        "Low-latency audio",
-        "Rapid trigger",
-        "Control accessories",
-      ],
-      showcaseEyebrow: "Flagship of the week",
-      showcaseTitle: "HX-7 Phantom Loadout",
-      showcaseSubtitle:
-        "A headset, keyboard, and lightweight mouse combo tuned for FPS, ranked sessions, and long night runs.",
-      showcaseSpecs: [
-        ["Audio", "7.1 / Detachable Mic"],
-        ["Keys", "Rapid Trigger / TKL"],
-        ["Mouse", "49 g / 26K DPI"],
-      ],
-      spotlightLabel: "Primary signal",
-      spotlightValue: "Hit Drop // Ready",
-      availabilityLabel: "Showcase status",
-      availabilityValue: "In stock now",
+        "Mice, keyboards, headsets, mousepads, and accessories that make a real difference in comfort, response, and control.",
+      primaryCta: "Open catalog",
+      secondaryCta: "Open blog",
+      microcopy:
+        "We help build setups by genre, budget, and playstyle, from a single upgrade to a complete desk loadout.",
+      chips: ["FPS", "Ranked", "Low Latency", "RGB Control"],
+      panelEyebrow: "Combat sync",
+      panelTitle: "Enter the match",
+      panelText:
+        "Fast access to categories and hardware that feels wired into gameplay instead of just sitting on a shelf.",
+      orbitLabels: ["Headsets", "Keyboards", "Mice", "Mousepads"],
+      signalLabel: "Signal status",
+      signalValue: "Target locked",
       scroll: "Scroll",
     },
     loadout: {
-      eyebrow: "Loadout Zones",
-      title: "The categories that start a serious setup",
+      eyebrow: "Core Categories",
+      title: "Where most gaming setups begin",
       subtitle:
-        "The section right after the hero should surface the core product lanes. It turns visual interest into shopping intent and helps users jump into the catalog with less friction.",
+        "Start with the category that matters most: sound, control, precision, or desk organization.",
       primaryCta: "Open catalog",
       secondaryCta: "Contact us",
       signalLabel: "Frag Signal",
@@ -592,10 +559,10 @@ const dictionaries: Record<Locale, Dictionary> = {
       ],
     },
     service: {
-      eyebrow: "Service Protocol",
-      title: "Why this store is easy to buy from and easy to recommend",
+      eyebrow: "Why Buy Here",
+      title: "A cleaner buying experience",
       subtitle:
-        "After the category block, the page should answer rational buying questions: authenticity, warranty, delivery speed, and help choosing gear by budget, genre, and playstyle.",
+        "Authentic gear, clear warranty terms, real stock visibility, and help choosing equipment for your games and budget.",
       metrics: [
         ["Authentic gear", "100%"],
         ["Warranty", "12 mo"],
@@ -623,12 +590,12 @@ const dictionaries: Record<Locale, Dictionary> = {
       ],
     },
     featured: {
-      eyebrow: "Hot Drop",
-      title: "The pieces most setups start with",
+      eyebrow: "Best Sellers",
+      title: "The models most buyers choose for gaming setups",
       subtitle:
-        "After the trust block, the page needs a product showcase. It brings users back to concrete offers and gives them a fast route into high-intent shopping.",
-      primaryCta: "Browse catalog",
-      secondaryCta: "All new arrivals",
+        "These are the products people most often start with: proven hits, strong new arrivals, and easy entry points into a full setup.",
+      primaryCta: "Browse all products",
+      secondaryCta: "See new arrivals",
       priceLabel: "Drop Price",
       productCta: "Open",
       detailsCta: "Details",
@@ -836,44 +803,29 @@ const dictionaries: Record<Locale, Dictionary> = {
       registerHint: "Катталуу бир мүнөттөн аз убакыт алат.",
     },
     hero: {
-      eyebrow: "Frag Store // Cyberpunk loadout store",
-      titleStart: "Биринчи басуудан эле",
-      titleHighlight: "басым кылган сетап",
+      eyebrow: "Frag Store // Gaming Gear",
+      title: "Гейминг жана күчтүү сетап үчүн техника",
       subtitle:
-        "ПК жана гейминг үчүн гарнитуралар, клавиатуралар, чычкандар жана control-аксессуарлар. Биз тандаган периферия агрессивдүү көрүнөт жана ranked оюнда чыныгы артыкчылык берет.",
-      primaryCta: "Loadout чогултуу",
-      secondaryCta: "Хиттерди көрүү",
-      metrics: [
-        ["SKU", "280+"],
-        ["Жеткирүү", "24/7"],
-        ["Хиттер", "48 с"],
-      ],
-      featurePills: [
-        "Official gear",
-        "Low-latency audio",
-        "Rapid trigger",
-        "Control accessories",
-      ],
-      showcaseEyebrow: "Аптанын флагманы",
-      showcaseTitle: "HX-7 Phantom Loadout",
-      showcaseSubtitle:
-        "FPS, ranked жана узак түнкү оюн сессиялары үчүн гарнитура, клавиатура жана жеңил чычкан топтому.",
-      showcaseSpecs: [
-        ["Аудио", "7.1 / Detachable Mic"],
-        ["Клавиш", "Rapid Trigger / TKL"],
-        ["Чычкан", "49 g / 26K DPI"],
-      ],
-      spotlightLabel: "Негизги сигнал",
-      spotlightValue: "Hit Drop // Ready",
-      availabilityLabel: "Витрина абалы",
-      availabilityValue: "Азыр бар",
+        "Оюндагы комфортко, реакцияга жана так башкарууга таасир берген чычкандар, клавиатуралар, гарнитуралар жана аксессуарлар.",
+      primaryCta: "Каталогду ачуу",
+      secondaryCta: "Блогду ачуу",
+      microcopy:
+        "Биз сетапты жанрга, бюджетке жана оюн стилине жараша чогултабыз: бир девайстан баштап толук жумуш аймагына чейин.",
+      chips: ["FPS", "Ranked", "Low Latency", "RGB Control"],
+      panelEyebrow: "Combat sync",
+      panelTitle: "Enter the match",
+      panelText:
+        "Категорияларга тез кирүү жана оюн реакциясынын бир бөлүгү болуп сезилген жабдыктар.",
+      orbitLabels: ["Headsets", "Keyboards", "Mice", "Mousepads"],
+      signalLabel: "Сигнал абалы",
+      signalValue: "Target locked",
       scroll: "Төмөн",
     },
     loadout: {
-      eyebrow: "Loadout Zones",
-      title: "Күчтүү сетап башталуучу негизги категориялар",
+      eyebrow: "Негизги категориялар",
+      title: "Күчтүү оюн сетабы көбүнчө ушул жерден башталат",
       subtitle:
-        "Hero'дон кийинки эң туура секция бул негизги товар категориялары. Ал ассортиментти дароо көрсөтүп, сатып алуу сценарийин түшүндүрөт жана колдонуучуну каталогго алып барат.",
+        "Алгач керектүү багытты тандаңыз: үн, башкаруу, тактык же стол үстүндөгү тартип.",
       primaryCta: "Каталогду ачуу",
       secondaryCta: "Бизге жазуу",
       signalLabel: "Сигнал",
@@ -911,10 +863,10 @@ const dictionaries: Record<Locale, Dictionary> = {
       ],
     },
     service: {
-      eyebrow: "Сервис протоколу",
-      title: "Бул дүкөндөн сатып алуу эмнеге ыңгайлуу жана ишенимдүү",
+      eyebrow: "Эмнеге бизден алышат",
+      title: "Ашыкча тобокелсиз сатып алуу",
       subtitle:
-        "Категориялардан кийинки блок рационалдуу суроолорду жабышы керек: товар оригиналдуубу, кепилдик барбы, жеткирүү канчалык тез жана тандоого ким жардам берет.",
+        "Оригинал техника, түшүнүктүү кепилдик, реалдуу бар-жок абалы жана сиздин оюндар менен бюджетиңизге ылайык тандоо боюнча жардам.",
       metrics: [
         ["Оригинал техника", "100%"],
         ["Кепилдик", "12 ай"],
@@ -942,12 +894,12 @@ const dictionaries: Record<Locale, Dictionary> = {
       ],
     },
     featured: {
-      eyebrow: "Hot Drop",
-      title: "Көпчүлүк gaming loadout ушулардан башталат",
+      eyebrow: "Сатуу лидерлери",
+      title: "Гейминг жана сетап үчүн көбүнчө ушуларды тандашат",
       subtitle:
-        "Ишеним блогунан кийин товар витринасы керек. Ал колдонуучуну кайра конкреттүү позицияларга алып келип, сатып алууга жакын моделдерди көрсөтөт.",
-      primaryCta: "Каталогду көрүү",
-      secondaryCta: "Бардык жаңылыктар",
+        "Текшерилген хиттер, күчтүү жаңылыктар жана сатып алууну же толук комплект чогултууну баштоого ыңгайлуу позициялар.",
+      primaryCta: "Бардык товарларды көрүү",
+      secondaryCta: "Жаңы товарларды көрүү",
       priceLabel: "Баасы",
       productCta: "Ачуу",
       detailsCta: "Кененирээк",

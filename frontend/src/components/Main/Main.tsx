@@ -18,8 +18,8 @@ export function Main({ locale, dictionary }: MainProps) {
       <Header locale={locale} dictionary={dictionary.header} />
       <Hero locale={locale} content={dictionary.hero} />
       <LoadoutZones locale={locale} content={dictionary.loadout} />
-      <ServiceProtocol content={dictionary.service} />
       <FeaturedDrops locale={locale} content={dictionary.featured} />
+      <ServiceProtocol content={dictionary.service} />
       <ContactSection locale={locale} />
       <Footer locale={locale} dictionary={dictionary} />
     </main>

@@ -3,6 +3,7 @@ import { Exo_2, JetBrains_Mono } from "next/font/google";
 
 import { CyberLoader } from "@/components/Loaders/CyberLoader";
 import { ContactProvider } from "@/components/Contacts/ContactProvider";
+import BackToTopButton from "@/components/ui/BackToTopButton";
 import { getContactInfos } from "@/lib/contacts";
 import "./globals.css";
 
@@ -36,7 +37,10 @@ export default async function RootLayout({
         className={`${exo.variable} ${jetbrainsMono.variable} flex min-h-full flex-col antialiased`}
       >
         <CyberLoader />
-        <ContactProvider contacts={contacts}>{children}</ContactProvider>
+        <ContactProvider contacts={contacts}>
+          {children}
+          <BackToTopButton />
+        </ContactProvider>
       </body>
     </html>
   );

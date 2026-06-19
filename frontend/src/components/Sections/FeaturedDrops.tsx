@@ -13,6 +13,8 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 import { CyberBadge, CyberButton, CyberProductCard } from "@/components/cyber";
 import { Section } from "@/components/Sections/Section";
+import RevealOnScroll from "@/components/ui/RevealOnScroll";
+import AnimatedText from "@/components/ui/animatedText";
 import { type Dictionary, type Locale, localizePath } from "@/lib/i18n";
 
 export interface FeaturedDropsProps {
@@ -194,18 +196,31 @@ export function FeaturedDrops({ locale, content }: FeaturedDropsProps) {
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-10">
         <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
           <div className="max-w-3xl">
-            <CyberBadge variant="cyan" glow>
-              {content.eyebrow}
-            </CyberBadge>
-            <h2 className="font-display mt-6 text-4xl font-normal tracking-[0.03em] text-white sm:text-5xl">
-              {content.title}
-            </h2>
-            <p className="mt-5 max-w-2xl text-base leading-8 text-zinc-400 sm:text-lg">
-              {content.subtitle}
-            </p>
+            <RevealOnScroll as="div" delay={80}>
+              <CyberBadge variant="cyan" glow>
+                {content.eyebrow}
+              </CyberBadge>
+            </RevealOnScroll>
+            <AnimatedText
+              as="h2"
+              text={content.title}
+              delay={180}
+              className="font-display mt-6 text-4xl font-normal tracking-[0.03em] text-white sm:text-5xl"
+              config={{ duration: 0.32, delayStep: 16, distance: 24 }}
+            />
+            <AnimatedText
+              as="p"
+              text={content.subtitle}
+              delay={340}
+              className="mt-5 max-w-2xl text-base leading-8 text-zinc-400 sm:text-lg"
+              config={{ duration: 0.24, delayStep: 7, distance: 16 }}
+            />
           </div>
 
-          <div className="flex flex-col gap-3 sm:flex-row">
+          <RevealOnScroll
+            className="flex flex-col gap-3 sm:flex-row"
+            delay={520}
+          >
             <CyberButton asChild variant="secondary">
               <a href={catalogHref}>
                 <ArrowRight />
@@ -215,9 +230,8 @@ export function FeaturedDrops({ locale, content }: FeaturedDropsProps) {
             <CyberButton asChild variant="ghost">
               <a href={blogHref}>{content.secondaryCta}</a>
             </CyberButton>
-          </div>
+          </RevealOnScroll>
         </div>
-
       </div>
 
       <div

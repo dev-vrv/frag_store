@@ -2,6 +2,8 @@ import { BadgeCheck, ShieldCheck, Truck, Waves } from "lucide-react";
 
 import { CyberBadge } from "@/components/cyber";
 import { Section } from "@/components/Sections/Section";
+import RevealOnScroll from "@/components/ui/RevealOnScroll";
+import AnimatedText from "@/components/ui/animatedText";
 import { type Dictionary } from "@/lib/i18n";
 
 const serviceIcons = [BadgeCheck, Waves, Truck];
@@ -25,20 +27,32 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
 
       <div className="mx-auto grid w-full max-w-7xl gap-8 xl:grid-cols-[0.95fr_1.05fr]">
         <div className="service-protocol__core rounded-[2rem] border border-cyan-300/15 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.025))] p-7 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02),0_0_56px_rgba(34,211,238,0.08)] backdrop-blur-xl sm:p-8">
-          <CyberBadge variant="cyan" glow>
-            {content.eyebrow}
-          </CyberBadge>
-          <h2 className="font-display mt-6 text-4xl font-normal tracking-[0.03em] text-white sm:text-5xl">
-            {content.title}
-          </h2>
-          <p className="mt-5 max-w-2xl text-base leading-8 text-zinc-400 sm:text-lg">
-            {content.subtitle}
-          </p>
+          <RevealOnScroll as="div" delay={80}>
+            <CyberBadge variant="cyan" glow>
+              {content.eyebrow}
+            </CyberBadge>
+          </RevealOnScroll>
+          <AnimatedText
+            as="h2"
+            text={content.title}
+            delay={180}
+            className="font-display mt-6 text-4xl font-normal tracking-[0.03em] text-white sm:text-5xl"
+            config={{ duration: 0.32, delayStep: 16, distance: 24 }}
+          />
+          <AnimatedText
+            as="p"
+            text={content.subtitle}
+            delay={340}
+            className="mt-5 max-w-2xl text-base leading-8 text-zinc-400 sm:text-lg"
+            config={{ duration: 0.24, delayStep: 7, distance: 16 }}
+          />
 
           <div className="mt-8 grid gap-3 sm:grid-cols-3">
             {content.metrics.map(([label, value], index) => (
-              <div
+              <RevealOnScroll
                 key={label}
+                as="div"
+                delay={520 + index * 100}
                 className="service-protocol__metric rounded-2xl border border-cyan-300/15 bg-[linear-gradient(180deg,rgba(34,211,238,0.08),rgba(255,255,255,0.025))] p-4"
                 style={{ animationDelay: `${index * 180}ms` }}
               >
@@ -47,7 +61,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
                 </div>
                 <div className="font-display mt-2 text-2xl text-cyan-100">{value}</div>
                 <div className="mt-3 h-px bg-gradient-to-r from-cyan-300/60 via-red-300/45 to-transparent" />
-              </div>
+              </RevealOnScroll>
             ))}
           </div>
         </div>
@@ -57,8 +71,10 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
             const Icon = serviceIcons[index] ?? ShieldCheck;
 
             return (
-              <article
+              <RevealOnScroll
                 key={card.title}
+                as="article"
+                delay={660 + index * 120}
                 className="service-protocol__card group relative overflow-hidden rounded-[1.6rem] border border-white/10 bg-zinc-950/70 p-6 transition-colors duration-300 hover:border-cyan-300/30"
                 style={{ animationDelay: `${index * 220}ms` }}
               >
@@ -79,7 +95,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
                     <p className="mt-3 text-sm leading-7 text-zinc-400">{card.description}</p>
                   </div>
                 </div>
-              </article>
+              </RevealOnScroll>
             );
           })}
         </div>

@@ -3,6 +3,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 
 export interface SectionProps {
+  id?: string;
   className?: string;
   containerClassName?: string;
   fullWidth?: boolean;
@@ -10,13 +11,14 @@ export interface SectionProps {
 }
 
 export function Section({
+  id,
   className,
   containerClassName,
   fullWidth = false,
   children,
 }: SectionProps) {
   return (
-    <section className={cn("NameSection", className)}>
+    <section id={id} className={cn("NameSection", className)}>
       <div className={cn("section", fullWidth && "section-full", containerClassName)}>
         {children}
       </div>

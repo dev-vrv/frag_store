@@ -1,14 +1,9 @@
-import {
-  Headphones,
-  Keyboard,
-  Mouse,
-  Usb,
-  ArrowRight,
-  type LucideIcon,
-} from "lucide-react";
+import { Headphones, Keyboard, Mouse, Usb, ArrowRight, type LucideIcon } from "lucide-react";
 
 import { CyberBadge, CyberButton } from "@/components/cyber";
 import { Section } from "@/components/Sections/Section";
+import RevealOnScroll from "@/components/ui/RevealOnScroll";
+import AnimatedText from "@/components/ui/animatedText";
 import { type Dictionary, type Locale, localizePath } from "@/lib/i18n";
 
 const zoneIcons: LucideIcon[] = [Headphones, Keyboard, Mouse, Usb];
@@ -22,6 +17,7 @@ export interface LoadoutZonesProps {
 export function LoadoutZones({ locale, content }: LoadoutZonesProps) {
   return (
     <Section
+      id="loadout"
       fullWidth
       className="relative isolate overflow-hidden bg-[linear-gradient(180deg,#050507_0%,#09090d_46%,#040405_100%)] text-zinc-50"
     >
@@ -30,32 +26,24 @@ export function LoadoutZones({ locale, content }: LoadoutZonesProps) {
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-400/70 to-transparent" />
 
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-10">
-        <div className="grid gap-8 lg:grid-cols-[0.92fr_1.08fr] lg:items-end">
-          <div className="max-w-2xl">
+        <div className="flex flex-col items-center text-center">
+          <RevealOnScroll as="div" delay={80}>
             <CyberBadge variant="red" glow>
               {content.eyebrow}
             </CyberBadge>
-            <h2 className="font-display mt-6 text-4xl font-normal tracking-[0.03em] text-white sm:text-5xl">
-              {content.title}
-            </h2>
-          </div>
-
-          <div className="lg:justify-self-end lg:text-right">
-            <p className="max-w-2xl text-base leading-8 text-zinc-400 sm:text-lg">
-              {content.subtitle}
-            </p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row lg:justify-end">
-              <CyberButton asChild variant="primary">
-                <a href={localizePath("/catalog", locale)}>
-                  <ArrowRight />
-                  {content.primaryCta}
-                </a>
-              </CyberButton>
-              <CyberButton asChild variant="ghost">
-                <a href={localizePath("/contacts", locale)}>{content.secondaryCta}</a>
-              </CyberButton>
-            </div>
-          </div>
+          </RevealOnScroll>
+          <AnimatedText
+            as="h2"
+            text={content.title}
+            delay={180}
+            className="font-display mt-6 max-w-4xl text-4xl font-normal tracking-[0.03em] text-white sm:text-5xl"
+            config={{ duration: 0.32, delayStep: 16, distance: 24 }}
+          />
+          <RevealOnScroll className="mt-7 flex justify-center" delay={420}>
+            <CyberButton asChild variant="ghost">
+              <a href={localizePath("/contacts", locale)}>{content.secondaryCta}</a>
+            </CyberButton>
+          </RevealOnScroll>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
@@ -65,8 +53,10 @@ export function LoadoutZones({ locale, content }: LoadoutZonesProps) {
             const categoryHref = `${localizePath("/catalog", locale)}?category=${categorySlug}`;
 
             return (
-              <article
+              <RevealOnScroll
                 key={card.title}
+                as="article"
+                delay={620 + index * 120}
                 className="cyber-float-card group relative overflow-hidden rounded-[1.6rem] border border-white/10 bg-white/[0.04] p-6 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02)] backdrop-blur-xl transition-transform duration-300 hover:-translate-y-1 hover:border-red-400/35"
                 style={{ animationDelay: `${index * 1.4}s` }}
               >
@@ -108,7 +98,7 @@ export function LoadoutZones({ locale, content }: LoadoutZonesProps) {
                     <ArrowRight className="size-4" />
                   </a>
                 </div>
-              </article>
+              </RevealOnScroll>
             );
           })}
         </div>

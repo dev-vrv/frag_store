@@ -3,6 +3,8 @@ import { ContactFormCard } from "@/components/Contacts/ContactFormCard";
 import { ContactInfoCard } from "@/components/Contacts/ContactInfoCard";
 import { contactContent } from "@/components/Contacts/contact-content";
 import { Section } from "@/components/Sections/Section";
+import RevealOnScroll from "@/components/ui/RevealOnScroll";
+import AnimatedText from "@/components/ui/animatedText";
 import { type Locale } from "@/lib/i18n";
 
 export interface ContactSectionProps {
@@ -23,24 +25,38 @@ export function ContactSection({ locale }: ContactSectionProps) {
 
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-10">
         <div className="max-w-3xl">
-          <CyberBadge variant="red" glow>
-            {content.home.eyebrow}
-          </CyberBadge>
-          <h2 className="font-display mt-6 text-4xl font-normal tracking-[0.03em] text-white sm:text-5xl">
-            {content.home.title}
-          </h2>
-          <p className="mt-5 text-base leading-8 text-zinc-400 sm:text-lg">
-            {content.home.subtitle}
-          </p>
+          <RevealOnScroll as="div" delay={80}>
+            <CyberBadge variant="red" glow>
+              {content.home.eyebrow}
+            </CyberBadge>
+          </RevealOnScroll>
+          <AnimatedText
+            as="h2"
+            text={content.home.title}
+            delay={180}
+            className="font-display mt-6 text-4xl font-normal tracking-[0.03em] text-white sm:text-5xl"
+            config={{ duration: 0.32, delayStep: 16, distance: 24 }}
+          />
+          <AnimatedText
+            as="p"
+            text={content.home.subtitle}
+            delay={340}
+            className="mt-5 text-base leading-8 text-zinc-400 sm:text-lg"
+            config={{ duration: 0.24, delayStep: 7, distance: 16 }}
+          />
         </div>
 
         <div className="grid gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(360px,0.92fr)]">
-          <ContactInfoCard locale={locale} dictionary={content.info} />
-          <ContactFormCard
-            locale={locale}
-            dictionary={content.form}
-            className="h-fit"
-          />
+          <RevealOnScroll delay={520}>
+            <ContactInfoCard locale={locale} dictionary={content.info} />
+          </RevealOnScroll>
+          <RevealOnScroll delay={660}>
+            <ContactFormCard
+              locale={locale}
+              dictionary={content.form}
+              className="h-fit"
+            />
+          </RevealOnScroll>
         </div>
       </div>
     </Section>

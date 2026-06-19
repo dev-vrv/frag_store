@@ -76,9 +76,9 @@ export const contactContent: Record<Locale, ContactContentDictionary> = {
     },
     home: {
       eyebrow: "Связаться с нами",
-      title: "Подберем технику, ответим по наличию и примем заявку на сетап",
+      title: "Поможем выбрать технику и быстро ответим по наличию",
       subtitle:
-        "Форма и контактные данные вынесены в отдельные компоненты, чтобы один и тот же блок работал и на главной, и на странице контактов без дублирования структуры.",
+        "Напишите нам, если нужен конкретный девайс, сборка под игру, резерв товара или консультация перед покупкой.",
     },
   },
   en: {
@@ -116,9 +116,9 @@ export const contactContent: Record<Locale, ContactContentDictionary> = {
     },
     home: {
       eyebrow: "Contact Us",
-      title: "We can help with gear choice, stock checks, and full setup requests",
+      title: "We can help choose the right gear and confirm stock fast",
       subtitle:
-        "The form and contact data are now isolated into reusable components so the same contact block works on both the homepage and the contacts page.",
+        "Message us if you need a specific device, a setup for certain games, a stock hold, or advice before buying.",
     },
   },
   kg: {
@@ -156,9 +156,9 @@ export const contactContent: Record<Locale, ContactContentDictionary> = {
     },
     home: {
       eyebrow: "Биз менен байланыш",
-      title: "Техника тандоого жардам беребиз, бар-жогун тактайбыз жана сетап боюнча заявка алабыз",
+      title: "Техниканы тандоого жардам беребиз жана бар-жогун тез тактайбыз",
       subtitle:
-        "Форма менен байланыш маалыматтары эми өзүнчө компоненттерде, ошондуктан ошол эле блок башкы бетте да, байланыш бетинде да кайра колдонулат.",
+        "Эгер сизге конкреттүү девайс, оюнга ылайык сетап, товарды кармап берүү же сатып алардын алдында кеңеш керек болсо, бизге жазыңыз.",
     },
   },
 };
