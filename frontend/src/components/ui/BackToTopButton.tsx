@@ -30,14 +30,11 @@ export default function BackToTopButton() {
       onClick={scrollToTop}
       className={["back-to-top", isVisible ? "is-visible" : ""].filter(Boolean).join(" ")}
     >
-      <span className="back-to-top__rail back-to-top__rail--left" />
-      <span className="back-to-top__core">
-        <ArrowUp className="size-4" />
+      <span className="back-to-top__pulse back-to-top__pulse--outer" />
+      <span className="back-to-top__pulse back-to-top__pulse--inner" />
+      <span className="back-to-top__icon" aria-hidden="true">
+        <ArrowUp className="size-5" />
       </span>
-      <span className="font-tech text-[10px] uppercase tracking-[0.18em] text-white/88">
-        Up
-      </span>
-      <span className="back-to-top__rail back-to-top__rail--right" />
     </button>
   );
 }

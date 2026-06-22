@@ -194,31 +194,28 @@ export function FeaturedDrops({ locale, content }: FeaturedDropsProps) {
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/75 to-transparent" />
 
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-10">
-        <div className="flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
-          <div className="max-w-3xl">
-            <RevealOnScroll as="div" delay={80}>
-              <CyberBadge variant="cyan" glow>
-                {content.eyebrow}
-              </CyberBadge>
-            </RevealOnScroll>
-            <AnimatedText
-              as="h2"
-              text={content.title}
-              delay={180}
-              className="font-display mt-6 text-4xl font-normal tracking-[0.03em] text-white sm:text-5xl"
-              config={{ duration: 0.32, delayStep: 16, distance: 24 }}
-            />
-            <AnimatedText
-              as="p"
-              text={content.subtitle}
-              delay={340}
-              className="mt-5 max-w-2xl text-base leading-8 text-zinc-400 sm:text-lg"
-              config={{ duration: 0.24, delayStep: 7, distance: 16 }}
-            />
-          </div>
-
+        <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
+          <RevealOnScroll as="div" delay={80}>
+            <CyberBadge variant="cyan" glow>
+              {content.eyebrow}
+            </CyberBadge>
+          </RevealOnScroll>
+          <AnimatedText
+            as="h2"
+            text={content.title}
+            delay={180}
+            className="font-display mt-6 text-4xl font-normal tracking-[0.03em] text-white sm:text-5xl"
+            config={{ duration: 0.32, delayStep: 16, distance: 24 }}
+          />
+          <AnimatedText
+            as="p"
+            text={content.subtitle}
+            delay={340}
+            className="mt-5 max-w-2xl text-base leading-8 text-zinc-400 sm:text-lg"
+            config={{ duration: 0.24, delayStep: 7, distance: 16 }}
+          />
           <RevealOnScroll
-            className="flex flex-col gap-3 sm:flex-row"
+            className="mt-8 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row"
             delay={520}
           >
             <CyberButton asChild variant="secondary">
@@ -290,6 +287,7 @@ export function FeaturedDrops({ locale, content }: FeaturedDropsProps) {
           </div>
         </div>
       </div>
+
     </Section>
   );
 }

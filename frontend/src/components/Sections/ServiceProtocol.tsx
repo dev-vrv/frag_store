@@ -21,8 +21,6 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
       <div className="absolute inset-0 -z-30 bg-[radial-gradient(circle_at_18%_12%,rgba(34,211,238,0.12),transparent_24%),radial-gradient(circle_at_78%_18%,rgba(255,23,68,0.18),transparent_28%),radial-gradient(circle_at_48%_100%,rgba(167,139,250,0.05),transparent_30%),linear-gradient(180deg,rgba(255,255,255,0.015),transparent)]" />
       <div className="service-protocol__grid absolute inset-0 -z-20 opacity-35" />
       <div className="service-protocol__scan absolute inset-0 -z-10 opacity-25" />
-      <div className="service-protocol__rail service-protocol__rail--left" />
-      <div className="service-protocol__rail service-protocol__rail--right" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/75 to-transparent" />
 
       <div className="mx-auto grid w-full max-w-7xl gap-8 xl:grid-cols-[0.95fr_1.05fr]">

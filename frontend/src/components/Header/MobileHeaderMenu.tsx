@@ -4,7 +4,6 @@ import Link from "next/link";
 import { Heart, Menu, ShoppingCart } from "lucide-react";
 import { FaUserAstronaut } from "react-icons/fa";
 
-import { CyberButton } from "@/components/cyber";
 import {
   Sheet,
   SheetClose,
@@ -91,12 +90,19 @@ export function MobileHeaderMenu({
 
           <div className="mt-auto border-t border-white/10 p-5">
             <SheetClose asChild>
-              <CyberButton asChild variant="primary" className="w-full">
-                <Link href={localizePath("/auth", locale)}>
-                  <FaUserAstronaut aria-hidden="true" />
-                  <span>{dictionary.auth}</span>
-                </Link>
-              </CyberButton>
+              <Link
+                href={localizePath("/auth", locale)}
+                className={cn(
+                  "group relative flex min-h-12 items-center justify-center gap-3 overflow-hidden border px-4 text-sm font-semibold uppercase tracking-[0.1em] text-white transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/30",
+                  pathname === "/auth" || pathname === "/profile"
+                    ? "border-fuchsia-300/45 bg-[linear-gradient(135deg,rgba(34,211,238,0.16),rgba(217,70,239,0.18))] shadow-[0_0_28px_rgba(217,70,239,0.14)]"
+                    : "border-white/12 bg-[linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] hover:border-fuchsia-300/35 hover:bg-[linear-gradient(135deg,rgba(34,211,238,0.12),rgba(217,70,239,0.14))]",
+                )}
+              >
+                <span className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-cyan-300/80 to-transparent opacity-80 transition-opacity group-hover:opacity-100" />
+                <FaUserAstronaut aria-hidden="true" />
+                <span>{dictionary.auth}</span>
+              </Link>
             </SheetClose>
           </div>
         </div>

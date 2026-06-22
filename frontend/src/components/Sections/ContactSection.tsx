@@ -24,7 +24,7 @@ export function ContactSection({ locale }: ContactSectionProps) {
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-400/70 to-transparent" />
 
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-10">
-        <div className="max-w-3xl">
+        <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
           <RevealOnScroll as="div" delay={80}>
             <CyberBadge variant="red" glow>
               {content.home.eyebrow}

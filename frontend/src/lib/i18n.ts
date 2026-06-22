@@ -45,6 +45,10 @@ export interface Dictionary {
     registerWelcomeText: string;
     emailLabel: string;
     emailPlaceholder: string;
+    firstNameLabel: string;
+    firstNamePlaceholder: string;
+    lastNameLabel: string;
+    lastNamePlaceholder: string;
     passwordLabel: string;
     passwordPlaceholder: string;
     phoneLabel: string;
@@ -55,6 +59,16 @@ export interface Dictionary {
     registerSubmit: string;
     loginHint: string;
     registerHint: string;
+    errorFallback: string;
+  };
+  profile: {
+    badge: string;
+    title: string;
+    subtitle: string;
+    emailLabel: string;
+    phoneLabel: string;
+    joinedLabel: string;
+    logoutLabel: string;
   };
   hero: {
     eyebrow: string;
@@ -131,6 +145,7 @@ export interface Dictionary {
     | "blog"
     | "cart"
     | "comparison"
+    | "profile"
     | "privacy"
     | "offer",
     {
@@ -183,6 +198,10 @@ const dictionaries: Record<Locale, Dictionary> = {
         "Создай аккаунт для персонального loadout, истории заказов и раннего доступа к новым игровым девайсам.",
       emailLabel: "Email",
       emailPlaceholder: "you@frag.store",
+      firstNameLabel: "Имя",
+      firstNamePlaceholder: "Алекс",
+      lastNameLabel: "Фамилия",
+      lastNamePlaceholder: "Иванов",
       passwordLabel: "Пароль",
       passwordPlaceholder: "Введите пароль",
       phoneLabel: "Телефон",
@@ -193,6 +212,17 @@ const dictionaries: Record<Locale, Dictionary> = {
       registerSubmit: "Создать аккаунт",
       loginHint: "Доступ к профилю и сохраненным сетапам.",
       registerHint: "Регистрация займет меньше минуты.",
+      errorFallback: "Не удалось выполнить запрос. Попробуйте еще раз.",
+    },
+    profile: {
+      badge: "Профиль",
+      title: "ЛИЧНЫЙ КАБИНЕТ",
+      subtitle:
+        "Управляйте своими контактными данными и используйте аккаунт Frag Store как точку входа для будущих заказов и избранного.",
+      emailLabel: "Email",
+      phoneLabel: "Телефон",
+      joinedLabel: "Дата регистрации",
+      logoutLabel: "Выйти",
     },
     hero: {
       eyebrow: "Frag Store // Gaming Gear",
@@ -287,9 +317,8 @@ const dictionaries: Record<Locale, Dictionary> = {
     },
     featured: {
       eyebrow: "Лидеры продаж",
-      title: "Модели, которые чаще всего берут для гейминга и сетапа",
-      subtitle:
-        "Проверенные хиты, сильные новинки и позиции, с которых удобно начать покупку или собрать полный комплект.",
+      title: "Хиты для гейминга",
+      subtitle: "Проверенные модели и сильные новинки.",
       primaryCta: "Смотреть все товары",
       secondaryCta: "Смотреть новинки",
       priceLabel: "Цена",
@@ -416,6 +445,16 @@ const dictionaries: Record<Locale, Dictionary> = {
           description: "Избранные gaming-девайсы Frag Store.",
         },
       },
+      profile: {
+        title: "ПРОФИЛЬ",
+        subtitle:
+          "Личный кабинет пользователя Frag Store с контактными данными и персональным доступом к следующим этапам покупки.",
+        badge: "Аккаунт",
+        metadata: {
+          title: "Профиль | Frag Store",
+          description: "Профиль пользователя Frag Store.",
+        },
+      },
       privacy: {
         title: "ПОЛИТИКА КОНФИДЕНЦИАЛЬНОСТИ",
         subtitle:
@@ -487,6 +526,10 @@ const dictionaries: Record<Locale, Dictionary> = {
         "Create an account for a personal loadout, order history, and early access to new gaming gear.",
       emailLabel: "Email",
       emailPlaceholder: "you@frag.store",
+      firstNameLabel: "First name",
+      firstNamePlaceholder: "Alex",
+      lastNameLabel: "Last name",
+      lastNamePlaceholder: "Morgan",
       passwordLabel: "Password",
       passwordPlaceholder: "Enter password",
       phoneLabel: "Phone",
@@ -497,6 +540,17 @@ const dictionaries: Record<Locale, Dictionary> = {
       registerSubmit: "Create account",
       loginHint: "Access your profile and saved setups.",
       registerHint: "Registration takes less than a minute.",
+      errorFallback: "Request failed. Please try again.",
+    },
+    profile: {
+      badge: "Profile",
+      title: "ACCOUNT PROFILE",
+      subtitle:
+        "Manage your contact details and use your Frag Store account as the entry point for future orders and favorites.",
+      emailLabel: "Email",
+      phoneLabel: "Phone",
+      joinedLabel: "Joined",
+      logoutLabel: "Log out",
     },
     hero: {
       eyebrow: "Frag Store // Gaming Gear",
@@ -591,9 +645,8 @@ const dictionaries: Record<Locale, Dictionary> = {
     },
     featured: {
       eyebrow: "Best Sellers",
-      title: "The models most buyers choose for gaming setups",
-      subtitle:
-        "These are the products people most often start with: proven hits, strong new arrivals, and easy entry points into a full setup.",
+      title: "Gaming best sellers",
+      subtitle: "Proven picks and strong new arrivals.",
       primaryCta: "Browse all products",
       secondaryCta: "See new arrivals",
       priceLabel: "Drop Price",
@@ -720,6 +773,16 @@ const dictionaries: Record<Locale, Dictionary> = {
           description: "Frag Store favorite gaming gear.",
         },
       },
+      profile: {
+        title: "PROFILE",
+        subtitle:
+          "Your Frag Store account dashboard with contact details and personal access to the next purchase steps.",
+        badge: "Account",
+        metadata: {
+          title: "Profile | Frag Store",
+          description: "Frag Store user profile.",
+        },
+      },
       privacy: {
         title: "PRIVACY POLICY",
         subtitle:
@@ -791,6 +854,10 @@ const dictionaries: Record<Locale, Dictionary> = {
         "Жеке loadout, заказ тарыхы жана жаңы gaming жабдыктарга эрте жетүү үчүн аккаунт түзүңүз.",
       emailLabel: "Email",
       emailPlaceholder: "you@frag.store",
+      firstNameLabel: "Атыңыз",
+      firstNamePlaceholder: "Алекс",
+      lastNameLabel: "Фамилия",
+      lastNamePlaceholder: "Иванов",
       passwordLabel: "Сыр сөз",
       passwordPlaceholder: "Сыр сөздү жазыңыз",
       phoneLabel: "Телефон",
@@ -801,6 +868,17 @@ const dictionaries: Record<Locale, Dictionary> = {
       registerSubmit: "Аккаунт түзүү",
       loginHint: "Профиль жана сакталган сетаптарга кирүү.",
       registerHint: "Катталуу бир мүнөттөн аз убакыт алат.",
+      errorFallback: "Сурам аткарылган жок. Кайра аракет кылыңыз.",
+    },
+    profile: {
+      badge: "Профиль",
+      title: "ЖЕКЕ КАБИНЕТ",
+      subtitle:
+        "Байланыш маалыматыңызды башкарып, Frag Store аккаунтун келечектеги заказдар жана тандалгандар үчүн колдонуңуз.",
+      emailLabel: "Email",
+      phoneLabel: "Телефон",
+      joinedLabel: "Катталган күнү",
+      logoutLabel: "Чыгуу",
     },
     hero: {
       eyebrow: "Frag Store // Gaming Gear",
@@ -895,9 +973,8 @@ const dictionaries: Record<Locale, Dictionary> = {
     },
     featured: {
       eyebrow: "Сатуу лидерлери",
-      title: "Гейминг жана сетап үчүн көбүнчө ушуларды тандашат",
-      subtitle:
-        "Текшерилген хиттер, күчтүү жаңылыктар жана сатып алууну же толук комплект чогултууну баштоого ыңгайлуу позициялар.",
+      title: "Гейминг хиттери",
+      subtitle: "Текшерилген моделдер жана күчтүү жаңылыктар.",
       primaryCta: "Бардык товарларды көрүү",
       secondaryCta: "Жаңы товарларды көрүү",
       priceLabel: "Баасы",
@@ -1022,6 +1099,16 @@ const dictionaries: Record<Locale, Dictionary> = {
         metadata: {
           title: "Тандалгандар | Frag Store",
           description: "Frag Store тандалган gaming девайстары.",
+        },
+      },
+      profile: {
+        title: "ПРОФИЛЬ",
+        subtitle:
+          "Frag Store колдонуучусунун жеке кабинети байланыш маалыматтары жана кийинки сатып алуу кадамдарына кирүү менен.",
+        badge: "Аккаунт",
+        metadata: {
+          title: "Профиль | Frag Store",
+          description: "Frag Store колдонуучусунун профили.",
         },
       },
       privacy: {

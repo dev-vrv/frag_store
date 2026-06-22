@@ -1,21 +1,21 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 
-import { AuthPage } from "@/components/Pages/AuthPage";
+import { ProfilePage } from "@/components/Pages/ProfilePage";
 import { defaultLocale, getDictionary } from "@/lib/i18n";
 import { getCurrentUser } from "@/lib/server-auth";
 
 const dictionary = getDictionary(defaultLocale);
-const page = dictionary.pages.auth;
+const page = dictionary.pages.profile;
 
 export const metadata: Metadata = page.metadata;
 
-export default async function AuthRoutePage() {
+export default async function ProfileRoutePage() {
   const user = await getCurrentUser();
 
-  if (user) {
-    redirect("/profile");
+  if (!user) {
+    redirect("/auth");
   }
 
-  return <AuthPage locale={defaultLocale} dictionary={dictionary} />;
+  return <ProfilePage locale={defaultLocale} dictionary={dictionary} user={user} />;
 }

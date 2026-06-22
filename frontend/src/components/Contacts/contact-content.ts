@@ -76,9 +76,8 @@ export const contactContent: Record<Locale, ContactContentDictionary> = {
     },
     home: {
       eyebrow: "Связаться с нами",
-      title: "Поможем выбрать технику и быстро ответим по наличию",
-      subtitle:
-        "Напишите нам, если нужен конкретный девайс, сборка под игру, резерв товара или консультация перед покупкой.",
+      title: "Поможем с выбором и наличием",
+      subtitle: "Напишите нам по товару, заказу или подбору.",
     },
   },
   en: {
@@ -116,9 +115,8 @@ export const contactContent: Record<Locale, ContactContentDictionary> = {
     },
     home: {
       eyebrow: "Contact Us",
-      title: "We can help choose the right gear and confirm stock fast",
-      subtitle:
-        "Message us if you need a specific device, a setup for certain games, a stock hold, or advice before buying.",
+      title: "We can help with gear and stock",
+      subtitle: "Message us about products, orders, or selection.",
     },
   },
   kg: {
@@ -156,9 +154,8 @@ export const contactContent: Record<Locale, ContactContentDictionary> = {
     },
     home: {
       eyebrow: "Биз менен байланыш",
-      title: "Техниканы тандоого жардам беребиз жана бар-жогун тез тактайбыз",
-      subtitle:
-        "Эгер сизге конкреттүү девайс, оюнга ылайык сетап, товарды кармап берүү же сатып алардын алдында кеңеш керек болсо, бизге жазыңыз.",
+      title: "Тандоого жана бар-жогуна жардам беребиз",
+      subtitle: "Товар, заказ же тандоо боюнча бизге жазыңыз.",
     },
   },
 };
