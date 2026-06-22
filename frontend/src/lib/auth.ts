@@ -93,6 +93,15 @@ export function register(payload: RegisterPayload) {
   return submitAuthRequest("/api/auth/register", payload);
 }
 
+export function persistAuthCookies(payload: AuthTokens) {
+  if (typeof document === "undefined") {
+    return;
+  }
+
+  document.cookie = `${ACCESS_TOKEN_COOKIE}=${encodeURIComponent(payload.access)}; Path=/; Max-Age=${60 * 30}; SameSite=Lax`;
+  document.cookie = `${REFRESH_TOKEN_COOKIE}=${encodeURIComponent(payload.refresh)}; Path=/; Max-Age=${60 * 60 * 24 * 7}; SameSite=Lax`;
+}
+
 export async function logout() {
   const response = await fetch("/api/auth/logout", {
     method: "POST",

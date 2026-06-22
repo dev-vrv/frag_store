@@ -47,8 +47,8 @@ export function ContactMessageForm({
   }
 
   return (
-    <form className="space-y-5" onSubmit={handleSubmit}>
-      <h2 className="font-display text-3xl uppercase text-red-100">
+    <form className="space-y-4 sm:space-y-5" onSubmit={handleSubmit}>
+      <h2 className="font-display text-[1.7rem] uppercase text-red-100 sm:text-3xl">
         {dictionary.title}
       </h2>
 
@@ -94,7 +94,7 @@ export function ContactMessageForm({
         </p>
       ) : null}
 
-      <CyberButton type="submit" variant="primary" loading={isSending}>
+      <CyberButton type="submit" variant="primary" loading={isSending} className="w-full sm:w-auto">
         <Send aria-hidden="true" />
         {dictionary.submit}
       </CyberButton>

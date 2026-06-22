@@ -15,7 +15,7 @@ export function ContactFormCard({
   locale,
   dictionary,
   className,
-  contentClassName = "p-6 sm:p-8",
+  contentClassName = "p-4 sm:p-6 lg:p-8",
 }: ContactFormCardProps) {
   return (
     <ContactPanel className={className} contentClassName={contentClassName}>

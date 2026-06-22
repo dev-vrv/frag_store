@@ -100,8 +100,8 @@ select:disabled {
   width: 100%;
   max-width: 80rem;
   margin-inline: auto;
-  padding-inline: clamp(1rem, 3vw, 2rem);
-  padding-block: clamp(5rem, 9vw, 8rem);
+  padding-inline: clamp(1rem, 2.4vw, 2rem);
+  padding-block: clamp(3.75rem, 7vw, 7.5rem);
 }
 
 .section-full {
@@ -117,8 +117,8 @@ html {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-top: clamp(7rem, 12vw, 9rem);
-  padding-bottom: clamp(4rem, 8vw, 7rem);
+  padding-top: clamp(6rem, 11vw, 8.5rem);
+  padding-bottom: clamp(3.5rem, 7vw, 6rem);
 }
 
 .reveal-on-scroll {
@@ -230,12 +230,14 @@ html {
 .back-to-top__icon {
   position: relative;
   z-index: 2;
-  display: inline-flex;
+  display: flex;
   align-items: center;
   justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
   animation: back-to-top-float 2.6s ease-in-out infinite;
-  filter: drop-shadow(0 0 12px rgba(34, 211, 238, 0.32))
-    drop-shadow(0 0 18px rgba(255, 23, 68, 0.22));
+  filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.18))
+    drop-shadow(0 0 20px rgba(255, 255, 255, 0.12));
 }
 
 .back-to-top:hover .back-to-top__icon,
@@ -245,9 +247,10 @@ html {
 
 .back-to-top__pulse {
   position: absolute;
-  inset: 50%;
-  width: 1.6rem;
-  height: 1.6rem;
+  left: 50%;
+  top: 50%;
+  width: 2.2rem;
+  height: 2.2rem;
   border-radius: 9999px;
   transform: translate(-50%, -50%) scale(0.7);
   pointer-events: none;
@@ -255,14 +258,14 @@ html {
 }
 
 .back-to-top__pulse--outer {
-  border: 1px solid rgba(34, 211, 238, 0.34);
-  box-shadow: 0 0 28px rgba(34, 211, 238, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  box-shadow: 0 0 24px rgba(255, 255, 255, 0.1);
   animation: back-to-top-pulse-ring 2.8s ease-out infinite;
 }
 
 .back-to-top__pulse--inner {
-  border: 1px solid rgba(255, 23, 68, 0.28);
-  box-shadow: 0 0 22px rgba(255, 23, 68, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.08);
   animation: back-to-top-pulse-ring 2.8s ease-out 1.15s infinite;
 }
 
@@ -470,8 +473,24 @@ html {
 }
 
 .featured-marquee-slide {
-  width: min(24rem, calc(100vw - 3.5rem));
+  width: min(24rem, calc(100vw - 2.5rem));
   flex: 0 0 auto;
+}
+
+@media (min-width: 768px) {
+  .section {
+    padding-inline: clamp(1.5rem, 3vw, 2rem);
+    padding-block: clamp(4.5rem, 7vw, 7rem);
+  }
+
+  .section-hero {
+    padding-top: clamp(6.75rem, 10vw, 8rem);
+    padding-bottom: clamp(4rem, 6vw, 5.5rem);
+  }
+
+  .featured-marquee-slide {
+    width: min(23rem, calc(50vw - 2.5rem));
+  }
 }
 
 .service-protocol__grid {

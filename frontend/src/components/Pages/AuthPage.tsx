@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { type FormEvent, startTransition, useState } from "react";
+import { type FormEvent, useState } from "react";
 import { FaLock, FaPhoneAlt, FaRegEnvelope, FaUser } from "react-icons/fa";
 
 import {
@@ -17,7 +16,7 @@ import {
   CyberTabsList,
   CyberTabsTrigger,
 } from "@/components/cyber";
-import { login, register } from "@/lib/auth";
+import { login, persistAuthCookies, register } from "@/lib/auth";
 import { type Dictionary, type Locale, localizePath } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
@@ -62,44 +61,56 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
   const [registerForm, setRegisterForm] = useState<RegisterFormState>(initialRegisterForm);
   const [loginError, setLoginError] = useState("");
   const [registerError, setRegisterError] = useState("");
+  const [loginNotice, setLoginNotice] = useState("");
+  const [registerNotice, setRegisterNotice] = useState("");
   const [isLoginPending, setIsLoginPending] = useState(false);
   const [isRegisterPending, setIsRegisterPending] = useState(false);
   const auth = dictionary.auth;
-  const router = useRouter();
   const profilePath = localizePath("/profile", locale);
+  const isAuthLocked = isLoginPending || isRegisterPending;
 
   async function handleLoginSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (isAuthLocked) {
+      return;
+    }
+
     setLoginError("");
+    setLoginNotice("");
+    setRegisterError("");
+    setRegisterNotice("");
     setIsLoginPending(true);
 
     try {
-      await login(loginForm);
-      startTransition(() => {
-        router.push(profilePath);
-        router.refresh();
-      });
+      const response = await login(loginForm);
+      persistAuthCookies(response);
+      setLoginNotice(auth.loginSuccessNotice);
+      window.location.assign(profilePath);
     } catch (error) {
       setLoginError(error instanceof Error ? error.message : auth.errorFallback);
-    } finally {
       setIsLoginPending(false);
     }
   }
 
   async function handleRegisterSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (isAuthLocked) {
+      return;
+    }
+
     setRegisterError("");
+    setRegisterNotice("");
+    setLoginError("");
+    setLoginNotice("");
     setIsRegisterPending(true);
 
     try {
-      await register(registerForm);
-      startTransition(() => {
-        router.push(profilePath);
-        router.refresh();
-      });
+      const response = await register(registerForm);
+      persistAuthCookies(response);
+      setRegisterNotice(auth.registerSuccessNotice);
+      window.location.assign(profilePath);
     } catch (error) {
       setRegisterError(error instanceof Error ? error.message : auth.errorFallback);
-    } finally {
       setIsRegisterPending(false);
     }
   }
@@ -111,22 +122,34 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
         mode === "login" ? "selection:bg-red-400/30" : "selection:bg-fuchsia-400/30",
       )}
     >
-      <div
-        className={cn(
-          "absolute inset-0 -z-30 transition-all duration-700",
-          mode === "login"
-            ? "bg-[radial-gradient(circle_at_18%_24%,rgba(255,23,68,0.3),transparent_31%),radial-gradient(circle_at_78%_18%,rgba(127,29,29,0.42),transparent_30%),radial-gradient(circle_at_58%_78%,rgba(217,70,239,0.08),transparent_24%),linear-gradient(180deg,#050507_0%,#120507_48%,#000_100%)]"
-            : "bg-[radial-gradient(circle_at_16%_22%,rgba(34,211,238,0.18),transparent_28%),radial-gradient(circle_at_82%_16%,rgba(217,70,239,0.34),transparent_32%),radial-gradient(circle_at_62%_78%,rgba(59,130,246,0.14),transparent_24%),linear-gradient(180deg,#040509_0%,#16051a_52%,#020204_100%)]",
-        )}
-      />
-      <div
-        className={cn(
-          "absolute inset-0 -z-20 transition-all duration-700",
-          mode === "login"
-            ? "bg-[radial-gradient(circle_at_22%_30%,rgba(255,23,68,0.14),transparent_34%),radial-gradient(circle_at_72%_72%,rgba(190,242,100,0.08),transparent_24%)]"
-            : "bg-[radial-gradient(circle_at_24%_28%,rgba(34,211,238,0.12),transparent_32%),radial-gradient(circle_at_76%_70%,rgba(217,70,239,0.14),transparent_24%)]",
-        )}
-      />
+      <div className="absolute inset-0 -z-30">
+        <div
+          className={cn(
+            "absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(255,23,68,0.3),transparent_31%),radial-gradient(circle_at_78%_18%,rgba(127,29,29,0.42),transparent_30%),radial-gradient(circle_at_58%_78%,rgba(217,70,239,0.08),transparent_24%),linear-gradient(180deg,#050507_0%,#120507_48%,#000_100%)] transition-opacity duration-700",
+            mode === "login" ? "opacity-100" : "opacity-0",
+          )}
+        />
+        <div
+          className={cn(
+            "absolute inset-0 bg-[radial-gradient(circle_at_16%_22%,rgba(34,211,238,0.18),transparent_28%),radial-gradient(circle_at_82%_16%,rgba(217,70,239,0.34),transparent_32%),radial-gradient(circle_at_62%_78%,rgba(59,130,246,0.14),transparent_24%),linear-gradient(180deg,#040509_0%,#16051a_52%,#020204_100%)] transition-opacity duration-700",
+            mode === "register" ? "opacity-100" : "opacity-0",
+          )}
+        />
+      </div>
+      <div className="absolute inset-0 -z-20">
+        <div
+          className={cn(
+            "absolute inset-0 bg-[radial-gradient(circle_at_22%_30%,rgba(255,23,68,0.14),transparent_34%),radial-gradient(circle_at_72%_72%,rgba(190,242,100,0.08),transparent_24%)] transition-opacity duration-700",
+            mode === "login" ? "opacity-100" : "opacity-0",
+          )}
+        />
+        <div
+          className={cn(
+            "absolute inset-0 bg-[radial-gradient(circle_at_24%_28%,rgba(34,211,238,0.12),transparent_32%),radial-gradient(circle_at_76%_70%,rgba(217,70,239,0.14),transparent_24%)] transition-opacity duration-700",
+            mode === "register" ? "opacity-100" : "opacity-0",
+          )}
+        />
+      </div>
       <div
         className={cn(
           "cyber-grid absolute inset-0 -z-20 transition-opacity duration-700",
@@ -233,7 +256,11 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
             </Link>
             <CyberTabs
               value={mode}
-              onValueChange={(value) => setMode(value as AuthMode)}
+              onValueChange={(value) => {
+                if (!isAuthLocked) {
+                  setMode(value as AuthMode);
+                }
+              }}
               className="w-full"
             >
               <CyberTabsList
@@ -246,6 +273,7 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
               >
                 <CyberTabsTrigger
                   value="login"
+                  disabled={isAuthLocked}
                   className={cn(
                     "transition-all duration-500",
                     mode === "login"
@@ -257,6 +285,7 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
                 </CyberTabsTrigger>
                 <CyberTabsTrigger
                   value="register"
+                  disabled={isAuthLocked}
                   className={cn(
                     "transition-all duration-500",
                     mode === "login"
@@ -285,6 +314,7 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
                     icon={<FaRegEnvelope aria-hidden="true" />}
                     autoComplete="email"
                     required
+                    disabled={isAuthLocked}
                     value={loginForm.email}
                     onChange={(event) =>
                       setLoginForm((current) => ({ ...current, email: event.target.value }))
@@ -297,12 +327,16 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
                     icon={<FaLock aria-hidden="true" />}
                     autoComplete="current-password"
                     required
+                    disabled={isAuthLocked}
                     value={loginForm.password}
                     onChange={(event) =>
                       setLoginForm((current) => ({ ...current, password: event.target.value }))
                     }
                     errorText={loginError || undefined}
                   />
+                  {loginNotice ? (
+                    <p className="font-tech text-sm text-cyan-100">{loginNotice}</p>
+                  ) : null}
                   <p className="font-tech text-sm text-zinc-500">{auth.loginHint}</p>
                   <CyberButton
                     type="submit"
@@ -333,6 +367,7 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
                       icon={<FaUser aria-hidden="true" />}
                       autoComplete="given-name"
                       required
+                      disabled={isAuthLocked}
                       value={registerForm.first_name}
                       onChange={(event) =>
                         setRegisterForm((current) => ({
@@ -347,6 +382,7 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
                       placeholder={auth.lastNamePlaceholder}
                       icon={<FaUser aria-hidden="true" />}
                       autoComplete="family-name"
+                      disabled={isAuthLocked}
                       value={registerForm.last_name}
                       onChange={(event) =>
                         setRegisterForm((current) => ({
@@ -362,6 +398,7 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
                     placeholder={auth.phonePlaceholder}
                     icon={<FaPhoneAlt aria-hidden="true" />}
                     autoComplete="tel"
+                    disabled={isAuthLocked}
                     value={registerForm.phone}
                     onChange={(event) =>
                       setRegisterForm((current) => ({ ...current, phone: event.target.value }))
@@ -374,6 +411,7 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
                     icon={<FaRegEnvelope aria-hidden="true" />}
                     autoComplete="email"
                     required
+                    disabled={isAuthLocked}
                     value={registerForm.email}
                     onChange={(event) =>
                       setRegisterForm((current) => ({ ...current, email: event.target.value }))
@@ -386,6 +424,7 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
                     icon={<FaLock aria-hidden="true" />}
                     autoComplete="new-password"
                     required
+                    disabled={isAuthLocked}
                     value={registerForm.password}
                     onChange={(event) =>
                       setRegisterForm((current) => ({ ...current, password: event.target.value }))
@@ -398,6 +437,7 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
                     icon={<FaLock aria-hidden="true" />}
                     autoComplete="new-password"
                     required
+                    disabled={isAuthLocked}
                     value={registerForm.password_confirm}
                     onChange={(event) =>
                       setRegisterForm((current) => ({
@@ -407,6 +447,9 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
                     }
                     errorText={registerError || undefined}
                   />
+                  {registerNotice ? (
+                    <p className="font-tech text-sm text-cyan-100">{registerNotice}</p>
+                  ) : null}
                   <p className="font-tech text-sm text-zinc-500">{auth.registerHint}</p>
                   <CyberButton
                     type="submit"

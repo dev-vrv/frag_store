@@ -71,23 +71,23 @@ export function Footer({ locale, dictionary, className }: FooterProps) {
   return (
     <footer
       className={cn(
-        "relative border-t border-red-500/15 bg-black/82 px-4 py-10 text-zinc-300 backdrop-blur-xl sm:px-6 lg:px-8",
+        "relative border-t border-red-500/15 bg-black/82 px-4 py-8 text-zinc-300 backdrop-blur-xl sm:px-6 sm:py-10 lg:px-8",
         className,
       )}
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-400/70 to-transparent" />
       <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1.85fr)]">
-        <section className="space-y-5">
+        <section className="space-y-5 text-center lg:text-left">
           <Link
             href={localizePath("/", locale)}
-            className="font-display inline-flex border border-red-400/35 bg-red-500/10 px-4 py-2 text-xl tracking-[0.08em] text-red-100"
+            className="font-display inline-flex border border-red-400/35 bg-red-500/10 px-4 py-2 text-lg tracking-[0.08em] text-red-100 sm:text-xl"
             aria-label="Frag Store"
           >
             {dictionary.header.logo}
           </Link>
-          <p className="max-w-sm text-sm leading-7 text-zinc-400">{text.tagline}</p>
-          <ContactSocialButtons locale={locale} />
-          <div className="flex flex-wrap gap-3 text-sm">
+          <p className="mx-auto max-w-sm text-sm leading-7 text-zinc-400 lg:mx-0">{text.tagline}</p>
+          <ContactSocialButtons locale={locale} className="justify-center lg:justify-start" />
+          <div className="flex flex-wrap justify-center gap-3 text-sm lg:justify-start">
             <span className="inline-flex items-center gap-2 border border-lime-300/20 bg-lime-300/5 px-3 py-2 text-lime-100">
               <ShieldCheck className="size-4" aria-hidden="true" />
               {text.status}
@@ -99,10 +99,10 @@ export function Footer({ locale, dictionary, className }: FooterProps) {
           </div>
         </section>
 
-        <section className="grid gap-6 sm:grid-cols-3">
+        <section className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           <FooterLinkGroup title={text.catalog} links={storeLinks} locale={locale} />
           <FooterLinkGroup title={text.support} links={supportLinks} locale={locale} />
-          <div className="space-y-3">
+          <div className="space-y-3 sm:col-span-2 lg:col-span-1">
             <h2 className="font-tech text-sm uppercase text-zinc-500">{text.account}</h2>
             <Link
               href={localizePath("/auth", locale)}
@@ -114,7 +114,7 @@ export function Footer({ locale, dictionary, className }: FooterProps) {
         </section>
       </div>
 
-      <div className="mx-auto mt-8 flex max-w-7xl flex-col gap-2 border-t border-white/10 pt-5 text-xs uppercase tracking-[0.12em] text-zinc-600 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto mt-8 flex max-w-7xl flex-col gap-2 border-t border-white/10 pt-5 text-center text-[11px] uppercase tracking-[0.12em] text-zinc-600 sm:flex-row sm:items-center sm:justify-between sm:text-left sm:text-xs">
         <span>© 2026 Frag Store</span>
         <span>{text.rights}</span>
       </div>
@@ -132,7 +132,7 @@ function FooterLinkGroup({
   locale: Locale;
 }) {
   return (
-    <div className="space-y-3">
+    <div className="space-y-3 text-center sm:text-left">
       <h2 className="font-tech text-sm uppercase text-zinc-500">{title}</h2>
       <nav className="space-y-2" aria-label={title}>
         {links.map((link) => (

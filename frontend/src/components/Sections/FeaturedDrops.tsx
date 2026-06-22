@@ -38,8 +38,8 @@ function ProductVisual({ category }: { category: Dictionary["featured"]["product
 
   return (
     <div className="flex h-full items-center justify-center">
-      <div className="grid size-28 place-items-center border border-red-300/25 bg-black/45 text-red-100 shadow-[0_0_46px_rgba(255,23,68,0.18)]">
-        <Icon className="size-12" aria-hidden="true" />
+      <div className="grid size-24 place-items-center border border-red-300/25 bg-black/45 text-red-100 shadow-[0_0_46px_rgba(255,23,68,0.18)] sm:size-28">
+        <Icon className="size-10 sm:size-12" aria-hidden="true" />
       </div>
     </div>
   );
@@ -193,7 +193,7 @@ export function FeaturedDrops({ locale, content }: FeaturedDropsProps) {
       <div className="cyber-grid absolute inset-0 -z-10 opacity-25" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/75 to-transparent" />
 
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-10">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 sm:gap-10">
         <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
           <RevealOnScroll as="div" delay={80}>
             <CyberBadge variant="cyan" glow>
@@ -204,27 +204,27 @@ export function FeaturedDrops({ locale, content }: FeaturedDropsProps) {
             as="h2"
             text={content.title}
             delay={180}
-            className="font-display mt-6 text-4xl font-normal tracking-[0.03em] text-white sm:text-5xl"
+            className="font-display mt-6 text-[2rem] font-normal leading-[1.08] tracking-[0.02em] text-white sm:text-[2.6rem] lg:text-5xl"
             config={{ duration: 0.32, delayStep: 16, distance: 24 }}
           />
           <AnimatedText
             as="p"
             text={content.subtitle}
             delay={340}
-            className="mt-5 max-w-2xl text-base leading-8 text-zinc-400 sm:text-lg"
+            className="mt-5 max-w-2xl text-[0.95rem] leading-7 text-zinc-400 sm:text-base sm:leading-8 lg:text-lg"
             config={{ duration: 0.24, delayStep: 7, distance: 16 }}
           />
           <RevealOnScroll
             className="mt-8 flex w-full flex-col justify-center gap-3 sm:w-auto sm:flex-row"
             delay={520}
           >
-            <CyberButton asChild variant="secondary">
+            <CyberButton asChild variant="secondary" className="w-full sm:w-auto">
               <a href={catalogHref}>
                 <ArrowRight />
                 {content.primaryCta}
               </a>
             </CyberButton>
-            <CyberButton asChild variant="ghost">
+            <CyberButton asChild variant="ghost" className="w-full sm:w-auto">
               <a href={blogHref}>{content.secondaryCta}</a>
             </CyberButton>
           </RevealOnScroll>
@@ -232,7 +232,7 @@ export function FeaturedDrops({ locale, content }: FeaturedDropsProps) {
       </div>
 
       <div
-        className="featured-marquee-shell mt-10"
+        className="featured-marquee-shell mt-8 sm:mt-10"
         data-dragging={isDragging}
         onMouseEnter={() => {
           isHoveredRef.current = true;

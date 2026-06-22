@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUp } from "lucide-react";
+import { ChevronUp } from "lucide-react";
 import { useEffect, useState } from "react";
 
 export default function BackToTopButton() {
@@ -33,7 +33,7 @@ export default function BackToTopButton() {
       <span className="back-to-top__pulse back-to-top__pulse--outer" />
       <span className="back-to-top__pulse back-to-top__pulse--inner" />
       <span className="back-to-top__icon" aria-hidden="true">
-        <ArrowUp className="size-5" />
+        <ChevronUp className="size-6" strokeWidth={2.2} />
       </span>
     </button>
   );

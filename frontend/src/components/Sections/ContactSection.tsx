@@ -23,7 +23,7 @@ export function ContactSection({ locale }: ContactSectionProps) {
       <div className="cyber-grid absolute inset-0 -z-10 opacity-25" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-400/70 to-transparent" />
 
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-10">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 sm:gap-10">
         <div className="mx-auto flex max-w-3xl flex-col items-center text-center">
           <RevealOnScroll as="div" delay={80}>
             <CyberBadge variant="red" glow>
@@ -34,19 +34,19 @@ export function ContactSection({ locale }: ContactSectionProps) {
             as="h2"
             text={content.home.title}
             delay={180}
-            className="font-display mt-6 text-4xl font-normal tracking-[0.03em] text-white sm:text-5xl"
+            className="font-display mt-6 text-[2rem] font-normal leading-[1.08] tracking-[0.02em] text-white sm:text-[2.6rem] lg:text-5xl"
             config={{ duration: 0.32, delayStep: 16, distance: 24 }}
           />
           <AnimatedText
             as="p"
             text={content.home.subtitle}
             delay={340}
-            className="mt-5 text-base leading-8 text-zinc-400 sm:text-lg"
+            className="mt-5 max-w-2xl text-[0.95rem] leading-7 text-zinc-400 sm:text-base sm:leading-8 lg:text-lg"
             config={{ duration: 0.24, delayStep: 7, distance: 16 }}
           />
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(360px,0.92fr)]">
+        <div className="grid gap-5 sm:gap-6 lg:grid-cols-[minmax(0,1.08fr)_minmax(320px,0.92fr)]">
           <RevealOnScroll delay={520}>
             <ContactInfoCard locale={locale} dictionary={content.info} />
           </RevealOnScroll>

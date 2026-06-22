@@ -60,6 +60,8 @@ export interface Dictionary {
     loginHint: string;
     registerHint: string;
     errorFallback: string;
+    loginSuccessNotice: string;
+    registerSuccessNotice: string;
   };
   profile: {
     badge: string;
@@ -213,6 +215,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       loginHint: "Доступ к профилю и сохраненным сетапам.",
       registerHint: "Регистрация займет меньше минуты.",
       errorFallback: "Не удалось выполнить запрос. Попробуйте еще раз.",
+      loginSuccessNotice: "Вход выполнен. Перенаправляем в профиль...",
+      registerSuccessNotice: "Аккаунт создан. Перенаправляем в профиль...",
     },
     profile: {
       badge: "Профиль",
@@ -541,6 +545,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       loginHint: "Access your profile and saved setups.",
       registerHint: "Registration takes less than a minute.",
       errorFallback: "Request failed. Please try again.",
+      loginSuccessNotice: "Signed in. Redirecting to your profile...",
+      registerSuccessNotice: "Account created. Redirecting to your profile...",
     },
     profile: {
       badge: "Profile",
@@ -869,6 +875,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       loginHint: "Профиль жана сакталган сетаптарга кирүү.",
       registerHint: "Катталуу бир мүнөттөн аз убакыт алат.",
       errorFallback: "Сурам аткарылган жок. Кайра аракет кылыңыз.",
+      loginSuccessNotice: "Кирүү аяктады. Профилге багыттап жатабыз...",
+      registerSuccessNotice: "Аккаунт түзүлдү. Профилге багыттап жатабыз...",
     },
     profile: {
       badge: "Профиль",

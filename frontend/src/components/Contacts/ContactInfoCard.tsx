@@ -33,7 +33,7 @@ export function ContactInfoCard({
   locale,
   dictionary,
   className,
-  contentClassName = "space-y-5 p-5 sm:p-6",
+  contentClassName = "space-y-5 p-4 sm:p-5 lg:p-6",
 }: ContactInfoCardProps) {
   const contactInfo = useContactInfo(locale);
   const extraContacts = getExtraContacts(contactInfo?.extra_contacts);
@@ -41,11 +41,11 @@ export function ContactInfoCard({
   return (
     <ContactPanel className={className} contentClassName={contentClassName}>
       <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-        <h2 className="font-display text-3xl uppercase text-red-100">
+        <h2 className="font-display text-[1.7rem] uppercase text-red-100 sm:text-3xl">
           {dictionary.title}
         </h2>
         {contactInfo?.working_hours ? (
-          <div className="flex items-center gap-2 border border-fuchsia-300/20 bg-white/[0.04] px-3 py-2 text-sm text-zinc-300">
+          <div className="flex items-center gap-2 border border-fuchsia-300/20 bg-white/[0.04] px-3 py-2 text-xs text-zinc-300 sm:text-sm">
             <Timer className="size-4 text-fuchsia-200" aria-hidden="true" />
             <span>{contactInfo.working_hours}</span>
           </div>
@@ -56,7 +56,7 @@ export function ContactInfoCard({
         <div className="grid gap-3 sm:grid-cols-2">
           {contactInfo.phone ? (
             <a
-              className="flex min-h-16 items-center gap-3 border border-lime-300/20 bg-black/30 p-3 text-zinc-200 transition hover:border-lime-300/55"
+              className="flex min-h-14 items-center gap-3 border border-lime-300/20 bg-black/30 p-3 text-sm text-zinc-200 transition hover:border-lime-300/55 sm:min-h-16 sm:text-base"
               href={getPhoneHref(contactInfo.phone)}
             >
               <Phone className="size-5 text-lime-200" aria-hidden="true" />
@@ -67,7 +67,7 @@ export function ContactInfoCard({
           ) : null}
           {contactInfo.email ? (
             <a
-              className="flex min-h-16 items-center gap-3 border border-cyan-300/20 bg-black/30 p-3 text-zinc-200 transition hover:border-cyan-300/55"
+              className="flex min-h-14 items-center gap-3 border border-cyan-300/20 bg-black/30 p-3 text-sm text-zinc-200 transition hover:border-cyan-300/55 sm:min-h-16 sm:text-base"
               href={`mailto:${contactInfo.email}`}
             >
               <Mail className="size-5 text-cyan-200" aria-hidden="true" />
@@ -77,7 +77,7 @@ export function ContactInfoCard({
             </a>
           ) : null}
           {contactInfo.address ? (
-            <div className="flex min-h-16 items-center gap-3 border border-red-300/20 bg-black/30 p-3 text-zinc-200 sm:col-span-2">
+            <div className="flex min-h-14 items-center gap-3 border border-red-300/20 bg-black/30 p-3 text-sm text-zinc-200 sm:col-span-2 sm:min-h-16 sm:text-base">
               <MapPin className="size-5 text-red-200" aria-hidden="true" />
               <span className="min-w-0 break-words">{contactInfo.address}</span>
             </div>
@@ -92,7 +92,7 @@ export function ContactInfoCard({
           <h3 className="font-tech text-sm uppercase text-zinc-400">
             {dictionary.helpTitle}
           </h3>
-          <ul className="grid gap-2 sm:grid-cols-2">
+          <ul className="grid gap-2 lg:grid-cols-2">
             {dictionary.helpItems.map((item) => (
               <li
                 key={item}

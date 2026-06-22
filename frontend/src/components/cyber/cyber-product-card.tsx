@@ -67,7 +67,7 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
       className={cn("flex h-full flex-col", className)}
       {...props}
     >
-      <CyberCardContent className="relative flex flex-1 flex-col gap-5 p-4">
+      <CyberCardContent className="relative flex flex-1 flex-col gap-4 p-3 sm:gap-5 sm:p-4">
         <div className="relative aspect-[4/3] overflow-hidden rounded-md border border-white/10 bg-[radial-gradient(circle_at_30%_20%,rgba(248,113,113,0.22),transparent_32%),linear-gradient(135deg,rgba(113,113,122,0.28),rgba(9,9,11,0.92))]">
           <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:22px_22px] opacity-40" />
           {typeof image === "string" ? (
@@ -85,7 +85,7 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
             </div>
           )}
           {badges.length > 0 ? (
-            <div className="absolute top-3 left-3 z-20 flex flex-wrap gap-2">
+            <div className="absolute left-2.5 top-2.5 z-20 flex flex-wrap gap-1.5 sm:left-3 sm:top-3 sm:gap-2">
               {badges.map((badge, index) => (
                 <CyberBadge key={index} variant={badge.variant ?? "cyan"} glow>
                   {badge.label}
@@ -97,16 +97,16 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
             type="button"
             onClick={onFavoriteClick}
             aria-label={favoriteLabel}
-            className="absolute right-3 top-3 z-20 grid size-10 place-items-center border border-white/15 bg-black/55 text-zinc-200 backdrop-blur transition hover:border-red-300/55 hover:bg-red-500/12 hover:text-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/30"
+            className="absolute right-2.5 top-2.5 z-20 grid size-9 place-items-center border border-white/15 bg-black/55 text-zinc-200 backdrop-blur transition hover:border-red-300/55 hover:bg-red-500/12 hover:text-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/30 sm:right-3 sm:top-3 sm:size-10"
           >
             <Heart className="size-4" aria-hidden="true" />
           </button>
         </div>
         <div className="flex flex-1 flex-col gap-3">
           <div className="space-y-2">
-            <h3 className="font-display text-2xl font-normal tracking-[0.04em] text-white">{title}</h3>
+            <h3 className="font-display text-[1.35rem] font-normal tracking-[0.03em] text-white sm:text-2xl">{title}</h3>
             {description ? (
-              <p className="line-clamp-2 text-base leading-7 text-zinc-400">
+              <p className="line-clamp-2 text-sm leading-6 text-zinc-400 sm:text-base sm:leading-7">
                 {description}
               </p>
             ) : null}
@@ -120,15 +120,15 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
           ) : null}
           <div className="flex items-end justify-between gap-4">
             <div>
-              <div className="font-display text-3xl font-normal text-lime-100">{price}</div>
+              <div className="font-display text-[1.7rem] font-normal text-lime-100 sm:text-3xl">{price}</div>
               {oldPrice ? (
-                <div className="font-tech text-base text-zinc-600 line-through">{oldPrice}</div>
+                <div className="font-tech text-sm text-zinc-600 line-through sm:text-base">{oldPrice}</div>
               ) : null}
             </div>
           </div>
         </div>
       </CyberCardContent>
-      <CyberCardFooter className="mt-auto grid grid-cols-2 gap-3 px-4 pb-4 pt-0">
+      <CyberCardFooter className="mt-auto grid grid-cols-2 gap-2 px-3 pb-3 pt-0 sm:gap-3 sm:px-4 sm:pb-4">
         {detailsHref ? (
           <a
             href={detailsHref}
