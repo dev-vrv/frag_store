@@ -3,21 +3,22 @@ from decimal import Decimal
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
 
 
 class Brand(models.Model):
-    name = models.CharField(max_length=120, unique=True)
-    slug = models.SlugField(max_length=140, unique=True, blank=True)
-    website = models.URLField(blank=True)
-    country = models.CharField(max_length=80, blank=True)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    name = models.CharField(_('название'), max_length=120, unique=True)
+    slug = models.SlugField(_('slug'), max_length=140, unique=True, blank=True)
+    website = models.URLField(_('сайт'), blank=True)
+    country = models.CharField(_('страна'), max_length=80, blank=True)
+    is_active = models.BooleanField(_('активен'), default=True)
+    created_at = models.DateTimeField(_('создано'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('обновлено'), auto_now=True)
 
     class Meta:
         ordering = ('name',)
-        verbose_name = 'brand'
-        verbose_name_plural = 'brands'
+        verbose_name = _('бренд')
+        verbose_name_plural = _('бренды')
 
     def __str__(self):
         return self.name
@@ -42,29 +43,29 @@ class Brand(models.Model):
 
 class ProductCategory(models.Model):
     class DeviceType(models.TextChoices):
-        MOUSE = 'mouse', 'Mouse'
-        KEYBOARD = 'keyboard', 'Keyboard'
-        HEADSET = 'headset', 'Headset'
-        MOUSEPAD = 'mousepad', 'Mousepad'
-        CONTROLLER = 'controller', 'Controller'
-        MONITOR = 'monitor', 'Monitor'
-        COMPONENT = 'component', 'Component'
-        ACCESSORY = 'accessory', 'Accessory'
-        OTHER = 'other', 'Other'
+        MOUSE = 'mouse', _('Мышь')
+        KEYBOARD = 'keyboard', _('Клавиатура')
+        HEADSET = 'headset', _('Гарнитура')
+        MOUSEPAD = 'mousepad', _('Коврик')
+        CONTROLLER = 'controller', _('Контроллер')
+        MONITOR = 'monitor', _('Монитор')
+        COMPONENT = 'component', _('Компонент')
+        ACCESSORY = 'accessory', _('Аксессуар')
+        OTHER = 'other', _('Другое')
 
-    name = models.CharField(max_length=120, unique=True)
-    slug = models.SlugField(max_length=140, unique=True, blank=True)
-    description = models.TextField(blank=True)
-    device_type = models.CharField(max_length=24, choices=DeviceType.choices, default=DeviceType.OTHER)
-    sort_order = models.PositiveIntegerField(default=0)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    name = models.CharField(_('название'), max_length=120, unique=True)
+    slug = models.SlugField(_('slug'), max_length=140, unique=True, blank=True)
+    description = models.TextField(_('описание'), blank=True)
+    device_type = models.CharField(_('тип устройства'), max_length=24, choices=DeviceType.choices, default=DeviceType.OTHER)
+    sort_order = models.PositiveIntegerField(_('порядок сортировки'), default=0)
+    is_active = models.BooleanField(_('активна'), default=True)
+    created_at = models.DateTimeField(_('создано'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('обновлено'), auto_now=True)
 
     class Meta:
         ordering = ('sort_order', 'name')
-        verbose_name = 'product category'
-        verbose_name_plural = 'product categories'
+        verbose_name = _('категория')
+        verbose_name_plural = _('категории')
 
     def __str__(self):
         return self.name
@@ -77,11 +78,11 @@ class ProductCategory(models.Model):
 
 class Product(models.Model):
     class AvailabilityStatus(models.TextChoices):
-        IN_STOCK = 'in_stock', 'In stock'
-        LOW_STOCK = 'low_stock', 'Low stock'
-        OUT_OF_STOCK = 'out_of_stock', 'Out of stock'
-        PREORDER = 'preorder', 'Preorder'
-        DISCONTINUED = 'discontinued', 'Discontinued'
+        IN_STOCK = 'in_stock', _('В наличии')
+        LOW_STOCK = 'low_stock', _('Мало на складе')
+        OUT_OF_STOCK = 'out_of_stock', _('Нет в наличии')
+        PREORDER = 'preorder', _('Предзаказ')
+        DISCONTINUED = 'discontinued', _('Снят с продажи')
 
     class Currency(models.TextChoices):
         KGS = 'KGS', 'KGS'
@@ -91,43 +92,46 @@ class Product(models.Model):
         ProductCategory,
         on_delete=models.PROTECT,
         related_name='products',
+        verbose_name=_('категория'),
     )
     brand = models.ForeignKey(
         Brand,
         on_delete=models.PROTECT,
         related_name='products',
+        verbose_name=_('бренд'),
     )
-    name = models.CharField(max_length=180)
-    slug = models.SlugField(max_length=220, unique=True, blank=True)
-    sku = models.CharField(max_length=64, unique=True)
-    short_description = models.CharField(max_length=280)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    old_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
-    currency = models.CharField(max_length=3, choices=Currency.choices, default=Currency.KGS)
-    quantity_in_stock = models.PositiveIntegerField(default=0)
+    name = models.CharField(_('название'), max_length=180)
+    slug = models.SlugField(_('slug'), max_length=220, unique=True, blank=True)
+    sku = models.CharField(_('артикул'), max_length=64, unique=True)
+    short_description = models.CharField(_('краткое описание'), max_length=280)
+    description = models.TextField(_('описание'))
+    price = models.DecimalField(_('цена'), max_digits=10, decimal_places=2)
+    old_price = models.DecimalField(_('старая цена'), max_digits=10, decimal_places=2, blank=True, null=True)
+    currency = models.CharField(_('валюта'), max_length=3, choices=Currency.choices, default=Currency.KGS)
+    quantity_in_stock = models.PositiveIntegerField(_('остаток на складе'), default=0)
     availability_status = models.CharField(
+        _('статус наличия'),
         max_length=20,
         choices=AvailabilityStatus.choices,
         default=AvailabilityStatus.IN_STOCK,
     )
-    warranty_months = models.PositiveIntegerField(default=0)
-    color = models.CharField(max_length=80, blank=True)
-    weight_grams = models.PositiveIntegerField(blank=True, null=True)
-    release_date = models.DateField(blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-    is_featured = models.BooleanField(default=False)
-    is_best_seller = models.BooleanField(default=False)
-    is_new_arrival = models.BooleanField(default=False)
-    meta_title = models.CharField(max_length=255, blank=True)
-    meta_description = models.CharField(max_length=320, blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    warranty_months = models.PositiveIntegerField(_('гарантия, мес.'), default=0)
+    color = models.CharField(_('цвет'), max_length=80, blank=True)
+    weight_grams = models.PositiveIntegerField(_('вес, г'), blank=True, null=True)
+    release_date = models.DateField(_('дата релиза'), blank=True, null=True)
+    is_active = models.BooleanField(_('активен'), default=True)
+    is_featured = models.BooleanField(_('подборка'), default=False)
+    is_best_seller = models.BooleanField(_('хит продаж'), default=False)
+    is_new_arrival = models.BooleanField(_('новинка'), default=False)
+    meta_title = models.CharField(_('meta title'), max_length=255, blank=True)
+    meta_description = models.CharField(_('meta description'), max_length=320, blank=True)
+    created_at = models.DateTimeField(_('создано'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('обновлено'), auto_now=True)
 
     class Meta:
         ordering = ('-is_best_seller', '-is_featured', 'name')
-        verbose_name = 'product'
-        verbose_name_plural = 'products'
+        verbose_name = _('товар')
+        verbose_name_plural = _('товары')
         indexes = [
             models.Index(fields=('category', 'is_active')),
             models.Index(fields=('brand', 'is_active')),
@@ -155,14 +159,14 @@ class Product(models.Model):
         super().clean()
 
         if self.old_price is not None and self.old_price <= self.price:
-            raise ValidationError({'old_price': 'Old price must be greater than current price.'})
+            raise ValidationError({'old_price': _('Старая цена должна быть больше текущей цены.')})
 
         if self.quantity_in_stock == 0 and self.availability_status in {
             self.AvailabilityStatus.IN_STOCK,
             self.AvailabilityStatus.LOW_STOCK,
         }:
             raise ValidationError({
-                'availability_status': 'In stock and low stock statuses require a positive stock quantity.'
+                'availability_status': _('Статусы "в наличии" и "мало на складе" требуют положительный остаток.')
             })
 
     def save(self, *args, **kwargs):
@@ -174,23 +178,23 @@ class Product(models.Model):
 
 class ProductMedia(models.Model):
     class MediaType(models.TextChoices):
-        IMAGE = 'image', 'Image'
-        VIDEO = 'video', 'Video'
+        IMAGE = 'image', _('Изображение')
+        VIDEO = 'video', _('Видео')
 
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='media_items')
-    media_type = models.CharField(max_length=10, choices=MediaType.choices, default=MediaType.IMAGE)
-    file = models.FileField(upload_to='products/media/', blank=True)
-    external_url = models.URLField(blank=True)
-    alt_text = models.CharField(max_length=255, blank=True)
-    is_primary = models.BooleanField(default=False)
-    sort_order = models.PositiveIntegerField(default=0)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='media_items', verbose_name=_('товар'))
+    media_type = models.CharField(_('тип медиа'), max_length=10, choices=MediaType.choices, default=MediaType.IMAGE)
+    file = models.FileField(_('файл'), upload_to='products/media/', blank=True)
+    external_url = models.URLField(_('внешняя ссылка'), blank=True)
+    alt_text = models.CharField(_('alt текст'), max_length=255, blank=True)
+    is_primary = models.BooleanField(_('основное'), default=False)
+    sort_order = models.PositiveIntegerField(_('порядок сортировки'), default=0)
+    created_at = models.DateTimeField(_('создано'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('обновлено'), auto_now=True)
 
     class Meta:
         ordering = ('sort_order', 'id')
-        verbose_name = 'product media'
-        verbose_name_plural = 'product media'
+        verbose_name = _('медиа товара')
+        verbose_name_plural = _('медиа товаров')
 
     def __str__(self):
         return f'{self.product.name} - {self.media_type}'
@@ -199,19 +203,19 @@ class ProductMedia(models.Model):
         super().clean()
 
         if not self.file and not self.external_url:
-            raise ValidationError('Either file or external URL must be provided.')
+            raise ValidationError(_('Необходимо указать файл или внешнюю ссылку.'))
 
 
 class ProductFeature(models.Model):
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='features')
-    title = models.CharField(max_length=140)
-    description = models.CharField(max_length=280, blank=True)
-    sort_order = models.PositiveIntegerField(default=0)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='features', verbose_name=_('товар'))
+    title = models.CharField(_('заголовок'), max_length=140)
+    description = models.CharField(_('описание'), max_length=280, blank=True)
+    sort_order = models.PositiveIntegerField(_('порядок сортировки'), default=0)
 
     class Meta:
         ordering = ('sort_order', 'id')
-        verbose_name = 'product feature'
-        verbose_name_plural = 'product features'
+        verbose_name = _('особенность товара')
+        verbose_name_plural = _('особенности товара')
 
     def __str__(self):
         return f'{self.product.name} - {self.title}'
@@ -219,23 +223,23 @@ class ProductFeature(models.Model):
 
 class ProductSpecification(models.Model):
     class ValueType(models.TextChoices):
-        TEXT = 'text', 'Text'
-        NUMBER = 'number', 'Number'
-        BOOLEAN = 'boolean', 'Boolean'
+        TEXT = 'text', _('Текст')
+        NUMBER = 'number', _('Число')
+        BOOLEAN = 'boolean', _('Логическое')
 
-    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='specifications')
-    group = models.CharField(max_length=80, blank=True)
-    name = models.CharField(max_length=120)
-    value = models.CharField(max_length=255)
-    unit = models.CharField(max_length=32, blank=True)
-    value_type = models.CharField(max_length=16, choices=ValueType.choices, default=ValueType.TEXT)
-    is_highlight = models.BooleanField(default=False)
-    sort_order = models.PositiveIntegerField(default=0)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='specifications', verbose_name=_('товар'))
+    group = models.CharField(_('группа'), max_length=80, blank=True)
+    name = models.CharField(_('название'), max_length=120)
+    value = models.CharField(_('значение'), max_length=255)
+    unit = models.CharField(_('единица измерения'), max_length=32, blank=True)
+    value_type = models.CharField(_('тип значения'), max_length=16, choices=ValueType.choices, default=ValueType.TEXT)
+    is_highlight = models.BooleanField(_('показывать как ключевую'), default=False)
+    sort_order = models.PositiveIntegerField(_('порядок сортировки'), default=0)
 
     class Meta:
         ordering = ('sort_order', 'id')
-        verbose_name = 'product specification'
-        verbose_name_plural = 'product specifications'
+        verbose_name = _('характеристика товара')
+        verbose_name_plural = _('характеристики товара')
 
     def __str__(self):
         return f'{self.product.name} - {self.name}'

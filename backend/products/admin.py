@@ -5,20 +5,29 @@ from .models import Brand, Product, ProductCategory, ProductFeature, ProductMedi
 
 class ProductMediaInline(admin.TabularInline):
     model = ProductMedia
-    extra = 1
+    extra = 0
     fields = ('media_type', 'file', 'external_url', 'alt_text', 'is_primary', 'sort_order')
+    verbose_name = 'Медиафайл'
+    verbose_name_plural = 'Медиафайлы'
+    classes = ('collapse',)
 
 
 class ProductFeatureInline(admin.TabularInline):
     model = ProductFeature
-    extra = 1
+    extra = 0
     fields = ('title', 'description', 'sort_order')
+    verbose_name = 'Особенность'
+    verbose_name_plural = 'Особенности'
+    classes = ('collapse',)
 
 
 class ProductSpecificationInline(admin.TabularInline):
     model = ProductSpecification
-    extra = 1
+    extra = 0
     fields = ('group', 'name', 'value', 'unit', 'value_type', 'is_highlight', 'sort_order')
+    verbose_name = 'Характеристика'
+    verbose_name_plural = 'Характеристики'
+    classes = ('collapse',)
 
 
 @admin.register(Brand)
@@ -69,7 +78,7 @@ class ProductAdmin(admin.ModelAdmin):
     inlines = (ProductMediaInline, ProductFeatureInline, ProductSpecificationInline)
     fieldsets = (
         (
-            'Core',
+            'Основное',
             {
                 'fields': (
                     'category',
@@ -83,7 +92,7 @@ class ProductAdmin(admin.ModelAdmin):
             },
         ),
         (
-            'Pricing and stock',
+            'Цена и склад',
             {
                 'fields': (
                     'price',
@@ -96,7 +105,7 @@ class ProductAdmin(admin.ModelAdmin):
             },
         ),
         (
-            'Attributes',
+            'Атрибуты',
             {
                 'fields': (
                     'color',
@@ -106,7 +115,7 @@ class ProductAdmin(admin.ModelAdmin):
             },
         ),
         (
-            'Display flags',
+            'Отображение',
             {
                 'fields': (
                     'is_active',
@@ -126,24 +135,3 @@ class ProductAdmin(admin.ModelAdmin):
             },
         ),
     )
-
-
-@admin.register(ProductMedia)
-class ProductMediaAdmin(admin.ModelAdmin):
-    list_display = ('product', 'media_type', 'is_primary', 'sort_order', 'updated_at')
-    list_filter = ('media_type', 'is_primary')
-    search_fields = ('product__name', 'alt_text', 'external_url')
-
-
-@admin.register(ProductFeature)
-class ProductFeatureAdmin(admin.ModelAdmin):
-    list_display = ('product', 'title', 'sort_order')
-    list_filter = ('product__category',)
-    search_fields = ('product__name', 'title', 'description')
-
-
-@admin.register(ProductSpecification)
-class ProductSpecificationAdmin(admin.ModelAdmin):
-    list_display = ('product', 'group', 'name', 'value', 'unit', 'is_highlight', 'sort_order')
-    list_filter = ('value_type', 'is_highlight', 'product__category')
-    search_fields = ('product__name', 'group', 'name', 'value')

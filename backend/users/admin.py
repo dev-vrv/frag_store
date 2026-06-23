@@ -25,7 +25,7 @@ class UserAdmin(BaseUserAdmin):
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
         (
-            'Personal info',
+            'Личные данные',
             {
                 'fields': (
                     'first_name',
@@ -38,7 +38,7 @@ class UserAdmin(BaseUserAdmin):
             },
         ),
         (
-            'Security',
+            'Безопасность',
             {
                 'fields': (
                     'email_verified',
@@ -49,8 +49,8 @@ class UserAdmin(BaseUserAdmin):
                 )
             },
         ),
-        ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-        ('Important dates', {'fields': ('last_login', 'date_joined')}),
+        ('Права доступа', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
+        ('Важные даты', {'fields': ('last_login', 'date_joined')}),
     )
     add_fieldsets = (
         (

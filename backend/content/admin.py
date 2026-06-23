@@ -9,10 +9,10 @@ class ContactInfoAdmin(admin.ModelAdmin):
     list_filter = ('locale', 'is_active')
     search_fields = ('phone', 'email', 'address', 'working_hours')
     fieldsets = (
-        ('Localization', {'fields': ('locale', 'is_active')}),
-        ('Main contacts', {'fields': ('phone', 'email', 'address', 'working_hours')}),
+        ('Локализация', {'fields': ('locale', 'is_active')}),
+        ('Основные контакты', {'fields': ('phone', 'email', 'address', 'working_hours')}),
         (
-            'Social links',
+            'Социальные ссылки',
             {
                 'fields': (
                     'whatsapp',
@@ -25,7 +25,7 @@ class ContactInfoAdmin(admin.ModelAdmin):
                 )
             },
         ),
-        ('Additional contacts', {'fields': ('extra_contacts',)}),
+        ('Дополнительные контакты', {'fields': ('extra_contacts',)}),
     )
 
 
@@ -44,7 +44,7 @@ class BlogPostAdmin(admin.ModelAdmin):
     )
     fieldsets = (
         (
-            'Media',
+            'Медиа',
             {
                 'fields': (
                     'image',
@@ -54,7 +54,7 @@ class BlogPostAdmin(admin.ModelAdmin):
                 )
             },
         ),
-        ('Russian', {'fields': ('title_ru', 'text_ru')}),
-        ('English', {'fields': ('title_en', 'text_en')}),
-        ('Kyrgyz', {'fields': ('title_kg', 'text_kg')}),
+        ('Русский', {'fields': ('title_ru', 'text_ru')}),
+        ('Английский', {'fields': ('title_en', 'text_en')}),
+        ('Кыргызский', {'fields': ('title_kg', 'text_kg')}),
     )

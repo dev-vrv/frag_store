@@ -16,10 +16,17 @@ Including another URLconf
 """
 from django.conf import settings
 from django.conf.urls.static import static
+from backend.admin import patch_admin_site
 from django.contrib import admin
 from django.urls import include, path
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+
+patch_admin_site()
+
+admin.site.site_header = 'Панель управления Frag Store'
+admin.site.site_title = 'Администрирование Frag Store'
+admin.site.index_title = 'Управление сайтом'
 
 urlpatterns = [
     path('admin/', admin.site.urls),

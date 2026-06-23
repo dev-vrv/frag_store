@@ -1,0 +1,108 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrastyle %}
+  {{ block.super }}
+  <link rel="stylesheet" href="{% static 'admin/css/dashboard.css' %}">
+{% endblock %}
+
+{% block coltype %}colMS{% endblock %}
+
+{% block bodyclass %}{{ block.super }} dashboard frag-admin-dashboard{% endblock %}
+
+{% block nav-breadcrumbs %}{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+<div id="content-main">
+  {% if app_list %}
+    <div class="frag-admin-app-list">
+      {% for app in app_list %}
+        <section class="frag-admin-app app-{{ app.app_label }} module" data-admin-app="{{ app.app_label }}">
+          <button
+            type="button"
+            class="frag-admin-app__toggle"
+            aria-expanded="false"
+            aria-controls="frag-admin-panel-{{ app.app_label }}"
+          >
+            <span class="frag-admin-app__title-wrap">
+              <span class="frag-admin-app__icon" aria-hidden="true"></span>
+              <span class="frag-admin-app__title">{{ app.name }}</span>
+            </span>
+            <span class="frag-admin-app__chevron" aria-hidden="true"></span>
+          </button>
+          <div
+            id="frag-admin-panel-{{ app.app_label }}"
+            class="frag-admin-app__panel"
+            hidden
+          >
+            <ul class="frag-admin-model-list">
+              {% for model in app.models %}
+                {% with model_name=model.object_name|lower %}
+                  <li class="frag-admin-model model-{{ model_name }}{% if model.admin_url in request.path|urlencode %} current-model{% endif %}">
+                    <div class="frag-admin-model__main">
+                      {% if model.admin_url %}
+                        <a href="{{ model.admin_url }}"{% if model.admin_url in request.path|urlencode %} aria-current="page"{% endif %}>{{ model.name }}</a>
+                      {% else %}
+                        <span>{{ model.name }}</span>
+                      {% endif %}
+                    </div>
+                    <div class="frag-admin-model__actions">
+                      {% if model.admin_url and show_changelinks %}
+                        {% if model.view_only %}
+                          <a href="{{ model.admin_url }}" class="viewlink">{% translate 'View' %}</a>
+                        {% else %}
+                          <a href="{{ model.admin_url }}" class="changelink">{% translate 'Change' %}</a>
+                        {% endif %}
+                      {% endif %}
+                      {% if model.add_url %}
+                        <a href="{{ model.add_url }}" class="addlink">{% translate 'Add' %}</a>
+                      {% endif %}
+                    </div>
+                  </li>
+                {% endwith %}
+              {% endfor %}
+            </ul>
+          </div>
+        </section>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p>{% translate 'You don’t have permission to view or edit anything.' %}</p>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block sidebar %}
+<div id="content-related">
+    <div class="module" id="recent-actions-module">
+        <h2>{% translate 'Recent actions' %}</h2>
+        <h3>{% translate 'My actions' %}</h3>
+            {% load log %}
+            {% get_admin_log 10 as admin_log for_user user %}
+            {% if not admin_log %}
+            <p>{% translate 'None available' %}</p>
+            {% else %}
+            <ul class="actionlist">
+            {% for entry in admin_log %}
+            <li class="{% if entry.is_addition %}addlink{% endif %}{% if entry.is_change %}changelink{% endif %}{% if entry.is_deletion %}deletelink{% endif %}">
+                <span class="visually-hidden">{% if entry.is_addition %}{% translate 'Added:' %}{% elif entry.is_change %}{% translate 'Changed:' %}{% elif entry.is_deletion %}{% translate 'Deleted:' %}{% endif %}</span>
+                {% if entry.is_deletion or not entry.get_admin_url %}
+                    {{ entry.object_repr }}
+                {% else %}
+                    <a href="{{ entry.get_admin_url }}">{{ entry.object_repr }}</a>
+                {% endif %}
+                <br>
+                {% if entry.content_type %}
+                    <span class="mini quiet">{% filter capfirst %}{{ entry.content_type.name }}{% endfilter %}</span>
+                {% else %}
+                    <span class="mini quiet">{% translate 'Unknown content' %}</span>
+                {% endif %}
+            </li>
+            {% endfor %}
+            </ul>
+            {% endif %}
+    </div>
+</div>
+{% endblock %}

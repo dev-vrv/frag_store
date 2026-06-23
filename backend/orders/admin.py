@@ -6,6 +6,8 @@ from .models import Order, OrderItem, PromoCode
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
     extra = 0
+    verbose_name = 'Позиция заказа'
+    verbose_name_plural = 'Позиции заказа'
     readonly_fields = (
         'product',
         'product_name',
@@ -49,7 +51,7 @@ class OrderAdmin(admin.ModelAdmin):
     inlines = (OrderItemInline,)
     fieldsets = (
         (
-            'Order',
+            'Заказ',
             {
                 'fields': (
                     'number',
@@ -61,7 +63,7 @@ class OrderAdmin(admin.ModelAdmin):
             },
         ),
         (
-            'Customer',
+            'Клиент',
             {
                 'fields': (
                     'customer_name',
@@ -71,7 +73,7 @@ class OrderAdmin(admin.ModelAdmin):
             },
         ),
         (
-            'Discounts',
+            'Скидки',
             {
                 'fields': (
                     'promo_code',
@@ -81,7 +83,7 @@ class OrderAdmin(admin.ModelAdmin):
             },
         ),
         (
-            'Delivery',
+            'Доставка',
             {
                 'fields': (
                     'delivery_city',
@@ -91,7 +93,7 @@ class OrderAdmin(admin.ModelAdmin):
             },
         ),
         (
-            'Totals',
+            'Итоги',
             {
                 'fields': (
                     'subtotal',
@@ -102,7 +104,7 @@ class OrderAdmin(admin.ModelAdmin):
             },
         ),
         (
-            'Dates',
+            'Даты',
             {
                 'fields': (
                     'created_at',
@@ -138,7 +140,7 @@ class PromoCodeAdmin(admin.ModelAdmin):
     readonly_fields = ('used_count', 'created_at', 'updated_at')
     fieldsets = (
         (
-            'Promo code',
+            'Промокод',
             {
                 'fields': (
                     'code',
@@ -151,7 +153,7 @@ class PromoCodeAdmin(admin.ModelAdmin):
             },
         ),
         (
-            'Availability',
+            'Доступность',
             {
                 'fields': (
                     'starts_at',
@@ -162,7 +164,7 @@ class PromoCodeAdmin(admin.ModelAdmin):
             },
         ),
         (
-            'Dates',
+            'Даты',
             {
                 'fields': (
                     'created_at',

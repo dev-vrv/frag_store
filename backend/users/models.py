@@ -2,6 +2,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
 from django.db import models
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 
 class UserManager(BaseUserManager):
@@ -9,7 +10,7 @@ class UserManager(BaseUserManager):
 
     def _create_user(self, email, password, **extra_fields):
         if not email:
-            raise ValueError('The email address must be provided.')
+            raise ValueError(_('Необходимо указать email адрес.'))
 
         email = self.normalize_email(email).strip().lower()
         user = self.model(email=email, **extra_fields)
@@ -28,29 +29,29 @@ class UserManager(BaseUserManager):
         extra_fields.setdefault('is_active', True)
 
         if extra_fields.get('is_staff') is not True:
-            raise ValueError('Superuser must have is_staff=True.')
+            raise ValueError(_('У суперпользователя должен быть is_staff=True.'))
         if extra_fields.get('is_superuser') is not True:
-            raise ValueError('Superuser must have is_superuser=True.')
+            raise ValueError(_('У суперпользователя должен быть is_superuser=True.'))
 
         return self._create_user(email, password, **extra_fields)
 
 
 class User(AbstractBaseUser, PermissionsMixin):
-    email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=150)
-    last_name = models.CharField(max_length=150, blank=True)
-    phone = models.CharField(max_length=32, blank=True)
-    city = models.CharField(max_length=120, blank=True)
-    address = models.CharField(max_length=255, blank=True)
-    personal_discount_percent = models.DecimalField(max_digits=5, decimal_places=2, default=0)
-    email_verified = models.BooleanField(default=False)
-    two_factor_enabled = models.BooleanField(default=False)
-    pending_two_factor_enabled = models.BooleanField(default=False)
-    email_verification_code = models.CharField(max_length=6, blank=True)
-    email_verification_expires_at = models.DateTimeField(blank=True, null=True)
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=True)
-    date_joined = models.DateTimeField(default=timezone.now)
+    email = models.EmailField(_('email'), unique=True)
+    first_name = models.CharField(_('имя'), max_length=150)
+    last_name = models.CharField(_('фамилия'), max_length=150, blank=True)
+    phone = models.CharField(_('телефон'), max_length=32, blank=True)
+    city = models.CharField(_('город'), max_length=120, blank=True)
+    address = models.CharField(_('адрес'), max_length=255, blank=True)
+    personal_discount_percent = models.DecimalField(_('персональная скидка, %'), max_digits=5, decimal_places=2, default=0)
+    email_verified = models.BooleanField(_('email подтвержден'), default=False)
+    two_factor_enabled = models.BooleanField(_('двухфакторная аутентификация включена'), default=False)
+    pending_two_factor_enabled = models.BooleanField(_('ожидает включения 2FA'), default=False)
+    email_verification_code = models.CharField(_('код подтверждения email'), max_length=6, blank=True)
+    email_verification_expires_at = models.DateTimeField(_('код подтверждения действует до'), blank=True, null=True)
+    is_staff = models.BooleanField(_('доступ к админке'), default=False)
+    is_active = models.BooleanField(_('активен'), default=True)
+    date_joined = models.DateTimeField(_('дата регистрации'), default=timezone.now)
 
     objects = UserManager()
 
@@ -59,8 +60,8 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         ordering = ['-date_joined']
-        verbose_name = 'user'
-        verbose_name_plural = 'users'
+        verbose_name = _('пользователь')
+        verbose_name_plural = _('пользователи')
 
     def __str__(self):
         return self.email
@@ -72,28 +73,28 @@ class User(AbstractBaseUser, PermissionsMixin):
 
 class ContactMessage(models.Model):
     class Locale(models.TextChoices):
-        RU = 'ru', 'Russian'
-        EN = 'en', 'English'
-        KG = 'kg', 'Kyrgyz'
+        RU = 'ru', _('Русский')
+        EN = 'en', _('Английский')
+        KG = 'kg', _('Кыргызский')
 
     class Status(models.TextChoices):
-        NEW = 'new', 'New'
-        IN_PROGRESS = 'in_progress', 'In progress'
-        DONE = 'done', 'Done'
+        NEW = 'new', _('Новый')
+        IN_PROGRESS = 'in_progress', _('В работе')
+        DONE = 'done', _('Завершен')
 
-    name = models.CharField(max_length=120)
-    email = models.EmailField()
-    phone = models.CharField(max_length=64, blank=True)
-    message = models.TextField()
-    locale = models.CharField(max_length=2, choices=Locale.choices, default=Locale.RU)
-    status = models.CharField(max_length=16, choices=Status.choices, default=Status.NEW)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
+    name = models.CharField(_('имя'), max_length=120)
+    email = models.EmailField(_('email'))
+    phone = models.CharField(_('телефон'), max_length=64, blank=True)
+    message = models.TextField(_('сообщение'))
+    locale = models.CharField(_('язык'), max_length=2, choices=Locale.choices, default=Locale.RU)
+    status = models.CharField(_('статус'), max_length=16, choices=Status.choices, default=Status.NEW)
+    created_at = models.DateTimeField(_('создано'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('обновлено'), auto_now=True)
 
     class Meta:
         ordering = ['-created_at']
-        verbose_name = 'contact message'
-        verbose_name_plural = 'contact messages'
+        verbose_name = _('сообщение')
+        verbose_name_plural = _('сообщения')
 
     def __str__(self):
         return f'{self.name} <{self.email}>'

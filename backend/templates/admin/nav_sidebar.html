@@ -1,0 +1,49 @@
+{% load i18n %}
+<button class="sticky toggle-nav-sidebar" id="toggle-nav-sidebar" aria-label="{% translate 'Toggle navigation' %}"></button>
+<nav class="sticky" id="nav-sidebar" aria-label="{% translate 'Sidebar' %}">
+  <input
+    type="search"
+    id="nav-filter"
+    placeholder="{% translate 'Start typing to filter…' %}"
+    aria-label="{% translate 'Filter navigation items' %}"
+  >
+  <div class="frag-admin-app-list frag-admin-app-list--sidebar">
+    {% for app in available_apps %}
+      <section class="frag-admin-app app-{{ app.app_label }} module" data-admin-app="{{ app.app_label }}">
+        <button
+          type="button"
+          class="frag-admin-app__toggle"
+          aria-expanded="false"
+          aria-controls="frag-admin-sidebar-panel-{{ app.app_label }}"
+        >
+          <span class="frag-admin-app__title-wrap">
+            <span class="frag-admin-app__icon" aria-hidden="true"></span>
+            <span class="frag-admin-app__title">{{ app.name }}</span>
+          </span>
+          <span class="frag-admin-app__chevron" aria-hidden="true"></span>
+        </button>
+        <div
+          id="frag-admin-sidebar-panel-{{ app.app_label }}"
+          class="frag-admin-app__panel"
+          hidden
+        >
+          <ul class="frag-admin-model-list">
+            {% for model in app.models %}
+              {% with model_name=model.object_name|lower %}
+                <li class="frag-admin-model model-{{ model_name }}{% if model.admin_url in request.path|urlencode %} current-model{% endif %}">
+                  <div class="frag-admin-model__main">
+                    {% if model.admin_url %}
+                      <a href="{{ model.admin_url }}"{% if model.admin_url in request.path|urlencode %} aria-current="page"{% endif %}>{{ model.name }}</a>
+                    {% else %}
+                      <span>{{ model.name }}</span>
+                    {% endif %}
+                  </div>
+                </li>
+              {% endwith %}
+            {% endfor %}
+          </ul>
+        </div>
+      </section>
+    {% endfor %}
+  </div>
+</nav>
