@@ -2,8 +2,16 @@
 
 import * as React from "react";
 import { Check, ChevronDown, Circle } from "lucide-react";
+import { usePathname } from "next/navigation";
 
+import { getLocaleFromPathname } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+
+const selectPlaceholderLabels = {
+  ru: "Выберите вариант",
+  en: "Select option",
+  kg: "Вариант тандаңыз",
+} as const;
 
 export interface CyberSelectOption {
   value: string;
@@ -42,6 +50,8 @@ const CyberNativeSelect = React.forwardRef<HTMLDivElement, CyberNativeSelectProp
     },
     ref,
   ) => {
+    const pathname = usePathname();
+    const locale = getLocaleFromPathname(pathname);
     const generatedId = React.useId();
     const selectId = id ?? generatedId;
     const listboxId = `${selectId}-listbox`;
@@ -123,7 +133,7 @@ const CyberNativeSelect = React.forwardRef<HTMLDivElement, CyberNativeSelectProp
               className,
             )}
           >
-            <span>{selectedOption?.label ?? "Select option"}</span>
+            <span>{selectedOption?.label ?? selectPlaceholderLabels[locale]}</span>
           </button>
           <ChevronDown className="pointer-events-none absolute right-4 top-1/2 size-4 -translate-y-1/2 text-lime-200" />
           {open ? (

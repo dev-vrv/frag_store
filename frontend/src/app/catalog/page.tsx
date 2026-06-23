@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 
 import { CatalogPage as CatalogContentPage } from "@/components/Pages/CatalogPage";
 import { defaultLocale, getDictionary } from "@/lib/i18n";
-import { getProductCategories, getProducts } from "@/lib/products";
+import { getProductBrands, getProductCategories, getProducts } from "@/lib/products";
 
 const dictionary = getDictionary(defaultLocale);
 const page = dictionary.pages.catalog;
@@ -16,9 +16,11 @@ export default async function CatalogPage({
 }) {
   const params = (await searchParams) ?? {};
   const initialCategory = typeof params.category === "string" ? params.category : "all";
-  const [products, categories] = await Promise.all([
+  const initialBrand = typeof params.brand === "string" ? params.brand : "all";
+  const [products, categories, brands] = await Promise.all([
     getProducts(),
     getProductCategories(),
+    getProductBrands(),
   ]);
 
   return (
@@ -27,7 +29,9 @@ export default async function CatalogPage({
       dictionary={dictionary}
       products={products}
       categories={categories}
+      brands={brands}
       initialCategory={initialCategory}
+      initialBrand={initialBrand}
     />
   );
 }

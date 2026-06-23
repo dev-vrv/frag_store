@@ -16,6 +16,8 @@ class BrandSerializer(serializers.ModelSerializer):
 
 
 class ProductCategorySerializer(serializers.ModelSerializer):
+    products_count = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = ProductCategory
         fields = (
@@ -25,6 +27,7 @@ class ProductCategorySerializer(serializers.ModelSerializer):
             'description',
             'device_type',
             'sort_order',
+            'products_count',
         )
 
 

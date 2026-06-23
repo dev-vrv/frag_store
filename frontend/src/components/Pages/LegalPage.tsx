@@ -165,7 +165,7 @@ export function LegalPage({ locale, dictionary, page }: LegalPageProps) {
   const pageDictionary = dictionary.pages[page];
 
   return (
-    <main className="relative isolate min-h-screen overflow-hidden bg-black px-4 pb-16 pt-36 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative isolate overflow-hidden bg-black px-4 pb-16 pt-36 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
       <ContactCyberBackground />
 
@@ -184,7 +184,7 @@ export function LegalPage({ locale, dictionary, page }: LegalPageProps) {
         </p>
       </section>
 
-      <section className="relative z-10 mx-auto mt-10 grid max-w-7xl gap-5 lg:grid-cols-2">
+      <section className="relative z-10 mx-auto py-8 grid max-w-7xl gap-5 lg:grid-cols-2">
         {legalContent[locale][page].map((section) => (
           <ContactPanel key={section.title} contentClassName="h-full p-6">
             <div className="mb-4 flex items-center gap-3">

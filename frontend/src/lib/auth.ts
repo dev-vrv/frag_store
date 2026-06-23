@@ -88,6 +88,7 @@ const publicApiUrl = process.env.NEXT_PUBLIC_API_URL || internalApiUrl;
 
 export const ACCESS_TOKEN_COOKIE = "frag_access_token";
 export const REFRESH_TOKEN_COOKIE = "frag_refresh_token";
+export const AUTH_STATE_CHANGE_EVENT = "frag-auth-state-change";
 
 export function getBackendApiUrl() {
   return typeof window === "undefined" ? internalApiUrl : publicApiUrl;
@@ -149,6 +150,16 @@ export function persistAuthCookies(payload: AuthTokens) {
 
   document.cookie = `${ACCESS_TOKEN_COOKIE}=${encodeURIComponent(payload.access)}; Path=/; Max-Age=${60 * 30}; SameSite=Lax`;
   document.cookie = `${REFRESH_TOKEN_COOKIE}=${encodeURIComponent(payload.refresh)}; Path=/; Max-Age=${60 * 60 * 24 * 7}; SameSite=Lax`;
+  window.dispatchEvent(new Event(AUTH_STATE_CHANGE_EVENT));
+}
+
+export function hasAuthCookies() {
+  if (typeof document === "undefined") {
+    return false;
+  }
+
+  const cookies = document.cookie;
+  return cookies.includes(`${ACCESS_TOKEN_COOKIE}=`) || cookies.includes(`${REFRESH_TOKEN_COOKIE}=`);
 }
 
 export async function logout() {
@@ -158,6 +169,10 @@ export async function logout() {
 
   if (!response.ok) {
     throw new Error(await readApiError(response));
+  }
+
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(AUTH_STATE_CHANGE_EVENT));
   }
 }
 

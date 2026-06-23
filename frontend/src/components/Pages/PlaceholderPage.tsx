@@ -25,7 +25,7 @@ export function PlaceholderPage({
   return (
     <main
       className={cn(
-        "relative min-h-screen overflow-hidden bg-black px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8",
+        "page-shell relative overflow-hidden bg-black px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8",
         animatedBackground && "isolate",
       )}
     >

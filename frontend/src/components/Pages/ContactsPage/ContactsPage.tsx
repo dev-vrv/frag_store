@@ -23,7 +23,7 @@ export function ContactsPage({
   const text = contactContent[locale];
 
   return (
-    <main className="relative isolate min-h-screen overflow-hidden bg-black px-4 pt-36 pb-16 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative isolate overflow-hidden bg-black px-4 pt-36 pb-16 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
       <ContactCyberBackground />
 
@@ -47,7 +47,7 @@ export function ContactsPage({
         <ContactFormCard locale={locale} dictionary={text.form} className="h-fit" />
       </section>
 
-      <section className="relative z-10 mx-auto mt-6 max-w-7xl">
+      <section className="relative z-10 mx-auto py-8 max-w-7xl">
         <ContactPanel contentClassName="space-y-4 p-6 sm:p-8">
             <h2 className="font-display text-3xl uppercase text-red-100">
               {text.mapTitle}

@@ -286,10 +286,10 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
 
                   const badges = [];
                   if (product.is_new_arrival) {
-                    badges.push({ label: "New", variant: "cyan" as const });
+                    badges.push({ label: content.badgeNew, variant: "cyan" as const });
                   }
                   if (product.is_best_seller) {
-                    badges.push({ label: "Hit", variant: "red" as const });
+                    badges.push({ label: content.badgeHit, variant: "red" as const });
                   }
                   if (product.has_discount) {
                     badges.push({ label: `-${product.discount_percent}%`, variant: "green" as const });
@@ -330,10 +330,10 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
               </div>
               <div className="space-y-3">
                 <h3 className="font-display text-3xl tracking-[0.04em] text-white">
-                  Drops are loading
+                  {content.loadingTitle}
                 </h3>
                 <p className="mx-auto max-w-2xl text-sm leading-7 text-zinc-400 sm:text-base">
-                  Пока здесь пусто. Как только добавим товары в каталог, этот блок соберет реальные лидеры продаж автоматически.
+                  {content.loadingSubtitle}
                 </p>
               </div>
             </CyberCardContent>

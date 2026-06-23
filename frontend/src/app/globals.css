@@ -112,6 +112,19 @@ html {
   scroll-behavior: smooth;
 }
 
+.page-shell {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+}
+
+@supports (min-height: 100dvh) {
+  .page-shell {
+    min-height: 100dvh;
+  }
+}
+
 .section-hero {
   min-height: 100svh;
   display: flex;
@@ -193,13 +206,13 @@ html {
 
 .back-to-top {
   position: fixed;
-  right: clamp(1rem, 3vw, 2rem);
+  left: clamp(1rem, 3vw, 2rem);
   bottom: clamp(1rem, 3vw, 2rem);
   z-index: 50;
   display: grid;
   place-items: center;
-  width: 3.25rem;
-  height: 3.25rem;
+  width: 2.08rem;
+  height: 2.08rem;
   background: transparent;
   opacity: 0;
   color: rgba(255, 255, 255, 0.9);
@@ -233,8 +246,8 @@ html {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 2.25rem;
-  height: 2.25rem;
+  width: 1.44rem;
+  height: 1.44rem;
   animation: back-to-top-float 2.6s ease-in-out infinite;
   filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.18))
     drop-shadow(0 0 20px rgba(255, 255, 255, 0.12));
@@ -249,8 +262,8 @@ html {
   position: absolute;
   left: 50%;
   top: 50%;
-  width: 2.2rem;
-  height: 2.2rem;
+  width: 1.44rem;
+  height: 1.44rem;
   border-radius: 9999px;
   transform: translate(-50%, -50%) scale(0.7);
   pointer-events: none;
@@ -506,6 +519,19 @@ html {
   animation: service-grid-drift 18s linear infinite;
 }
 
+.service-protocol__ripple {
+  background:
+    radial-gradient(circle, rgba(34, 211, 238, 0.12) 0%, rgba(34, 211, 238, 0.04) 22%, transparent 52%);
+  filter: blur(2px);
+  opacity: 0.8;
+  animation: service-ripple 14s ease-out infinite;
+}
+
+.service-protocol__ripple--delayed {
+  animation-delay: 4.5s;
+  opacity: 0.5;
+}
+
 .service-protocol__scan {
   background-image: linear-gradient(
     to bottom,
@@ -541,6 +567,26 @@ html {
 
   to {
     transform: translate3d(0, 46px, 0);
+  }
+}
+
+@keyframes service-ripple {
+  0% {
+    transform: scale(0.65);
+    opacity: 0;
+  }
+
+  18% {
+    opacity: 0.72;
+  }
+
+  60% {
+    opacity: 0.3;
+  }
+
+  100% {
+    transform: scale(1.24);
+    opacity: 0;
   }
 }
 
@@ -619,6 +665,7 @@ html {
   }
 
   .service-protocol__grid,
+  .service-protocol__ripple,
   .service-protocol__scan,
   .service-protocol__core,
   .service-protocol__metric,

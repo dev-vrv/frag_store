@@ -3,9 +3,17 @@
 import * as React from "react";
 import * as SheetPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+import { usePathname } from "next/navigation";
 import { cva, type VariantProps } from "class-variance-authority";
 
+import { getLocaleFromPathname } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+
+const closeLabels = {
+  ru: "Закрыть",
+  en: "Close",
+  kg: "Жабуу",
+} as const;
 
 const Sheet = SheetPrimitive.Root;
 const SheetTrigger = SheetPrimitive.Trigger;
@@ -49,6 +57,9 @@ function SheetContent({
   ...props
 }: React.ComponentProps<typeof SheetPrimitive.Content> &
   VariantProps<typeof sheetVariants>) {
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+
   return (
     <SheetPortal>
       <SheetOverlay />
@@ -60,7 +71,7 @@ function SheetContent({
         {children}
         <SheetPrimitive.Close className="absolute top-4 right-4 rounded-xs opacity-70 outline-none transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-red-300/50">
           <X className="size-4" />
-          <span className="sr-only">Close</span>
+          <span className="sr-only">{closeLabels[locale]}</span>
         </SheetPrimitive.Close>
       </SheetPrimitive.Content>
     </SheetPortal>

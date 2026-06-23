@@ -1,3 +1,4 @@
+from django.db.models import Count, Q
 from rest_framework import mixins, viewsets
 from rest_framework.permissions import AllowAny
 
@@ -25,7 +26,11 @@ class ProductCategoryViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, v
     lookup_field = 'slug'
 
     def get_queryset(self):
-        return ProductCategory.objects.filter(is_active=True).order_by('sort_order', 'name')
+        return (
+            ProductCategory.objects.filter(is_active=True)
+            .annotate(products_count=Count('products', filter=Q(products__is_active=True), distinct=True))
+            .order_by('sort_order', 'name')
+        )
 
 
 class ProductViewSet(viewsets.ReadOnlyModelViewSet):

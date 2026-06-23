@@ -5,7 +5,7 @@ import {
   type LocalePageProps,
 } from "@/app/[locale]/localized";
 import { CatalogPage } from "@/components/Pages/CatalogPage";
-import { getProductCategories, getProducts } from "@/lib/products";
+import { getProductBrands, getProductCategories, getProducts } from "@/lib/products";
 
 export const generateStaticParams = generateLocaleStaticParams;
 
@@ -22,9 +22,11 @@ export default async function LocalizedCatalogPage({
   const { locale, dictionary } = await getLocaleDictionary(params);
   const query = (await searchParams) ?? {};
   const initialCategory = typeof query.category === "string" ? query.category : "all";
-  const [products, categories] = await Promise.all([
+  const initialBrand = typeof query.brand === "string" ? query.brand : "all";
+  const [products, categories, brands] = await Promise.all([
     getProducts(),
     getProductCategories(),
+    getProductBrands(),
   ]);
 
   return (
@@ -33,7 +35,9 @@ export default async function LocalizedCatalogPage({
       dictionary={dictionary}
       products={products}
       categories={categories}
+      brands={brands}
       initialCategory={initialCategory}
+      initialBrand={initialBrand}
     />
   );
 }

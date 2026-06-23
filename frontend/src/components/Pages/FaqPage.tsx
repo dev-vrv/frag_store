@@ -288,7 +288,7 @@ export function FaqPage({ locale, dictionary }: FaqPageProps) {
   const page = dictionary.pages.faq;
 
   return (
-    <main className="relative isolate min-h-screen overflow-hidden bg-black px-4 pb-16 pt-36 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative isolate overflow-hidden bg-black px-4 pb-16 pt-36 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
       <ContactCyberBackground />
 
@@ -307,7 +307,7 @@ export function FaqPage({ locale, dictionary }: FaqPageProps) {
         </p>
       </section>
 
-      <section className="relative z-10 mx-auto mt-12 grid max-w-7xl auto-rows-fr gap-6 lg:grid-cols-2">
+      <section className="relative z-10 mx-auto py-8 grid max-w-7xl auto-rows-fr gap-6 lg:grid-cols-2">
         {faqContent[locale].map((section) => (
           <ContactPanel key={section.title} className="h-full" contentClassName="flex h-full flex-col p-6 sm:p-7">
               <div className="mb-5 flex items-center gap-3">

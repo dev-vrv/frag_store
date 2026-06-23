@@ -4,6 +4,7 @@ import * as React from "react";
 
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -53,6 +54,7 @@ function CyberSheetContent({
 }
 
 const CyberDialog = Dialog;
+const CyberDialogClose = DialogClose;
 const CyberDialogTrigger = DialogTrigger;
 const CyberDialogHeader = DialogHeader;
 const CyberDialogTitle = DialogTitle;
@@ -68,6 +70,7 @@ const CyberSheetFooter = SheetFooter;
 
 export {
   CyberDialog,
+  CyberDialogClose,
   CyberDialogContent,
   CyberDialogDescription,
   CyberDialogFooter,

@@ -6,20 +6,21 @@ import { ServiceProtocol } from "@/components/Sections/ServiceProtocol";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
 import { type Dictionary, type Locale } from "@/lib/i18n";
-import { type Product } from "@/lib/products";
+import { type Product, type ProductCategory } from "@/lib/products";
 
 export interface MainProps {
   locale: Locale;
   dictionary: Dictionary;
   bestSellerProducts: Product[];
+  categories: ProductCategory[];
 }
 
-export function Main({ locale, dictionary, bestSellerProducts }: MainProps) {
+export function Main({ locale, dictionary, bestSellerProducts, categories }: MainProps) {
   return (
-    <main className="min-h-screen w-full overflow-x-hidden bg-black">
+    <main className="page-shell w-full overflow-x-hidden bg-black">
       <Header locale={locale} dictionary={dictionary.header} />
       <Hero locale={locale} content={dictionary.hero} />
-      <LoadoutZones locale={locale} content={dictionary.loadout} />
+      <LoadoutZones locale={locale} content={dictionary.loadout} categories={categories} />
       <FeaturedDrops locale={locale} content={dictionary.featured} products={bestSellerProducts} />
       <ServiceProtocol content={dictionary.service} />
       <ContactSection locale={locale} />

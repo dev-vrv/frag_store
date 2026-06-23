@@ -34,6 +34,7 @@ export interface Dictionary {
     cart: string;
     comparison: string;
     auth: string;
+    profile: string;
   };
   auth: {
     brand: string;
@@ -137,6 +138,9 @@ export interface Dictionary {
     signalLabel: string;
     categoryCta: string;
     categoryAriaLabel: string;
+    modalClose: string;
+    modalPrev: string;
+    modalNext: string;
     cards: Array<{
       title: string;
       description: string;
@@ -148,11 +152,21 @@ export interface Dictionary {
     eyebrow: string;
     title: string;
     subtitle: string;
+    modalCta: string;
+    modalClose: string;
+    modalPrev: string;
+    modalNext: string;
+    modalHint: string;
+    modalListLabel: string;
     metrics: Array<[string, string]>;
     cards: Array<{
       title: string;
       description: string;
       signal: string;
+      detailsTitle: string;
+      detailsDescription: string;
+      highlights: string[];
+      note: string;
     }>;
   };
   featured: {
@@ -165,6 +179,10 @@ export interface Dictionary {
     productCta: string;
     detailsCta: string;
     favoriteLabel: string;
+    loadingTitle: string;
+    loadingSubtitle: string;
+    badgeNew: string;
+    badgeHit: string;
     products: Array<{
       name: string;
       category: string;
@@ -227,6 +245,7 @@ const dictionaries: Record<Locale, Dictionary> = {
       cart: "Корзина",
       comparison: "Избранное",
       auth: "Войти",
+      profile: "Профиль",
     },
     auth: {
       brand: "Frag Store",
@@ -338,32 +357,31 @@ const dictionaries: Record<Locale, Dictionary> = {
       signalLabel: "Сигнал",
       categoryCta: "Открыть категорию",
       categoryAriaLabel: "Открыть категорию в каталоге",
+      modalClose: "Закрыть окно",
+      modalPrev: "Предыдущая категория",
+      modalNext: "Следующая категория",
       cards: [
         {
           title: "Гарнитуры",
-          description:
-            "Закрытые и открытые модели для чистого позиционирования, командной связи и длинных игровых сессий.",
+          description: "Чистое позиционирование, связь и комфорт в долгих сессиях.",
           signal: "7.1 / Noise Cancel",
           stat: "24 модели",
         },
         {
           title: "Клавиатуры",
-          description:
-            "Механика и low-profile решения с быстрым откликом, хотсвапом и агрессивной RGB-подачей.",
+          description: "Быстрый отклик, hot swap и яркая RGB-подача.",
           signal: "Hot Swap / RGB",
           stat: "18 серий",
         },
         {
           title: "Мыши",
-          description:
-            "Легкие корпуса, точные сенсоры и формы под claw, palm и fingertip для соревновательной игры.",
+          description: "Легкий корпус, точный сенсор и формы под любой хват.",
           signal: "49 g / 26K DPI",
           stat: "32 варианта",
         },
         {
           title: "Control-аксессуары",
-          description:
-            "Коврики, стойки, USB-хабы и кабели, которые собирают рабочую зону в цельный cyberpunk-loadout.",
+          description: "Коврики, хабы и стойки для цельной рабочей зоны.",
           signal: "Desk Flow / Cable Sync",
           stat: "40+ позиций",
         },
@@ -374,6 +392,12 @@ const dictionaries: Record<Locale, Dictionary> = {
       title: "Покупка без лишнего риска",
       subtitle:
         "Оригинальная техника, понятная гарантия, живое наличие и помощь с выбором, если нужен сетап под конкретные игры и бюджет.",
+      modalCta: "Смотреть детали",
+      modalClose: "Закрыть окно",
+      modalPrev: "Назад",
+      modalNext: "Далее",
+      modalHint: "Подробности по разделу",
+      modalListLabel: "Что внутри процесса",
       metrics: [
         ["Оригинальная техника", "100%"],
         ["Гарантия", "12 мес"],
@@ -385,18 +409,45 @@ const dictionaries: Record<Locale, Dictionary> = {
           description:
             "Работаем только с актуальными линейками gaming-периферии и аксессуаров без серого ассортимента.",
           signal: "Официальные поставки",
+          detailsTitle: "Контроль по бренду, а не случайный ассортимент",
+          detailsDescription:
+            "Мы опираемся на понятные линейки и бренды, у которых можно прогнозировать качество сборки, совместимость аксессуаров и реальную поддержку после покупки.",
+          highlights: [
+            "Фокус на актуальных моделях вместо случайных остатков.",
+            "Прозрачное происхождение товара и понятные условия гарантии.",
+            "Быстрее подбираем замену или альтернативу внутри одного класса устройств.",
+          ],
+          note: "Это снижает риск купить красивую, но спорную по качеству периферию.",
         },
         {
           title: "Подбор под сетап",
           description:
             "Помогаем собрать совместимый loadout: гарнитура, коврик, мышь, клавиатура и полезные desktop-аксессуары.",
           signal: "Синхронный подбор",
+          detailsTitle: "Подбираем не по отдельности, а как единую игровую связку",
+          detailsDescription:
+            "Смотрим на жанр игр, хват мыши, размер коврика, шум клавиатуры, посадку гарнитуры и то, как всё это будет ощущаться вместе в реальном использовании.",
+          highlights: [
+            "Сверяем совместимость и сценарий использования, а не только цену.",
+            "Помогаем собрать базовый, сбалансированный или более агрессивный комплект.",
+            "Учитываем бюджет, апгрейд-путь и визуальную целостность рабочего места.",
+          ],
+          note: "Так клиент получает не набор отдельных вещей, а цельный рабочий сетап.",
         },
         {
           title: "Быстрая логистика",
           description:
             "Фокус на наличии и понятной доставке, чтобы клиент видел не только стиль, но и реальную готовность к заказу.",
           signal: "Быстрая отгрузка",
+          detailsTitle: "Показываем реальную готовность заказа и следующий шаг",
+          detailsDescription:
+            "Мы стараемся держать процесс без тумана: что есть в наличии, что нужно уточнить, когда можно отгрузить и на каком этапе находится заказ после подтверждения.",
+          highlights: [
+            "Приоритет товарам с понятным статусом и сроком отправки.",
+            "Быстрее подтверждаем заказ, если комплект уже собран по наличию.",
+            "Сокращаем лишние ожидания между заявкой, оплатой и отправкой.",
+          ],
+          note: "Для клиента это выглядит как предсказуемая логистика, а не обещание без срока.",
         },
       ],
     },
@@ -410,6 +461,11 @@ const dictionaries: Record<Locale, Dictionary> = {
       productCta: "Открыть",
       detailsCta: "Подробнее",
       favoriteLabel: "В избранное",
+      loadingTitle: "Витрина наполняется",
+      loadingSubtitle:
+        "Пока здесь пусто. Как только добавим товары в каталог, этот блок соберет реальные лидеры продаж автоматически.",
+      badgeNew: "Новинка",
+      badgeHit: "Хит",
       products: [
         {
           name: "HX-7 Phantom",
@@ -598,6 +654,7 @@ const dictionaries: Record<Locale, Dictionary> = {
       cart: "Cart",
       comparison: "Favorites",
       auth: "Log in",
+      profile: "Profile",
     },
     auth: {
       brand: "Frag Store",
@@ -709,32 +766,31 @@ const dictionaries: Record<Locale, Dictionary> = {
       signalLabel: "Frag Signal",
       categoryCta: "Open category",
       categoryAriaLabel: "Open category in catalog",
+      modalClose: "Close window",
+      modalPrev: "Previous category",
+      modalNext: "Next category",
       cards: [
         {
           title: "Headsets",
-          description:
-            "Closed and open-back options for clean positioning, clear comms, and long gaming sessions.",
+          description: "Clean positioning, clear comms, and long-session comfort.",
           signal: "7.1 / Noise Cancel",
           stat: "24 models",
         },
         {
           title: "Keyboards",
-          description:
-            "Mechanical and low-profile boards with fast actuation, hot swap support, and aggressive RGB character.",
+          description: "Fast actuation, hot-swap support, and bold RGB character.",
           signal: "Hot Swap / RGB",
           stat: "18 lines",
         },
         {
           title: "Mice",
-          description:
-            "Lightweight shells, precise sensors, and shapes tuned for claw, palm, and fingertip playstyles.",
+          description: "Light shells, precise sensors, and shapes for every grip.",
           signal: "49 g / 26K DPI",
           stat: "32 options",
         },
         {
           title: "Control Accessories",
-          description:
-            "Mousepads, stands, USB hubs, and cables that complete the desk zone into one cyberpunk loadout.",
+          description: "Pads, hubs, and stands for one cohesive desk setup.",
           signal: "Desk Flow / Cable Sync",
           stat: "40+ items",
         },
@@ -745,6 +801,12 @@ const dictionaries: Record<Locale, Dictionary> = {
       title: "A cleaner buying experience",
       subtitle:
         "Authentic gear, clear warranty terms, real stock visibility, and help choosing equipment for your games and budget.",
+      modalCta: "View details",
+      modalClose: "Close window",
+      modalPrev: "Back",
+      modalNext: "Next",
+      modalHint: "Section details",
+      modalListLabel: "What this includes",
       metrics: [
         ["Authentic gear", "100%"],
         ["Warranty", "12 mo"],
@@ -756,18 +818,45 @@ const dictionaries: Record<Locale, Dictionary> = {
           description:
             "We focus on current gaming peripheral lines and accessories instead of gray-market assortment.",
           signal: "Official Supply",
+          detailsTitle: "Brand curation instead of random assortment",
+          detailsDescription:
+            "We rely on product lines and brands with more predictable build quality, clearer positioning, and better post-purchase support than one-off gray-market picks.",
+          highlights: [
+            "Current models instead of leftover stock with vague origin.",
+            "Clearer warranty logic and easier support expectations.",
+            "Faster alternatives inside the same performance tier when needed.",
+          ],
+          note: "That reduces the chance of buying gear that looks good but ages badly in real use.",
         },
         {
           title: "Setup guidance",
           description:
             "We help users build a compatible loadout across headsets, pads, mice, keyboards, and desk accessories.",
           signal: "Setup Match",
+          detailsTitle: "We match the setup as one system",
+          detailsDescription:
+            "The selection process is based on genre, grip style, desk space, keyboard feel, headset comfort, and how all of that works together in actual daily play.",
+          highlights: [
+            "Compatibility and use case come before raw spec shopping.",
+            "We can outline basic, balanced, and higher-end setup directions.",
+            "Budget, upgrade path, and visual coherence are considered together.",
+          ],
+          note: "The result is a coherent desk loadout, not a pile of unrelated parts.",
         },
         {
           title: "Fast logistics",
           description:
             "The offer is built around stock visibility and clear delivery expectations, not just atmosphere and visuals.",
           signal: "Fast Dispatch",
+          detailsTitle: "Real stock visibility and a clearer delivery path",
+          detailsDescription:
+            "We try to keep the process explicit: what is in stock, what needs confirmation, when dispatch is realistic, and what the next order stage actually is.",
+          highlights: [
+            "Priority on products with a clear availability status.",
+            "Faster confirmation when the setup can be assembled from live stock.",
+            "Less dead time between request, payment, and dispatch.",
+          ],
+          note: "For the buyer, that feels like predictable delivery rather than vague promises.",
         },
       ],
     },
@@ -781,6 +870,11 @@ const dictionaries: Record<Locale, Dictionary> = {
       productCta: "Open",
       detailsCta: "Details",
       favoriteLabel: "Add to favorites",
+      loadingTitle: "Showcase is loading",
+      loadingSubtitle:
+        "Nothing is here yet. As soon as products are added to the catalog, this block will automatically show real best sellers.",
+      badgeNew: "New",
+      badgeHit: "Hit",
       products: [
         {
           name: "HX-7 Phantom",
@@ -969,6 +1063,7 @@ const dictionaries: Record<Locale, Dictionary> = {
       cart: "Себет",
       comparison: "Тандалгандар",
       auth: "Кирүү",
+      profile: "Профиль",
     },
     auth: {
       brand: "Frag Store",
@@ -1080,32 +1175,31 @@ const dictionaries: Record<Locale, Dictionary> = {
       signalLabel: "Сигнал",
       categoryCta: "Категорияны ачуу",
       categoryAriaLabel: "Каталогдогу категорияны ачуу",
+      modalClose: "Терезени жабуу",
+      modalPrev: "Мурунку категория",
+      modalNext: "Кийинки категория",
       cards: [
         {
           title: "Гарнитуралар",
-          description:
-            "Так позициялоо, таза үн байланышы жана узак оюн сессиялары үчүн жабык жана ачык моделдер.",
+          description: "Так позиция, таза байланыш жана узак сессиядагы комфорт.",
           signal: "7.1 / Noise Cancel",
           stat: "24 модель",
         },
         {
           title: "Клавиатуралар",
-          description:
-            "Тез жооп берген, hot swap колдогон жана күчтүү RGB мүнөзү бар механикалык жана low-profile чечимдер.",
+          description: "Тез жооп, hot swap жана күчтүү RGB мүнөзү.",
           signal: "Hot Swap / RGB",
           stat: "18 серия",
         },
         {
           title: "Чычкандар",
-          description:
-            "Жеңил корпус, так сенсор жана claw, palm, fingertip стилине ылайык формалар.",
+          description: "Жеңил корпус, так сенсор жана ар башка хватка ылайык форма.",
           signal: "49 g / 26K DPI",
           stat: "32 вариант",
         },
         {
           title: "Control-аксессуарлар",
-          description:
-            "Килемчелер, стенддер, USB-хабдар жана кабелдер жумуш аймагын толук cyberpunk-loadout кылып чогултат.",
+          description: "Килемче, хаб жана стенддер үчүн бирдиктүү desk-zone.",
           signal: "Desk Flow / Cable Sync",
           stat: "40+ позиция",
         },
@@ -1116,6 +1210,12 @@ const dictionaries: Record<Locale, Dictionary> = {
       title: "Ашыкча тобокелсиз сатып алуу",
       subtitle:
         "Оригинал техника, түшүнүктүү кепилдик, реалдуу бар-жок абалы жана сиздин оюндар менен бюджетиңизге ылайык тандоо боюнча жардам.",
+      modalCta: "Толугураак көрүү",
+      modalClose: "Терезени жабуу",
+      modalPrev: "Артка",
+      modalNext: "Кийинки",
+      modalHint: "Бөлүм боюнча толук маалымат",
+      modalListLabel: "Процесстин ичинде эмне бар",
       metrics: [
         ["Оригинал техника", "100%"],
         ["Кепилдик", "12 ай"],
@@ -1127,18 +1227,45 @@ const dictionaries: Record<Locale, Dictionary> = {
           description:
             "Биз актуалдуу gaming-периферия жана аксессуар линиялары менен иштейбиз, күмөндүү ассортименти жок.",
           signal: "Расмий жеткирүү",
+          detailsTitle: "Кокус ассортимент эмес, түшүнүктүү бренд тандоосу",
+          detailsDescription:
+            "Биз сапаты, классы жана сатып алгандан кийинки колдоосу алдын ала түшүнүктүү болгон бренддер менен линияларга таянабыз.",
+          highlights: [
+            "Эски же күмөндүү калдыктар эмес, актуалдуу моделдерге басым жасайбыз.",
+            "Товар кайдан келгени жана кепилдик шарттары түшүнүктүүрөөк болот.",
+            "Керек болсо ошол эле класстагы альтернатива тезирээк табылат.",
+          ],
+          note: "Бул кооз көрүнгөн, бирок ишенимсиз периферияны алып калуу коркунучун азайтат.",
         },
         {
           title: "Сетап тандоо",
           description:
             "Гарнитура, килемче, чычкан, клавиатура жана desk-аксессуарларды бир-бирине тууралап тандоого жардам беребиз.",
           signal: "Туура шайкештик",
+          detailsTitle: "Ар бир нерсени өзүнчө эмес, бирдиктүү сетап катары карайбыз",
+          detailsDescription:
+            "Оюн жанры, чычкан кармоо стили, столдогу орун, клавиатуранын үнү, гарнитуранын ыңгайлуулугу жана баарынын чогуу иштеши эске алынат.",
+          highlights: [
+            "Баадан мурда шайкештик жана колдонуу сценарийи каралат.",
+            "Базалык, тең салмактуу же күчтүүрөөк варианттарды сунуштай алабыз.",
+            "Бюджет, келечектеги апгрейд жана столдун жалпы көрүнүшү чогуу эсептелет.",
+          ],
+          note: "Натыйжада өзүнчө нерселер эмес, толук иштеген жумушчу сетап чыгат.",
         },
         {
           title: "Тез логистика",
           description:
             "Сунуш товар бар экенин жана жеткирүү шарттарын түшүнүктүү көрсөтүүгө курулган.",
           signal: "Тез жөнөтүү",
+          detailsTitle: "Заказдын кийинки кадамы жана даярдыгы алдын ала көрүнөт",
+          detailsDescription:
+            "Биз процессти мүмкүн болушунча ачык кармайбыз: эмне кампада бар, эмнени тактоо керек, качан жөнөтүү реалдуу жана ырастоодон кийин заказ кайсы этапта турат.",
+          highlights: [
+            "Бар-жогу так товарларга артыкчылык берилет.",
+            "Комплект кампадан чогулса, заказ ылдамыраак ырасталат.",
+            "Сурамдан төлөмгө жана жөнөтүүгө чейинки бош күтүү азаят.",
+          ],
+          note: "Кардар үчүн бул түшүнүктүү логистика болуп сезилет, жөн гана убада эмес.",
         },
       ],
     },
@@ -1152,6 +1279,11 @@ const dictionaries: Record<Locale, Dictionary> = {
       productCta: "Ачуу",
       detailsCta: "Кененирээк",
       favoriteLabel: "Тандалгандарга",
+      loadingTitle: "Витрина толукталып жатат",
+      loadingSubtitle:
+        "Азырынча бул жерде бош. Каталогго товарлар кошулары менен бул блок чыныгы лидерлерди автоматтык түрдө көрсөтөт.",
+      badgeNew: "Жаңы",
+      badgeHit: "Хит",
       products: [
         {
           name: "HX-7 Phantom",
@@ -1341,6 +1473,17 @@ export function stripLocaleFromPath(pathname: string) {
   }
 
   return pathname || "/";
+}
+
+export function getLocaleFromPathname(pathname: string): Locale {
+  const segments = pathname.split("/").filter(Boolean);
+  const firstSegment = segments[0];
+
+  if (firstSegment && isLocale(firstSegment)) {
+    return firstSegment;
+  }
+
+  return defaultLocale;
 }
 
 export function getPageDictionary(

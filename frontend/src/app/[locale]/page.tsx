@@ -5,7 +5,7 @@ import {
   getLocalizedMetadata,
   type LocalePageProps,
 } from "@/app/[locale]/localized";
-import { getBestSellerProducts } from "@/lib/products";
+import { getBestSellerProducts, getProductCategories } from "@/lib/products";
 
 export const generateStaticParams = generateLocaleStaticParams;
 
@@ -15,7 +15,17 @@ export function generateMetadata({ params }: LocalePageProps) {
 
 export default async function LocalizedHomePage({ params }: LocalePageProps) {
   const { locale, dictionary } = await getLocaleDictionary(params);
-  const bestSellerProducts = await getBestSellerProducts();
+  const [bestSellerProducts, categories] = await Promise.all([
+    getBestSellerProducts(),
+    getProductCategories(),
+  ]);
 
-  return <Main locale={locale} dictionary={dictionary} bestSellerProducts={bestSellerProducts} />;
+  return (
+    <Main
+      locale={locale}
+      dictionary={dictionary}
+      bestSellerProducts={bestSellerProducts}
+      categories={categories}
+    />
+  );
 }

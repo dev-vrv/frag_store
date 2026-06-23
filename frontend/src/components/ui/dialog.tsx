@@ -3,8 +3,16 @@
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { X } from "lucide-react";
+import { usePathname } from "next/navigation";
 
+import { getLocaleFromPathname } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
+
+const closeLabels = {
+  ru: "Закрыть",
+  en: "Close",
+  kg: "Жабуу",
+} as const;
 
 const Dialog = DialogPrimitive.Root;
 const DialogTrigger = DialogPrimitive.Trigger;
@@ -35,6 +43,9 @@ function DialogContent({
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean;
 }) {
+  const pathname = usePathname();
+  const locale = getLocaleFromPathname(pathname);
+
   return (
     <DialogPortal>
       <DialogOverlay />
@@ -48,9 +59,9 @@ function DialogContent({
       >
         {children}
         {showCloseButton ? (
-          <DialogPrimitive.Close className="absolute top-4 right-4 rounded-xs opacity-70 outline-none transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-red-300/50 disabled:pointer-events-none">
+          <DialogPrimitive.Close className="absolute top-4 right-4 z-20 rounded-xs opacity-70 outline-none transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-red-300/50 disabled:pointer-events-none">
             <X className="size-4" />
-            <span className="sr-only">Close</span>
+            <span className="sr-only">{closeLabels[locale]}</span>
           </DialogPrimitive.Close>
         ) : null}
       </DialogPrimitive.Content>

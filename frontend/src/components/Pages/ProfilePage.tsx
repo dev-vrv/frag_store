@@ -32,7 +32,7 @@ export function ProfilePage({ locale, dictionary, user }: ProfilePageProps) {
   }
 
   return (
-    <main className="relative isolate min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.06),transparent_22%),linear-gradient(180deg,#060606_0%,#0b0b0c_38%,#050505_100%)] px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative isolate overflow-hidden bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.06),transparent_22%),linear-gradient(180deg,#060606_0%,#0b0b0c_38%,#050505_100%)] px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
       <ContactCyberBackground />
       <section className="relative z-10 mx-auto max-w-7xl pb-16">

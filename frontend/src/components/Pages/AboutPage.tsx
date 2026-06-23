@@ -139,7 +139,7 @@ export function AboutPage({ locale, dictionary }: AboutPageProps) {
   const content = aboutContent[locale];
 
   return (
-    <main className="relative isolate min-h-screen overflow-hidden bg-black px-4 pb-16 pt-36 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative isolate overflow-hidden bg-black px-4 pb-16 pt-36 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
       <ContactCyberBackground />
 
@@ -213,7 +213,7 @@ export function AboutPage({ locale, dictionary }: AboutPageProps) {
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto mt-8 grid max-w-7xl gap-6 lg:grid-cols-[24rem_minmax(0,1fr)]">
+      <section className="relative z-10 mx-auto py-8 grid max-w-7xl gap-6 lg:grid-cols-[24rem_minmax(0,1fr)]">
         <ContactPanel contentClassName="p-6">
           <div className="flex items-center gap-3">
             <ShieldCheck className="size-6 text-lime-200" aria-hidden="true" />

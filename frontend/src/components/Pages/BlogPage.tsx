@@ -35,7 +35,7 @@ export async function BlogPage({ locale, dictionary }: BlogPageProps) {
   const posts = await getBlogPosts();
 
   return (
-    <main className="relative min-h-screen overflow-hidden bg-black px-4 pb-20 pt-36 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative overflow-hidden bg-black px-4 pb-20 pt-36 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
       <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_20%_18%,rgba(255,23,68,0.2),transparent_30%),radial-gradient(circle_at_80%_16%,rgba(34,211,238,0.12),transparent_28%),linear-gradient(180deg,#050507,#000)]" />
       <div className="cyber-grid absolute inset-0 -z-10 opacity-60" />
@@ -53,7 +53,7 @@ export async function BlogPage({ locale, dictionary }: BlogPageProps) {
         <p className="mt-6 max-w-3xl text-xl leading-9 text-zinc-400">{page.subtitle}</p>
       </section>
 
-      <section className="mx-auto mt-12 grid w-full max-w-7xl gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <section className="mx-auto my-8 grid w-full max-w-7xl gap-6 md:grid-cols-2 xl:grid-cols-3">
         {posts.length > 0 ? (
           posts.map((post) => {
             const content = getLocalizedBlogPost(post, locale);
