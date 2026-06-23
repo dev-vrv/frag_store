@@ -21,7 +21,13 @@ export default async function LocalizedCatalogPage({
 }) {
   const { locale, dictionary } = await getLocaleDictionary(params);
   const query = (await searchParams) ?? {};
-  const initialCategory = typeof query.category === "string" ? query.category : "all";
+  const initialCategory =
+    typeof query.category === "string"
+      ? query.category
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean)
+      : [];
   const initialBrand = typeof query.brand === "string" ? query.brand : "all";
   const [products, categories, brands] = await Promise.all([
     getProducts(),

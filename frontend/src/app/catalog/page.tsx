@@ -15,7 +15,13 @@ export default async function CatalogPage({
   searchParams?: Promise<Record<string, string | string[] | undefined>>;
 }) {
   const params = (await searchParams) ?? {};
-  const initialCategory = typeof params.category === "string" ? params.category : "all";
+  const initialCategory =
+    typeof params.category === "string"
+      ? params.category
+          .split(",")
+          .map((item) => item.trim())
+          .filter(Boolean)
+      : [];
   const initialBrand = typeof params.brand === "string" ? params.brand : "all";
   const [products, categories, brands] = await Promise.all([
     getProducts(),

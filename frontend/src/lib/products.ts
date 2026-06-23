@@ -106,7 +106,8 @@ function unwrapCollection<T>(payload: CollectionResponse<T>) {
   return Array.isArray(payload) ? payload : payload.results ?? [];
 }
 
-export function getLocalizedProductName(product: Product, _locale: Locale) {
+export function getLocalizedProductName(product: Product, locale: Locale) {
+  void locale;
   return product.name;
 }
 
@@ -130,7 +131,7 @@ const defaultCategoryTranslations: Record<
   },
   keyboards: {
     ru: {
-      name: "Игровые клавиатуры",
+      name: "Клавиатуры",
       description: "Механические и low-profile клавиатуры с быстрым откликом и RGB-подсветкой.",
     },
     en: {
@@ -144,7 +145,7 @@ const defaultCategoryTranslations: Record<
   },
   headsets: {
     ru: {
-      name: "Игровые гарнитуры",
+      name: "Гарнитуры",
       description: "Гарнитуры для чистой связи, точного позиционирования и комфортных длинных сессий.",
     },
     en: {
@@ -158,7 +159,7 @@ const defaultCategoryTranslations: Record<
   },
   mousepads: {
     ru: {
-      name: "Игровые коврики",
+      name: "Коврики",
       description: "Коврики под speed и control сценарии для стабильного трекинга.",
     },
     en: {
@@ -172,7 +173,7 @@ const defaultCategoryTranslations: Record<
   },
   controllers: {
     ru: {
-      name: "Геймпады и контроллеры",
+      name: "Геймпады",
       description: "Контроллеры для консоли и ПК с упором на комфорт и точность.",
     },
     en: {
@@ -186,7 +187,7 @@ const defaultCategoryTranslations: Record<
   },
   monitors: {
     ru: {
-      name: "Игровые мониторы",
+      name: "Мониторы",
       description: "Мониторы с высокой герцовкой, низким откликом и adaptive sync.",
     },
     en: {
@@ -242,7 +243,7 @@ const defaultCategoryTranslations: Record<
   },
   accessories: {
     ru: {
-      name: "Игровые аксессуары",
+      name: "Аксессуары",
       description: "Хабы, стойки, кабели и полезные desk-аксессуары для сетапа.",
     },
     en: {

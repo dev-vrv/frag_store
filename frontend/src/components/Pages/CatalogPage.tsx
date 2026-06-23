@@ -58,7 +58,7 @@ interface CatalogPageProps {
   products: Product[];
   categories: ProductCategory[];
   brands: ProductBrand[];
-  initialCategory?: string;
+  initialCategory?: string[];
   initialBrand?: string;
 }
 
@@ -89,6 +89,14 @@ interface QuickFilterOption {
 
 const pageSize = 6;
 
+function parseInitialCategories(value?: string[]) {
+  if (!value?.length) {
+    return [];
+  }
+
+  return [...new Set(value.filter((item) => item !== "all"))];
+}
+
 const catalogText: Record<
   Locale,
   {
@@ -101,6 +109,7 @@ const catalogText: Record<
     sortOptions: Record<SortKey, string>;
     results: string;
     empty: string;
+    emptyFilteredByCategory: string;
     emptyTitle: string;
     emptySubtitle: string;
     reset: string;
@@ -141,6 +150,7 @@ const catalogText: Record<
     },
     results: "товаров найдено",
     empty: "Ничего не найдено. Попробуйте изменить поиск или фильтры.",
+    emptyFilteredByCategory: "По выбранным категориям пока пусто.",
     emptyTitle: "Каталог пока пуст",
     emptySubtitle: "Когда товары появятся, здесь сразу откроется полноценная витрина с фильтрами и сортировкой.",
     reset: "Сбросить",
@@ -186,6 +196,7 @@ const catalogText: Record<
     },
     results: "products found",
     empty: "Nothing found. Try changing search or filters.",
+    emptyFilteredByCategory: "No products yet in the selected categories.",
     emptyTitle: "Catalog is empty for now",
     emptySubtitle: "As soon as products are added, this page will automatically turn into a full storefront with filters and sorting.",
     reset: "Reset",
@@ -231,6 +242,7 @@ const catalogText: Record<
     },
     results: "товар табылды",
     empty: "Эч нерсе табылган жок. Издөөнү же фильтрлерди өзгөртүңүз.",
+    emptyFilteredByCategory: "Тандалган категорияларда азырынча товар жок.",
     emptyTitle: "Каталог азырынча бош",
     emptySubtitle: "Товарлар кошулганда бул жерде фильтрлери жана сорттоосу бар толук витрина автоматтык түрдө чыгат.",
     reset: "Тазалоо",
@@ -300,7 +312,7 @@ export function CatalogPage({
   products,
   categories,
   brands,
-  initialCategory = "all",
+  initialCategory = [],
   initialBrand = "all",
 }: CatalogPageProps) {
   const text = catalogText[locale];
@@ -308,7 +320,9 @@ export function CatalogPage({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState(initialCategory);
+  const [selectedCategories, setSelectedCategories] = useState(() =>
+    parseInitialCategories(initialCategory),
+  );
   const [brand, setBrand] = useState(initialBrand);
   const [sort, setSort] = useState<SortKey>("popular");
   const [pageIndex, setPageIndex] = useState(1);
@@ -350,10 +364,13 @@ export function CatalogPage({
     [brands, text.allBrands],
   );
 
+  const selectedCategorySet = useMemo(() => new Set(selectedCategories), [selectedCategories]);
+
   const filteredProducts = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
     const filtered = products.filter((product) => {
-      const matchesCategory = category === "all" || product.category.slug === category;
+      const matchesCategory =
+        selectedCategorySet.size === 0 || selectedCategorySet.has(product.category.slug);
       const matchesBrand = brand === "all" || product.brand.slug === brand;
       const matchesQuery =
         !normalizedQuery ||
@@ -390,7 +407,7 @@ export function CatalogPage({
         (Number(a.is_best_seller) * 3 + Number(a.is_featured) * 2 + Number(a.has_discount))
       );
     });
-  }, [brand, category, products, query, quickFilters, sort]);
+  }, [brand, products, query, quickFilters, selectedCategorySet, sort]);
 
   const totalPages = Math.max(1, Math.ceil(filteredProducts.length / pageSize));
   const safePageIndex = Math.min(pageIndex, totalPages);
@@ -401,7 +418,11 @@ export function CatalogPage({
 
   const activeQuickFilterCount = Object.values(quickFilters).filter(Boolean).length;
   const hasActiveFilters = Boolean(
-    query || category !== "all" || brand !== "all" || sort !== "popular" || activeQuickFilterCount,
+    query ||
+      selectedCategories.length > 0 ||
+      brand !== "all" ||
+      sort !== "popular" ||
+      activeQuickFilterCount,
   );
   const selectedProductSlug = searchParams.get("product");
   const selectedProduct = selectedProductSlug
@@ -429,9 +450,26 @@ export function CatalogPage({
     setPageIndex(1);
   }
 
+  function toggleCategory(value: string) {
+    if (value === "all") {
+      setSelectedCategories([]);
+      setPageIndex(1);
+      return;
+    }
+
+    setSelectedCategories((current) => {
+      if (current.includes(value)) {
+        return current.filter((item) => item !== value);
+      }
+
+      return [...current, value];
+    });
+    setPageIndex(1);
+  }
+
   function resetFilters() {
     setQuery("");
-    setCategory("all");
+    setSelectedCategories([]);
     setBrand("all");
     setSort("popular");
     setQuickFilters({
@@ -486,18 +524,18 @@ export function CatalogPage({
         <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">
           {text.filters}
         </p>
-        <div className="flex flex-wrap gap-2.5">
+        <div className="grid grid-cols-2 gap-2">
           {categoryOptions.map((item) => (
             <button
               key={item.value}
               type="button"
-              onClick={() => {
-                setCategory(item.value);
-                setPageIndex(1);
-              }}
+              onClick={() => toggleCategory(item.value)}
+              aria-pressed={item.value === "all" ? selectedCategories.length === 0 : selectedCategorySet.has(item.value)}
               className={cn(
-                "font-tech inline-flex min-h-11 items-center gap-2 border border-white/10 bg-white/[0.035] px-3.5 text-sm uppercase tracking-[0.08em] text-zinc-300 transition duration-300 hover:-translate-y-0.5 hover:border-amber-200/35 hover:bg-white/[0.07] hover:text-white [&_svg]:size-4",
-                category === item.value &&
+                "font-tech inline-flex min-h-[3rem] items-center justify-start gap-2 rounded-xl border border-white/10 bg-white/[0.035] px-3 py-2 text-left text-[11px] uppercase leading-[1.15] tracking-[0.06em] text-zinc-300 transition duration-300 hover:border-amber-200/35 hover:bg-white/[0.07] hover:text-white [&_svg]:size-3.5 [&_svg]:shrink-0",
+                item.value === "all" && "col-span-2 justify-center",
+                ((item.value === "all" && selectedCategories.length === 0) ||
+                  selectedCategorySet.has(item.value)) &&
                   "border-amber-200/45 bg-amber-200/[0.10] text-amber-100 shadow-[0_12px_30px_rgba(251,191,36,0.08)]",
               )}
             >
@@ -512,7 +550,7 @@ export function CatalogPage({
         <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">
           {text.quickFilters}
         </p>
-        <div className="grid gap-2">
+        <div className="grid grid-cols-2 gap-2">
           {text.quickFilterOptions.map((option) => {
             const isActive = quickFilters[option.key];
 
@@ -523,22 +561,22 @@ export function CatalogPage({
                 onClick={() => toggleQuickFilter(option.key)}
                 aria-pressed={isActive}
                 className={cn(
-                  "group flex min-h-11 items-center gap-3 border border-white/10 bg-white/[0.03] px-3.5 text-left transition duration-300 hover:border-cyan-200/30 hover:bg-white/[0.06]",
+                  "group flex min-h-[3rem] items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-left transition duration-300 hover:border-cyan-200/30 hover:bg-white/[0.06]",
                   isActive &&
                     "border-cyan-300/40 bg-cyan-300/[0.10] shadow-[0_10px_28px_rgba(34,211,238,0.08)]",
                 )}
               >
                 <span
                   className={cn(
-                    "grid size-5 shrink-0 place-items-center border border-white/14 bg-black/35 text-transparent transition duration-300",
+                    "grid size-4 shrink-0 place-items-center rounded border border-white/14 bg-black/35 text-transparent transition duration-300",
                     isActive && "border-cyan-300/55 bg-cyan-300/18 text-cyan-100",
                   )}
                 >
-                  <Check className="size-3.5" aria-hidden="true" />
+                  <Check className="size-3" aria-hidden="true" />
                 </span>
                 <span
                   className={cn(
-                    "font-tech text-sm uppercase tracking-[0.08em] text-zinc-300 transition duration-300",
+                    "font-tech text-[11px] uppercase leading-[1.15] tracking-[0.06em] text-zinc-300 transition duration-300",
                     isActive && "text-cyan-50",
                   )}
                 >
@@ -564,7 +602,7 @@ export function CatalogPage({
             {text.filters}
           </p>
           <p className="mt-2 font-display text-lg leading-none text-amber-200">
-            {activeQuickFilterCount + Number(category !== "all") + Number(brand !== "all")}
+            {activeQuickFilterCount + selectedCategories.length + Number(brand !== "all")}
           </p>
         </div>
         <div className="flex min-h-[84px] flex-col justify-between border border-white/10 bg-white/[0.03] px-2.5 py-2">
@@ -830,7 +868,7 @@ export function CatalogPage({
             ) : (
               <CyberCard variant="glass" className="border-white/10 bg-zinc-950/70">
                 <CyberCardContent className="p-10 text-center text-lg text-zinc-400">
-                  {text.empty}
+                  {selectedCategories.length ? text.emptyFilteredByCategory : text.empty}
                 </CyberCardContent>
               </CyberCard>
             )}
