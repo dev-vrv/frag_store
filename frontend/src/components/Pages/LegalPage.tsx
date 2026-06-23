@@ -165,7 +165,7 @@ export function LegalPage({ locale, dictionary, page }: LegalPageProps) {
   const pageDictionary = dictionary.pages[page];
 
   return (
-    <main className="page-shell relative isolate overflow-hidden bg-black px-4 pb-16 pt-36 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative isolate overflow-hidden bg-black px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
       <ContactCyberBackground />
 

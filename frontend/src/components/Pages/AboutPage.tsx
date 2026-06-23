@@ -139,7 +139,7 @@ export function AboutPage({ locale, dictionary }: AboutPageProps) {
   const content = aboutContent[locale];
 
   return (
-    <main className="page-shell relative isolate overflow-hidden bg-black px-4 pb-16 pt-36 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative isolate overflow-hidden bg-black px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
       <ContactCyberBackground />
 

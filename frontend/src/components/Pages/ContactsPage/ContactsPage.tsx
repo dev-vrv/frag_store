@@ -23,7 +23,7 @@ export function ContactsPage({
   const text = contactContent[locale];
 
   return (
-    <main className="page-shell relative isolate overflow-hidden bg-black px-4 pt-36 pb-16 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative isolate overflow-hidden bg-black px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
       <ContactCyberBackground />
 

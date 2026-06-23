@@ -102,7 +102,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
           />
         </div>
 
-        <div className="grid gap-3 sm:grid-cols-3">
+        <div className="grid gap-3 md:grid-cols-3">
           {content.metrics.map(([label, value], index) => (
             <RevealOnScroll
               key={label}
@@ -248,7 +248,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
                     </p>
                   </div>
 
-                  <div className="mt-8 grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+                  <div className="mt-8 grid gap-3 md:grid-cols-3 lg:grid-cols-1">
                     {content.metrics.map(([label, value]) => (
                       <div key={label} className="border border-white/10 bg-black/20 px-4 py-3 backdrop-blur-sm">
                         <p className="font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-500">

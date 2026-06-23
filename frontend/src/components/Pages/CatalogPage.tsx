@@ -588,31 +588,31 @@ export function CatalogPage({
   );
 
   return (
-    <main className="page-shell relative overflow-hidden bg-[#040915] px-4 pb-24 pt-32 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative overflow-hidden bg-[linear-gradient(180deg,#12070a_0%,#17090c_26%,#10070a_56%,#050304_100%)] px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
-      <div className="absolute inset-0 -z-40 bg-[radial-gradient(circle_at_16%_14%,rgba(34,211,238,0.30),transparent_24%),radial-gradient(circle_at_84%_12%,rgba(244,63,94,0.24),transparent_24%),radial-gradient(circle_at_52%_82%,rgba(168,85,247,0.18),transparent_28%),linear-gradient(180deg,#090d18_0%,#070b16_28%,#05070f_56%,#030409_100%)]" />
+      <div className="absolute inset-0 -z-40 bg-[radial-gradient(circle_at_14%_16%,rgba(255,94,77,0.34),transparent_24%),radial-gradient(circle_at_84%_12%,rgba(220,38,38,0.30),transparent_24%),radial-gradient(circle_at_50%_82%,rgba(251,146,60,0.16),transparent_28%),linear-gradient(180deg,#16090b_0%,#14070a_28%,#0d0507_56%,#040304_100%)]" />
       <div className="pointer-events-none absolute inset-0 -z-30 overflow-hidden">
-        <div className="absolute -left-[10%] top-[2%] h-[24rem] w-[24rem] animate-[catalogAurora_22s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgba(34,211,238,0.50),rgba(34,211,238,0.16)_42%,transparent_74%)] blur-3xl sm:h-[30rem] sm:w-[30rem]" />
-        <div className="absolute right-[-8%] top-[8%] h-[24rem] w-[24rem] animate-[catalogAurora_28s_ease-in-out_infinite_reverse] rounded-full bg-[radial-gradient(circle,rgba(244,63,94,0.40),rgba(244,63,94,0.14)_40%,transparent_74%)] blur-3xl sm:h-[32rem] sm:w-[32rem]" />
-        <div className="absolute left-[18%] bottom-[8%] h-[18rem] w-[36rem] animate-[catalogPulse_20s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.30),transparent_64%)] blur-3xl" />
-        <div className="absolute left-1/2 top-[14%] h-[34rem] w-[34rem] -translate-x-1/2 animate-[catalogHalo_26s_linear_infinite] rounded-full border border-cyan-200/14 opacity-60" />
-        <div className="absolute left-1/2 top-[14%] h-[25rem] w-[25rem] -translate-x-1/2 animate-[catalogHaloReverse_18s_linear_infinite] rounded-full border border-fuchsia-300/12 opacity-45" />
-        <div className="absolute left-[8%] top-[22%] h-40 w-40 rotate-45 animate-[catalogFloatShape_20s_ease-in-out_infinite] border border-cyan-200/24 bg-cyan-200/[0.05] backdrop-blur-[2px]" />
-        <div className="absolute right-[12%] top-[48%] h-28 w-28 rotate-12 animate-[catalogFloatShapeAlt_24s_ease-in-out_infinite] border border-fuchsia-300/20 bg-fuchsia-300/[0.05] backdrop-blur-[2px]" />
-        <div className="absolute left-[14%] top-[52%] h-52 w-52 animate-[catalogPolygon_20s_linear_infinite] border border-cyan-200/16 opacity-70 [clip-path:polygon(50%_0%,100%_38%,82%_100%,18%_100%,0%_38%)]" />
+        <div className="absolute -left-[10%] top-[2%] h-[24rem] w-[24rem] animate-[catalogAurora_22s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgba(255,94,77,0.48),rgba(255,94,77,0.16)_42%,transparent_74%)] blur-3xl sm:h-[30rem] sm:w-[30rem]" />
+        <div className="absolute right-[-8%] top-[8%] h-[24rem] w-[24rem] animate-[catalogAurora_28s_ease-in-out_infinite_reverse] rounded-full bg-[radial-gradient(circle,rgba(220,38,38,0.44),rgba(220,38,38,0.16)_40%,transparent_74%)] blur-3xl sm:h-[32rem] sm:w-[32rem]" />
+        <div className="absolute left-[18%] bottom-[8%] h-[18rem] w-[36rem] animate-[catalogPulse_20s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgba(251,146,60,0.26),transparent_64%)] blur-3xl" />
+        <div className="absolute left-1/2 top-[14%] h-[34rem] w-[34rem] -translate-x-1/2 animate-[catalogHalo_26s_linear_infinite] rounded-full border border-red-200/12 opacity-60" />
+        <div className="absolute left-1/2 top-[14%] h-[25rem] w-[25rem] -translate-x-1/2 animate-[catalogHaloReverse_18s_linear_infinite] rounded-full border border-orange-300/12 opacity-45" />
+        <div className="absolute left-[8%] top-[22%] h-40 w-40 rotate-45 animate-[catalogFloatShape_20s_ease-in-out_infinite] border border-red-200/18 bg-red-200/[0.05] backdrop-blur-[2px]" />
+        <div className="absolute right-[12%] top-[48%] h-28 w-28 rotate-12 animate-[catalogFloatShapeAlt_24s_ease-in-out_infinite] border border-orange-300/18 bg-orange-300/[0.05] backdrop-blur-[2px]" />
+        <div className="absolute left-[14%] top-[52%] h-52 w-52 animate-[catalogPolygon_20s_linear_infinite] border border-red-200/14 opacity-70 [clip-path:polygon(50%_0%,100%_38%,82%_100%,18%_100%,0%_38%)]" />
         <div className="absolute right-[18%] top-[18%] h-44 w-44 animate-[catalogPolygon_26s_linear_infinite_reverse] border border-rose-300/12 opacity-55 [clip-path:polygon(12%_12%,88%_0%,100%_76%,40%_100%,0%_64%)]" />
-        <div className="absolute left-[38%] top-[18%] h-40 w-40 animate-[catalogDiamond_22s_linear_infinite] border border-cyan-100/14 opacity-50 [clip-path:polygon(50%_0%,100%_50%,50%_100%,0%_50%)]" />
-        <div className="absolute right-[22%] bottom-[14%] h-36 w-36 animate-[catalogDiamond_18s_linear_infinite_reverse] border border-fuchsia-200/12 opacity-40 [clip-path:polygon(50%_0%,100%_50%,50%_100%,0%_50%)]" />
-        <div className="absolute left-[-8%] top-[24%] h-32 w-[36rem] animate-[catalogBeam_18s_ease-in-out_infinite] rotate-[-12deg] bg-[linear-gradient(90deg,transparent,rgba(34,211,238,0.24),transparent)] blur-2xl" />
-        <div className="absolute right-[-10%] top-[52%] h-28 w-[30rem] animate-[catalogBeam_24s_ease-in-out_infinite_reverse] rotate-[18deg] bg-[linear-gradient(90deg,transparent,rgba(244,63,94,0.18),transparent)] blur-2xl" />
-        <div className="absolute inset-x-0 top-[22%] h-px animate-[catalogScanline_9s_linear_infinite] bg-[linear-gradient(90deg,transparent,rgba(34,211,238,0.45),transparent)] opacity-80" />
-        <div className="absolute inset-x-0 top-[58%] h-px animate-[catalogScanline_13s_linear_infinite_reverse] bg-[linear-gradient(90deg,transparent,rgba(217,70,239,0.34),transparent)] opacity-70" />
+        <div className="absolute left-[38%] top-[18%] h-40 w-40 animate-[catalogDiamond_22s_linear_infinite] border border-orange-200/12 opacity-50 [clip-path:polygon(50%_0%,100%_50%,50%_100%,0%_50%)]" />
+        <div className="absolute right-[22%] bottom-[14%] h-36 w-36 animate-[catalogDiamond_18s_linear_infinite_reverse] border border-red-100/10 opacity-40 [clip-path:polygon(50%_0%,100%_50%,50%_100%,0%_50%)]" />
+        <div className="absolute left-[-8%] top-[24%] h-32 w-[36rem] animate-[catalogBeam_18s_ease-in-out_infinite] rotate-[-12deg] bg-[linear-gradient(90deg,transparent,rgba(255,94,77,0.24),transparent)] blur-2xl" />
+        <div className="absolute right-[-10%] top-[52%] h-28 w-[30rem] animate-[catalogBeam_24s_ease-in-out_infinite_reverse] rotate-[18deg] bg-[linear-gradient(90deg,transparent,rgba(220,38,38,0.20),transparent)] blur-2xl" />
+        <div className="absolute inset-x-0 top-[22%] h-px animate-[catalogScanline_9s_linear_infinite] bg-[linear-gradient(90deg,transparent,rgba(255,115,115,0.42),transparent)] opacity-80" />
+        <div className="absolute inset-x-0 top-[58%] h-px animate-[catalogScanline_13s_linear_infinite_reverse] bg-[linear-gradient(90deg,transparent,rgba(251,146,60,0.30),transparent)] opacity-70" />
       </div>
       <div className="cyber-grid absolute inset-0 -z-20 opacity-[0.32]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 animate-[catalogGridDrift_36s_linear_infinite] bg-[linear-gradient(rgba(130,246,255,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(168,85,247,0.06)_1px,transparent_1px)] bg-[size:68px_68px] opacity-[0.34] [mask-image:linear-gradient(180deg,rgba(0,0,0,0.94),rgba(0,0,0,0.58)_58%,transparent)]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(34,211,238,0.05),transparent_18%,transparent_82%,rgba(244,63,94,0.05))]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.36] [background-image:radial-gradient(circle_at_center,rgba(125,211,252,0.22)_1px,transparent_1px)] [background-size:30px_30px] [mask-image:linear-gradient(180deg,transparent,rgba(0,0,0,0.88)_16%,rgba(0,0,0,0.88)_84%,transparent)]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[conic-gradient(from_180deg_at_50%_50%,rgba(34,211,238,0.08),transparent_18%,rgba(217,70,239,0.07)_40%,transparent_58%,rgba(244,63,94,0.08)_82%,transparent)] opacity-80" />
+      <div className="pointer-events-none absolute inset-0 -z-10 animate-[catalogGridDrift_36s_linear_infinite] bg-[linear-gradient(rgba(255,115,115,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(251,146,60,0.06)_1px,transparent_1px)] bg-[size:68px_68px] opacity-[0.34] [mask-image:linear-gradient(180deg,rgba(0,0,0,0.94),rgba(0,0,0,0.58)_58%,transparent)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(255,94,77,0.06),transparent_18%,transparent_82%,rgba(220,38,38,0.06))]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.34] [background-image:radial-gradient(circle_at_center,rgba(253,186,116,0.20)_1px,transparent_1px)] [background-size:30px_30px] [mask-image:linear-gradient(180deg,transparent,rgba(0,0,0,0.88)_16%,rgba(0,0,0,0.88)_84%,transparent)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[conic-gradient(from_180deg_at_50%_50%,rgba(255,94,77,0.08),transparent_18%,rgba(251,146,60,0.07)_40%,transparent_58%,rgba(220,38,38,0.08)_82%,transparent)] opacity-80" />
       <style jsx>{`
         @keyframes catalogAurora {
           0%,
@@ -729,7 +729,7 @@ export function CatalogPage({
         }
       `}</style>
 
-      <section className="mx-auto max-w-7xl py-8">
+      <section className="mx-auto w-full max-w-[92rem] py-8">
         <div className="mb-6 flex flex-col gap-4 border-b border-white/10 pb-5 sm:mb-7 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <CyberBadge variant="warning" glow>
@@ -765,7 +765,7 @@ export function CatalogPage({
           </div>
         </div>
 
-        <div className="grid items-start gap-6 xl:grid-cols-[320px_minmax(0,1fr)]">
+        <div className="grid items-start gap-6 2xl:grid-cols-[340px_minmax(0,1fr)]">
           <aside className="hidden xl:block xl:sticky xl:top-32">
             <CyberCard variant="glass" className="overflow-hidden border-white/10 bg-zinc-950/70">
               <CyberCardContent className="p-5">
@@ -795,7 +795,7 @@ export function CatalogPage({
                 </CyberCardContent>
               </CyberCard>
             ) : paginatedProducts.length ? (
-              <div className="grid auto-rows-fr gap-5 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
+              <div className="grid auto-rows-fr gap-5 sm:gap-6 md:grid-cols-2 2xl:grid-cols-3">
                 {paginatedProducts.map((product) => {
                   const badges = [];
                   if (product.is_new_arrival) {
@@ -839,7 +839,7 @@ export function CatalogPage({
       </section>
 
       {products.length ? (
-        <section className="mx-auto mt-8 mb-10 flex max-w-7xl flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <section className="mx-auto mt-8 mb-10 flex w-full max-w-[92rem] flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
           <div className="font-tech text-sm uppercase tracking-[0.1em] text-zinc-500">
             {text.page} {safePageIndex} / {totalPages}
           </div>

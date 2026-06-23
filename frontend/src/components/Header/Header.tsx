@@ -76,10 +76,10 @@ export function Header({ locale, dictionary }: HeaderProps) {
         isHidden ? "-translate-y-full" : "translate-y-0",
       )}
     >
-      <div className="mx-auto flex min-h-20 w-full max-w-7xl items-center justify-between gap-5 px-4 sm:px-6 lg:px-8">
+      <div className="mx-auto flex min-h-20 w-full max-w-7xl items-center justify-between gap-3 px-4 sm:gap-5 sm:px-6 lg:px-8">
         <Link
           href={localizePath("/", locale)}
-          className="cyber-cut-small font-display border border-red-400/35 bg-red-500/10 px-4 py-2 text-xl font-normal tracking-[0.08em] text-red-100 shadow-[0_0_24px_rgba(255,23,68,0.18)]"
+          className="cyber-cut-small font-display shrink-0 border border-red-400/35 bg-red-500/10 px-3 py-2 text-lg font-normal tracking-[0.08em] text-red-100 shadow-[0_0_24px_rgba(255,23,68,0.18)] sm:px-4 sm:text-xl"
           aria-label="Frag Store"
         >
           {dictionary.logo}
@@ -125,8 +125,8 @@ export function Header({ locale, dictionary }: HeaderProps) {
             <span>{authLabel}</span>
           </Link>
         </div>
-        <div className="flex items-center gap-2 lg:hidden">
-          <LocaleSwitcher locale={locale} label="Сменить язык" />
+        <div className="flex shrink-0 items-center gap-2 lg:hidden">
+          <LocaleSwitcher locale={locale} label="Сменить язык" className="shrink-0" />
           <MobileHeaderMenu
             locale={locale}
             dictionary={dictionary}
