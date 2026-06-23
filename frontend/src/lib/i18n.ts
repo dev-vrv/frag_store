@@ -463,7 +463,7 @@ const dictionaries: Record<Locale, Dictionary> = {
       catalog: {
         title: "КАТАЛОГ",
         subtitle:
-          "Скоро здесь появится витрина игровых девайсов, комплектующих и лимитированных cyber-drop коллекций.",
+          "Игровые девайсы, комплектующие и актуальные подборки.",
         badge: "Магазин",
         metadata: {
           title: "Каталог | Frag Store",
@@ -834,7 +834,7 @@ const dictionaries: Record<Locale, Dictionary> = {
       catalog: {
         title: "CATALOG",
         subtitle:
-          "A storefront for gaming devices, components, and limited cyber-drop collections is coming soon.",
+          "Gaming devices, components, and current curated drops.",
         badge: "Дүкөн",
         metadata: {
           title: "Catalog | Frag Store",
@@ -1205,7 +1205,7 @@ const dictionaries: Record<Locale, Dictionary> = {
       catalog: {
         title: "КАТАЛОГ",
         subtitle:
-          "Жакында бул жерде gaming түзмөктөрү, комплекттер жана лимиттелген cyber-drop коллекциялар чыгат.",
+          "Gaming түзмөктөрү, комплекттер жана актуалдуу тандоолор.",
         badge: "Дүкөн",
         metadata: {
           title: "Каталог | Frag Store",
