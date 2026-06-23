@@ -729,7 +729,7 @@ export function CatalogPage({
         }
       `}</style>
 
-      <section className="mx-auto w-full max-w-[92rem] py-8">
+      <section className="mx-auto w-full max-w-7xl py-8">
         <div className="mb-6 flex flex-col gap-4 border-b border-white/10 pb-5 sm:mb-7 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <CyberBadge variant="warning" glow>
