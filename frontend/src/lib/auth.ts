@@ -5,7 +5,48 @@ export interface AuthUser {
   last_name: string;
   full_name: string;
   phone: string;
+  city: string;
+  address: string;
+  personal_discount_percent: string;
+  email_verified: boolean;
+  two_factor_enabled: boolean;
+  pending_two_factor_enabled: boolean;
   date_joined: string;
+  orders?: AuthOrder[];
+}
+
+export interface AuthOrderItem {
+  id: number;
+  product_id: number;
+  product_slug: string;
+  product_name: string;
+  product_sku: string;
+  unit_price: string;
+  unit_old_price: string | null;
+  quantity: number;
+  line_total: string;
+  currency: string;
+}
+
+export interface AuthOrder {
+  id: number;
+  number: string;
+  status: string;
+  payment_status: string;
+  delivery_method: string;
+  customer_name: string;
+  customer_email: string;
+  customer_phone: string;
+  delivery_city: string;
+  delivery_address: string;
+  comment: string;
+  subtotal: string;
+  discount_total: string;
+  total: string;
+  currency: string;
+  items: AuthOrderItem[];
+  created_at: string;
+  updated_at: string;
 }
 
 export interface AuthTokens {
@@ -32,6 +73,14 @@ export interface RegisterPayload extends LoginPayload {
 export interface ApiErrorPayload {
   detail?: string;
   [key: string]: unknown;
+}
+
+export interface ProfileUpdatePayload {
+  first_name?: string;
+  last_name?: string;
+  phone?: string;
+  address?: string;
+  two_factor_enabled?: boolean;
 }
 
 const internalApiUrl = process.env.API_URL || "http://127.0.0.1:8000/api";
@@ -110,4 +159,46 @@ export async function logout() {
   if (!response.ok) {
     throw new Error(await readApiError(response));
   }
+}
+
+export async function updateProfile(payload: ProfileUpdatePayload) {
+  const response = await fetch("/profile-api", {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+
+  if (!response.ok) {
+    throw new Error(await readApiError(response));
+  }
+
+  return (await response.json()) as AuthUser;
+}
+
+export async function requestProfileEmailVerification() {
+  const response = await fetch("/profile-api/email-verification/request", {
+    method: "POST",
+  });
+
+  if (!response.ok) {
+    throw new Error(await readApiError(response));
+  }
+}
+
+export async function confirmProfileEmailVerification(code: string) {
+  const response = await fetch("/profile-api/email-verification/confirm", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ code }),
+  });
+
+  if (!response.ok) {
+    throw new Error(await readApiError(response));
+  }
+
+  return (await response.json()) as AuthUser;
 }

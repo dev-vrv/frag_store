@@ -6,35 +6,57 @@ import {
   Gamepad2,
   Headphones,
   Keyboard,
+  Monitor,
   Mouse,
   PackageCheck,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { CyberBadge, CyberButton, CyberProductCard } from "@/components/cyber";
+import { CyberBadge, CyberButton, CyberCard, CyberCardContent, CyberProductCard } from "@/components/cyber";
 import { Section } from "@/components/Sections/Section";
 import RevealOnScroll from "@/components/ui/RevealOnScroll";
 import AnimatedText from "@/components/ui/animatedText";
 import { type Dictionary, type Locale, localizePath } from "@/lib/i18n";
+import {
+  formatProductOldPrice,
+  formatProductPrice,
+  getLocalizedProductName,
+  type Product,
+} from "@/lib/products";
 
 export interface FeaturedDropsProps {
   locale: Locale;
   content: Dictionary["featured"];
+  products: Product[];
 }
 
-function ProductVisual({ category }: { category: Dictionary["featured"]["products"][number]["visual"] }) {
+function ProductVisual({ product }: { product: Product }) {
+  const deviceType = product.category.device_type;
   const Icon =
-    category === "mice"
+    deviceType === "mouse"
       ? Mouse
-      : category === "keyboards"
+      : deviceType === "keyboard"
         ? Keyboard
-        : category === "headsets"
+        : deviceType === "headset"
           ? Headphones
-          : category === "components"
-            ? Cpu
-            : category === "setups"
-              ? PackageCheck
-              : Gamepad2;
+          : deviceType === "monitor"
+            ? Monitor
+            : deviceType === "component"
+              ? Cpu
+              : deviceType === "accessory"
+                ? PackageCheck
+                : Gamepad2;
+
+  if (product.primary_media?.file) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={product.primary_media.file}
+        alt={product.primary_media.alt_text || product.name}
+        className="h-full w-full object-cover"
+      />
+    );
+  }
 
   return (
     <div className="flex h-full items-center justify-center">
@@ -45,7 +67,7 @@ function ProductVisual({ category }: { category: Dictionary["featured"]["product
   );
 }
 
-export function FeaturedDrops({ locale, content }: FeaturedDropsProps) {
+export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps) {
   const catalogHref = localizePath("/catalog", locale);
   const blogHref = localizePath("/blog", locale);
   const laneRef = useRef<HTMLDivElement | null>(null);
@@ -59,14 +81,14 @@ export function FeaturedDrops({ locale, content }: FeaturedDropsProps) {
   const autoDirectionRef = useRef(1);
   const [isDragging, setIsDragging] = useState(false);
   const marqueeProducts = useMemo(
-    () => [...content.products, ...content.products, ...content.products],
-    [content.products],
+    () => [...products, ...products, ...products],
+    [products],
   );
 
   useEffect(() => {
     const lane = laneRef.current;
 
-    if (!lane) {
+    if (!lane || !products.length) {
       return;
     }
 
@@ -108,7 +130,7 @@ export function FeaturedDrops({ locale, content }: FeaturedDropsProps) {
         window.cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [content.products]);
+  }, [products]);
 
   function normalizeAfterDrag() {
     const lane = laneRef.current;
@@ -231,63 +253,93 @@ export function FeaturedDrops({ locale, content }: FeaturedDropsProps) {
         </div>
       </div>
 
-      <div
-        className="featured-marquee-shell mt-8 sm:mt-10"
-        data-dragging={isDragging}
-        onMouseEnter={() => {
-          isHoveredRef.current = true;
-        }}
-        onMouseLeave={() => {
-          isHoveredRef.current = false;
-        }}
-      >
-        <div className="featured-marquee-mask">
-          <div
-            ref={laneRef}
-            className="featured-marquee-lane"
-            onPointerDown={handlePointerDown}
-            onPointerMove={handlePointerMove}
-            onPointerUp={handlePointerUp}
-            onPointerCancel={stopDragging}
-            onPointerLeave={(event) => {
-              if (pointerIdRef.current === event.pointerId) {
-                handlePointerUp(event);
-              }
-            }}
-          >
-            <div className="featured-marquee-track">
-              {marqueeProducts.map((product, index) => {
-                const inPrimarySet =
-                  index >= content.products.length &&
-                  index < content.products.length * 2;
+      {products.length ? (
+        <div
+          className="featured-marquee-shell mt-8 sm:mt-10"
+          data-dragging={isDragging}
+          onMouseEnter={() => {
+            isHoveredRef.current = true;
+          }}
+          onMouseLeave={() => {
+            isHoveredRef.current = false;
+          }}
+        >
+          <div className="featured-marquee-mask">
+            <div
+              ref={laneRef}
+              className="featured-marquee-lane"
+              onPointerDown={handlePointerDown}
+              onPointerMove={handlePointerMove}
+              onPointerUp={handlePointerUp}
+              onPointerCancel={stopDragging}
+              onPointerLeave={(event) => {
+                if (pointerIdRef.current === event.pointerId) {
+                  handlePointerUp(event);
+                }
+              }}
+            >
+              <div className="featured-marquee-track">
+                {marqueeProducts.map((product, index) => {
+                  const inPrimarySet =
+                    index >= products.length &&
+                    index < products.length * 2;
 
-                return (
-                  <div
-                    key={`${product.name}-${index}`}
-                    className="featured-marquee-slide"
-                    aria-hidden={!inPrimarySet}
-                  >
-                    <CyberProductCard
-                      image={<ProductVisual category={product.visual} />}
-                      title={product.name}
-                      description={product.description}
-                      price={product.price}
-                      oldPrice={product.oldPrice}
-                      badges={product.badges}
-                      detailsLabel={content.detailsCta}
-                      ctaLabel={content.productCta}
-                      detailsHref={catalogHref}
-                      ctaHref={catalogHref}
-                      favoriteLabel={content.favoriteLabel}
-                    />
-                  </div>
-                );
-              })}
+                  const badges = [];
+                  if (product.is_new_arrival) {
+                    badges.push({ label: "New", variant: "cyan" as const });
+                  }
+                  if (product.is_best_seller) {
+                    badges.push({ label: "Hit", variant: "red" as const });
+                  }
+                  if (product.has_discount) {
+                    badges.push({ label: `-${product.discount_percent}%`, variant: "green" as const });
+                  }
+
+                  return (
+                    <div
+                      key={`${product.slug}-${index}`}
+                      className="featured-marquee-slide"
+                      aria-hidden={!inPrimarySet}
+                    >
+                      <CyberProductCard
+                        image={<ProductVisual product={product} />}
+                        title={getLocalizedProductName(product, locale)}
+                        description={product.short_description}
+                        price={formatProductPrice(product, locale)}
+                        oldPrice={formatProductOldPrice(product, locale)}
+                        badges={badges}
+                        detailsLabel={content.detailsCta}
+                        ctaLabel={content.productCta}
+                        detailsHref={`${catalogHref}?product=${product.slug}`}
+                        ctaHref={catalogHref}
+                        favoriteLabel={content.favoriteLabel}
+                      />
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-
+      ) : (
+        <div className="mx-auto mt-8 w-full max-w-7xl sm:mt-10">
+          <CyberCard variant="glass" className="overflow-hidden border-cyan-300/15 bg-black/35">
+            <CyberCardContent className="flex flex-col items-center justify-center gap-5 p-8 text-center sm:p-10">
+              <div className="grid size-18 place-items-center rounded-full border border-cyan-300/20 bg-cyan-300/8 text-cyan-100 shadow-[0_0_34px_rgba(34,211,238,0.14)]">
+                <PackageCheck className="size-8" />
+              </div>
+              <div className="space-y-3">
+                <h3 className="font-display text-3xl tracking-[0.04em] text-white">
+                  Drops are loading
+                </h3>
+                <p className="mx-auto max-w-2xl text-sm leading-7 text-zinc-400 sm:text-base">
+                  Пока здесь пусто. Как только добавим товары в каталог, этот блок соберет реальные лидеры продаж автоматически.
+                </p>
+              </div>
+            </CyberCardContent>
+          </CyberCard>
+        </div>
+      )}
     </Section>
   );
 }

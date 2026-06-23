@@ -39,12 +39,14 @@ from django.contrib.auth import get_user_model
 User = get_user_model()
 email = 'dev.vrv@gmail.com'
 password = 'ggwp8888'
+first_name = 'Dev'
 
 if not User.objects.filter(email=email).exists():
     username_field = User.USERNAME_FIELD
     user_data = {
         'email': email,
         'password': password,
+        'first_name': first_name,
     }
     if username_field != 'email':
         user_data[username_field] = email

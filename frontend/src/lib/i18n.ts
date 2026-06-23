@@ -67,9 +67,49 @@ export interface Dictionary {
     badge: string;
     title: string;
     subtitle: string;
+    editTitle: string;
+    editSubtitle: string;
     emailLabel: string;
+    emailReadonlyHint: string;
+    firstNameLabel: string;
+    firstNamePlaceholder: string;
+    lastNameLabel: string;
+    lastNamePlaceholder: string;
     phoneLabel: string;
+    phonePlaceholder: string;
+    cityLabel: string;
+    cityPlaceholder: string;
+    addressLabel: string;
+    addressPlaceholder: string;
+    discountLabel: string;
     joinedLabel: string;
+    twoFactorLabel: string;
+    twoFactorToggle: string;
+    emailVerified: string;
+    emailNotVerified: string;
+    verificationTitle: string;
+    verificationSubtitle: string;
+    verificationCodeLabel: string;
+    verificationCodePlaceholder: string;
+    sendCodeLabel: string;
+    confirmCodeLabel: string;
+    saveLabel: string;
+    saveSuccess: string;
+    saveSuccessNeedsVerification: string;
+    verificationSent: string;
+    verificationSuccess: string;
+    errorFallback: string;
+    ordersBadge: string;
+    ordersTitle: string;
+    ordersSubtitle: string;
+    ordersEmptyTitle: string;
+    ordersEmptyText: string;
+    catalogLabel: string;
+    orderStatusLabel: string;
+    orderDateLabel: string;
+    orderTotalLabel: string;
+    orderDiscountLabel: string;
+    orderQuantityLabel: string;
     logoutLabel: string;
   };
   hero: {
@@ -222,10 +262,51 @@ const dictionaries: Record<Locale, Dictionary> = {
       badge: "Профиль",
       title: "ЛИЧНЫЙ КАБИНЕТ",
       subtitle:
-        "Управляйте своими контактными данными и используйте аккаунт Frag Store как точку входа для будущих заказов и избранного.",
+        "Управляйте профилем, включайте защиту входа и следите за заказами в одном месте.",
+      editTitle: "Данные профиля",
+      editSubtitle: "Обновляйте контактные данные, адрес доставки и настройки безопасности.",
       emailLabel: "Email",
+      emailReadonlyHint: "Email недоступен для редактирования.",
+      firstNameLabel: "Имя",
+      firstNamePlaceholder: "Алекс",
+      lastNameLabel: "Фамилия",
+      lastNamePlaceholder: "Иванов",
       phoneLabel: "Телефон",
+      phonePlaceholder: "+996 000 000 000",
+      cityLabel: "Адрес доставки",
+      cityPlaceholder: "Улица, дом, квартира",
+      addressLabel: "Адрес доставки",
+      addressPlaceholder: "Улица, дом, квартира",
+      discountLabel: "Персональная скидка",
       joinedLabel: "Дата регистрации",
+      twoFactorLabel: "Двухфакторная защита",
+      twoFactorToggle: "Включить 2FA",
+      emailVerified: "Email подтвержден. Можно включить дополнительную защиту входа.",
+      emailNotVerified: "Для включения 2FA нужно подтвердить email кодом из письма.",
+      verificationTitle: "Подтверждение email",
+      verificationSubtitle:
+        "Отправьте код на email, затем введите его здесь. После подтверждения 2FA активируется.",
+      verificationCodeLabel: "Код подтверждения",
+      verificationCodePlaceholder: "123456",
+      sendCodeLabel: "Отправить код",
+      confirmCodeLabel: "Подтвердить",
+      saveLabel: "Сохранить изменения",
+      saveSuccess: "Профиль обновлен.",
+      saveSuccessNeedsVerification: "Профиль обновлен. Подтвердите email, чтобы включить 2FA.",
+      verificationSent: "Код отправлен на email.",
+      verificationSuccess: "Email подтвержден, 2FA активирована.",
+      errorFallback: "Не удалось выполнить запрос. Попробуйте еще раз.",
+      ordersBadge: "Заказы",
+      ordersTitle: "История заказов",
+      ordersSubtitle: "Здесь отображаются оформленные заказы, их статус и состав.",
+      ordersEmptyTitle: "Пока без заказов",
+      ordersEmptyText: "Когда появится первый заказ, он отобразится здесь вместе с составом и суммой.",
+      catalogLabel: "Перейти в каталог",
+      orderStatusLabel: "Статус",
+      orderDateLabel: "Дата",
+      orderTotalLabel: "Итого",
+      orderDiscountLabel: "Скидка",
+      orderQuantityLabel: "Кол-во",
       logoutLabel: "Выйти",
     },
     hero: {
@@ -552,10 +633,51 @@ const dictionaries: Record<Locale, Dictionary> = {
       badge: "Profile",
       title: "ACCOUNT PROFILE",
       subtitle:
-        "Manage your contact details and use your Frag Store account as the entry point for future orders and favorites.",
+        "Manage your account details, enable extra sign-in protection, and review your orders in one place.",
+      editTitle: "Profile Details",
+      editSubtitle: "Update contact data, delivery address, and security settings.",
       emailLabel: "Email",
+      emailReadonlyHint: "Email cannot be edited.",
+      firstNameLabel: "First name",
+      firstNamePlaceholder: "Alex",
+      lastNameLabel: "Last name",
+      lastNamePlaceholder: "Morgan",
       phoneLabel: "Phone",
+      phonePlaceholder: "+1 555 000 0000",
+      cityLabel: "Delivery address",
+      cityPlaceholder: "Street, building, apartment",
+      addressLabel: "Delivery address",
+      addressPlaceholder: "Street, building, apartment",
+      discountLabel: "Personal discount",
       joinedLabel: "Joined",
+      twoFactorLabel: "Two-factor protection",
+      twoFactorToggle: "Enable 2FA",
+      emailVerified: "Your email is verified. Extra sign-in protection can be enabled.",
+      emailNotVerified: "Email verification is required before 2FA can be enabled.",
+      verificationTitle: "Verify email",
+      verificationSubtitle:
+        "Send a code to your email, then enter it here. Once confirmed, 2FA will be enabled.",
+      verificationCodeLabel: "Verification code",
+      verificationCodePlaceholder: "123456",
+      sendCodeLabel: "Send code",
+      confirmCodeLabel: "Confirm",
+      saveLabel: "Save changes",
+      saveSuccess: "Profile updated.",
+      saveSuccessNeedsVerification: "Profile updated. Verify your email to finish enabling 2FA.",
+      verificationSent: "Verification code sent to your email.",
+      verificationSuccess: "Email verified, 2FA enabled.",
+      errorFallback: "Request failed. Please try again.",
+      ordersBadge: "Orders",
+      ordersTitle: "Order History",
+      ordersSubtitle: "Your placed orders, statuses, and line items appear here.",
+      ordersEmptyTitle: "No orders yet",
+      ordersEmptyText: "Your first completed checkout will appear here with full order details.",
+      catalogLabel: "Open catalog",
+      orderStatusLabel: "Status",
+      orderDateLabel: "Date",
+      orderTotalLabel: "Total",
+      orderDiscountLabel: "Discount",
+      orderQuantityLabel: "Qty",
       logoutLabel: "Log out",
     },
     hero: {
@@ -882,10 +1004,51 @@ const dictionaries: Record<Locale, Dictionary> = {
       badge: "Профиль",
       title: "ЖЕКЕ КАБИНЕТ",
       subtitle:
-        "Байланыш маалыматыңызды башкарып, Frag Store аккаунтун келечектеги заказдар жана тандалгандар үчүн колдонуңуз.",
+        "Профилди башкарыңыз, кирүү коргоосун күйгүзүңүз жана заказдарды бир жерден көзөмөлдөңүз.",
+      editTitle: "Профиль маалыматы",
+      editSubtitle: "Байланыш маалыматын, жеткирүү дарегин жана коопсуздук жөндөөлөрүн жаңыртыңыз.",
       emailLabel: "Email",
+      emailReadonlyHint: "Email өзгөртүлбөйт.",
+      firstNameLabel: "Атыңыз",
+      firstNamePlaceholder: "Алекс",
+      lastNameLabel: "Фамилия",
+      lastNamePlaceholder: "Иванов",
       phoneLabel: "Телефон",
+      phonePlaceholder: "+996 700 000 000",
+      cityLabel: "Жеткирүү дареги",
+      cityPlaceholder: "Көчө, үй, батир",
+      addressLabel: "Жеткирүү дареги",
+      addressPlaceholder: "Көчө, үй, батир",
+      discountLabel: "Жеке арзандатуу",
       joinedLabel: "Катталган күнү",
+      twoFactorLabel: "Эки факторлуу коргоо",
+      twoFactorToggle: "2FA күйгүзүү",
+      emailVerified: "Email тастыкталган. Кошумча кирүү коргоосун күйгүзсө болот.",
+      emailNotVerified: "2FA күйгүзүү үчүн email'ди каттагы код менен тастыктоо керек.",
+      verificationTitle: "Email тастыктоо",
+      verificationSubtitle:
+        "Email'ге код жөнөтүп, андан кийин бул жерге киргизиңиз. Тастыкталгандан кийин 2FA иштейт.",
+      verificationCodeLabel: "Тастыктоо коду",
+      verificationCodePlaceholder: "123456",
+      sendCodeLabel: "Код жөнөтүү",
+      confirmCodeLabel: "Тастыктоо",
+      saveLabel: "Өзгөртүүлөрдү сактоо",
+      saveSuccess: "Профиль жаңыртылды.",
+      saveSuccessNeedsVerification: "Профиль жаңыртылды. 2FA күйгүзүү үчүн email'ди тастыктаңыз.",
+      verificationSent: "Код email'ге жөнөтүлдү.",
+      verificationSuccess: "Email тастыкталды, 2FA күйгүзүлдү.",
+      errorFallback: "Сурам аткарылган жок. Кайра аракет кылыңыз.",
+      ordersBadge: "Заказдар",
+      ordersTitle: "Заказ тарыхы",
+      ordersSubtitle: "Бул жерде жасалган заказдар, алардын абалы жана курамы көрсөтүлөт.",
+      ordersEmptyTitle: "Азырынча заказ жок",
+      ordersEmptyText: "Биринчи заказ чыккандан кийин бул жерде суммасы жана курамы менен көрүнөт.",
+      catalogLabel: "Каталогго өтүү",
+      orderStatusLabel: "Абалы",
+      orderDateLabel: "Дата",
+      orderTotalLabel: "Жалпы",
+      orderDiscountLabel: "Арзандатуу",
+      orderQuantityLabel: "Саны",
       logoutLabel: "Чыгуу",
     },
     hero: {

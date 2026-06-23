@@ -21,155 +21,38 @@ import {
   CyberCard,
   CyberCardContent,
   CyberInput,
-  CyberLaserText,
   CyberNativeSelect,
   CyberProductCard,
 } from "@/components/cyber";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
 import { type Dictionary, type Locale } from "@/lib/i18n";
+import {
+  formatProductOldPrice,
+  formatProductPrice,
+  getLocalizedProductName,
+  type Product,
+  type ProductCategory,
+} from "@/lib/products";
 import { cn } from "@/lib/utils";
 
 interface CatalogPageProps {
   locale: Locale;
   dictionary: Dictionary;
+  products: Product[];
+  categories: ProductCategory[];
+  initialCategory?: string;
 }
 
-type Category =
-  | "all"
-  | "mice"
-  | "keyboards"
-  | "headsets"
-  | "components"
-  | "accessories"
-  | "setups";
-type SortKey = "popular" | "priceAsc" | "priceDesc" | "rating";
+type SortKey = "popular" | "priceAsc" | "priceDesc" | "newest";
 
-interface CatalogProduct {
-  id: number;
-  category: Exclude<Category, "all">;
-  title: string;
-  description: string;
-  price: number;
-  oldPrice?: number;
-  rating: number;
-  badges: Array<"new" | "hit" | "sale" | "pro">;
+interface CatalogCategoryOption {
+  value: string;
+  label: string;
+  icon: React.ReactNode;
 }
 
-const products: CatalogProduct[] = [
-  {
-    id: 1,
-    category: "mice",
-    title: "Rift X9 Wireless",
-    description: "Легкая игровая мышь 54 г, сенсор 26K DPI, быстрый 2.4G режим.",
-    price: 7490,
-    oldPrice: 8490,
-    rating: 4.9,
-    badges: ["hit", "sale"],
-  },
-  {
-    id: 2,
-    category: "keyboards",
-    title: "Neon TKL Forge",
-    description: "TKL клавиатура с hot-swap, PBT кейкапами и gasket mount посадкой.",
-    price: 12990,
-    rating: 4.8,
-    badges: ["pro"],
-  },
-  {
-    id: 3,
-    category: "headsets",
-    title: "Auralis V7",
-    description: "Гарнитура 7.1 с мягкими амбушюрами и съемным шумоподавляющим микрофоном.",
-    price: 8990,
-    rating: 4.7,
-    badges: ["new"],
-  },
-  {
-    id: 4,
-    category: "components",
-    title: "CoreFlux 750W",
-    description: "Модульный блок питания 80+ Gold для стабильных игровых сборок.",
-    price: 10990,
-    oldPrice: 11990,
-    rating: 4.8,
-    badges: ["sale"],
-  },
-  {
-    id: 5,
-    category: "accessories",
-    title: "Zero Drag Mat XL",
-    description: "Большой коврик с контролируемым скольжением и прошитыми краями.",
-    price: 3490,
-    rating: 4.6,
-    badges: ["hit"],
-  },
-  {
-    id: 6,
-    category: "mice",
-    title: "Pulse Mini 8K",
-    description: "Компактная мышь для claw grip, polling rate 8000 Hz и PTFE глайды.",
-    price: 9990,
-    rating: 4.9,
-    badges: ["new", "pro"],
-  },
-  {
-    id: 7,
-    category: "keyboards",
-    title: "Obsidian 75 HE",
-    description: "75% клавиатура на hall-effect переключателях с rapid trigger.",
-    price: 17990,
-    rating: 5,
-    badges: ["new", "pro"],
-  },
-  {
-    id: 8,
-    category: "components",
-    title: "Frostline AIO 240",
-    description: "СЖО 240 мм с тихими вентиляторами и чистой подсветкой.",
-    price: 15990,
-    oldPrice: 17990,
-    rating: 4.7,
-    badges: ["sale"],
-  },
-  {
-    id: 9,
-    category: "headsets",
-    title: "Comms Pro Mic",
-    description: "USB-микрофон для стримов, дискорда и командных игр.",
-    price: 6990,
-    rating: 4.6,
-    badges: ["hit"],
-  },
-  {
-    id: 10,
-    category: "setups",
-    title: "Starter Aim Setup",
-    description: "Готовый стартовый сетап: мышь, коврик, гарнитура и базовые настройки под FPS.",
-    price: 18900,
-    oldPrice: 20900,
-    rating: 4.8,
-    badges: ["hit", "sale"],
-  },
-  {
-    id: 11,
-    category: "setups",
-    title: "Ranked Core Setup",
-    description: "Сбалансированная сборка периферии: клавиатура, мышь, гарнитура и коврик.",
-    price: 31900,
-    rating: 4.9,
-    badges: ["pro"],
-  },
-  {
-    id: 12,
-    category: "setups",
-    title: "Full Station Setup",
-    description: "Полный игровой сетап с монитором, клавиатурой, мышью, звуком и аксессуарами.",
-    price: 72900,
-    rating: 5,
-    badges: ["new", "pro"],
-  },
-];
+const pageSize = 6;
 
 const catalogText: Record<
   Locale,
@@ -177,10 +60,12 @@ const catalogText: Record<
     search: string;
     searchPlaceholder: string;
     sort: string;
-    categories: Record<Category, string>;
+    allCategories: string;
     sortOptions: Record<SortKey, string>;
     results: string;
     empty: string;
+    emptyTitle: string;
+    emptySubtitle: string;
     reset: string;
     addToCart: string;
     details: string;
@@ -188,36 +73,26 @@ const catalogText: Record<
     page: string;
     filters: string;
     featured: string;
-    setupIncludes: string;
-    setups: Array<{
-      title: string;
-      items: string;
-      price: string;
-    }>;
-    badgeLabels: Record<"new" | "hit" | "sale" | "pro", string>;
+    badgeNew: string;
+    badgeHit: string;
+    badgeSale: string;
   }
 > = {
   ru: {
     search: "Поиск",
     searchPlaceholder: "Мышь, клавиатура, гарнитура...",
     sort: "Сортировка",
-    categories: {
-      all: "Все",
-      mice: "Мышки",
-      keyboards: "Клавиатуры",
-      headsets: "Гарнитуры",
-      components: "Комплектующие",
-      accessories: "Аксессуары",
-      setups: "Готовые сетапы",
-    },
+    allCategories: "Все",
     sortOptions: {
       popular: "Популярные",
       priceAsc: "Цена: ниже",
       priceDesc: "Цена: выше",
-      rating: "Рейтинг",
+      newest: "Новинки",
     },
     results: "товаров найдено",
-    empty: "Ничего не найдено. Попробуйте изменить поиск или категорию.",
+    empty: "Ничего не найдено. Попробуйте изменить поиск или фильтры.",
+    emptyTitle: "Каталог пока пуст",
+    emptySubtitle: "Когда товары появятся, здесь сразу откроется полноценная витрина с фильтрами и сортировкой.",
     reset: "Сбросить",
     addToCart: "В корзину",
     details: "Подробнее",
@@ -225,52 +100,25 @@ const catalogText: Record<
     page: "Страница",
     filters: "Фильтры",
     featured: "Подборка недели",
-    setupIncludes: "В сетапе",
-    setups: [
-      {
-        title: "Starter Aim",
-        items: "мышь + коврик + гарнитура",
-        price: "от 18 900 сом",
-      },
-      {
-        title: "Ranked Core",
-        items: "клавиатура + мышь + гарнитура",
-        price: "от 31 900 сом",
-      },
-      {
-        title: "Full Station",
-        items: "монитор + клавиатура + мышь + звук",
-        price: "от 72 900 сом",
-      },
-    ],
-    badgeLabels: {
-      new: "Новинка",
-      hit: "Хит",
-      sale: "Скидка",
-      pro: "Pro",
-    },
+    badgeNew: "Новинка",
+    badgeHit: "Хит",
+    badgeSale: "Скидка",
   },
   en: {
     search: "Search",
     searchPlaceholder: "Mouse, keyboard, headset...",
     sort: "Sort",
-    categories: {
-      all: "All",
-      mice: "Mice",
-      keyboards: "Keyboards",
-      headsets: "Headsets",
-      components: "Components",
-      accessories: "Accessories",
-      setups: "Ready setups",
-    },
+    allCategories: "All",
     sortOptions: {
       popular: "Popular",
       priceAsc: "Price: low",
       priceDesc: "Price: high",
-      rating: "Rating",
+      newest: "New arrivals",
     },
     results: "products found",
-    empty: "Nothing found. Try changing search or category.",
+    empty: "Nothing found. Try changing search or filters.",
+    emptyTitle: "Catalog is empty for now",
+    emptySubtitle: "As soon as products are added, this page will automatically turn into a full storefront with filters and sorting.",
     reset: "Reset",
     addToCart: "Add to cart",
     details: "Details",
@@ -278,52 +126,25 @@ const catalogText: Record<
     page: "Page",
     filters: "Filters",
     featured: "Weekly picks",
-    setupIncludes: "Includes",
-    setups: [
-      {
-        title: "Starter Aim",
-        items: "mouse + mousepad + headset",
-        price: "from 18,900 KGS",
-      },
-      {
-        title: "Ranked Core",
-        items: "keyboard + mouse + headset",
-        price: "from 31,900 KGS",
-      },
-      {
-        title: "Full Station",
-        items: "monitor + keyboard + mouse + audio",
-        price: "from 72,900 KGS",
-      },
-    ],
-    badgeLabels: {
-      new: "New",
-      hit: "Hit",
-      sale: "Sale",
-      pro: "Pro",
-    },
+    badgeNew: "New",
+    badgeHit: "Hit",
+    badgeSale: "Sale",
   },
   kg: {
     search: "Издөө",
     searchPlaceholder: "Мышка, клавиатура, гарнитура...",
     sort: "Сорттоо",
-    categories: {
-      all: "Баары",
-      mice: "Мышкалар",
-      keyboards: "Клавиатуралар",
-      headsets: "Гарнитуралар",
-      components: "Комплекттер",
-      accessories: "Аксессуарлар",
-      setups: "Даяр сетаптар",
-    },
+    allCategories: "Баары",
     sortOptions: {
       popular: "Популярдуу",
       priceAsc: "Баасы: төмөн",
       priceDesc: "Баасы: жогору",
-      rating: "Рейтинг",
+      newest: "Жаңы товарлар",
     },
     results: "товар табылды",
-    empty: "Эч нерсе табылган жок. Издөөнү же категорияны өзгөртүңүз.",
+    empty: "Эч нерсе табылган жок. Издөөнү же фильтрлерди өзгөртүңүз.",
+    emptyTitle: "Каталог азырынча бош",
+    emptySubtitle: "Товарлар кошулганда бул жерде фильтрлери жана сорттоосу бар толук витрина автоматтык түрдө чыгат.",
     reset: "Тазалоо",
     addToCart: "Себетке",
     details: "Кененирээк",
@@ -331,83 +152,106 @@ const catalogText: Record<
     page: "Барак",
     filters: "Фильтрлер",
     featured: "Аптанын тандоосу",
-    setupIncludes: "Сетапта",
-    setups: [
-      {
-        title: "Starter Aim",
-        items: "мышка + коврик + гарнитура",
-        price: "18 900 сомдон",
-      },
-      {
-        title: "Ranked Core",
-        items: "клавиатура + мышка + гарнитура",
-        price: "31 900 сомдон",
-      },
-      {
-        title: "Full Station",
-        items: "монитор + клавиатура + мышка + үн",
-        price: "72 900 сомдон",
-      },
-    ],
-    badgeLabels: {
-      new: "Жаңы",
-      hit: "Хит",
-      sale: "Арзан",
-      pro: "Pro",
-    },
+    badgeNew: "Жаңы",
+    badgeHit: "Хит",
+    badgeSale: "Арзан",
   },
 };
 
-const categoryIcons: Record<Category, React.ReactNode> = {
-  all: <Sparkles aria-hidden="true" />,
-  mice: <Mouse aria-hidden="true" />,
-  keyboards: <Keyboard aria-hidden="true" />,
-  headsets: <Headphones aria-hidden="true" />,
-  components: <Cpu aria-hidden="true" />,
-  accessories: <Gamepad2 aria-hidden="true" />,
-  setups: <PackageCheck aria-hidden="true" />,
-};
+function getCategoryIcon(deviceType: string) {
+  if (deviceType === "mouse") return <Mouse aria-hidden="true" />;
+  if (deviceType === "keyboard") return <Keyboard aria-hidden="true" />;
+  if (deviceType === "headset") return <Headphones aria-hidden="true" />;
+  if (deviceType === "monitor") return <Monitor aria-hidden="true" />;
+  if (deviceType === "component") return <Cpu aria-hidden="true" />;
+  if (deviceType === "accessory") return <PackageCheck aria-hidden="true" />;
+  return <Gamepad2 aria-hidden="true" />;
+}
 
-const setupIcons = [Mouse, Keyboard, Monitor];
+function ProductVisual({ product }: { product: Product }) {
+  if (product.primary_media?.file) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element
+      <img
+        src={product.primary_media.file}
+        alt={product.primary_media.alt_text || product.name}
+        className="h-full w-full object-cover"
+      />
+    );
+  }
 
-const pageSize = 6;
+  return (
+    <div className="flex h-full items-center justify-center">
+      <div className="grid size-28 place-items-center border border-red-300/25 bg-black/45 text-red-100 shadow-[0_0_46px_rgba(255,23,68,0.18)]">
+        {getCategoryIcon(product.category.device_type)}
+      </div>
+    </div>
+  );
+}
 
-export function CatalogPage({ locale, dictionary }: CatalogPageProps) {
-  const page = dictionary.pages.catalog;
+export function CatalogPage({
+  locale,
+  dictionary,
+  products,
+  categories,
+  initialCategory = "all",
+}: CatalogPageProps) {
   const text = catalogText[locale];
   const [query, setQuery] = useState("");
-  const [category, setCategory] = useState<Category>("all");
+  const [category, setCategory] = useState(initialCategory);
   const [sort, setSort] = useState<SortKey>("popular");
   const [pageIndex, setPageIndex] = useState(1);
+
+  const categoryOptions = useMemo<CatalogCategoryOption[]>(
+    () => [
+      {
+        value: "all",
+        label: text.allCategories,
+        icon: <Sparkles aria-hidden="true" />,
+      },
+      ...categories.map((item) => ({
+        value: item.slug,
+        label: item.name,
+        icon: getCategoryIcon(item.device_type),
+      })),
+    ],
+    [categories, text.allCategories],
+  );
 
   const filteredProducts = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
     const filtered = products.filter((product) => {
-      const matchesCategory = category === "all" || product.category === category;
+      const matchesCategory = category === "all" || product.category.slug === category;
       const matchesQuery =
         !normalizedQuery ||
-        product.title.toLowerCase().includes(normalizedQuery) ||
-        product.description.toLowerCase().includes(normalizedQuery);
+        product.name.toLowerCase().includes(normalizedQuery) ||
+        product.short_description.toLowerCase().includes(normalizedQuery) ||
+        product.brand.name.toLowerCase().includes(normalizedQuery);
 
       return matchesCategory && matchesQuery;
     });
 
     return filtered.toSorted((a, b) => {
       if (sort === "priceAsc") {
-        return a.price - b.price;
+        return Number(a.price) - Number(b.price);
       }
 
       if (sort === "priceDesc") {
-        return b.price - a.price;
+        return Number(b.price) - Number(a.price);
       }
 
-      if (sort === "rating") {
-        return b.rating - a.rating;
+      if (sort === "newest") {
+        return Number(b.is_new_arrival) - Number(a.is_new_arrival);
       }
 
-      return b.badges.length + b.rating - (a.badges.length + a.rating);
+      return (
+        Number(b.is_best_seller) * 3 +
+        Number(b.is_featured) * 2 +
+        Number(b.has_discount) -
+        (Number(a.is_best_seller) * 3 + Number(a.is_featured) * 2 + Number(a.has_discount))
+      );
     });
-  }, [category, query, sort]);
+  }, [category, products, query, sort]);
 
   const totalPages = Math.max(1, Math.ceil(filteredProducts.length / pageSize));
   const safePageIndex = Math.min(pageIndex, totalPages);
@@ -416,18 +260,10 @@ export function CatalogPage({ locale, dictionary }: CatalogPageProps) {
     safePageIndex * pageSize,
   );
 
-  function updateCategory(nextCategory: Category) {
-    setCategory(nextCategory);
-    setPageIndex(1);
-  }
-
-  function updateQuery(nextQuery: string) {
-    setQuery(nextQuery);
-    setPageIndex(1);
-  }
-
-  function updateSort(nextSort: string) {
-    setSort(nextSort as SortKey);
+  function resetFilters() {
+    setQuery("");
+    setCategory("all");
+    setSort("popular");
     setPageIndex(1);
   }
 
@@ -446,34 +282,43 @@ export function CatalogPage({ locale, dictionary }: CatalogPageProps) {
                 placeholder={text.searchPlaceholder}
                 icon={<Search aria-hidden="true" />}
                 value={query}
-                onChange={(event) => updateQuery(event.target.value)}
+                onChange={(event) => {
+                  setQuery(event.target.value);
+                  setPageIndex(1);
+                }}
               />
               <CyberNativeSelect
                 label={text.sort}
                 value={sort}
-                onValueChange={updateSort}
+                onValueChange={(value) => {
+                  setSort(value as SortKey);
+                  setPageIndex(1);
+                }}
                 options={[
                   { value: "popular", label: text.sortOptions.popular },
                   { value: "priceAsc", label: text.sortOptions.priceAsc },
                   { value: "priceDesc", label: text.sortOptions.priceDesc },
-                  { value: "rating", label: text.sortOptions.rating },
+                  { value: "newest", label: text.sortOptions.newest },
                 ]}
               />
             </div>
 
             <div className="flex flex-wrap gap-2">
-              {(Object.keys(text.categories) as Category[]).map((item) => (
+              {categoryOptions.map((item) => (
                 <button
-                  key={item}
+                  key={item.value}
                   type="button"
-                  onClick={() => updateCategory(item)}
+                  onClick={() => {
+                    setCategory(item.value);
+                    setPageIndex(1);
+                  }}
                   className={cn(
                     "font-tech inline-flex min-h-10 items-center gap-2 border border-white/10 bg-white/[0.035] px-3 text-sm uppercase tracking-[0.08em] text-zinc-300 transition hover:border-red-400/35 hover:bg-red-500/10 hover:text-red-100 [&_svg]:size-4",
-                    category === item && "border-red-400/55 bg-red-500/14 text-red-100",
+                    category === item.value && "border-red-400/55 bg-red-500/14 text-red-100",
                   )}
                 >
-                  {categoryIcons[item]}
-                  {text.categories[item]}
+                  {item.icon}
+                  {item.label}
                 </button>
               ))}
             </div>
@@ -487,12 +332,7 @@ export function CatalogPage({ locale, dictionary }: CatalogPageProps) {
                   type="button"
                   variant="ghost"
                   size="sm"
-                  onClick={() => {
-                    setQuery("");
-                    setCategory("all");
-                    setSort("popular");
-                    setPageIndex(1);
-                  }}
+                  onClick={resetFilters}
                 >
                   {text.reset}
                 </CyberButton>
@@ -502,27 +342,57 @@ export function CatalogPage({ locale, dictionary }: CatalogPageProps) {
         </CyberCard>
       </section>
 
-      <section className="mx-auto mt-8 max-w-7xl">
-        {paginatedProducts.length ? (
+      <section className="mx-auto mt-8 max-w-7xl py-3">
+        {products.length === 0 ? (
+          <CyberCard variant="glass" className="overflow-hidden border-cyan-300/15 bg-black/35">
+            <CyberCardContent className="flex flex-col items-center justify-center gap-5 p-10 text-center sm:p-14">
+              <div className="grid size-20 place-items-center rounded-full border border-cyan-300/20 bg-cyan-300/8 text-cyan-100 shadow-[0_0_34px_rgba(34,211,238,0.14)]">
+                <PackageCheck className="size-9" />
+              </div>
+              <div className="space-y-3">
+                <CyberBadge variant="cyan" glow>
+                  {text.featured}
+                </CyberBadge>
+                <h2 className="font-display text-4xl tracking-[0.04em] text-white">
+                  {text.emptyTitle}
+                </h2>
+                <p className="mx-auto max-w-2xl text-base leading-8 text-zinc-400">
+                  {text.emptySubtitle}
+                </p>
+              </div>
+            </CyberCardContent>
+          </CyberCard>
+        ) : paginatedProducts.length ? (
           <div className="grid auto-rows-fr gap-6 md:grid-cols-2 xl:grid-cols-3">
-            {paginatedProducts.map((product) => (
-              <CyberProductCard
-                key={product.id}
-                image={<ProductVisual category={product.category} />}
-                title={product.title}
-                description={product.description}
-                price={formatPrice(product.price)}
-                oldPrice={product.oldPrice ? formatPrice(product.oldPrice) : undefined}
-                rating={product.rating}
-                ctaLabel={text.addToCart}
-                detailsLabel={text.details}
-                favoriteLabel={text.favorite}
-                badges={product.badges.map((badge) => ({
-                  label: text.badgeLabels[badge],
-                  variant: badge === "sale" ? "green" : badge === "pro" ? "violet" : "red",
-                }))}
-              />
-            ))}
+            {paginatedProducts.map((product) => {
+              const badges = [];
+              if (product.is_new_arrival) {
+                badges.push({ label: text.badgeNew, variant: "cyan" as const });
+              }
+              if (product.is_best_seller) {
+                badges.push({ label: text.badgeHit, variant: "red" as const });
+              }
+              if (product.has_discount) {
+                badges.push({ label: text.badgeSale, variant: "green" as const });
+              }
+
+              return (
+                <CyberProductCard
+                  key={product.id}
+                  image={<ProductVisual product={product} />}
+                  title={getLocalizedProductName(product, locale)}
+                  description={product.short_description}
+                  price={formatProductPrice(product, locale)}
+                  oldPrice={formatProductOldPrice(product, locale)}
+                  ctaLabel={text.addToCart}
+                  detailsLabel={text.details}
+                  favoriteLabel={text.favorite}
+                  detailsHref={`?product=${product.slug}`}
+                  ctaHref="#"
+                  badges={badges}
+                />
+              );
+            })}
           </div>
         ) : (
           <CyberCard variant="glass">
@@ -533,74 +403,49 @@ export function CatalogPage({ locale, dictionary }: CatalogPageProps) {
         )}
       </section>
 
-      <section className="mx-auto mt-8 py-5 flex max-w-7xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div className="font-tech text-sm uppercase tracking-[0.1em] text-zinc-500">
-          {text.page} {safePageIndex} / {totalPages}
-        </div>
-        <div className="flex gap-2">
-          <button
-            type="button"
-            onClick={() => setPageIndex((current) => Math.max(1, current - 1))}
-            disabled={safePageIndex === 1}
-            className="grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-zinc-300 transition hover:border-red-400/35 hover:text-red-100 disabled:cursor-not-allowed disabled:opacity-35"
-            aria-label="Previous page"
-          >
-            <ChevronLeft className="size-4" aria-hidden="true" />
-          </button>
-          {Array.from({ length: totalPages }, (_, index) => index + 1).map((item) => (
+      {products.length ? (
+        <section className="mx-auto mt-8 flex max-w-7xl flex-col gap-3 py-5 sm:flex-row sm:items-center sm:justify-between">
+          <div className="font-tech text-sm uppercase tracking-[0.1em] text-zinc-500">
+            {text.page} {safePageIndex} / {totalPages}
+          </div>
+          <div className="flex gap-2">
             <button
-              key={item}
               type="button"
-              onClick={() => setPageIndex(item)}
-              className={cn(
-                "grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-sm text-zinc-300 transition hover:border-red-400/35 hover:text-red-100",
-                safePageIndex === item && "border-red-400/55 bg-red-500/14 text-red-100",
-              )}
-              aria-current={safePageIndex === item ? "page" : undefined}
+              onClick={() => setPageIndex((current) => Math.max(1, current - 1))}
+              disabled={safePageIndex === 1}
+              className="grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-zinc-300 transition hover:border-red-400/35 hover:text-red-100 disabled:cursor-not-allowed disabled:opacity-35"
+              aria-label="Previous page"
             >
-              {item}
+              <ChevronLeft className="size-4" aria-hidden="true" />
             </button>
-          ))}
-          <button
-            type="button"
-            onClick={() => setPageIndex((current) => Math.min(totalPages, current + 1))}
-            disabled={safePageIndex === totalPages}
-            className="grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-zinc-300 transition hover:border-red-400/35 hover:text-red-100 disabled:cursor-not-allowed disabled:opacity-35"
-            aria-label="Next page"
-          >
-            <ChevronRight className="size-4" aria-hidden="true" />
-          </button>
-        </div>
-      </section>
+            {Array.from({ length: totalPages }, (_, index) => index + 1).map((item) => (
+              <button
+                key={item}
+                type="button"
+                onClick={() => setPageIndex(item)}
+                className={cn(
+                  "grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-sm text-zinc-300 transition hover:border-red-400/35 hover:text-red-100",
+                  safePageIndex === item && "border-red-400/55 bg-red-500/14 text-red-100",
+                )}
+                aria-current={safePageIndex === item ? "page" : undefined}
+              >
+                {item}
+              </button>
+            ))}
+            <button
+              type="button"
+              onClick={() => setPageIndex((current) => Math.min(totalPages, current + 1))}
+              disabled={safePageIndex === totalPages}
+              className="grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-zinc-300 transition hover:border-red-400/35 hover:text-red-100 disabled:cursor-not-allowed disabled:opacity-35"
+              aria-label="Next page"
+            >
+              <ChevronRight className="size-4" aria-hidden="true" />
+            </button>
+          </div>
+        </section>
+      ) : null}
 
       <Footer locale={locale} dictionary={dictionary} className="-mx-4 sm:-mx-6 lg:-mx-8" />
     </main>
   );
-}
-
-function ProductVisual({ category }: { category: Exclude<Category, "all"> }) {
-  const Icon =
-    category === "mice"
-      ? Mouse
-      : category === "keyboards"
-        ? Keyboard
-        : category === "headsets"
-          ? Headphones
-      : category === "components"
-        ? Cpu
-        : category === "setups"
-          ? PackageCheck
-          : Gamepad2;
-
-  return (
-    <div className="flex h-full items-center justify-center">
-      <div className="grid size-28 place-items-center border border-red-300/25 bg-black/45 text-red-100 shadow-[0_0_46px_rgba(255,23,68,0.18)]">
-        <Icon className="size-12" aria-hidden="true" />
-      </div>
-    </div>
-  );
-}
-
-function formatPrice(value: number) {
-  return `${value.toLocaleString("ru-RU")} сом`;
 }

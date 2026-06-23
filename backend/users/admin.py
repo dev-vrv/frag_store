@@ -7,14 +7,48 @@ from .models import ContactMessage, User
 @admin.register(User)
 class UserAdmin(BaseUserAdmin):
     ordering = ('-date_joined',)
-    list_display = ('email', 'first_name', 'last_name', 'phone', 'is_staff', 'is_active')
-    list_filter = ('is_staff', 'is_active', 'is_superuser', 'date_joined')
-    search_fields = ('email', 'first_name', 'last_name', 'phone')
-    readonly_fields = ('last_login', 'date_joined')
+    list_display = (
+        'email',
+        'first_name',
+        'last_name',
+        'phone',
+        'personal_discount_percent',
+        'email_verified',
+        'two_factor_enabled',
+        'is_staff',
+        'is_active',
+    )
+    list_filter = ('is_staff', 'is_active', 'is_superuser', 'email_verified', 'two_factor_enabled', 'date_joined')
+    search_fields = ('email', 'first_name', 'last_name', 'phone', 'city', 'address')
+    readonly_fields = ('last_login', 'date_joined', 'email_verification_expires_at')
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('first_name', 'last_name', 'phone')}),
+        (
+            'Personal info',
+            {
+                'fields': (
+                    'first_name',
+                    'last_name',
+                    'phone',
+                    'city',
+                    'address',
+                    'personal_discount_percent',
+                )
+            },
+        ),
+        (
+            'Security',
+            {
+                'fields': (
+                    'email_verified',
+                    'two_factor_enabled',
+                    'pending_two_factor_enabled',
+                    'email_verification_code',
+                    'email_verification_expires_at',
+                )
+            },
+        ),
         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
         ('Important dates', {'fields': ('last_login', 'date_joined')}),
     )
@@ -23,7 +57,7 @@ class UserAdmin(BaseUserAdmin):
             None,
             {
                 'classes': ('wide',),
-                'fields': ('email', 'first_name', 'last_name', 'phone', 'password1', 'password2'),
+                'fields': ('email', 'first_name', 'last_name', 'phone', 'city', 'address', 'password1', 'password2'),
             },
         ),
     )

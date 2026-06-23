@@ -7,7 +7,11 @@ from .models import ContactMessage
 from .serializers import (
     AuthResponseSerializer,
     ContactMessageSerializer,
+    EmailVerificationConfirmSerializer,
+    EmailVerificationRequestSerializer,
     LoginSerializer,
+    ProfileSerializer,
+    ProfileUpdateSerializer,
     RegisterSerializer,
     UserSerializer,
 )
@@ -36,7 +40,33 @@ class CurrentUserAPIView(APIView):
     permission_classes = (IsAuthenticated,)
 
     def get(self, request):
-        return Response(UserSerializer(request.user).data)
+        return Response(ProfileSerializer(request.user).data)
+
+    def patch(self, request):
+        serializer = ProfileUpdateSerializer(request.user, data=request.data, partial=True, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(ProfileSerializer(request.user).data)
+
+
+class EmailVerificationRequestAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        serializer = EmailVerificationRequestSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({'detail': 'Verification code sent.'})
+
+
+class EmailVerificationConfirmAPIView(APIView):
+    permission_classes = (IsAuthenticated,)
+
+    def post(self, request):
+        serializer = EmailVerificationConfirmSerializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(ProfileSerializer(request.user).data)
 
 
 class ContactMessageViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
