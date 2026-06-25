@@ -1,16 +1,9 @@
-import {
-  LocalizedPlaceholderPage,
-  generateLocaleStaticParams,
-  getLocalizedMetadata,
-  type LocalePageProps,
-} from "@/app/[locale]/localized";
+import { redirect } from "next/navigation";
 
-export const generateStaticParams = generateLocaleStaticParams;
+import { type LocalePageProps } from "@/app/[locale]/localized";
 
-export function generateMetadata({ params }: LocalePageProps) {
-  return getLocalizedMetadata(params, "comparison");
-}
+export default async function LocalizedComparisonPage({ params }: LocalePageProps) {
+  const { locale } = await params;
 
-export default function LocalizedComparisonPage({ params }: LocalePageProps) {
-  return <LocalizedPlaceholderPage params={params} page="comparison" />;
+  redirect(`/${locale}/catalog`);
 }

@@ -12,6 +12,8 @@ class OrderItemInline(admin.TabularInline):
         'product',
         'product_name',
         'product_sku',
+        'selected_color_name',
+        'selected_color_hex',
         'unit_price',
         'unit_old_price',
         'quantity',
@@ -117,7 +119,7 @@ class OrderAdmin(admin.ModelAdmin):
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ('order', 'product_name', 'product_sku', 'quantity', 'unit_price', 'line_total')
+    list_display = ('order', 'product_name', 'selected_color_name', 'product_sku', 'quantity', 'unit_price', 'line_total')
     list_filter = ('currency', 'created_at')
     search_fields = ('order__number', 'product_name', 'product_sku')
 
@@ -132,12 +134,14 @@ class PromoCodeAdmin(admin.ModelAdmin):
         'is_active',
         'usage_limit',
         'used_count',
+        'used_by',
+        'used_at',
         'starts_at',
         'ends_at',
     )
     list_filter = ('discount_type', 'is_active', 'starts_at', 'ends_at')
     search_fields = ('code', 'title', 'description')
-    readonly_fields = ('used_count', 'created_at', 'updated_at')
+    readonly_fields = ('used_count', 'used_by', 'used_by_email', 'used_at', 'created_at', 'updated_at')
     fieldsets = (
         (
             'Промокод',
@@ -160,6 +164,9 @@ class PromoCodeAdmin(admin.ModelAdmin):
                     'ends_at',
                     'usage_limit',
                     'used_count',
+                    'used_by',
+                    'used_by_email',
+                    'used_at',
                 )
             },
         ),

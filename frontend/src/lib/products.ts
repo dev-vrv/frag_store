@@ -28,6 +28,13 @@ export interface ProductMedia {
   sort_order: number;
 }
 
+export interface ProductColorOption {
+  id: number;
+  name: string;
+  hex_code: string;
+  sort_order: number;
+}
+
 export interface Product {
   id: number;
   name: string;
@@ -45,6 +52,8 @@ export interface Product {
   is_new_arrival: boolean;
   has_discount: boolean;
   discount_percent: number;
+  color: string;
+  color_options: ProductColorOption[];
   category: ProductCategory;
   brand: ProductBrand;
   primary_media: ProductMedia | null;
@@ -295,7 +304,7 @@ export async function getProducts(searchParams?: Record<string, string>) {
   try {
     const query = new URLSearchParams(searchParams).toString();
     const response = await fetch(`${getApiUrl()}/products/${query ? `?${query}` : ""}`, {
-      next: { revalidate: 60 },
+      cache: "no-store",
     });
 
     if (!response.ok) {
@@ -317,7 +326,7 @@ export async function getBestSellerProducts(limit = 12) {
 export async function getProductCategories() {
   try {
     const response = await fetch(`${getApiUrl()}/products/categories/`, {
-      next: { revalidate: 60 },
+      cache: "no-store",
     });
 
     if (!response.ok) {
@@ -334,7 +343,7 @@ export async function getProductCategories() {
 export async function getProductBrands() {
   try {
     const response = await fetch(`${getApiUrl()}/products/brands/`, {
-      next: { revalidate: 60 },
+      cache: "no-store",
     });
 
     if (!response.ok) {

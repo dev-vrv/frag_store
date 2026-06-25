@@ -38,8 +38,10 @@ import {
   CyberSheetTitle,
   CyberSheetTrigger,
 } from "@/components/cyber";
+import { useCart } from "@/components/Cart/CartProvider";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
+import { toggleFavorite, useFavoriteIds } from "@/lib/favorites";
 import { type Dictionary, type Locale } from "@/lib/i18n";
 import {
   formatProductOldPrice,
@@ -80,7 +82,8 @@ type QuickFilterKey =
   | "discount"
   | "newArrival"
   | "featured"
-  | "inStock";
+  | "inStock"
+  | "favorites";
 
 interface QuickFilterOption {
   key: QuickFilterKey;
@@ -122,7 +125,9 @@ const catalogText: Record<
     previousPage: string;
     nextPage: string;
     quickFilters: string;
+    favoritesOnly: string;
     detailsLead: string;
+    colorLabel: string;
     sku: string;
     brandLabel: string;
     categoryLabel: string;
@@ -163,7 +168,9 @@ const catalogText: Record<
     previousPage: "Предыдущая страница",
     nextPage: "Следующая страница",
     quickFilters: "Быстрые фильтры",
+    favoritesOnly: "Избранное",
     detailsLead: "Полные характеристики и описание",
+    colorLabel: "Цвет",
     sku: "Артикул",
     brandLabel: "Марка",
     categoryLabel: "Категория",
@@ -176,6 +183,7 @@ const catalogText: Record<
       { key: "newArrival", label: "Новинки" },
       { key: "featured", label: "Подборка" },
       { key: "inStock", label: "В наличии" },
+      { key: "favorites", label: "Избранное" },
     ],
     badgeNew: "Новинка",
     badgeHit: "Хит",
@@ -209,7 +217,9 @@ const catalogText: Record<
     previousPage: "Previous page",
     nextPage: "Next page",
     quickFilters: "Quick filters",
+    favoritesOnly: "Favorites",
     detailsLead: "Full description and product details",
+    colorLabel: "Color",
     sku: "SKU",
     brandLabel: "Brand",
     categoryLabel: "Category",
@@ -222,6 +232,7 @@ const catalogText: Record<
       { key: "newArrival", label: "New arrivals" },
       { key: "featured", label: "Featured" },
       { key: "inStock", label: "In stock" },
+      { key: "favorites", label: "Favorites" },
     ],
     badgeNew: "New",
     badgeHit: "Hit",
@@ -255,7 +266,9 @@ const catalogText: Record<
     previousPage: "Мурунку барак",
     nextPage: "Кийинки барак",
     quickFilters: "Тез фильтрлер",
+    favoritesOnly: "Тандалгандар",
     detailsLead: "Толук сүрөттөмө жана товар маалыматы",
+    colorLabel: "Түс",
     sku: "Артикул",
     brandLabel: "Марка",
     categoryLabel: "Категория",
@@ -268,6 +281,7 @@ const catalogText: Record<
       { key: "newArrival", label: "Жаңы товарлар" },
       { key: "featured", label: "Подборка" },
       { key: "inStock", label: "Бар" },
+      { key: "favorites", label: "Тандалгандар" },
     ],
     badgeNew: "Жаңы",
     badgeHit: "Хит",
@@ -316,9 +330,11 @@ export function CatalogPage({
   initialBrand = "all",
 }: CatalogPageProps) {
   const text = catalogText[locale];
+  const { addItem } = useCart();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const favoriteIds = useFavoriteIds();
   const [query, setQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState(() =>
     parseInitialCategories(initialCategory),
@@ -326,13 +342,16 @@ export function CatalogPage({
   const [brand, setBrand] = useState(initialBrand);
   const [sort, setSort] = useState<SortKey>("popular");
   const [pageIndex, setPageIndex] = useState(1);
+  const [selectedProductColorId, setSelectedProductColorId] = useState<number | null>(null);
   const [quickFilters, setQuickFilters] = useState<Record<QuickFilterKey, boolean>>({
     bestSeller: false,
     discount: false,
     newArrival: false,
     featured: false,
     inStock: false,
+    favorites: false,
   });
+  const favoriteIdSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
 
   const categoryOptions = useMemo<CatalogCategoryOption[]>(
     () => [
@@ -382,7 +401,8 @@ export function CatalogPage({
         (!quickFilters.discount || product.has_discount) &&
         (!quickFilters.newArrival || product.is_new_arrival) &&
         (!quickFilters.featured || product.is_featured) &&
-        (!quickFilters.inStock || product.quantity_in_stock > 0);
+        (!quickFilters.inStock || product.quantity_in_stock > 0) &&
+        (!quickFilters.favorites || favoriteIdSet.has(product.id));
 
       return matchesCategory && matchesBrand && matchesQuery && matchesQuickFilters;
     });
@@ -407,7 +427,7 @@ export function CatalogPage({
         (Number(a.is_best_seller) * 3 + Number(a.is_featured) * 2 + Number(a.has_discount))
       );
     });
-  }, [brand, products, query, quickFilters, selectedCategorySet, sort]);
+  }, [brand, favoriteIdSet, products, query, quickFilters, selectedCategorySet, sort]);
 
   const totalPages = Math.max(1, Math.ceil(filteredProducts.length / pageSize));
   const safePageIndex = Math.min(pageIndex, totalPages);
@@ -428,8 +448,17 @@ export function CatalogPage({
   const selectedProduct = selectedProductSlug
     ? products.find((product) => product.slug === selectedProductSlug) ?? null
     : null;
+  const resolvedSelectedProductColorId =
+    selectedProductColorId ?? selectedProduct?.color_options[0]?.id ?? null;
 
   function updateProductQuery(productSlug: string | null) {
+    if (productSlug) {
+      const product = products.find((item) => item.slug === productSlug) ?? null;
+      setSelectedProductColorId(product?.color_options[0]?.id ?? null);
+    } else {
+      setSelectedProductColorId(null);
+    }
+
     const params = new URLSearchParams(searchParams.toString());
 
     if (productSlug) {
@@ -478,6 +507,7 @@ export function CatalogPage({
       newArrival: false,
       featured: false,
       inStock: false,
+      favorites: false,
     });
     setPageIndex(1);
   }
@@ -551,8 +581,8 @@ export function CatalogPage({
           {text.quickFilters}
         </p>
         <div className="grid grid-cols-2 gap-2">
-          {text.quickFilterOptions.map((option) => {
-            const isActive = quickFilters[option.key];
+            {text.quickFilterOptions.map((option) => {
+              const isActive = quickFilters[option.key];
 
             return (
               <button
@@ -843,7 +873,7 @@ export function CatalogPage({
                     badges.push({ label: text.badgeHit, variant: "red" as const });
                   }
                   if (product.has_discount) {
-                    badges.push({ label: text.badgeSale, variant: "green" as const });
+                    badges.push({ label: `-${product.discount_percent}%`, variant: "warning" as const });
                   }
 
                   return (
@@ -855,11 +885,18 @@ export function CatalogPage({
                       description={product.short_description}
                       price={formatProductPrice(product, locale)}
                       oldPrice={formatProductOldPrice(product, locale)}
-                      ctaLabel={text.addToCart}
+                      ctaLabel={product.quantity_in_stock > 0 ? text.addToCart : text.outOfStock}
                       detailsLabel={text.details}
                       favoriteLabel={text.favorite}
+                      favoriteActive={favoriteIdSet.has(product.id)}
+                      onFavoriteClick={() => toggleFavorite(product.id)}
                       onDetailsClick={() => updateProductQuery(product.slug)}
-                      ctaHref="#"
+                      onCtaClick={() =>
+                        product.color_options.length
+                          ? updateProductQuery(product.slug)
+                          : addItem(product.id, 1)
+                      }
+                      ctaDisabled={product.quantity_in_stock <= 0}
                       badges={badges}
                     />
                   );
@@ -948,7 +985,7 @@ export function CatalogPage({
                   <div className="flex flex-wrap gap-2.5">
                     {selectedProduct.is_new_arrival ? <CyberBadge variant="cyan" glow>{text.badgeNew}</CyberBadge> : null}
                     {selectedProduct.is_best_seller ? <CyberBadge variant="red" glow>{text.badgeHit}</CyberBadge> : null}
-                    {selectedProduct.has_discount ? <CyberBadge variant="green" glow>{text.badgeSale}</CyberBadge> : null}
+                    {selectedProduct.has_discount ? <CyberBadge variant="warning" glow>{`-${selectedProduct.discount_percent}%`}</CyberBadge> : null}
                   </div>
 
                   <div className="space-y-3">
@@ -990,12 +1027,36 @@ export function CatalogPage({
                     </p>
                   </div>
 
+                  {selectedProduct.color_options.length ? (
+                    <CyberNativeSelect
+                      label={text.colorLabel}
+                      value={String(resolvedSelectedProductColorId ?? "")}
+                      onValueChange={(value) => setSelectedProductColorId(Number(value))}
+                      options={selectedProduct.color_options.map((option) => ({
+                        value: String(option.id),
+                        label: option.name,
+                      }))}
+                    />
+                  ) : selectedProduct.color ? (
+                    <div className="border border-white/10 bg-white/[0.03] px-4 py-3">
+                      <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">{text.colorLabel}</p>
+                      <p className="mt-2 text-base text-zinc-100">{selectedProduct.color}</p>
+                    </div>
+                  ) : null}
+
                   <div className="mt-auto grid gap-3 sm:grid-cols-2">
                     <CyberButton variant="ghost" onClick={() => updateProductQuery(null)}>
                       {text.details}
                     </CyberButton>
-                    <CyberButton variant="primary">
-                      {text.addToCart}
+                    <CyberButton
+                      variant="primary"
+                      onClick={() => addItem(selectedProduct.id, 1, resolvedSelectedProductColorId)}
+                      disabled={
+                        selectedProduct.quantity_in_stock <= 0 ||
+                        (selectedProduct.color_options.length > 0 && !resolvedSelectedProductColorId)
+                      }
+                    >
+                      {selectedProduct.quantity_in_stock > 0 ? text.addToCart : text.outOfStock}
                     </CyberButton>
                   </div>
                 </div>

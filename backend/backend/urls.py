@@ -36,6 +36,7 @@ urlpatterns = [
     path('api/auth/jwt/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('api/auth/jwt/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/accounts/', include('allauth.urls')),
+    path('api/cart/', include('cart.urls')),
     path('api/content/', include('content.urls')),
     path('api/orders/', include('orders.urls')),
     path('api/products/', include('products.urls')),

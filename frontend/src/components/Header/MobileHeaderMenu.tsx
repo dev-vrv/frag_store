@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, Menu, ShoppingCart } from "lucide-react";
+import { Menu, ShoppingCart } from "lucide-react";
 import { FaUserAstronaut } from "react-icons/fa";
 
 import {
@@ -31,11 +31,6 @@ export function MobileHeaderMenu({
   const primaryLinks = dictionary.nav;
   const infoLinks = dictionary.info.items;
   const actionLinks = [
-    {
-      href: "/comparison",
-      label: dictionary.comparison,
-      icon: <Heart aria-hidden="true" />,
-    },
     {
       href: "/cart",
       label: dictionary.cart,

@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Brand, Product, ProductCategory, ProductFeature, ProductMedia, ProductSpecification
+from .models import Brand, Product, ProductCategory, ProductColorOption, ProductFeature, ProductMedia, ProductSpecification
 
 
 class ProductMediaInline(admin.TabularInline):
@@ -28,6 +28,14 @@ class ProductSpecificationInline(admin.TabularInline):
     verbose_name = 'Характеристика'
     verbose_name_plural = 'Характеристики'
     classes = ('collapse',)
+
+
+class ProductColorOptionInline(admin.TabularInline):
+    model = ProductColorOption
+    extra = 0
+    fields = ('name', 'hex_code', 'sort_order', 'is_active')
+    verbose_name = 'Цвет'
+    verbose_name_plural = 'Цвета'
 
 
 @admin.register(Brand)
@@ -75,7 +83,7 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', 'sku', 'short_description', 'description')
     list_editable = ('price', 'old_price', 'quantity_in_stock', 'availability_status', 'is_best_seller', 'is_featured', 'is_new_arrival', 'is_active')
     prepopulated_fields = {'slug': ('name',)}
-    inlines = (ProductMediaInline, ProductFeatureInline, ProductSpecificationInline)
+    inlines = (ProductColorOptionInline, ProductMediaInline, ProductFeatureInline, ProductSpecificationInline)
     fieldsets = (
         (
             'Основное',

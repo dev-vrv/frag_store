@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, ShoppingCart } from "lucide-react";
+import { ShoppingCart } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { FaUserAstronaut } from "react-icons/fa";
@@ -9,7 +9,8 @@ import { FaUserAstronaut } from "react-icons/fa";
 import { LocaleSwitcher } from "@/components/Header/LocaleSwitcher";
 import { MobileHeaderMenu } from "@/components/Header/MobileHeaderMenu";
 import { Nav } from "@/components/Nav/Nav";
-import { AUTH_STATE_CHANGE_EVENT, hasAuthCookies } from "@/lib/auth";
+import { useCart } from "@/components/Cart/CartProvider";
+import { AUTH_STATE_CHANGE_EVENT, getAuthSessionState } from "@/lib/auth";
 import { type Dictionary, type Locale, localizePath, stripLocaleFromPath } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
@@ -20,6 +21,7 @@ export interface HeaderProps {
 
 export function Header({ locale, dictionary }: HeaderProps) {
   const pathname = stripLocaleFromPath(usePathname() || "/");
+  const { quantityTotal } = useCart();
   const [isHidden, setIsHidden] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const lastScrollYRef = useRef(0);
@@ -51,15 +53,22 @@ export function Header({ locale, dictionary }: HeaderProps) {
   }, []);
 
   useEffect(() => {
-    function syncAuthState() {
-      setIsAuthenticated(hasAuthCookies());
+    let active = true;
+
+    async function syncAuthState() {
+      const nextState = await getAuthSessionState();
+
+      if (active) {
+        setIsAuthenticated(nextState);
+      }
     }
 
-    syncAuthState();
+    void syncAuthState();
     window.addEventListener(AUTH_STATE_CHANGE_EVENT, syncAuthState);
     window.addEventListener("focus", syncAuthState);
 
     return () => {
+      active = false;
       window.removeEventListener(AUTH_STATE_CHANGE_EVENT, syncAuthState);
       window.removeEventListener("focus", syncAuthState);
     };
@@ -96,18 +105,11 @@ export function Header({ locale, dictionary }: HeaderProps) {
         <div className="hidden items-center gap-3 lg:flex">
           <LocaleSwitcher locale={locale} label="Сменить язык" />
           <HeaderIconLink
-            href="/comparison"
-            locale={locale}
-            label={dictionary.comparison}
-            active={pathname === "/comparison"}
-          >
-            <Heart aria-hidden="true" />
-          </HeaderIconLink>
-          <HeaderIconLink
             href="/cart"
             locale={locale}
             label={dictionary.cart}
             active={pathname === "/cart"}
+            badge={quantityTotal}
           >
             <ShoppingCart aria-hidden="true" />
           </HeaderIconLink>
@@ -144,12 +146,14 @@ function HeaderIconLink({
   locale,
   label,
   active,
+  badge,
   children,
 }: {
   href: string;
   locale: Locale;
   label: string;
   active: boolean;
+  badge?: number;
   children: ReactNode;
 }) {
   return (
@@ -158,12 +162,17 @@ function HeaderIconLink({
       aria-label={label}
       aria-current={active ? "page" : undefined}
       className={cn(
-        "grid size-10 place-items-center border border-white/15 bg-white/[0.04] text-zinc-300 transition hover:border-red-400/45 hover:bg-red-500/10 hover:text-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/30 [&_svg]:size-4",
+        "relative grid size-10 place-items-center border border-white/15 bg-white/[0.04] text-zinc-300 transition hover:border-red-400/45 hover:bg-red-500/10 hover:text-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/30 [&_svg]:size-4",
         active &&
           "border-red-400/55 bg-red-500/14 text-red-100 shadow-[0_0_18px_rgba(255,23,68,0.18)]",
       )}
     >
       {children}
+      {badge ? (
+        <span className="absolute -right-1.5 -top-1.5 grid min-w-5 place-items-center rounded-full border border-lime-300/35 bg-lime-300/90 px-1 text-[10px] font-bold leading-5 text-black shadow-[0_0_18px_rgba(190,242,100,0.3)]">
+          {badge > 99 ? "99+" : badge}
+        </span>
+      ) : null}
     </Link>
   );
 }

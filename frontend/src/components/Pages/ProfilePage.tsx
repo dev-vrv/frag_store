@@ -185,6 +185,11 @@ export function ProfilePage({ locale, dictionary, user }: ProfilePageProps) {
                                 <p className="mt-1 break-all text-xs uppercase tracking-[0.12em] text-zinc-500">
                                   SKU: {item.product_sku}
                                 </p>
+                                {item.selected_color_name ? (
+                                  <p className="mt-2 text-xs uppercase tracking-[0.12em] text-zinc-400">
+                                    Цвет: {item.selected_color_name}
+                                  </p>
+                                ) : null}
                               </div>
                               <div className="text-left sm:text-right">
                                 <p className="text-sm text-zinc-300">

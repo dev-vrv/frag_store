@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Brand, Product, ProductCategory, ProductFeature, ProductMedia, ProductSpecification
+from .models import Brand, Product, ProductCategory, ProductColorOption, ProductFeature, ProductMedia, ProductSpecification
 
 
 class BrandSerializer(serializers.ModelSerializer):
@@ -81,10 +81,22 @@ class ProductSpecificationSerializer(serializers.ModelSerializer):
         )
 
 
+class ProductColorOptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProductColorOption
+        fields = (
+            'id',
+            'name',
+            'hex_code',
+            'sort_order',
+        )
+
+
 class ProductListSerializer(serializers.ModelSerializer):
     category = ProductCategorySerializer(read_only=True)
     brand = BrandSerializer(read_only=True)
     primary_media = serializers.SerializerMethodField()
+    color_options = serializers.SerializerMethodField()
     has_discount = serializers.BooleanField(read_only=True)
     discount_percent = serializers.IntegerField(read_only=True)
 
@@ -106,6 +118,8 @@ class ProductListSerializer(serializers.ModelSerializer):
             'is_new_arrival',
             'has_discount',
             'discount_percent',
+            'color',
+            'color_options',
             'category',
             'brand',
             'primary_media',
@@ -119,6 +133,9 @@ class ProductListSerializer(serializers.ModelSerializer):
             return None
         return ProductMediaSerializer(media, context=self.context).data
 
+    def get_color_options(self, obj):
+        return ProductColorOptionSerializer(obj.active_color_options, many=True).data
+
 
 class ProductDetailSerializer(ProductListSerializer):
     media_items = ProductMediaSerializer(many=True, read_only=True)
@@ -129,7 +146,6 @@ class ProductDetailSerializer(ProductListSerializer):
         fields = ProductListSerializer.Meta.fields + (
             'description',
             'warranty_months',
-            'color',
             'weight_grams',
             'release_date',
             'meta_title',

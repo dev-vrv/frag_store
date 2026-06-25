@@ -175,6 +175,10 @@ class Product(models.Model):
         self.full_clean()
         super().save(*args, **kwargs)
 
+    @property
+    def active_color_options(self):
+        return self.color_options.filter(is_active=True).order_by('sort_order', 'id')
+
 
 class ProductMedia(models.Model):
     class MediaType(models.TextChoices):
@@ -204,6 +208,40 @@ class ProductMedia(models.Model):
 
         if not self.file and not self.external_url:
             raise ValidationError(_('Необходимо указать файл или внешнюю ссылку.'))
+
+
+class ProductColorOption(models.Model):
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='color_options', verbose_name=_('товар'))
+    name = models.CharField(_('название цвета'), max_length=80)
+    hex_code = models.CharField(_('hex код'), max_length=7, blank=True)
+    sort_order = models.PositiveIntegerField(_('порядок сортировки'), default=0)
+    is_active = models.BooleanField(_('активен'), default=True)
+    created_at = models.DateTimeField(_('создано'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('обновлено'), auto_now=True)
+
+    class Meta:
+        ordering = ('sort_order', 'id')
+        verbose_name = _('цвет товара')
+        verbose_name_plural = _('цвета товара')
+        constraints = [
+            models.UniqueConstraint(fields=('product', 'name'), name='unique_product_color_name'),
+        ]
+
+    def __str__(self):
+        return f'{self.product.name} - {self.name}'
+
+    def clean(self):
+        super().clean()
+
+        if self.hex_code:
+            normalized_hex = self.hex_code.strip().upper()
+            if not normalized_hex.startswith('#') or len(normalized_hex) != 7:
+                raise ValidationError({'hex_code': _('Hex код должен быть в формате #RRGGBB.')})
+            self.hex_code = normalized_hex
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 class ProductFeature(models.Model):

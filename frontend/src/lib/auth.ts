@@ -21,6 +21,8 @@ export interface AuthOrderItem {
   product_slug: string;
   product_name: string;
   product_sku: string;
+  selected_color_name: string;
+  selected_color_hex: string;
   unit_price: string;
   unit_old_price: string | null;
   quantity: number;
@@ -144,22 +146,25 @@ export function register(payload: RegisterPayload) {
 }
 
 export function persistAuthCookies(payload: AuthTokens) {
-  if (typeof document === "undefined") {
-    return;
-  }
+  void payload;
 
-  document.cookie = `${ACCESS_TOKEN_COOKIE}=${encodeURIComponent(payload.access)}; Path=/; Max-Age=${60 * 30}; SameSite=Lax`;
-  document.cookie = `${REFRESH_TOKEN_COOKIE}=${encodeURIComponent(payload.refresh)}; Path=/; Max-Age=${60 * 60 * 24 * 7}; SameSite=Lax`;
-  window.dispatchEvent(new Event(AUTH_STATE_CHANGE_EVENT));
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(AUTH_STATE_CHANGE_EVENT));
+  }
 }
 
-export function hasAuthCookies() {
-  if (typeof document === "undefined") {
+export async function getAuthSessionState() {
+  const response = await fetch("/api/auth/session", {
+    method: "GET",
+    cache: "no-store",
+  });
+
+  if (!response.ok) {
     return false;
   }
 
-  const cookies = document.cookie;
-  return cookies.includes(`${ACCESS_TOKEN_COOKIE}=`) || cookies.includes(`${REFRESH_TOKEN_COOKIE}=`);
+  const payload = (await response.json()) as { authenticated?: boolean };
+  return Boolean(payload.authenticated);
 }
 
 export async function logout() {

@@ -13,9 +13,11 @@ import {
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { CyberBadge, CyberButton, CyberCard, CyberCardContent, CyberProductCard } from "@/components/cyber";
+import { useCart } from "@/components/Cart/CartProvider";
 import { Section } from "@/components/Sections/Section";
 import RevealOnScroll from "@/components/ui/RevealOnScroll";
 import AnimatedText from "@/components/ui/animatedText";
+import { toggleFavorite, useFavoriteIds } from "@/lib/favorites";
 import { type Dictionary, type Locale, localizePath } from "@/lib/i18n";
 import {
   formatProductOldPrice,
@@ -68,6 +70,8 @@ function ProductVisual({ product }: { product: Product }) {
 }
 
 export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps) {
+  const { addItem } = useCart();
+  const favoriteIds = useFavoriteIds();
   const catalogHref = localizePath("/catalog", locale);
   const blogHref = localizePath("/blog", locale);
   const laneRef = useRef<HTMLDivElement | null>(null);
@@ -84,6 +88,7 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
     () => [...products, ...products, ...products],
     [products],
   );
+  const favoriteIdSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
 
   useEffect(() => {
     const lane = laneRef.current;
@@ -292,7 +297,7 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
                     badges.push({ label: content.badgeHit, variant: "red" as const });
                   }
                   if (product.has_discount) {
-                    badges.push({ label: `-${product.discount_percent}%`, variant: "green" as const });
+                    badges.push({ label: `-${product.discount_percent}%`, variant: "warning" as const });
                   }
 
                   return (
@@ -311,8 +316,12 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
                         detailsLabel={content.detailsCta}
                         ctaLabel={content.productCta}
                         detailsHref={`${catalogHref}?product=${product.slug}`}
-                        ctaHref={catalogHref}
+                        ctaHref={product.color_options.length ? `${catalogHref}?product=${product.slug}` : undefined}
+                        onCtaClick={product.color_options.length ? undefined : () => addItem(product.id, 1)}
+                        ctaDisabled={product.quantity_in_stock <= 0}
                         favoriteLabel={content.favoriteLabel}
+                        favoriteActive={favoriteIdSet.has(product.id)}
+                        onFavoriteClick={() => toggleFavorite(product.id)}
                       />
                     </div>
                   );

@@ -24,6 +24,16 @@ class PromoCode(models.Model):
     ends_at = models.DateTimeField(_('действует до'), blank=True, null=True)
     usage_limit = models.PositiveIntegerField(_('лимит использований'), blank=True, null=True)
     used_count = models.PositiveIntegerField(_('использовано'), default=0)
+    used_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        related_name='used_promo_codes',
+        blank=True,
+        null=True,
+        verbose_name=_('кто использовал'),
+    )
+    used_by_email = models.EmailField(_('email использовавшего'), blank=True)
+    used_at = models.DateTimeField(_('использован в'), blank=True, null=True)
     created_at = models.DateTimeField(_('создано'), auto_now_add=True)
     updated_at = models.DateTimeField(_('обновлено'), auto_now=True)
 
@@ -155,6 +165,8 @@ class OrderItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.PROTECT, related_name='order_items', verbose_name=_('товар'))
     product_name = models.CharField(_('название товара'), max_length=180)
     product_sku = models.CharField(_('артикул товара'), max_length=64)
+    selected_color_name = models.CharField(_('выбранный цвет'), max_length=80, blank=True)
+    selected_color_hex = models.CharField(_('hex выбранного цвета'), max_length=7, blank=True)
     unit_price = models.DecimalField(_('цена за единицу'), max_digits=10, decimal_places=2)
     unit_old_price = models.DecimalField(_('старая цена за единицу'), max_digits=10, decimal_places=2, blank=True, null=True)
     quantity = models.PositiveIntegerField(_('количество'))
@@ -168,7 +180,8 @@ class OrderItem(models.Model):
         verbose_name_plural = _('позиции заказа')
 
     def __str__(self):
-        return f'{self.order.number} - {self.product_name}'
+        color_suffix = f' ({self.selected_color_name})' if self.selected_color_name else ''
+        return f'{self.order.number} - {self.product_name}{color_suffix}'
 
     def clean(self):
         super().clean()

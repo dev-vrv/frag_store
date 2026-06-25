@@ -57,7 +57,6 @@ export function Footer({ locale, dictionary, className }: FooterProps) {
   const storeLinks = [
     { href: "/catalog", label: pages.catalog.title },
     { href: "/cart", label: pages.cart.title },
-    { href: "/comparison", label: pages.comparison.title },
     { href: "/blog", label: pages.blog.title },
   ];
   const supportLinks = [
