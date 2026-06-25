@@ -111,9 +111,12 @@ const cartText = {
     checkoutPending: "Оформляем...",
     successTitle: "Заказ отправлен",
     successText: "Менеджер подтвердит наличие, стоимость и детали доставки.",
+    guestSuccessText: "Заказ сформирован. Наш менеджер свяжется с вами для подтверждения и уточнения деталей.",
     successRedirect: "Автопереход в раздел заказов через",
+    guestSuccessRedirect: "Автопереход в каталог через",
     successRedirectSeconds: "сек.",
     successViewOrders: "Перейти к заказам",
+    successGoToCatalog: "Перейти в каталог",
     orderNumber: "Номер заказа",
     continueShopping: "Продолжить покупки",
     qty: "Кол-во",
@@ -182,9 +185,12 @@ const cartText = {
     checkoutPending: "Submitting...",
     successTitle: "Order submitted",
     successText: "A manager will confirm stock, final amount, and delivery details.",
+    guestSuccessText: "The order has been created. Our manager will contact you to confirm the details.",
     successRedirect: "Auto redirect to orders in",
+    guestSuccessRedirect: "Auto redirect to catalog in",
     successRedirectSeconds: "sec.",
     successViewOrders: "Open orders",
+    successGoToCatalog: "Open catalog",
     orderNumber: "Order number",
     continueShopping: "Continue shopping",
     qty: "Qty",
@@ -253,9 +259,12 @@ const cartText = {
     checkoutPending: "Жөнөтүлүүдө...",
     successTitle: "Заказ жөнөтүлдү",
     successText: "Менеджер калдыкты, акыркы сумманы жана жеткирүү шарттарын тактайт.",
+    guestSuccessText: "Заказ түзүлдү. Биздин менеджер сиз менен байланышып, деталдарды тактайт.",
     successRedirect: "Заказдар бөлүмүнө автоматтык өтүү",
+    guestSuccessRedirect: "Каталогго автоматтык өтүү",
     successRedirectSeconds: "сек. кийин",
     successViewOrders: "Заказдарды ачуу",
+    successGoToCatalog: "Каталогго өтүү",
     orderNumber: "Заказ номери",
     continueShopping: "Сооданы улантуу",
     qty: "Саны",
@@ -329,6 +338,10 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
   const catalogHref = localizePath("/catalog", locale);
   const profileHref = localizePath("/profile", locale);
   const profileOrdersHref = `${profileHref}?tab=orders`;
+  const successRedirectHref = user ? profileOrdersHref : catalogHref;
+  const successDescription = user ? text.successText : text.guestSuccessText;
+  const successRedirectLabel = user ? text.successRedirect : text.guestSuccessRedirect;
+  const successActionLabel = user ? text.successViewOrders : text.successGoToCatalog;
   const isSummaryLoading = items.length > 0 && !summary && !summaryError;
   const previewResolvedColorId = previewSelectedColorId ?? previewProduct?.color_options[0]?.id ?? null;
 
@@ -412,14 +425,14 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
     }, 1000);
 
     const timeoutId = window.setTimeout(() => {
-      router.push(profileOrdersHref);
+      router.push(successRedirectHref);
     }, 10000);
 
     return () => {
       window.clearInterval(countdownId);
       window.clearTimeout(timeoutId);
     };
-  }, [checkoutSuccess, profileOrdersHref, router]);
+  }, [checkoutSuccess, router, successRedirectHref]);
 
   const canSubmit = useMemo(() => {
     if (!summary || summary.items.length === 0) {
@@ -1054,7 +1067,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                 {text.successTitle}
               </p>
               <p className="mt-3 max-w-xl text-sm leading-7 text-zinc-300 sm:text-base">
-                {text.successText}
+                {successDescription}
               </p>
             </div>
 
@@ -1076,16 +1089,16 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
             </div>
 
             <div className="mt-6 rounded-xl border border-cyan-300/14 bg-cyan-300/[0.05] px-4 py-3 text-center font-tech text-[11px] uppercase tracking-[0.16em] text-cyan-100">
-              {text.successRedirect} {redirectCountdown} {text.successRedirectSeconds}
+              {successRedirectLabel} {redirectCountdown} {text.successRedirectSeconds}
             </div>
 
             <CyberButton
               type="button"
               variant="primary"
               className="mt-4 w-full"
-              onClick={() => router.push(profileOrdersHref)}
+              onClick={() => router.push(successRedirectHref)}
             >
-              {text.successViewOrders}
+              {successActionLabel}
             </CyberButton>
           </div>
 
