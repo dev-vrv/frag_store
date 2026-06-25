@@ -4,13 +4,14 @@ import Link from "next/link";
 import { type FormEvent, useState } from "react";
 import { FaLock, FaPhoneAlt, FaRegEnvelope, FaUser } from "react-icons/fa";
 
+import { GeometricBackdrop } from "@/components/Background/GeometricBackdrop";
+import { BrandLogo } from "@/components/Brand/BrandLogo";
 import {
   CyberBadge,
   CyberButton,
   CyberCard,
   CyberCardContent,
   CyberInput,
-  CyberLaserText,
   CyberTabs,
   CyberTabsContent,
   CyberTabsList,
@@ -150,17 +151,17 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
           )}
         />
       </div>
-      <div
-        className={cn(
-          "cyber-grid absolute inset-0 -z-20 transition-opacity duration-700",
-          mode === "login" ? "opacity-70" : "opacity-55",
-        )}
+      <GeometricBackdrop
+        className={cn("absolute inset-0 -z-20 transition-opacity duration-700", mode === "login" ? "opacity-100" : "opacity-0")}
+        variant="auth-login"
+        gridOpacityClassName="opacity-70"
+        scanlineOpacityClassName="opacity-35"
       />
-      <div
-        className={cn(
-          "cyber-scanline absolute inset-0 -z-10 transition-opacity duration-700",
-          mode === "login" ? "opacity-35" : "opacity-25",
-        )}
+      <GeometricBackdrop
+        className={cn("absolute inset-0 -z-20 transition-opacity duration-700", mode === "register" ? "opacity-100" : "opacity-0")}
+        variant="auth-register"
+        gridOpacityClassName="opacity-55"
+        scanlineOpacityClassName="opacity-25"
       />
       <div
         className={cn(
@@ -186,12 +187,9 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
             <CyberBadge variant="red" glow>
               {auth.loginTab}
             </CyberBadge>
-            <CyberLaserText
-              as="h1"
-              text={auth.brand}
-              className="mt-7 block text-5xl text-red-100 sm:text-7xl"
-              speedMs={42}
-            />
+            <div className="mt-7">
+              <BrandLogo className="w-[13rem] sm:w-[18rem]" imageClassName="brightness-[1.12]" priority />
+            </div>
             <h2 className="font-display mt-8 text-2xl font-normal uppercase tracking-[0.08em] text-lime-100">
               {auth.loginWelcomeTitle}
             </h2>
@@ -209,12 +207,9 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
             <CyberBadge variant="violet" glow>
               {auth.registerTab}
             </CyberBadge>
-            <CyberLaserText
-              as="h1"
-              text={auth.brand}
-              className="mt-7 block text-5xl text-red-100 sm:text-7xl"
-              speedMs={42}
-            />
+            <div className="mt-7">
+              <BrandLogo className="w-[13rem] sm:w-[18rem]" imageClassName="brightness-[1.12]" priority />
+            </div>
             <h2 className="font-display mt-8 text-2xl font-normal uppercase tracking-[0.08em] text-cyan-100">
               {auth.registerWelcomeTitle}
             </h2>
@@ -237,22 +232,20 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
             <Link
               href={localizePath("/", locale)}
               className={cn(
-                "font-display mb-8 inline-flex flex-col items-start border px-5 py-4 leading-none tracking-[0.08em] transition-all duration-500 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2",
+                "mb-8 inline-flex items-center px-1 py-1 transition-all duration-500 hover:scale-[1.02] focus-visible:outline-none focus-visible:ring-2",
                 mode === "login"
-                  ? "border-red-400/30 bg-red-500/8 shadow-[0_0_30px_rgba(255,23,68,0.12)] focus-visible:ring-red-300/35"
-                  : "border-fuchsia-300/30 bg-fuchsia-500/8 shadow-[0_0_30px_rgba(217,70,239,0.12)] focus-visible:ring-fuchsia-300/35",
+                  ? "focus-visible:ring-red-300/35"
+                  : "focus-visible:ring-fuchsia-300/35",
               )}
               aria-label="Frag Store"
             >
-              <span
-                className={cn(
-                  "text-3xl font-normal transition-colors duration-500 sm:text-4xl",
-                  mode === "login" ? "text-red-500" : "text-fuchsia-300",
+              <BrandLogo
+                className="w-[9.4rem] sm:w-[11rem]"
+                imageClassName={cn(
+                  "transition-all duration-500",
+                  mode === "login" ? "brightness-[1.06]" : "brightness-[1.08] hue-rotate-[8deg]",
                 )}
-              >
-                FRAG
-              </span>
-              <span className="mt-1 text-2xl font-normal text-white sm:text-3xl">STORE</span>
+              />
             </Link>
             <CyberTabs
               value={mode}

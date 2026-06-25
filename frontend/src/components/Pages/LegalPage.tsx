@@ -169,7 +169,7 @@ export function LegalPage({ locale, dictionary, page }: LegalPageProps) {
       <Header locale={locale} dictionary={dictionary.header} />
       <ContactCyberBackground />
 
-      <section className="relative z-10 mx-auto max-w-7xl">
+      <section className="relative z-10 mx-auto w-full max-w-7xl">
         <CyberBadge variant="red" glow>
           {pageDictionary.badge}
         </CyberBadge>
@@ -179,12 +179,12 @@ export function LegalPage({ locale, dictionary, page }: LegalPageProps) {
           className="mt-7 block text-4xl text-red-100 sm:text-6xl"
           speedMs={34}
         />
-        <p className="mt-6 max-w-3xl text-xl leading-9 text-zinc-400">
+        <p className="mt-6 max-w-5xl text-xl leading-9 text-zinc-400">
           {pageDictionary.subtitle}
         </p>
       </section>
 
-      <section className="relative z-10 mx-auto py-8 grid max-w-7xl gap-5 lg:grid-cols-2">
+      <section className="relative z-10 mx-auto grid w-full max-w-7xl auto-rows-fr gap-5 py-8 lg:grid-cols-2">
         {legalContent[locale][page].map((section) => (
           <ContactPanel key={section.title} contentClassName="h-full p-6">
             <div className="mb-4 flex items-center gap-3">

@@ -15,6 +15,7 @@ from products.models import (
     ProductColorOption,
     ProductFeature,
     ProductSpecification,
+    ProductTechnicalDetails,
 )
 
 
@@ -151,6 +152,7 @@ class Command(BaseCommand):
         products = self._ensure_products(categories, brands, rng)
         self._apply_flags(products)
         self._sync_related_data(products, categories, rng)
+        self._sync_technical_details(products, rng)
         self._print_summary(products)
 
     def _ensure_categories(self) -> dict[str, ProductCategory]:
@@ -339,6 +341,117 @@ class Command(BaseCommand):
         ProductColorOption.objects.bulk_create(color_options)
         ProductFeature.objects.bulk_create(features)
         ProductSpecification.objects.bulk_create(specifications)
+
+    def _sync_technical_details(self, products: list[Product], rng: random.Random) -> None:
+        ProductTechnicalDetails.objects.filter(product__in=products).delete()
+
+        details: list[ProductTechnicalDetails] = []
+
+        for product in products:
+            device_type = product.category.device_type
+            common = {
+                'product': product,
+                'form_factor': self._resolve_form_factor(device_type, rng),
+                'connectivity': self._resolve_connectivity(device_type, rng),
+                'compatibility': self._resolve_compatibility(device_type),
+                'software_support': rng.choice(('Windows / macOS', 'Windows', 'Windows / macOS / Linux')),
+                'battery_life_hours': rng.choice((30, 45, 60, 80)) if device_type in {
+                    ProductCategory.DeviceType.MOUSE,
+                    ProductCategory.DeviceType.HEADSET,
+                } and 'wireless' in product.description.lower() else None,
+                'cable_length_m': Decimal(rng.choice(('1.8', '2.0'))) if device_type != ProductCategory.DeviceType.MONITOR else None,
+                'switch_type': rng.choice(('Optical', 'Mechanical', 'Magnetic')) if device_type in {
+                    ProductCategory.DeviceType.MOUSE,
+                    ProductCategory.DeviceType.KEYBOARD,
+                } else '',
+                'response_time_ms': self._resolve_response_time(device_type, rng),
+            }
+
+            payload = common | self._resolve_device_payload(device_type, rng)
+            details.append(ProductTechnicalDetails(**payload))
+
+        ProductTechnicalDetails.objects.bulk_create(details)
+
+    def _resolve_device_payload(self, device_type: str, rng: random.Random) -> dict:
+        if device_type == ProductCategory.DeviceType.MOUSE:
+            return {
+                'sensor_model': rng.choice(('PixArt 3395', 'PixArt 3950', 'PAW3370')),
+                'dpi': rng.choice((19000, 26000, 30000)),
+                'polling_rate_hz': rng.choice((1000, 2000, 4000, 8000)),
+                'programmable_buttons': rng.randint(5, 9),
+            }
+        if device_type == ProductCategory.DeviceType.KEYBOARD:
+            return {
+                'keyboard_layout': rng.choice(('65%', '75%', 'TKL', 'Full-size')),
+                'key_count': rng.choice((68, 75, 87, 98)),
+                'switch_profile': rng.choice(('Linear', 'Tactile', 'Speed Linear', 'Magnetic')),
+                'hot_swap': rng.choice((True, False)),
+                'backlight': rng.choice(('RGB per-key', 'South-facing RGB', 'White LED')),
+                'polling_rate_hz': rng.choice((1000, 4000, 8000)),
+            }
+        if device_type == ProductCategory.DeviceType.HEADSET:
+            return {
+                'driver_size_mm': rng.choice((40, 50, 53)),
+                'microphone': rng.choice(('ENC boom mic', 'Detachable cardioid mic', 'Flip-to-mute mic')),
+                'surround_sound': rng.choice(('Stereo', 'Virtual 7.1', 'Spatial audio')),
+                'frequency_response': rng.choice(('20-20000 Hz', '18-22000 Hz', '20-40000 Hz')),
+                'impedance_ohm': rng.choice((32, 38, 60)),
+                'sensitivity_db': rng.choice((96, 100, 103)),
+            }
+        if device_type == ProductCategory.DeviceType.MOUSEPAD:
+            return {
+                'surface_type': rng.choice(('Speed', 'Control', 'Hybrid')),
+                'pad_size': rng.choice(('L', 'XL', 'XXL', '490x420 mm')),
+                'thickness_mm': Decimal(rng.choice(('3.0', '4.0', '4.5'))),
+                'stitched_edges': rng.choice((True, False)),
+                'base_material': rng.choice(('Anti-slip rubber', 'Poron base', 'Natural rubber')),
+            }
+        if device_type == ProductCategory.DeviceType.MONITOR:
+            return {
+                'panel_type': rng.choice(('Fast IPS', 'QD-OLED', 'VA')),
+                'resolution': rng.choice(('1920x1080', '2560x1440', '3840x2160')),
+                'refresh_rate_hz': rng.choice((165, 240, 360)),
+                'brightness_nits': rng.choice((300, 350, 450, 1000)),
+                'contrast_ratio': rng.choice(('1000:1', '1200:1', '1500:1')),
+            }
+        return {
+            'material': rng.choice(('Aluminum', 'ABS plastic', 'Steel', 'Silicone')),
+            'extra_notes': rng.choice(('Desk-ready design', 'Travel-friendly build', 'Cable routing included')),
+        }
+
+    def _resolve_form_factor(self, device_type: str, rng: random.Random) -> str:
+        mapping = {
+            ProductCategory.DeviceType.MOUSE: ('Ergonomic right-hand', 'Symmetrical', 'Ultra-light'),
+            ProductCategory.DeviceType.KEYBOARD: ('Compact', 'TKL', 'Full-size'),
+            ProductCategory.DeviceType.HEADSET: ('Over-ear closed-back', 'Over-ear wireless', 'Lightweight frame'),
+            ProductCategory.DeviceType.MOUSEPAD: ('Desk mat', 'Extended', 'Tournament pad'),
+            ProductCategory.DeviceType.MONITOR: ('Flat panel', '27-inch', 'Esports display'),
+            ProductCategory.DeviceType.ACCESSORY: ('Desk accessory', 'Compact hub', 'Clamp mount'),
+        }
+        return rng.choice(mapping.get(device_type, ('Universal',)))
+
+    def _resolve_connectivity(self, device_type: str, rng: random.Random) -> str:
+        mapping = {
+            ProductCategory.DeviceType.MOUSE: ('Wired USB-C', '2.4G + USB-C', 'Bluetooth + 2.4G'),
+            ProductCategory.DeviceType.KEYBOARD: ('USB-C', '2.4G + Bluetooth', 'Detachable USB-C'),
+            ProductCategory.DeviceType.HEADSET: ('2.4G + Bluetooth', 'USB + 3.5 mm', 'USB-C wireless'),
+            ProductCategory.DeviceType.MOUSEPAD: ('Passive',),
+            ProductCategory.DeviceType.MONITOR: ('DisplayPort 1.4 + HDMI 2.1', 'DisplayPort + HDMI'),
+            ProductCategory.DeviceType.ACCESSORY: ('USB-C', 'USB-A / USB-C', '3.5 mm'),
+        }
+        return rng.choice(mapping.get(device_type, ('Universal',)))
+
+    def _resolve_compatibility(self, device_type: str) -> str:
+        if device_type == ProductCategory.DeviceType.MONITOR:
+            return 'PC, PS5, Xbox Series'
+        if device_type == ProductCategory.DeviceType.HEADSET:
+            return 'PC, PS5, Nintendo Switch'
+        return 'PC, macOS'
+
+    def _resolve_response_time(self, device_type: str, rng: random.Random) -> Decimal | None:
+        if device_type in {ProductCategory.DeviceType.MOUSE, ProductCategory.DeviceType.MONITOR}:
+            return Decimal(rng.choice(('0.2', '0.5', '1.0')))
+        return None
 
     def _resolve_availability(self, quantity: int, index: int) -> str:
         if quantity == 0:

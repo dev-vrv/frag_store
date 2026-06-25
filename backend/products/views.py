@@ -43,7 +43,7 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         queryset = (
             Product.objects.filter(is_active=True)
-            .select_related('category', 'brand')
+            .select_related('category', 'brand', 'technical_details')
             .prefetch_related('media_items', 'features', 'specifications', 'color_options')
             .order_by('-is_best_seller', '-is_featured', 'name')
         )

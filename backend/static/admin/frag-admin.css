@@ -157,21 +157,17 @@ body::before {
 
 .frag-admin-brand {
   display: inline-flex;
-  align-items: baseline;
-  gap: 0.42rem;
-  font-family: var(--font-family-primary);
-  font-size: 1.6rem;
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  align-items: center;
+  max-width: min(16rem, 34vw);
 }
 
-.frag-admin-brand__frag {
-  color: #ef233c;
-}
-
-.frag-admin-brand__store {
-  color: #ffffff;
+.frag-admin-brand__logo {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: 42px;
+  object-fit: contain;
 }
 
 .frag-admin-branding__meta {
@@ -409,6 +405,21 @@ body.login #content {
 
 .frag-admin-login__intro {
   margin-bottom: 1.25rem;
+}
+
+.frag-admin-login__logo-link {
+  display: inline-flex;
+  margin-bottom: 1rem;
+  max-width: 13rem;
+}
+
+.frag-admin-login__logo {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  height: auto;
+  max-height: 3.5rem;
+  object-fit: contain;
 }
 
 .frag-admin-login__eyebrow {

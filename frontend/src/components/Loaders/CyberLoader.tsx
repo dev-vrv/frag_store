@@ -2,6 +2,8 @@
 
 import * as React from "react";
 
+import { BrandLogo } from "@/components/Brand/BrandLogo";
+
 export function CyberLoader() {
   const [isOpen, setIsOpen] = React.useState(false);
   const [isHidden, setIsHidden] = React.useState(false);
@@ -44,8 +46,7 @@ export function CyberLoader() {
       <div className="cyber-loader__door cyber-loader__door--right" />
       <div className="cyber-loader__core">
         <div className="cyber-loader__mark" aria-label="Frag Store">
-          <span className="cyber-loader__mark-frag">FRAG</span>
-          <span className="cyber-loader__mark-store">STORE</span>
+          <BrandLogo className="w-[10rem] sm:w-[12rem]" imageClassName="brightness-[1.1]" priority />
         </div>
         <div className="cyber-loader__line" />
       </div>

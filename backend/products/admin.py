@@ -1,6 +1,15 @@
 from django.contrib import admin
 
-from .models import Brand, Product, ProductCategory, ProductColorOption, ProductFeature, ProductMedia, ProductSpecification
+from .models import (
+    Brand,
+    Product,
+    ProductCategory,
+    ProductColorOption,
+    ProductFeature,
+    ProductMedia,
+    ProductSpecification,
+    ProductTechnicalDetails,
+)
 
 
 class ProductMediaInline(admin.TabularInline):
@@ -36,6 +45,118 @@ class ProductColorOptionInline(admin.TabularInline):
     fields = ('name', 'hex_code', 'sort_order', 'is_active')
     verbose_name = 'Цвет'
     verbose_name_plural = 'Цвета'
+
+
+class ProductTechnicalDetailsInline(admin.StackedInline):
+    model = ProductTechnicalDetails
+    extra = 1
+    max_num = 1
+    can_delete = False
+    show_change_link = True
+    verbose_name = 'Технический профиль'
+    verbose_name_plural = 'Технический профиль'
+    fields = (
+        ('form_factor', 'connectivity'),
+        ('compatibility', 'software_support'),
+        ('battery_life_hours', 'cable_length_m'),
+        ('sensor_model', 'dpi'),
+        ('polling_rate_hz', 'response_time_ms'),
+        ('switch_type', 'programmable_buttons'),
+        ('keyboard_layout', 'key_count'),
+        ('switch_profile', 'hot_swap'),
+        ('backlight', 'driver_size_mm'),
+        ('microphone', 'surround_sound'),
+        ('frequency_response', 'impedance_ohm'),
+        ('sensitivity_db', 'surface_type'),
+        ('pad_size', 'thickness_mm'),
+        ('stitched_edges', 'base_material'),
+        ('panel_type', 'resolution'),
+        ('refresh_rate_hz', 'brightness_nits'),
+        ('contrast_ratio', 'material'),
+        ('extra_notes',),
+    )
+    classes = ('collapse',)
+
+
+@admin.register(ProductTechnicalDetails)
+class ProductTechnicalDetailsAdmin(admin.ModelAdmin):
+    list_display = ('product', 'product_category', 'connectivity', 'dpi', 'polling_rate_hz', 'refresh_rate_hz')
+    list_filter = ('product__category', 'product__brand')
+    search_fields = ('product__name', 'product__sku', 'sensor_model', 'switch_type', 'panel_type')
+    autocomplete_fields = ('product',)
+    fieldsets = (
+        (
+            'Общее',
+            {
+                'fields': (
+                    'product',
+                    ('form_factor', 'connectivity'),
+                    ('compatibility', 'software_support'),
+                    ('battery_life_hours', 'cable_length_m'),
+                    ('material', 'extra_notes'),
+                )
+            },
+        ),
+        (
+            'Мыши',
+            {
+                'classes': ('collapse',),
+                'fields': (
+                    ('sensor_model', 'dpi'),
+                    ('polling_rate_hz', 'response_time_ms'),
+                    ('switch_type', 'programmable_buttons'),
+                ),
+            },
+        ),
+        (
+            'Клавиатуры',
+            {
+                'classes': ('collapse',),
+                'fields': (
+                    ('keyboard_layout', 'key_count'),
+                    ('switch_profile', 'backlight'),
+                    ('hot_swap',),
+                ),
+            },
+        ),
+        (
+            'Гарнитуры',
+            {
+                'classes': ('collapse',),
+                'fields': (
+                    ('driver_size_mm', 'microphone'),
+                    ('surround_sound', 'frequency_response'),
+                    ('impedance_ohm', 'sensitivity_db'),
+                ),
+            },
+        ),
+        (
+            'Коврики',
+            {
+                'classes': ('collapse',),
+                'fields': (
+                    ('surface_type', 'pad_size'),
+                    ('thickness_mm', 'base_material'),
+                    ('stitched_edges',),
+                ),
+            },
+        ),
+        (
+            'Мониторы',
+            {
+                'classes': ('collapse',),
+                'fields': (
+                    ('panel_type', 'resolution'),
+                    ('refresh_rate_hz', 'brightness_nits'),
+                    ('contrast_ratio',),
+                ),
+            },
+        ),
+    )
+
+    @admin.display(description='Категория')
+    def product_category(self, obj):
+        return obj.product.category
 
 
 @admin.register(Brand)
@@ -83,7 +204,13 @@ class ProductAdmin(admin.ModelAdmin):
     search_fields = ('name', 'sku', 'short_description', 'description')
     list_editable = ('price', 'old_price', 'quantity_in_stock', 'availability_status', 'is_best_seller', 'is_featured', 'is_new_arrival', 'is_active')
     prepopulated_fields = {'slug': ('name',)}
-    inlines = (ProductColorOptionInline, ProductMediaInline, ProductFeatureInline, ProductSpecificationInline)
+    inlines = (
+        ProductTechnicalDetailsInline,
+        ProductColorOptionInline,
+        ProductMediaInline,
+        ProductFeatureInline,
+        ProductSpecificationInline,
+    )
     fieldsets = (
         (
             'Основное',

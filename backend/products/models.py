@@ -179,6 +179,13 @@ class Product(models.Model):
     def active_color_options(self):
         return self.color_options.filter(is_active=True).order_by('sort_order', 'id')
 
+    @property
+    def technical_highlights(self):
+        details = getattr(self, 'technical_details', None)
+        if not details:
+            return []
+        return details.get_highlights()
+
 
 class ProductMedia(models.Model):
     class MediaType(models.TextChoices):
@@ -281,3 +288,120 @@ class ProductSpecification(models.Model):
 
     def __str__(self):
         return f'{self.product.name} - {self.name}'
+
+
+class ProductTechnicalDetails(models.Model):
+    product = models.OneToOneField(
+        Product,
+        on_delete=models.CASCADE,
+        related_name='technical_details',
+        verbose_name=_('товар'),
+    )
+
+    form_factor = models.CharField(_('форм-фактор'), max_length=120, blank=True)
+    connectivity = models.CharField(_('подключение'), max_length=120, blank=True)
+    compatibility = models.CharField(_('совместимость'), max_length=160, blank=True)
+    software_support = models.CharField(_('ПО / драйверы'), max_length=160, blank=True)
+    battery_life_hours = models.PositiveIntegerField(_('автономность, ч'), blank=True, null=True)
+    cable_length_m = models.DecimalField(_('длина кабеля, м'), max_digits=4, decimal_places=2, blank=True, null=True)
+
+    sensor_model = models.CharField(_('сенсор'), max_length=120, blank=True)
+    dpi = models.PositiveIntegerField(_('DPI'), blank=True, null=True)
+    polling_rate_hz = models.PositiveIntegerField(_('polling rate, Гц'), blank=True, null=True)
+    response_time_ms = models.DecimalField(_('время отклика, мс'), max_digits=5, decimal_places=2, blank=True, null=True)
+    switch_type = models.CharField(_('тип переключателей'), max_length=120, blank=True)
+    programmable_buttons = models.PositiveIntegerField(_('программируемые кнопки'), blank=True, null=True)
+
+    keyboard_layout = models.CharField(_('раскладка / формат'), max_length=120, blank=True)
+    key_count = models.PositiveIntegerField(_('количество клавиш'), blank=True, null=True)
+    switch_profile = models.CharField(_('профиль свитчей'), max_length=120, blank=True)
+    hot_swap = models.BooleanField(_('hot-swap'), default=False)
+    backlight = models.CharField(_('подсветка'), max_length=120, blank=True)
+
+    driver_size_mm = models.PositiveIntegerField(_('диаметр драйверов, мм'), blank=True, null=True)
+    microphone = models.CharField(_('микрофон'), max_length=120, blank=True)
+    surround_sound = models.CharField(_('звук / surround'), max_length=120, blank=True)
+    frequency_response = models.CharField(_('частотный диапазон'), max_length=120, blank=True)
+    impedance_ohm = models.PositiveIntegerField(_('сопротивление, Ом'), blank=True, null=True)
+    sensitivity_db = models.PositiveIntegerField(_('чувствительность, дБ'), blank=True, null=True)
+
+    surface_type = models.CharField(_('тип поверхности'), max_length=120, blank=True)
+    pad_size = models.CharField(_('размер коврика'), max_length=120, blank=True)
+    thickness_mm = models.DecimalField(_('толщина, мм'), max_digits=4, decimal_places=1, blank=True, null=True)
+    stitched_edges = models.BooleanField(_('прошитые края'), default=False)
+    base_material = models.CharField(_('основание'), max_length=120, blank=True)
+
+    panel_type = models.CharField(_('тип матрицы'), max_length=120, blank=True)
+    resolution = models.CharField(_('разрешение'), max_length=120, blank=True)
+    refresh_rate_hz = models.PositiveIntegerField(_('частота обновления, Гц'), blank=True, null=True)
+    brightness_nits = models.PositiveIntegerField(_('яркость, нит'), blank=True, null=True)
+    contrast_ratio = models.CharField(_('контрастность'), max_length=120, blank=True)
+
+    material = models.CharField(_('материал'), max_length=120, blank=True)
+    extra_notes = models.CharField(_('дополнительно'), max_length=255, blank=True)
+
+    class Meta:
+        verbose_name = _('технический профиль товара')
+        verbose_name_plural = _('технические профили товаров')
+
+    def __str__(self):
+        return f'{self.product.name} - tech'
+
+    def get_highlights(self):
+        category_type = self.product.category.device_type
+        highlight_map = {
+            ProductCategory.DeviceType.MOUSE: (
+                ('DPI', self.dpi, ''),
+                ('Сенсор', self.sensor_model, ''),
+                ('Отклик', self.response_time_ms, ' мс'),
+                ('Polling', self.polling_rate_hz, ' Гц'),
+            ),
+            ProductCategory.DeviceType.KEYBOARD: (
+                ('Формат', self.keyboard_layout, ''),
+                ('Свитчи', self.switch_type or self.switch_profile, ''),
+                ('Polling', self.polling_rate_hz, ' Гц'),
+                ('Hot-swap', 'Да' if self.hot_swap else '', ''),
+            ),
+            ProductCategory.DeviceType.HEADSET: (
+                ('Драйверы', self.driver_size_mm, ' мм'),
+                ('Микрофон', self.microphone, ''),
+                ('Звук', self.surround_sound, ''),
+                ('Диапазон', self.frequency_response, ''),
+            ),
+            ProductCategory.DeviceType.MOUSEPAD: (
+                ('Поверхность', self.surface_type, ''),
+                ('Размер', self.pad_size, ''),
+                ('Толщина', self.thickness_mm, ' мм'),
+                ('Основание', self.base_material, ''),
+            ),
+            ProductCategory.DeviceType.MONITOR: (
+                ('Матрица', self.panel_type, ''),
+                ('Разрешение', self.resolution, ''),
+                ('Герцовка', self.refresh_rate_hz, ' Гц'),
+                ('Отклик', self.response_time_ms, ' мс'),
+            ),
+        }
+        generic_highlights = (
+            ('Подключение', self.connectivity, ''),
+            ('Форм-фактор', self.form_factor, ''),
+            ('Автономность', self.battery_life_hours, ' ч'),
+            ('Материал', self.material, ''),
+        )
+
+        source = highlight_map.get(category_type, generic_highlights)
+        highlights = []
+
+        for label, value, suffix in source:
+            if value in (None, '', False):
+                continue
+            highlights.append({'label': label, 'value': f'{value}{suffix}'})
+
+        if highlights:
+            return highlights[:4]
+
+        for label, value, suffix in generic_highlights:
+            if value in (None, '', False):
+                continue
+            highlights.append({'label': label, 'value': f'{value}{suffix}'})
+
+        return highlights[:4]

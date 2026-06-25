@@ -35,6 +35,68 @@ export interface ProductColorOption {
   sort_order: number;
 }
 
+export interface ProductFeature {
+  id: number;
+  title: string;
+  description: string;
+  sort_order: number;
+}
+
+export interface ProductSpecification {
+  id: number;
+  group: string;
+  name: string;
+  value: string;
+  unit: string;
+  value_type: string;
+  is_highlight: boolean;
+  sort_order: number;
+}
+
+export interface ProductTechnicalHighlight {
+  label: string;
+  value: string;
+}
+
+export interface ProductTechnicalDetails {
+  form_factor: string;
+  connectivity: string;
+  compatibility: string;
+  software_support: string;
+  battery_life_hours: number | null;
+  cable_length_m: string | null;
+  sensor_model: string;
+  dpi: number | null;
+  polling_rate_hz: number | null;
+  response_time_ms: string | null;
+  switch_type: string;
+  programmable_buttons: number | null;
+  keyboard_layout: string;
+  key_count: number | null;
+  switch_profile: string;
+  hot_swap: boolean;
+  backlight: string;
+  driver_size_mm: number | null;
+  microphone: string;
+  surround_sound: string;
+  frequency_response: string;
+  impedance_ohm: number | null;
+  sensitivity_db: number | null;
+  surface_type: string;
+  pad_size: string;
+  thickness_mm: string | null;
+  stitched_edges: boolean;
+  base_material: string;
+  panel_type: string;
+  resolution: string;
+  refresh_rate_hz: number | null;
+  brightness_nits: number | null;
+  contrast_ratio: string;
+  material: string;
+  extra_notes: string;
+  highlights: ProductTechnicalHighlight[];
+}
+
 export interface Product {
   id: number;
   name: string;
@@ -54,6 +116,10 @@ export interface Product {
   discount_percent: number;
   color: string;
   color_options: ProductColorOption[];
+  features?: ProductFeature[];
+  specifications?: ProductSpecification[];
+  technical_details: ProductTechnicalDetails | null;
+  technical_highlights: ProductTechnicalHighlight[];
   category: ProductCategory;
   brand: ProductBrand;
   primary_media: ProductMedia | null;
@@ -315,6 +381,22 @@ export async function getProducts(searchParams?: Record<string, string>) {
     return unwrapCollection(data).map(normalizeProduct);
   } catch {
     return [];
+  }
+}
+
+export async function getProductBySlug(slug: string) {
+  try {
+    const response = await fetch(`${getApiUrl()}/products/${slug}/`, {
+      cache: "no-store",
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return normalizeProduct((await response.json()) as Product);
+  } catch {
+    return null;
   }
 }
 

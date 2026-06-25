@@ -20,16 +20,22 @@ const productCardLabels = {
     cta: "Купить",
     details: "Подробнее",
     favorite: "В избранное",
+    price: "Цена",
+    oldPrice: "Было",
   },
   en: {
     cta: "Buy now",
     details: "Details",
     favorite: "Add to favorites",
+    price: "Price",
+    oldPrice: "Was",
   },
   kg: {
     cta: "Сатып алуу",
     details: "Кененирээк",
     favorite: "Тандалгандарга",
+    price: "Баасы",
+    oldPrice: "Мурун",
   },
 } as const;
 
@@ -57,6 +63,7 @@ export interface CyberProductCardProps
   onCtaClick?: () => void;
   onDetailsClick?: () => void;
   onFavoriteClick?: () => void;
+  hoverPanel?: React.ReactNode;
   radius?: "default" | "compact";
   tone?: "default" | "featured" | "catalog";
   liftOnHover?: boolean;
@@ -83,6 +90,7 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
       onCtaClick,
       onDetailsClick,
       onFavoriteClick,
+      hoverPanel,
       radius = "default",
       tone = "default",
       liftOnHover = true,
@@ -114,7 +122,7 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
         )}
         {...props}
       >
-        <CyberCardContent className="relative flex flex-1 flex-col gap-4 p-3.5 sm:gap-5 sm:p-4">
+        <CyberCardContent className="relative flex flex-1 flex-col gap-3 p-3.5 sm:gap-4 sm:p-4">
           <div
             className={cn(
               "relative aspect-[1/1] overflow-hidden border border-white/10",
@@ -180,15 +188,26 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
             >
               <Heart className={cn("size-4", favoriteActive && "fill-current")} aria-hidden="true" />
             </button>
+            {hoverPanel ? (
+              <div
+                className={cn(
+                  "pointer-events-none absolute inset-x-3 bottom-3 z-20 translate-y-3 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 max-md:hidden",
+                )}
+              >
+                <div className="rounded-[0.9rem] border border-white/16 bg-black/88 px-3 py-3 shadow-[0_20px_40px_rgba(0,0,0,0.45)] backdrop-blur-md">
+                  {hoverPanel}
+                </div>
+              </div>
+            ) : null}
           </div>
 
-          <div className="flex flex-1 flex-col gap-4">
-            <div className="flex flex-1 flex-col gap-2">
-              <h3 className="min-h-[3.3rem] text-balance font-display text-[1.2rem] font-normal leading-[1.02] tracking-[0.035em] text-white sm:min-h-[3.7rem] sm:text-[1.45rem]">
+          <div className="flex flex-1 flex-col gap-2.5">
+            <div className="flex flex-col gap-1.5">
+              <h3 className="min-h-[2.9rem] text-balance font-display text-[1.2rem] font-normal leading-[1.02] tracking-[0.035em] text-white sm:min-h-[3.2rem] sm:text-[1.45rem]">
                 {title}
               </h3>
               {description ? (
-                <p className="line-clamp-3 min-h-[3.9rem] text-[13px] leading-6 text-zinc-400 sm:text-[14px]">
+                <p className="line-clamp-3 min-h-[3rem] text-[13px] leading-5.5 text-zinc-400 sm:min-h-[3.2rem] sm:text-[14px] sm:leading-6">
                   {description}
                 </p>
               ) : null}
@@ -204,21 +223,20 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
 
             <div
               className={cn(
-                "border border-white/8 px-3.5 py-3",
+                "border-t border-white/10 px-0 pt-3",
                 isFeaturedTone
-                  ? "bg-[linear-gradient(180deg,rgba(255,255,255,0.035),rgba(255,255,255,0.015))]"
-                  : "bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))]",
-                isCompactRadius ? "rounded-[0.62rem]" : "rounded-[0.95rem]",
+                  ? "bg-transparent"
+                  : "bg-transparent",
               )}
             >
-              <div className="flex min-h-[4.25rem] items-end justify-between gap-4">
-                <div className="space-y-1">
-                  <div className="font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-500">
-                    {labels.cta}
+              <div className="flex min-h-[3.2rem] items-end justify-between gap-4">
+                <div className="space-y-0.5">
+                  <div className="font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-600">
+                    {labels.price}
                   </div>
                   <div
                     className={cn(
-                      "font-display text-[1.9rem] font-normal leading-none sm:text-[2.15rem]",
+                      "font-display text-[1.75rem] font-normal leading-none sm:text-[2rem]",
                       isFeaturedTone || isCatalogTone ? "text-white" : "text-amber-100",
                     )}
                   >
@@ -227,7 +245,10 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
                 </div>
                 {oldPrice ? (
                   <div className="pb-0.5 text-right">
-                    <div className="font-tech text-xs text-zinc-500 line-through sm:text-sm">{oldPrice}</div>
+                    <div className="font-tech text-[11px] uppercase tracking-[0.12em] text-zinc-600">
+                      {labels.oldPrice}
+                    </div>
+                    <div className="mt-1 font-tech text-xs text-zinc-500 line-through sm:text-sm">{oldPrice}</div>
                   </div>
                 ) : null}
               </div>
@@ -245,7 +266,7 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
                   : "h-11 w-full border-white/14 bg-white/[0.02] text-zinc-200 hover:border-amber-200/35 hover:text-white",
               )}
             >
-              <span className="relative z-10 inline-flex items-center justify-center gap-2 px-4 py-1">
+              <span className="relative z-10 max-w-7xl mx-auto inline-flex items-center justify-center gap-2 px-4 py-1">
                 {detailsLabel ?? labels.details}
               </span>
             </a>
@@ -273,7 +294,7 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
                   : "h-11 w-full border-lime-300/75 bg-[linear-gradient(135deg,rgba(163,230,53,0.18),rgba(163,230,53,0.05))] text-lime-100 hover:bg-lime-300 hover:text-zinc-950",
               )}
             >
-              <span className="relative z-10 inline-flex items-center justify-center gap-2 px-4 py-1">
+              <span className="relative z-10 max-w-7xl mx-auto inline-flex items-center justify-center gap-2 px-4 py-1">
                 {ctaLabel ?? labels.cta}
               </span>
             </a>

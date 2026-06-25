@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { Cpu, ShieldCheck } from "lucide-react";
 
+import { BrandLogo } from "@/components/Brand/BrandLogo";
 import { ContactSocialButtons } from "@/components/Contacts/ContactSocialButtons";
 import { type Dictionary, type Locale, localizePath } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -79,10 +80,10 @@ export function Footer({ locale, dictionary, className }: FooterProps) {
         <section className="space-y-5 text-center lg:text-left">
           <Link
             href={localizePath("/", locale)}
-            className="font-display inline-flex border border-red-400/35 bg-red-500/10 px-4 py-2 text-lg tracking-[0.08em] text-red-100 sm:text-xl"
+            className="inline-flex px-1 py-1"
             aria-label="Frag Store"
           >
-            {dictionary.header.logo}
+            <BrandLogo className="w-[8.6rem]" imageClassName="brightness-[1.08]" />
           </Link>
           <p className="mx-auto max-w-sm text-sm leading-7 text-zinc-400 lg:mx-0">{text.tagline}</p>
           <ContactSocialButtons locale={locale} className="justify-center lg:justify-start" />

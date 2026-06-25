@@ -43,6 +43,16 @@ services:
       - media_data:/app/backend/media
       - ./scripts:/app/scripts:ro
     command: ["/app/scripts/run-django-debug.sh"]
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          "cd /app/backend && python manage.py shell -c \"from products.models import Brand, Product, ProductCategory; import sys; sys.exit(0 if Product.objects.exists() and Brand.objects.exists() and ProductCategory.objects.exists() else 1)\"",
+        ]
+      interval: 5s
+      timeout: 10s
+      retries: 24
+      start_period: 15s
     depends_on:
       db:
         condition: service_healthy

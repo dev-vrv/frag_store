@@ -1,6 +1,15 @@
 from rest_framework import serializers
 
-from .models import Brand, Product, ProductCategory, ProductColorOption, ProductFeature, ProductMedia, ProductSpecification
+from .models import (
+    Brand,
+    Product,
+    ProductCategory,
+    ProductColorOption,
+    ProductFeature,
+    ProductMedia,
+    ProductSpecification,
+    ProductTechnicalDetails,
+)
 
 
 class BrandSerializer(serializers.ModelSerializer):
@@ -92,6 +101,54 @@ class ProductColorOptionSerializer(serializers.ModelSerializer):
         )
 
 
+class ProductTechnicalDetailsSerializer(serializers.ModelSerializer):
+    highlights = serializers.SerializerMethodField()
+
+    class Meta:
+        model = ProductTechnicalDetails
+        fields = (
+            'form_factor',
+            'connectivity',
+            'compatibility',
+            'software_support',
+            'battery_life_hours',
+            'cable_length_m',
+            'sensor_model',
+            'dpi',
+            'polling_rate_hz',
+            'response_time_ms',
+            'switch_type',
+            'programmable_buttons',
+            'keyboard_layout',
+            'key_count',
+            'switch_profile',
+            'hot_swap',
+            'backlight',
+            'driver_size_mm',
+            'microphone',
+            'surround_sound',
+            'frequency_response',
+            'impedance_ohm',
+            'sensitivity_db',
+            'surface_type',
+            'pad_size',
+            'thickness_mm',
+            'stitched_edges',
+            'base_material',
+            'panel_type',
+            'resolution',
+            'refresh_rate_hz',
+            'brightness_nits',
+            'contrast_ratio',
+            'material',
+            'extra_notes',
+            'highlights',
+        )
+
+    def get_highlights(self, obj):
+        return obj.get_highlights()
+
+
 class ProductListSerializer(serializers.ModelSerializer):
     category = ProductCategorySerializer(read_only=True)
     brand = BrandSerializer(read_only=True)
@@ -99,6 +156,11 @@ class ProductListSerializer(serializers.ModelSerializer):
     color_options = serializers.SerializerMethodField()
     has_discount = serializers.BooleanField(read_only=True)
     discount_percent = serializers.IntegerField(read_only=True)
+    technical_details = ProductTechnicalDetailsSerializer(read_only=True)
+    technical_highlights = serializers.ListField(read_only=True)
+    media_items = ProductMediaSerializer(many=True, read_only=True)
+    features = ProductFeatureSerializer(many=True, read_only=True)
+    specifications = ProductSpecificationSerializer(many=True, read_only=True)
 
     class Meta:
         model = Product
@@ -123,6 +185,11 @@ class ProductListSerializer(serializers.ModelSerializer):
             'category',
             'brand',
             'primary_media',
+            'media_items',
+            'features',
+            'specifications',
+            'technical_details',
+            'technical_highlights',
         )
 
     def get_primary_media(self, obj):
@@ -138,10 +205,6 @@ class ProductListSerializer(serializers.ModelSerializer):
 
 
 class ProductDetailSerializer(ProductListSerializer):
-    media_items = ProductMediaSerializer(many=True, read_only=True)
-    features = ProductFeatureSerializer(many=True, read_only=True)
-    specifications = ProductSpecificationSerializer(many=True, read_only=True)
-
     class Meta(ProductListSerializer.Meta):
         fields = ProductListSerializer.Meta.fields + (
             'description',

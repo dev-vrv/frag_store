@@ -16,6 +16,9 @@
     <div class="frag-admin-login__card">
       <div class="frag-admin-login__intro">
         <p class="frag-admin-login__eyebrow">FRAG STORE ADMIN</p>
+        <a href="{% url 'admin:index' %}" class="frag-admin-login__logo-link" aria-label="Frag Store admin">
+          <img src="{% static 'admin/frag-logo.webp' %}" alt="Frag Store" class="frag-admin-login__logo">
+        </a>
         <h1 class="frag-admin-login__title">{% translate "Вход в панель управления" %}</h1>
         <p class="frag-admin-login__text">
           {% translate "Используйте учетную запись администратора для доступа к товарам, заказам и контенту." %}

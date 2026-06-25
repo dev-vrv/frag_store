@@ -136,7 +136,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
                   <div className={cn("relative aspect-[4/3] overflow-hidden border-b border-white/10", theme.surface)}>
                     <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.07)_1px,transparent_1px)] bg-[size:22px_22px] opacity-40" />
                     <div className={cn("absolute -right-8 top-6 size-28 rounded-full blur-3xl transition-transform duration-500 group-hover:scale-110", theme.orb)} />
-                    <div className="relative z-10 flex h-full flex-col p-5 sm:p-6">
+                    <div className="relative z-10 max-w-7xl mx-auto flex h-full flex-col p-5 sm:p-6">
                       <div className="flex items-start justify-between gap-3">
                         <span className={cn("inline-flex max-w-[calc(100%-5rem)] items-center border px-3 py-1.5 font-tech text-[11px] uppercase tracking-[0.16em]", theme.badge)}>
                           {card.signal}
@@ -203,7 +203,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
               <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.06)_1px,transparent_1px)] bg-[size:24px_24px] opacity-30" />
               <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/75 to-transparent" />
 
-              <div className="relative z-10 min-h-full lg:grid lg:grid-cols-[0.92fr_1.08fr]">
+              <div className="relative z-10 max-w-7xl mx-auto min-h-full lg:grid lg:grid-cols-[0.92fr_1.08fr]">
                 <div className="border-b border-white/10 p-6 sm:p-8 lg:border-b-0 lg:border-r">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex flex-wrap items-center gap-3">
@@ -230,7 +230,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
                       <div className={cn("absolute -right-6 top-6 size-24 rounded-full blur-3xl", activeTheme.orb)} />
                       {(() => {
                         const ActiveIcon = serviceIcons[activeCardIndex ?? 0] ?? ShieldCheck;
-                        return <ActiveIcon className="relative z-10 size-20 text-white" />;
+                        return <ActiveIcon className="relative z-10 max-w-7xl mx-auto size-20 text-white" />;
                       })()}
                     </div>
                   </div>

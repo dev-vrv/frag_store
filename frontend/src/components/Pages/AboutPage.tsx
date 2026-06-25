@@ -143,7 +143,7 @@ export function AboutPage({ locale, dictionary }: AboutPageProps) {
       <Header locale={locale} dictionary={dictionary.header} />
       <ContactCyberBackground />
 
-      <section className="relative z-10 mx-auto grid max-w-7xl gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-end">
+      <section className="relative z-10 max-w-7xl mx-auto grid max-w-7xl gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-end">
         <div>
           <CyberBadge variant="red" glow>
             {page.badge}
@@ -190,7 +190,7 @@ export function AboutPage({ locale, dictionary }: AboutPageProps) {
         </ContactPanel>
       </section>
 
-      <section className="relative z-10 mx-auto mt-12 max-w-7xl">
+      <section className="relative z-10 max-w-7xl mx-auto mt-12 max-w-7xl">
         <h2 className="font-display text-3xl uppercase text-red-100">
           {content.offerTitle}
         </h2>
@@ -213,7 +213,7 @@ export function AboutPage({ locale, dictionary }: AboutPageProps) {
         </div>
       </section>
 
-      <section className="relative z-10 mx-auto py-8 grid max-w-7xl gap-6 lg:grid-cols-[24rem_minmax(0,1fr)]">
+      <section className="relative z-10 max-w-7xl mx-auto py-8 grid max-w-7xl gap-6 lg:grid-cols-[24rem_minmax(0,1fr)]">
         <ContactPanel contentClassName="p-6">
           <div className="flex items-center gap-3">
             <ShieldCheck className="size-6 text-lime-200" aria-hidden="true" />

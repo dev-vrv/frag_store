@@ -8,7 +8,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const cyberButtonVariants = cva(
-  "cyber-cut-button font-display group relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 overflow-hidden border-2 font-normal uppercase tracking-[0.08em] text-sm outline-none transition-all duration-200 before:absolute before:inset-0 before:opacity-0 before:transition-opacity after:pointer-events-none after:absolute after:right-3 after:top-1/2 after:h-4 after:w-4 after:-translate-y-1/2 after:border-t-2 after:border-r-2 active:translate-y-px disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-45 focus-visible:ring-2 focus-visible:ring-lime-300/50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "cyber-cut-button font-display group relative inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 overflow-hidden whitespace-nowrap border-2 font-normal uppercase tracking-[0.08em] text-sm outline-none transition-all duration-200 before:absolute before:inset-0 before:opacity-0 before:transition-opacity after:pointer-events-none after:absolute after:right-3 after:top-1/2 after:h-4 after:w-4 after:-translate-y-1/2 after:border-t-2 after:border-r-2 active:translate-y-px disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-45 focus-visible:ring-2 focus-visible:ring-lime-300/50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -84,7 +84,7 @@ const CyberButton = React.forwardRef<HTMLButtonElement, CyberButtonProps>(
         {...props}
       >
         {loading ? <Loader2 className="animate-spin" aria-hidden="true" /> : null}
-        <span className="relative z-10 inline-flex items-center gap-2 px-3 py-1">
+        <span className="relative z-10 max-w-7xl mx-auto inline-flex items-center gap-2 px-3 py-1">
           {children}
         </span>
       </Comp>

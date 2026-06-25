@@ -41,7 +41,7 @@ const CyberHero = React.forwardRef<HTMLElement, CyberHeroProps>(
       <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_bottom,transparent_50%,rgba(255,255,255,0.025)_51%,transparent_52%)] bg-[length:100%_7px] opacity-40" />
 
       <div className="mx-auto grid max-w-7xl items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
-        <div className="relative z-10 max-w-3xl">
+        <div className="relative z-10 max-w-7xl mx-auto max-w-3xl">
           {eyebrow ? (
             <CyberBadge glow className="mb-6">
               {eyebrow}

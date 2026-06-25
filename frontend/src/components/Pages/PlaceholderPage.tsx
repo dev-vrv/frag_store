@@ -38,7 +38,7 @@ export function PlaceholderPage({
           <div className="cyber-grid absolute inset-0 -z-10 opacity-60" />
         </>
       )}
-      <section className="relative z-10 mx-auto flex min-h-[calc(100vh-9rem)] max-w-7xl items-center">
+      <section className="relative z-10 max-w-7xl mx-auto flex min-h-[calc(100vh-9rem)] max-w-7xl items-center">
         <CyberCard variant="glass" className="w-full max-w-4xl p-2">
           <CyberCardContent className="p-8 sm:p-10">
             <CyberBadge variant="red" glow>

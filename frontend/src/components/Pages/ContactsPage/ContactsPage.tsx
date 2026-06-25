@@ -27,7 +27,7 @@ export function ContactsPage({
       <Header locale={locale} dictionary={dictionary.header} />
       <ContactCyberBackground />
 
-      <section className="relative z-10 mx-auto max-w-7xl">
+      <section className="relative z-10 mx-auto w-full max-w-7xl">
         <CyberBadge variant="red" glow>
           {page.badge}
         </CyberBadge>
@@ -37,28 +37,31 @@ export function ContactsPage({
           className="mt-7 block text-5xl text-red-100 sm:text-7xl"
           speedMs={44}
         />
-        <p className="mt-6 max-w-3xl text-xl leading-9 text-zinc-400">
+        <p className="mt-6 max-w-5xl text-xl leading-9 text-zinc-400">
           {page.subtitle} {text.intro}
         </p>
       </section>
 
-      <section className="relative z-10 mx-auto mt-12 grid max-w-7xl gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]">
+      <section className="relative z-10 mx-auto mt-12 grid w-full max-w-7xl gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(360px,0.9fr)]">
         <ContactInfoCard locale={locale} dictionary={text.info} />
         <ContactFormCard locale={locale} dictionary={text.form} className="h-fit" />
       </section>
 
-      <section className="relative z-10 mx-auto py-8 max-w-7xl">
-        <ContactPanel contentClassName="space-y-4 p-6 sm:p-8">
-            <h2 className="font-display text-3xl uppercase text-red-100">
-              {text.mapTitle}
-            </h2>
-            <div className="overflow-hidden border border-cyan-300/25 bg-black/40">
+      <section className="relative z-10 mx-auto w-full max-w-7xl py-8">
+        <ContactPanel contentClassName="overflow-hidden p-0">
+            <div className="space-y-4 px-6 pb-4 pt-6 sm:px-8 sm:pt-8">
+              <h2 className="font-display text-3xl uppercase text-red-100">
+                {text.mapTitle}
+              </h2>
+            </div>
+            <div className="overflow-hidden border-y border-cyan-300/25 bg-black/40">
               <iframe
                 title={text.mapTitle}
                 src="https://yandex.com/map-widget/v1/?ll=74.5698%2C42.8746&z=13"
-                className="h-[420px] w-full border-0 grayscale invert sm:h-[520px]"
+                className="h-[440px] w-full border-0 grayscale invert sm:h-[560px] lg:h-[620px]"
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"
+                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
               />
             </div>
         </ContactPanel>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   Check,
@@ -17,11 +17,6 @@ import {
   CyberButton,
   CyberCard,
   CyberCardContent,
-  CyberDialog,
-  CyberDialogContent,
-  CyberDialogDescription,
-  CyberDialogHeader,
-  CyberDialogTitle,
   CyberInput,
   CyberNativeSelect,
   CyberProductCard,
@@ -32,11 +27,13 @@ import {
   CyberSheetTitle,
   CyberSheetTrigger,
 } from "@/components/cyber";
+import { GeometricBackdrop } from "@/components/Background/GeometricBackdrop";
 import { useCart } from "@/components/Cart/CartProvider";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
+import { ProductDetailsDialog } from "@/components/Products/ProductDetailsDialog";
 import { ProductTypeIcon } from "@/components/Products/ProductTypeIcon";
-import { toggleFavorite, useFavoriteIds } from "@/lib/favorites";
+import { reconcileFavoriteIds, toggleFavorite, useFavoriteIds } from "@/lib/favorites";
 import { type Dictionary, type Locale } from "@/lib/i18n";
 import {
   formatProductOldPrice,
@@ -46,6 +43,8 @@ import {
   type ProductBrand,
   type Product,
   type ProductCategory,
+  type ProductMedia,
+  type ProductTechnicalHighlight,
 } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
@@ -113,6 +112,8 @@ const catalogText: Record<
     emptySubtitle: string;
     reset: string;
     addToCart: string;
+    addedToCart: string;
+    alreadyInCart: string;
     details: string;
     favorite: string;
     page: string;
@@ -123,6 +124,11 @@ const catalogText: Record<
     quickFilters: string;
     favoritesOnly: string;
     detailsLead: string;
+    hoverSpecs: string;
+    specsLabel: string;
+    close: string;
+    removeFavorite: string;
+    highlightsLabel: string;
     colorLabel: string;
     sku: string;
     brandLabel: string;
@@ -156,6 +162,8 @@ const catalogText: Record<
     emptySubtitle: "Товары появятся позже.",
     reset: "Сбросить",
     addToCart: "В корзину",
+    addedToCart: "Добавлено в корзину",
+    alreadyInCart: "Уже в корзине",
     details: "Подробнее",
     favorite: "В избранное",
     page: "Страница",
@@ -166,6 +174,11 @@ const catalogText: Record<
     quickFilters: "Быстрые фильтры",
     favoritesOnly: "Избранное",
     detailsLead: "Полные характеристики и описание",
+    hoverSpecs: "Ключевые параметры",
+    specsLabel: "Спецификации",
+    close: "Закрыть",
+    removeFavorite: "Убрать из избранного",
+    highlightsLabel: "Ключевые преимущества",
     colorLabel: "Цвет",
     sku: "Артикул",
     brandLabel: "Марка",
@@ -205,6 +218,8 @@ const catalogText: Record<
     emptySubtitle: "Products will be added later.",
     reset: "Reset",
     addToCart: "Add to cart",
+    addedToCart: "Added to cart",
+    alreadyInCart: "Already in cart",
     details: "Details",
     favorite: "Add to favorites",
     page: "Page",
@@ -215,6 +230,11 @@ const catalogText: Record<
     quickFilters: "Quick filters",
     favoritesOnly: "Favorites",
     detailsLead: "Full description and product details",
+    hoverSpecs: "Key specs",
+    specsLabel: "Specifications",
+    close: "Close",
+    removeFavorite: "Remove from favorites",
+    highlightsLabel: "Highlights",
     colorLabel: "Color",
     sku: "SKU",
     brandLabel: "Brand",
@@ -254,6 +274,8 @@ const catalogText: Record<
     emptySubtitle: "Товарлар кийинчерээк кошулат.",
     reset: "Тазалоо",
     addToCart: "Себетке",
+    addedToCart: "Себетке кошулду",
+    alreadyInCart: "Себетте бар",
     details: "Кененирээк",
     favorite: "Тандалгандарга",
     page: "Барак",
@@ -264,6 +286,11 @@ const catalogText: Record<
     quickFilters: "Тез фильтрлер",
     favoritesOnly: "Тандалгандар",
     detailsLead: "Толук сүрөттөмө жана товар маалыматы",
+    hoverSpecs: "Негизги мүнөздөмөлөр",
+    specsLabel: "Спецификациялар",
+    close: "Жабуу",
+    removeFavorite: "Тандалгандардан алып салуу",
+    highlightsLabel: "Негизги артыкчылыктар",
     colorLabel: "Түс",
     sku: "Артикул",
     brandLabel: "Марка",
@@ -289,13 +316,104 @@ function getCategoryIcon(deviceType: string) {
   return <ProductTypeIcon deviceType={deviceType} className="size-5" />;
 }
 
+function getProductMediaSource(media: ProductMedia | null | undefined) {
+  return media?.file || media?.external_url || null;
+}
+
+function isVideoMedia(media: ProductMedia | null | undefined) {
+  if (!media) {
+    return false;
+  }
+
+  if (media.media_type === "video") {
+    return true;
+  }
+
+  const source = getProductMediaSource(media);
+
+  if (!source) {
+    return false;
+  }
+
+  return /\.(mp4|webm|ogg|mov|m4v)(\?.*)?$/i.test(source);
+}
+
+function getProductMediaGalleryItems(product: Product) {
+  if (product.media_items?.length) {
+    return product.media_items.filter((item) => Boolean(getProductMediaSource(item)));
+  }
+
+  if (product.primary_media && getProductMediaSource(product.primary_media)) {
+    return [product.primary_media];
+  }
+
+  return [];
+}
+
+function getExpandedTechnicalHighlights(product: Product): ProductTechnicalHighlight[] {
+  const items = [...product.technical_highlights];
+  const details = product.technical_details;
+
+  if (!details) {
+    return items;
+  }
+
+  const extendedFields: Array<[string, string | number | boolean | null | undefined, string?]> = [
+    ["Подключение", details.connectivity],
+    ["Форм-фактор", details.form_factor],
+    ["Совместимость", details.compatibility],
+    ["ПО", details.software_support],
+    ["Автономность", details.battery_life_hours, " ч"],
+    ["Клавиш", details.key_count],
+    ["Подсветка", details.backlight],
+    ["Кнопок", details.programmable_buttons],
+    ["Чувствительность", details.sensitivity_db, " дБ"],
+    ["Сопротивление", details.impedance_ohm, " Ом"],
+    ["Яркость", details.brightness_nits, " нит"],
+    ["Контраст", details.contrast_ratio],
+    ["Материал", details.material],
+    ["Дополнительно", details.extra_notes],
+  ];
+
+  for (const [label, rawValue, suffix = ""] of extendedFields) {
+    if (rawValue === null || rawValue === undefined || rawValue === "" || rawValue === false) {
+      continue;
+    }
+
+    if (items.some((item) => item.label === label)) {
+      continue;
+    }
+
+    items.push({ label, value: `${rawValue}${suffix}` });
+  }
+
+  return items;
+}
+
 function ProductVisual({ product }: { product: Product }) {
-  if (product.primary_media?.file) {
+  const media = getProductMediaGalleryItems(product)[0];
+  const source = getProductMediaSource(media);
+
+  if (source && media) {
+    if (isVideoMedia(media)) {
+      return (
+        <video
+          src={source}
+          className="h-full w-full object-cover"
+          muted
+          autoPlay
+          loop
+          playsInline
+          preload="metadata"
+        />
+      );
+    }
+
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src={product.primary_media.file}
-        alt={product.primary_media.alt_text || product.name}
+        src={source}
+        alt={media.alt_text || product.name}
         className="h-full w-full object-cover"
       />
     );
@@ -305,6 +423,43 @@ function ProductVisual({ product }: { product: Product }) {
     <div className="flex h-full items-center justify-center">
       <div className="grid size-28 place-items-center border border-red-300/25 bg-black/45 text-red-100 shadow-[0_0_46px_rgba(255,23,68,0.18)]">
         {getCategoryIcon(product.category.device_type)}
+      </div>
+    </div>
+  );
+}
+
+function ProductHoverSpecs({
+  product,
+  title,
+}: {
+  product: Product;
+  title: string;
+}) {
+  const items = getExpandedTechnicalHighlights(product);
+
+  if (!items.length) {
+    return null;
+  }
+
+  return (
+    <div className="space-y-2.5">
+      <p className="font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-500">
+        {title}
+      </p>
+      <div className="grid grid-cols-2 gap-2 xl:grid-cols-3">
+        {items.slice(0, 6).map((item) => (
+          <div
+            key={`${item.label}-${item.value}`}
+            className="min-w-0 rounded-[0.8rem] border border-white/10 bg-white/[0.045] px-2.5 py-2"
+          >
+            <p className="truncate font-tech text-[9px] uppercase tracking-[0.14em] text-zinc-500">
+              {item.label}
+            </p>
+            <p className="mt-1 truncate text-[12px] font-medium leading-5 text-white">
+              {item.value}
+            </p>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -320,10 +475,12 @@ export function CatalogPage({
   initialBrand = "all",
 }: CatalogPageProps) {
   const text = catalogText[locale];
-  const { addItem } = useCart();
+  const { addItem, hasItem } = useCart();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
+  const catalogSectionRef = useRef<HTMLElement | null>(null);
+  const addToCartFeedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const favoriteIds = useFavoriteIds();
   const [query, setQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState(() =>
@@ -333,6 +490,8 @@ export function CatalogPage({
   const [sort, setSort] = useState<SortKey>("popular");
   const [pageIndex, setPageIndex] = useState(1);
   const [selectedProductColorId, setSelectedProductColorId] = useState<number | null>(null);
+  const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
+  const [lastAddedCartItemKey, setLastAddedCartItemKey] = useState<string | null>(null);
   const [quickFilters, setQuickFilters] = useState<Record<QuickFilterKey, boolean>>({
     bestSeller: false,
     discount: false,
@@ -350,6 +509,14 @@ export function CatalogPage({
     }),
     [favoritesFromQuery, quickFilters],
   );
+
+  useEffect(() => {
+    if (!favoriteIds.length) {
+      return;
+    }
+
+    reconcileFavoriteIds(products.map((product) => product.id));
+  }, [favoriteIds, products]);
 
   const categoryOptions = useMemo<CatalogCategoryOption[]>(
     () => [
@@ -455,13 +622,31 @@ export function CatalogPage({
     : null;
   const resolvedSelectedProductColorId =
     selectedProductColorId ?? selectedProduct?.color_options[0]?.id ?? null;
+  const selectedProductCartKey = selectedProduct
+    ? `${selectedProduct.id}:${resolvedSelectedProductColorId ?? "none"}`
+    : null;
+  const selectedProductAlreadyInCart = selectedProduct
+    ? hasItem(selectedProduct.id, resolvedSelectedProductColorId)
+    : false;
+  const selectedProductJustAdded =
+    selectedProductCartKey != null && lastAddedCartItemKey === selectedProductCartKey;
+
+  useEffect(() => {
+    return () => {
+      if (addToCartFeedbackTimeoutRef.current) {
+        clearTimeout(addToCartFeedbackTimeoutRef.current);
+      }
+    };
+  }, []);
 
   function updateProductQuery(productSlug: string | null) {
     if (productSlug) {
       const product = products.find((item) => item.slug === productSlug) ?? null;
       setSelectedProductColorId(product?.color_options[0]?.id ?? null);
+      setSelectedMediaIndex(0);
     } else {
       setSelectedProductColorId(null);
+      setSelectedMediaIndex(0);
     }
 
     const params = new URLSearchParams(searchParams.toString());
@@ -474,6 +659,48 @@ export function CatalogPage({
 
     const nextQuery = params.toString();
     router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
+  }
+
+  function triggerAddToCartFeedback(cartItemKey: string) {
+    setLastAddedCartItemKey(cartItemKey);
+
+    if (addToCartFeedbackTimeoutRef.current) {
+      clearTimeout(addToCartFeedbackTimeoutRef.current);
+    }
+
+    addToCartFeedbackTimeoutRef.current = setTimeout(() => {
+      setLastAddedCartItemKey((current) => (current === cartItemKey ? null : current));
+      addToCartFeedbackTimeoutRef.current = null;
+    }, 2200);
+  }
+
+  function handleCatalogCardAddToCart(product: Product) {
+    if (product.quantity_in_stock <= 0) {
+      return;
+    }
+
+    const defaultColorId = product.color_options[0]?.id ?? null;
+
+    if (hasItem(product.id, defaultColorId)) {
+      return;
+    }
+
+    addItem(product.id, 1, defaultColorId);
+    triggerAddToCartFeedback(`${product.id}:${defaultColorId ?? "none"}`);
+  }
+
+  function handleSelectedProductAddToCart() {
+    if (
+      !selectedProduct ||
+      selectedProduct.quantity_in_stock <= 0 ||
+      (selectedProduct.color_options.length > 0 && !resolvedSelectedProductColorId) ||
+      selectedProductAlreadyInCart
+    ) {
+      return;
+    }
+
+    addItem(selectedProduct.id, 1, resolvedSelectedProductColorId);
+    triggerAddToCartFeedback(`${selectedProduct.id}:${resolvedSelectedProductColorId ?? "none"}`);
   }
 
   function toggleQuickFilter(key: QuickFilterKey) {
@@ -514,6 +741,30 @@ export function CatalogPage({
       return [...current, value];
     });
     setPageIndex(1);
+  }
+
+  function scrollCatalogToTop() {
+    const targetTop = catalogSectionRef.current
+      ? catalogSectionRef.current.getBoundingClientRect().top + window.scrollY - 96
+      : 0;
+
+    window.scrollTo({
+      top: Math.max(0, targetTop),
+      behavior: "smooth",
+    });
+  }
+
+  function setCatalogPage(nextPage: number | ((current: number) => number)) {
+    setPageIndex((current) => {
+      const resolvedPage =
+        typeof nextPage === "function" ? nextPage(current) : nextPage;
+
+      if (resolvedPage !== current) {
+        window.requestAnimationFrame(scrollCatalogToTop);
+      }
+
+      return resolvedPage;
+    });
   }
 
   function resetFilters() {
@@ -680,9 +931,15 @@ export function CatalogPage({
   );
 
   return (
-    <main className="page-shell relative overflow-hidden bg-[linear-gradient(180deg,#080708_0%,#090708_24%,#060506_54%,#020203_100%)] px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative overflow-x-clip bg-[linear-gradient(180deg,#080708_0%,#090708_24%,#060506_54%,#020203_100%)] px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
       <div className="absolute inset-0 -z-40 bg-[radial-gradient(circle_at_12%_18%,rgba(255,23,68,0.2),transparent_24%),radial-gradient(circle_at_86%_14%,rgba(168,85,247,0.12),transparent_24%),radial-gradient(circle_at_50%_84%,rgba(251,191,36,0.05),transparent_28%),linear-gradient(180deg,#0d0708_0%,#0a0708_28%,#060405_56%,#020203_100%)]" />
+      <GeometricBackdrop
+        className="absolute inset-0 -z-30"
+        variant="catalog"
+        gridOpacityClassName="opacity-[0.32]"
+        scanlineOpacityClassName="opacity-[0.18]"
+      />
       <div className="pointer-events-none absolute inset-0 -z-30 overflow-hidden">
         <div className="absolute -left-[10%] top-[2%] h-[24rem] w-[24rem] animate-[catalogAurora_22s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgba(255,23,68,0.28),rgba(255,23,68,0.12)_42%,transparent_74%)] blur-3xl sm:h-[30rem] sm:w-[30rem]" />
         <div className="absolute right-[-8%] top-[8%] h-[24rem] w-[24rem] animate-[catalogAurora_28s_ease-in-out_infinite_reverse] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.18),rgba(168,85,247,0.08)_40%,transparent_74%)] blur-3xl sm:h-[32rem] sm:w-[32rem]" />
@@ -700,7 +957,6 @@ export function CatalogPage({
         <div className="absolute inset-x-0 top-[22%] h-px animate-[catalogScanline_9s_linear_infinite] bg-[linear-gradient(90deg,transparent,rgba(255,131,131,0.22),transparent)] opacity-55" />
         <div className="absolute inset-x-0 top-[58%] h-px animate-[catalogScanline_13s_linear_infinite_reverse] bg-[linear-gradient(90deg,transparent,rgba(217,70,239,0.18),transparent)] opacity-42" />
       </div>
-      <div className="cyber-grid absolute inset-0 -z-20 opacity-[0.32]" />
       <div className="pointer-events-none absolute inset-0 -z-10 animate-[catalogGridDrift_36s_linear_infinite] bg-[linear-gradient(rgba(255,110,110,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(217,70,239,0.03)_1px,transparent_1px)] bg-[size:68px_68px] opacity-[0.18] [mask-image:linear-gradient(180deg,rgba(0,0,0,0.94),rgba(0,0,0,0.58)_58%,transparent)]" />
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(255,23,68,0.04),transparent_18%,transparent_82%,rgba(168,85,247,0.035))]" />
       <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.16] [background-image:radial-gradient(circle_at_center,rgba(251,191,36,0.12)_1px,transparent_1px)] [background-size:30px_30px] [mask-image:linear-gradient(180deg,transparent,rgba(0,0,0,0.88)_16%,rgba(0,0,0,0.88)_84%,transparent)]" />
@@ -821,7 +1077,7 @@ export function CatalogPage({
         }
       `}</style>
 
-      <section className="mx-auto w-full max-w-7xl py-8">
+      <section ref={catalogSectionRef} className="mx-auto w-full max-w-7xl py-8">
         <div className="mb-6 flex flex-col gap-4 border-b border-white/10 pb-5 sm:mb-7 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <CyberBadge variant="warning" glow>
@@ -858,8 +1114,8 @@ export function CatalogPage({
         </div>
 
         <div className="grid items-start gap-6 2xl:grid-cols-[340px_minmax(0,1fr)]">
-          <aside className="hidden xl:block xl:sticky xl:top-32">
-            <CyberCard variant="glass" className="overflow-hidden border-white/10 bg-zinc-950/70">
+          <aside className="hidden xl:block">
+            <CyberCard variant="glass" className="sticky top-32 overflow-hidden border-white/10 bg-zinc-950/70">
               <CyberCardContent className="p-5">
                 {filterPanel}
               </CyberCardContent>
@@ -887,9 +1143,11 @@ export function CatalogPage({
                 </CyberCardContent>
               </CyberCard>
             ) : paginatedProducts.length ? (
-              <div className="grid auto-rows-fr gap-5 sm:gap-6 md:grid-cols-2 2xl:grid-cols-3">
+              <div className="grid auto-rows-fr gap-5 sm:gap-6 md:grid-cols-2">
                 {paginatedProducts.map((product) => {
                   const badges = [];
+                  const defaultColorId = product.color_options[0]?.id ?? null;
+                  const cardAlreadyInCart = hasItem(product.id, defaultColorId);
                   if (product.is_new_arrival) {
                     badges.push({ label: text.badgeNew, variant: "cyan" as const });
                   }
@@ -906,22 +1164,25 @@ export function CatalogPage({
                       className="translate-y-0 transition-transform duration-500 hover:-translate-y-1.5"
                       tone="catalog"
                       image={<ProductVisual product={product} />}
+                      hoverPanel={<ProductHoverSpecs product={product} title={text.hoverSpecs} />}
                       title={getLocalizedProductName(product, locale)}
                       description={product.short_description}
                       price={formatProductPrice(product, locale)}
                       oldPrice={formatProductOldPrice(product, locale)}
-                      ctaLabel={product.quantity_in_stock > 0 ? text.addToCart : text.outOfStock}
+                      ctaLabel={
+                        product.quantity_in_stock <= 0
+                          ? text.outOfStock
+                          : cardAlreadyInCart
+                            ? text.alreadyInCart
+                            : text.addToCart
+                      }
                       detailsLabel={text.details}
                       favoriteLabel={text.favorite}
                       favoriteActive={favoriteIdSet.has(product.id)}
                       onFavoriteClick={() => toggleFavorite(product.id)}
                       onDetailsClick={() => updateProductQuery(product.slug)}
-                      onCtaClick={() =>
-                        product.color_options.length
-                          ? updateProductQuery(product.slug)
-                          : addItem(product.id, 1)
-                      }
-                      ctaDisabled={product.quantity_in_stock <= 0}
+                      onCtaClick={() => handleCatalogCardAddToCart(product)}
+                      ctaDisabled={product.quantity_in_stock <= 0 || cardAlreadyInCart}
                       badges={badges}
                     />
                   );
@@ -939,14 +1200,14 @@ export function CatalogPage({
       </section>
 
       {products.length ? (
-        <section className="mx-auto mt-8 mb-10 flex w-full max-w-[92rem] flex-col gap-4 border-t border-white/10 pt-6 sm:flex-row sm:items-center sm:justify-between">
+        <section className="mx-auto mt-8 mb-10 flex w-full max-w-[92rem] flex-col items-center gap-4 border-t border-white/10 pt-6 text-center">
           <div className="font-tech text-sm uppercase tracking-[0.1em] text-zinc-500">
             {text.page} {safePageIndex} / {totalPages}
           </div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap justify-center gap-2">
             <button
               type="button"
-              onClick={() => setPageIndex((current) => Math.max(1, current - 1))}
+              onClick={() => setCatalogPage((current) => Math.max(1, current - 1))}
               disabled={safePageIndex === 1}
               className="grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-zinc-300 transition hover:border-amber-200/35 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
               aria-label={text.previousPage}
@@ -957,7 +1218,7 @@ export function CatalogPage({
               <button
                 key={item}
                 type="button"
-                onClick={() => setPageIndex(item)}
+                onClick={() => setCatalogPage(item)}
                 className={cn(
                   "grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-sm text-zinc-300 transition hover:border-amber-200/35 hover:text-white",
                   safePageIndex === item && "border-amber-200/50 bg-amber-200/[0.10] text-amber-100",
@@ -969,7 +1230,7 @@ export function CatalogPage({
             ))}
             <button
               type="button"
-              onClick={() => setPageIndex((current) => Math.min(totalPages, current + 1))}
+              onClick={() => setCatalogPage((current) => Math.min(totalPages, current + 1))}
               disabled={safePageIndex === totalPages}
               className="grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-zinc-300 transition hover:border-amber-200/35 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
               aria-label={text.nextPage}
@@ -980,116 +1241,49 @@ export function CatalogPage({
         </section>
       ) : null}
 
-      <Footer locale={locale} dictionary={dictionary} className="-mx-4 sm:-mx-6 lg:-mx-8" />
+      <Footer locale={locale} dictionary={dictionary} />
 
-      <CyberDialog open={Boolean(selectedProduct)} onOpenChange={(open) => !open && updateProductQuery(null)}>
-        <CyberDialogContent className="max-h-[90svh] overflow-hidden border-cyan-200/16 bg-[linear-gradient(180deg,rgba(5,10,24,0.96),rgba(2,6,16,0.98))] p-0 sm:max-w-4xl">
-          {selectedProduct ? (
-            <div className="grid max-h-[90svh] grid-rows-[auto_minmax(0,1fr)]">
-              <CyberDialogHeader className="border-b border-white/10 px-6 pb-5 pt-6 sm:px-8">
-                <CyberDialogDescription className="font-tech text-[11px] uppercase tracking-[0.16em] text-cyan-200/70">
-                  {text.detailsLead}
-                </CyberDialogDescription>
-                <CyberDialogTitle className="pr-10 font-display text-2xl uppercase tracking-[0.04em] text-white sm:text-3xl">
-                  {getLocalizedProductName(selectedProduct, locale)}
-                </CyberDialogTitle>
-              </CyberDialogHeader>
+      <ProductDetailsDialog
+        open={Boolean(selectedProduct)}
+        onOpenChange={(open) => !open && updateProductQuery(null)}
+        locale={locale}
+        product={selectedProduct}
+        labels={text}
+        selectedColorId={resolvedSelectedProductColorId}
+        onSelectColor={setSelectedProductColorId}
+        selectedMediaIndex={selectedMediaIndex}
+        onSelectMediaIndex={setSelectedMediaIndex}
+        actionLabel={
+          selectedProduct
+            ? selectedProduct.quantity_in_stock <= 0
+              ? text.outOfStock
+              : selectedProductAlreadyInCart
+                ? text.alreadyInCart
+                : selectedProductJustAdded
+                  ? text.addedToCart
+                  : text.addToCart
+            : text.addToCart
+        }
+        actionDisabled={
+          !selectedProduct ||
+          selectedProduct.quantity_in_stock <= 0 ||
+          (selectedProduct.color_options.length > 0 && !resolvedSelectedProductColorId) ||
+          selectedProductAlreadyInCart
+        }
+        actionClassName={cn(
+          selectedProductJustAdded &&
+            "animate-pulse border-lime-200 shadow-[0_0_42px_rgba(190,242,100,0.32)]",
+        )}
+        onAction={handleSelectedProductAddToCart}
+        actionNotice={
+          selectedProduct && selectedProduct.quantity_in_stock > 0 && selectedProductJustAdded
+            ? text.addedToCart
+            : null
+        }
+        favoriteActive={selectedProduct ? favoriteIdSet.has(selectedProduct.id) : false}
+        onToggleFavorite={selectedProduct ? () => toggleFavorite(selectedProduct.id) : undefined}
+      />
 
-              <div className="grid min-h-0 gap-0 overflow-y-auto lg:grid-cols-[minmax(0,1.05fr)_minmax(320px,0.95fr)]">
-                <div className="relative min-h-[20rem] border-b border-white/10 bg-[radial-gradient(circle_at_24%_18%,rgba(34,211,238,0.24),transparent_30%),radial-gradient(circle_at_78%_16%,rgba(244,63,94,0.18),transparent_28%),linear-gradient(145deg,rgba(8,15,28,0.98),rgba(3,6,14,1))] lg:min-h-full lg:border-b-0 lg:border-r">
-                  <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.07)_1px,transparent_1px)] bg-[size:28px_28px] opacity-35" />
-                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(34,211,238,0.16),transparent_54%)]" />
-                  <div className="relative z-10 flex h-full items-center justify-center p-6 sm:p-8">
-                    <div className="h-full max-h-[28rem] w-full overflow-hidden border border-cyan-200/14 bg-black/30 shadow-[0_0_46px_rgba(34,211,238,0.10)]">
-                      <ProductVisual product={selectedProduct} />
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-6 px-6 py-6 sm:px-8 sm:py-8">
-                  <div className="flex flex-wrap gap-2.5">
-                    {selectedProduct.is_new_arrival ? <CyberBadge variant="cyan" glow>{text.badgeNew}</CyberBadge> : null}
-                    {selectedProduct.is_best_seller ? <CyberBadge variant="red" glow>{text.badgeHit}</CyberBadge> : null}
-                    {selectedProduct.has_discount ? <CyberBadge variant="warning" glow>{`-${selectedProduct.discount_percent}%`}</CyberBadge> : null}
-                  </div>
-
-                  <div className="space-y-3">
-                    <div className="font-display text-3xl text-lime-100 sm:text-4xl">
-                      {formatProductPrice(selectedProduct, locale)}
-                    </div>
-                    {selectedProduct.old_price ? (
-                      <div className="font-tech text-base text-zinc-500 line-through">
-                        {formatProductOldPrice(selectedProduct, locale)}
-                      </div>
-                    ) : null}
-                  </div>
-
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="border border-white/10 bg-white/[0.03] px-4 py-3">
-                      <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">{text.brandLabel}</p>
-                      <p className="mt-2 text-base text-zinc-100">{selectedProduct.brand.name}</p>
-                    </div>
-                    <div className="border border-white/10 bg-white/[0.03] px-4 py-3">
-                      <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">{text.categoryLabel}</p>
-                      <p className="mt-2 text-base text-zinc-100">{getLocalizedCategoryName(selectedProduct.category, locale)}</p>
-                    </div>
-                    <div className="border border-white/10 bg-white/[0.03] px-4 py-3">
-                      <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">{text.sku}</p>
-                      <p className="mt-2 text-base text-zinc-100">{selectedProduct.sku}</p>
-                    </div>
-                    <div className="border border-white/10 bg-white/[0.03] px-4 py-3">
-                      <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">{text.availabilityLabel}</p>
-                      <p className="mt-2 text-base text-zinc-100">
-                        {selectedProduct.quantity_in_stock > 0 ? text.inStock : text.outOfStock}
-                      </p>
-                    </div>
-                  </div>
-
-                  <div className="space-y-3">
-                    <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">{text.detailsLead}</p>
-                    <p className="text-base leading-8 text-zinc-300">
-                      {selectedProduct.description?.trim() || selectedProduct.short_description}
-                    </p>
-                  </div>
-
-                  {selectedProduct.color_options.length ? (
-                    <CyberNativeSelect
-                      label={text.colorLabel}
-                      value={String(resolvedSelectedProductColorId ?? "")}
-                      onValueChange={(value) => setSelectedProductColorId(Number(value))}
-                      options={selectedProduct.color_options.map((option) => ({
-                        value: String(option.id),
-                        label: option.name,
-                      }))}
-                    />
-                  ) : selectedProduct.color ? (
-                    <div className="border border-white/10 bg-white/[0.03] px-4 py-3">
-                      <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">{text.colorLabel}</p>
-                      <p className="mt-2 text-base text-zinc-100">{selectedProduct.color}</p>
-                    </div>
-                  ) : null}
-
-                  <div className="mt-auto grid gap-3 sm:grid-cols-2">
-                    <CyberButton variant="ghost" onClick={() => updateProductQuery(null)}>
-                      {text.details}
-                    </CyberButton>
-                    <CyberButton
-                      variant="primary"
-                      onClick={() => addItem(selectedProduct.id, 1, resolvedSelectedProductColorId)}
-                      disabled={
-                        selectedProduct.quantity_in_stock <= 0 ||
-                        (selectedProduct.color_options.length > 0 && !resolvedSelectedProductColorId)
-                      }
-                    >
-                      {selectedProduct.quantity_in_stock > 0 ? text.addToCart : text.outOfStock}
-                    </CyberButton>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : null}
-        </CyberDialogContent>
-      </CyberDialog>
     </main>
   );
 }

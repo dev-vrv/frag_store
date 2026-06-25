@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Heart, Menu, ShoppingCart } from "lucide-react";
 import { FaUserAstronaut } from "react-icons/fa";
 
+import { BrandLogo } from "@/components/Brand/BrandLogo";
 import {
   Sheet,
   SheetClose,
@@ -67,8 +68,8 @@ export function MobileHeaderMenu({
       >
         <div className="flex min-h-full flex-col">
           <SheetHeader className="border-b border-white/10 p-5">
-            <SheetTitle className="font-display text-2xl font-normal tracking-[0.08em] text-red-100">
-              {dictionary.logo}
+            <SheetTitle className="text-red-100">
+              <BrandLogo className="w-[8.5rem]" imageClassName="brightness-[1.08]" />
             </SheetTitle>
           </SheetHeader>
 

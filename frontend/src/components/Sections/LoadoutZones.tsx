@@ -595,7 +595,7 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
                   <div className="pointer-events-none absolute right-6 top-6 h-14 w-14 scale-100 rounded-full border border-white/10 opacity-40 transition-all duration-500 ease-out will-change-transform group-hover/loadout-card:scale-105 group-hover/loadout-card:opacity-80" />
                   <div className="pointer-events-none absolute left-6 top-24 right-6 h-px origin-left scale-x-0 bg-gradient-to-r from-white/0 via-white/18 to-white/0 transition-transform duration-500 ease-out will-change-transform group-hover/loadout-card:scale-x-100" />
 
-                  <div className="relative z-10 flex h-full flex-col">
+                  <div className="relative z-10 max-w-7xl mx-auto flex h-full flex-col">
                     <div className="flex items-center justify-between gap-4">
                       <div className="relative">
                         <div className={cn("pointer-events-none absolute inset-0 rounded-[1.15rem] blur-xl transition-transform duration-500 ease-out group-hover/loadout-card:scale-105", theme.pulse)} />
@@ -668,7 +668,7 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
 
               <div
                 key={activeSlug}
-                className={cn("relative z-10 space-y-8 p-6 transition-[transform,opacity,filter] duration-180 ease-[cubic-bezier(0.22,1,0.36,1)] sm:p-8", modalAnimationClass)}
+                className={cn("relative z-10 max-w-7xl mx-auto space-y-8 p-6 transition-[transform,opacity,filter] duration-180 ease-[cubic-bezier(0.22,1,0.36,1)] sm:p-8", modalAnimationClass)}
                 style={
                   {
                     "--loadout-enter-x": `${animationDirection * 24}px`,

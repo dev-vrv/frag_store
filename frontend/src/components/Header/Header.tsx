@@ -6,6 +6,7 @@ import { usePathname, useSearchParams } from "next/navigation";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { FaUserAstronaut } from "react-icons/fa";
 
+import { BrandLogo } from "@/components/Brand/BrandLogo";
 import { LocaleSwitcher } from "@/components/Header/LocaleSwitcher";
 import { MobileHeaderMenu } from "@/components/Header/MobileHeaderMenu";
 import { Nav } from "@/components/Nav/Nav";
@@ -27,7 +28,10 @@ export function Header({ locale, dictionary }: HeaderProps) {
   const favoriteIds = useFavoriteIds();
   const [isHidden, setIsHidden] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [cartIndicatorPulse, setCartIndicatorPulse] = useState(false);
   const lastScrollYRef = useRef(0);
+  const previousQuantityTotalRef = useRef(quantityTotal);
+  const cartPulseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const isFavoritesCatalogView = pathname === "/catalog" && searchParams.get("favorites") === "1";
 
   useEffect(() => {
@@ -78,6 +82,33 @@ export function Header({ locale, dictionary }: HeaderProps) {
     };
   }, []);
 
+  useEffect(() => {
+    if (previousQuantityTotalRef.current === quantityTotal) {
+      return;
+    }
+
+    previousQuantityTotalRef.current = quantityTotal;
+    setIsHidden(false);
+    setCartIndicatorPulse(true);
+
+    if (cartPulseTimeoutRef.current) {
+      clearTimeout(cartPulseTimeoutRef.current);
+    }
+
+    cartPulseTimeoutRef.current = setTimeout(() => {
+      setCartIndicatorPulse(false);
+      cartPulseTimeoutRef.current = null;
+    }, 1400);
+  }, [quantityTotal]);
+
+  useEffect(() => {
+    return () => {
+      if (cartPulseTimeoutRef.current) {
+        clearTimeout(cartPulseTimeoutRef.current);
+      }
+    };
+  }, []);
+
   const authHref = localizePath(isAuthenticated ? "/profile" : "/auth", locale);
   const authLabel = isAuthenticated ? dictionary.profile : dictionary.auth;
   const authActive = pathname === "/auth" || pathname === "/profile";
@@ -89,13 +120,17 @@ export function Header({ locale, dictionary }: HeaderProps) {
         isHidden ? "-translate-y-full" : "translate-y-0",
       )}
     >
-      <div className="mx-auto flex min-h-20 w-full max-w-7xl items-center justify-between gap-3sm:gap-5">
+      <div className="mx-auto flex min-h-20 w-full max-w-7xl items-center justify-between gap-3sm:gap-5 sm:px-4">
         <Link
           href={localizePath("/", locale)}
-          className="cyber-cut-small font-display shrink-0 border border-red-400/35 bg-red-500/10 px-3 py-2 text-lg font-normal tracking-[0.08em] text-red-100 shadow-[0_0_24px_rgba(255,23,68,0.18)] sm:px-4 sm:text-xl"
+          className="shrink-0 px-1 py-2 sm:px-2"
           aria-label="Frag Store"
         >
-          {dictionary.logo}
+          <BrandLogo
+            className="w-[6.6rem] sm:w-[8.2rem]"
+            imageClassName="brightness-[1.08] saturate-[1.02]"
+            priority
+          />
         </Link>
 
         <Nav
@@ -124,6 +159,7 @@ export function Header({ locale, dictionary }: HeaderProps) {
             label={dictionary.cart}
             active={pathname === "/cart"}
             badge={quantityTotal}
+            highlighted={cartIndicatorPulse}
           >
             <ShoppingCart aria-hidden="true" />
           </HeaderIconLink>
@@ -163,6 +199,7 @@ function HeaderIconLink({
   active,
   badge,
   query,
+  highlighted = false,
   children,
 }: {
   href: string;
@@ -171,6 +208,7 @@ function HeaderIconLink({
   active: boolean;
   badge?: number;
   query?: Record<string, string>;
+  highlighted?: boolean;
   children: ReactNode;
 }) {
   const localizedHref = localizePath(href, locale);
@@ -188,12 +226,21 @@ function HeaderIconLink({
         "relative grid size-10 place-items-center border border-white/15 bg-white/[0.04] text-zinc-300 transition hover:border-red-400/45 hover:bg-red-500/10 hover:text-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/30 [&_svg]:size-4",
         active &&
           "border-red-400/55 bg-red-500/14 text-red-100 shadow-[0_0_18px_rgba(255,23,68,0.18)]",
+        highlighted &&
+          "border-lime-300/65 bg-lime-300/14 text-lime-100 shadow-[0_0_28px_rgba(190,242,100,0.28)]",
       )}
     >
       {children}
       {badge ? (
-        <span className="absolute -right-1.5 -top-1.5 grid min-w-5 place-items-center rounded-full border border-lime-300/35 bg-lime-300/90 px-1 text-[10px] font-bold leading-5 text-black shadow-[0_0_18px_rgba(190,242,100,0.3)]">
-          {badge > 99 ? "99+" : badge}
+        <span
+          className={cn(
+            "absolute -right-1.5 -top-1.5 grid min-w-5 place-items-center rounded-full border border-lime-300/35 bg-lime-300/90 px-1 text-[10px] font-bold leading-5 text-black shadow-[0_0_18px_rgba(190,242,100,0.3)]",
+            highlighted && "animate-bounce",
+          )}
+        >
+          <span key={badge} className={cn("transition duration-300", highlighted && "scale-110")}>
+            {badge > 99 ? "99+" : badge}
+          </span>
         </span>
       ) : null}
     </Link>

@@ -292,7 +292,7 @@ export function FaqPage({ locale, dictionary }: FaqPageProps) {
       <Header locale={locale} dictionary={dictionary.header} />
       <ContactCyberBackground />
 
-      <section className="relative z-10 mx-auto max-w-7xl">
+      <section className="relative z-10 mx-auto w-full max-w-7xl">
         <CyberBadge variant="red" glow>
           {page.badge}
         </CyberBadge>
@@ -302,12 +302,12 @@ export function FaqPage({ locale, dictionary }: FaqPageProps) {
           className="mt-7 block text-5xl text-red-100 sm:text-7xl"
           speedMs={44}
         />
-        <p className="mt-6 max-w-3xl text-xl leading-9 text-zinc-400">
+        <p className="mt-6 max-w-5xl text-xl leading-9 text-zinc-400">
           {page.subtitle}
         </p>
       </section>
 
-      <section className="relative z-10 mx-auto py-8 grid max-w-7xl auto-rows-fr gap-6 lg:grid-cols-2">
+      <section className="relative z-10 mx-auto grid w-full max-w-7xl auto-rows-fr gap-6 py-8 lg:grid-cols-2">
         {faqContent[locale].map((section) => (
           <ContactPanel key={section.title} className="h-full" contentClassName="flex h-full flex-col p-6 sm:p-7">
               <div className="mb-5 flex items-center gap-3">

@@ -72,6 +72,26 @@ export function toggleFavorite(productId: number) {
   writeFavoriteIds(next);
 }
 
+export function reconcileFavoriteIds(validProductIds: Iterable<number>) {
+  const current = readFavoriteIds();
+
+  if (!current.length) {
+    return current;
+  }
+
+  const validIdSet = new Set(
+    [...validProductIds].filter((id) => Number.isInteger(id) && id > 0),
+  );
+  const next = current.filter((id) => validIdSet.has(id));
+
+  if (next.length !== current.length) {
+    writeFavoriteIds(next);
+    return next;
+  }
+
+  return current;
+}
+
 function subscribe(onStoreChange: () => void) {
   if (typeof window === "undefined") {
     return () => undefined;

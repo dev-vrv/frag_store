@@ -6,4 +6,4 @@ PROJECT_ROOT=$(CDPATH= cd -- "$SCRIPT_DIR/.." && pwd)
 
 cd "$PROJECT_ROOT"
 
-docker compose --env-file .env -f docker-compose.debug.yml up --build -d "$@"
+docker compose --env-file .env -f docker-compose.debug.yml up --build --force-recreate --wait -d "$@"

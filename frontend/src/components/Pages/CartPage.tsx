@@ -33,6 +33,7 @@ import {
 import { useCart } from "@/components/Cart/CartProvider";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
+import { ProductDetailsDialog } from "@/components/Products/ProductDetailsDialog";
 import { type AuthUser } from "@/lib/auth";
 import {
   fetchCartSummary,
@@ -41,6 +42,10 @@ import {
   type CartCheckoutResponse,
   type CartSummary,
 } from "@/lib/cart";
+import {
+  getProductBySlug,
+  type Product,
+} from "@/lib/products";
 import { type Dictionary, type Locale, localizePath } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
@@ -111,6 +116,19 @@ const cartText = {
     itemTotal: "Сумма позиции",
     unitPrice: "Цена за шт.",
     colorLabel: "Цвет",
+    details: "Подробнее",
+    detailsLead: "Полные характеристики и описание",
+    specsLabel: "Спецификации",
+    highlightsLabel: "Ключевые преимущества",
+    sku: "Артикул",
+    brandLabel: "Марка",
+    categoryLabel: "Категория",
+    availabilityLabel: "Наличие",
+    inStock: "В наличии",
+    outOfStock: "Нет в наличии",
+    addToCart: "В корзину",
+    alreadyInCart: "Уже в корзине",
+    close: "Закрыть",
     remove: "Удалить",
     loading: "Пересчитываем корзину...",
     stockWarning: "Количество скорректируйте под доступный остаток.",
@@ -166,6 +184,19 @@ const cartText = {
     itemTotal: "Line total",
     unitPrice: "Unit price",
     colorLabel: "Color",
+    details: "Details",
+    detailsLead: "Full description and product details",
+    specsLabel: "Specifications",
+    highlightsLabel: "Highlights",
+    sku: "SKU",
+    brandLabel: "Brand",
+    categoryLabel: "Category",
+    availabilityLabel: "Availability",
+    inStock: "In stock",
+    outOfStock: "Out of stock",
+    addToCart: "Add to cart",
+    alreadyInCart: "Already in cart",
+    close: "Close",
     remove: "Remove",
     loading: "Recalculating cart...",
     stockWarning: "Adjust quantity to the available stock.",
@@ -221,6 +252,19 @@ const cartText = {
     itemTotal: "Позиция суммасы",
     unitPrice: "Бир даанасы",
     colorLabel: "Түс",
+    details: "Кененирээк",
+    detailsLead: "Толук сүрөттөмө жана товар маалыматы",
+    specsLabel: "Спецификациялар",
+    highlightsLabel: "Негизги артыкчылыктар",
+    sku: "Артикул",
+    brandLabel: "Марка",
+    categoryLabel: "Категория",
+    availabilityLabel: "Жеткиликтүүлүк",
+    inStock: "Бар",
+    outOfStock: "Жок",
+    addToCart: "Себетке",
+    alreadyInCart: "Себетте бар",
+    close: "Жабуу",
     remove: "Өчүрүү",
     loading: "Себет кайра эсептелүүдө...",
     stockWarning: "Санды жеткиликтүү калдыкка жараша тууралаңыз.",
@@ -262,8 +306,16 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCheckingPromo, setIsCheckingPromo] = useState(false);
   const [isClearCartDialogOpen, setIsClearCartDialogOpen] = useState(false);
+  const [previewProductSlug, setPreviewProductSlug] = useState<string | null>(null);
+  const [previewCartItemColorId, setPreviewCartItemColorId] = useState<number | null>(null);
+  const [previewProduct, setPreviewProduct] = useState<Product | null>(null);
+  const [isPreviewLoading, setIsPreviewLoading] = useState(false);
+  const [previewError, setPreviewError] = useState("");
+  const [previewSelectedColorId, setPreviewSelectedColorId] = useState<number | null>(null);
+  const [previewSelectedMediaIndex, setPreviewSelectedMediaIndex] = useState(0);
   const catalogHref = localizePath("/catalog", locale);
   const isSummaryLoading = items.length > 0 && !summary && !summaryError;
+  const previewResolvedColorId = previewSelectedColorId ?? previewProduct?.color_options[0]?.id ?? null;
 
   useEffect(() => {
     if (!hydrated) {
@@ -298,6 +350,42 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
       active = false;
     };
   }, [hydrated, items, appliedPromoCode]);
+
+  useEffect(() => {
+    if (!previewProductSlug) {
+      return;
+    }
+
+    let active = true;
+
+    getProductBySlug(previewProductSlug)
+      .then((product) => {
+        if (!active) {
+          return;
+        }
+
+        if (!product) {
+          setPreviewError("Failed to load product.");
+          return;
+        }
+
+        setPreviewProduct(product);
+        setPreviewSelectedColorId(
+          product.color_options.some((option) => option.id === previewCartItemColorId)
+            ? previewCartItemColorId
+            : product.color_options[0]?.id ?? null,
+        );
+      })
+      .finally(() => {
+        if (active) {
+          setIsPreviewLoading(false);
+        }
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [previewCartItemColorId, previewProductSlug]);
 
   const canSubmit = useMemo(() => {
     if (!summary || summary.items.length === 0) {
@@ -378,12 +466,32 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
     }
   }
 
+  function closeProductPreview() {
+    setIsPreviewLoading(false);
+    setPreviewProductSlug(null);
+    setPreviewCartItemColorId(null);
+    setPreviewProduct(null);
+    setPreviewError("");
+    setPreviewSelectedColorId(null);
+    setPreviewSelectedMediaIndex(0);
+  }
+
+  function openProductPreview(productSlug: string, cartItemColorId: number | null) {
+    setIsPreviewLoading(true);
+    setPreviewProduct(null);
+    setPreviewError("");
+    setPreviewSelectedColorId(null);
+    setPreviewSelectedMediaIndex(0);
+    setPreviewCartItemColorId(cartItemColorId);
+    setPreviewProductSlug(productSlug);
+  }
+
   return (
     <main className="page-shell relative isolate overflow-hidden bg-[linear-gradient(180deg,#050505_0%,#0c0909_34%,#070506_100%)] px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
       <div className="absolute inset-0 -z-30 bg-[radial-gradient(circle_at_12%_16%,rgba(255,23,68,0.2),transparent_24%),radial-gradient(circle_at_88%_12%,rgba(34,211,238,0.14),transparent_24%),radial-gradient(circle_at_50%_88%,rgba(163,230,53,0.1),transparent_30%)]" />
       <div className="pointer-events-none absolute inset-0 -z-20 opacity-40 [background-image:linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:52px_52px]" />
-      <section className="relative z-10 mx-auto max-w-7xl pb-16">
+      <section className="relative z-10 w-full max-w-7xl mx-auto pb-16">
         <div className="flex flex-col gap-5 border-b border-white/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <CyberBadge variant="red" glow>
@@ -575,180 +683,187 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                   <CyberCard
                     key={item.product_id}
                     variant="glass"
-                    className="group/cart-item overflow-hidden !rounded-xl border border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(255,94,77,0.12),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(251,191,36,0.08),transparent_26%),linear-gradient(180deg,rgba(15,15,17,0.96),rgba(10,10,12,0.98))] shadow-[0_20px_48px_rgba(0,0,0,0.28)] transition-[transform,border-color,box-shadow] duration-300 hover:border-red-300/20 hover:shadow-[0_26px_62px_rgba(0,0,0,0.34)]"
+                    className="group/cart-item overflow-visible !rounded-xl border border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(255,94,77,0.12),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(251,191,36,0.08),transparent_26%),linear-gradient(180deg,rgba(15,15,17,0.96),rgba(10,10,12,0.98))] shadow-[0_20px_48px_rgba(0,0,0,0.28)] transition-[transform,border-color,box-shadow] duration-300 hover:border-red-300/20 hover:shadow-[0_26px_62px_rgba(0,0,0,0.34)]"
                   >
-                    <CyberCardContent className="relative grid gap-4 p-4 sm:p-5 lg:grid-cols-[132px_minmax(0,1fr)_172px] lg:items-start">
+                    <CyberCardContent className="relative grid gap-4 overflow-visible p-4 sm:gap-5 sm:p-5 xl:grid-cols-[172px_minmax(0,1fr)] xl:items-start">
                       <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-red-300/40 to-transparent opacity-80" />
 
-                      <div className="relative overflow-hidden rounded-lg border border-white/10 bg-[radial-gradient(circle_at_18%_16%,rgba(255,94,77,0.16),transparent_28%),radial-gradient(circle_at_78%_12%,rgba(251,191,36,0.1),transparent_24%),linear-gradient(160deg,rgba(22,11,12,0.98),rgba(9,7,8,1))]">
-                        <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:22px_22px] opacity-30" />
-                        {discountPercent ? (
-                          <div className="absolute left-3 top-3 z-20 rounded-full border border-amber-200/20 bg-amber-300/12 px-2.5 py-1 font-tech text-[10px] uppercase tracking-[0.16em] text-amber-100 backdrop-blur">
-                            -{discountPercent}%
-                          </div>
-                        ) : null}
-                        {item.primary_media ? (
-                          // eslint-disable-next-line @next/next/no-img-element
-                          <img
-                            src={item.primary_media}
-                            alt={item.product_name}
-                            className="relative z-10 aspect-square h-full w-full object-cover transition duration-700 group-hover/cart-item:scale-[1.045]"
-                          />
-                        ) : (
-                          <div className="relative z-10 grid aspect-square place-items-center text-zinc-500">
-                            <PackageCheck className="size-10" />
-                          </div>
-                        )}
-                      </div>
-
-                      <div className="min-w-0 space-y-3.5">
-                        <div className="space-y-2">
-                          <div className="flex flex-wrap items-start justify-between gap-3 lg:hidden">
-                            <div className="min-w-0">
-                              <p className="font-display text-[1.25rem] uppercase tracking-[0.04em] text-white sm:text-[1.45rem]">
-                                {item.product_name}
-                              </p>
+                      <div className="grid gap-3">
+                        <div className="relative overflow-hidden rounded-xl border border-white/10 bg-[radial-gradient(circle_at_18%_16%,rgba(255,94,77,0.16),transparent_28%),radial-gradient(circle_at_78%_12%,rgba(251,191,36,0.1),transparent_24%),linear-gradient(160deg,rgba(22,11,12,0.98),rgba(9,7,8,1))]">
+                          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:22px_22px] opacity-30" />
+                          {discountPercent ? (
+                            <div className="absolute left-3 top-3 z-20 rounded-full border border-amber-200/20 bg-amber-300/12 px-2.5 py-1 font-tech text-[10px] uppercase tracking-[0.16em] text-amber-100 backdrop-blur">
+                              -{discountPercent}%
                             </div>
-                            <div className="shrink-0 rounded-lg border border-amber-200/14 bg-amber-300/[0.07] px-3 py-2 text-right">
-                              <p className="font-tech text-[9px] uppercase tracking-[0.16em] text-zinc-500">
-                                {text.itemTotal}
-                              </p>
-                              <p className="mt-1 font-display text-[1.25rem] leading-none text-amber-100">
-                                {formatCartMoney(item.line_total, item.currency, locale)}
-                              </p>
-                            </div>
-                          </div>
-                          <p className="hidden font-display text-[1.25rem] uppercase tracking-[0.04em] text-white lg:block lg:text-[1.45rem]">
-                            {item.product_name}
-                          </p>
-                          <p className="max-w-2xl text-[13px] leading-6 text-zinc-400 sm:text-sm">
-                            {item.short_description}
-                          </p>
-                        </div>
-
-                        <div className="flex flex-wrap gap-2">
-                          <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-zinc-300">
-                            SKU {item.product_sku}
-                          </span>
-                          <span className="rounded-full border border-cyan-300/12 bg-cyan-300/[0.05] px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-cyan-100">
-                            {item.brand_name}
-                          </span>
-                          <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-zinc-300">
-                            {item.category_name}
-                          </span>
-                          {item.selected_color_name ? (
-                            <span className="inline-flex items-center gap-2 rounded-full border border-amber-200/14 bg-amber-200/[0.06] px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-amber-100">
-                              {item.selected_color_hex ? (
-                                <span
-                                  className="size-2.5 rounded-full border border-white/20 shadow-[0_0_0_3px_rgba(255,255,255,0.03)]"
-                                  style={{ backgroundColor: item.selected_color_hex }}
-                                />
-                              ) : null}
-                              {item.selected_color_name}
-                            </span>
                           ) : null}
+                          {item.primary_media ? (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img
+                              src={item.primary_media}
+                              alt={item.product_name}
+                              className="relative z-10 max-w-7xl mx-auto aspect-square h-full w-full object-cover transition duration-700 group-hover/cart-item:scale-[1.045]"
+                            />
+                          ) : (
+                            <div className="relative z-10 max-w-7xl mx-auto grid aspect-square place-items-center text-zinc-500">
+                              <PackageCheck className="size-10" />
+                            </div>
+                          )}
                         </div>
 
-                        {item.color_options.length ? (
-                          <div className="max-w-[18rem]">
-                            <CyberNativeSelect
-                              label={text.colorLabel}
-                              value={String(item.selected_color_id ?? item.color_options[0]?.id ?? "")}
-                              onValueChange={(value) =>
-                                setItemColor(item.product_id, item.selected_color_id, Number(value))
-                              }
-                              options={item.color_options.map((option) => ({
-                                value: String(option.id),
-                                label: option.name,
-                              }))}
-                              className="border-red-300/22 bg-red-500/[0.05] text-red-50 hover:bg-red-500/[0.08] focus-visible:border-red-300/60 focus-visible:ring-red-300/20"
-                            />
-                          </div>
-                        ) : null}
-
-                        <div className="grid gap-3 rounded-lg border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-3 sm:grid-cols-[auto_1fr_auto] sm:items-center">
-                          <div className="inline-flex items-center overflow-hidden rounded-full border border-white/10 bg-black/40 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02)]">
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setQuantity(item.product_id, item.quantity - 1, item.selected_color_id)
-                              }
-                              className="grid size-10 place-items-center border-r border-white/10 text-zinc-300 transition hover:bg-white/10 hover:text-white"
-                              aria-label="Decrease quantity"
-                            >
-                              <Minus className="size-4" />
-                            </button>
-                            <div className="min-w-12 px-3 text-center font-tech text-xs uppercase tracking-[0.14em] text-white">
-                              {item.quantity}
-                            </div>
-                            <button
-                              type="button"
-                              onClick={() =>
-                                setQuantity(
-                                  item.product_id,
-                                  Math.min(item.quantity + 1, item.quantity_in_stock),
-                                  item.selected_color_id,
-                                )
-                              }
-                              className="grid size-10 place-items-center border-l border-white/10 text-zinc-300 transition hover:bg-white/10 hover:text-white"
-                              aria-label="Increase quantity"
-                            >
-                              <Plus className="size-4" />
-                            </button>
-                          </div>
-
-                          <div className="grid gap-1 text-[13px] text-zinc-400 sm:px-1">
-                            <p>
-                              {text.available}:{" "}
-                              <span className="font-medium text-zinc-100">{item.quantity_in_stock}</span>
+                        <div className="rounded-xl border border-amber-200/14 bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,0.12),transparent_36%),linear-gradient(180deg,rgba(251,191,36,0.06),rgba(255,255,255,0.025))] p-4">
+                          <div>
+                            <p className="font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-500">
+                              {text.itemTotal}
                             </p>
-                            {item.quantity >= item.quantity_in_stock ? (
-                              <p className="text-xs text-amber-200">{text.stockWarning}</p>
+                            <p className="mt-2 font-display text-[1.55rem] leading-none text-amber-100">
+                              {formatCartMoney(item.line_total, item.currency, locale)}
+                            </p>
+                          </div>
+
+                          <div className="my-3 h-px bg-white/8" />
+
+                          <div className="grid gap-1">
+                            <p className="font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-500">
+                              {text.unitPrice}
+                            </p>
+                            <p className="text-sm font-medium text-zinc-100">
+                              {formatCartMoney(item.unit_price, item.currency, locale)}
+                            </p>
+                            {item.unit_old_price ? (
+                              <p className="text-xs text-zinc-500 line-through">
+                                {formatCartMoney(item.unit_old_price, item.currency, locale)}
+                              </p>
                             ) : null}
                           </div>
 
-                          <button
-                            type="button"
-                            onClick={() => removeItem(item.product_id, item.selected_color_id)}
-                            className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-red-400/20 bg-red-500/[0.06] px-4 text-[10px] uppercase tracking-[0.16em] text-red-100 transition hover:border-red-300/32 hover:bg-red-500/[0.14]"
-                          >
-                            <Trash2 className="size-4" />
-                            {text.remove}
-                          </button>
+                          {discountPercent ? (
+                            <div className="mt-3 inline-flex w-max items-center rounded-full border border-lime-300/18 bg-lime-300/[0.08] px-2.5 py-1 font-tech text-[10px] uppercase tracking-[0.16em] text-lime-100">
+                              -{discountPercent}%
+                            </div>
+                          ) : null}
                         </div>
                       </div>
 
-                      <div className="hidden rounded-lg border border-amber-200/14 bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,0.12),transparent_36%),linear-gradient(180deg,rgba(251,191,36,0.06),rgba(255,255,255,0.025))] p-4 lg:grid lg:gap-3">
-                        <div>
-                          <p className="font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-500">
-                            {text.itemTotal}
-                          </p>
-                          <p className="mt-2 font-display text-[1.75rem] leading-none text-amber-100">
-                            {formatCartMoney(item.line_total, item.currency, locale)}
-                          </p>
-                        </div>
-
-                        <div className="h-px bg-white/8" />
-
-                        <div className="grid gap-1">
-                          <p className="font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-500">
-                            {text.unitPrice}
-                          </p>
-                          <p className="text-sm font-medium text-zinc-100">
-                            {formatCartMoney(item.unit_price, item.currency, locale)}
-                          </p>
-                          {item.unit_old_price ? (
-                            <p className="text-xs text-zinc-500 line-through">
-                              {formatCartMoney(item.unit_old_price, item.currency, locale)}
+                      <div className="min-w-0 space-y-4">
+                        <div className="flex flex-col gap-3 border-b border-white/8 pb-4 sm:gap-4">
+                          <div className="min-w-0 space-y-2">
+                            <p className="font-display text-[1.2rem] uppercase tracking-[0.04em] text-white sm:text-[1.45rem]">
+                              {item.product_name}
                             </p>
-                          ) : null}
+                            <p className="max-w-3xl text-[13px] leading-6 text-zinc-400 sm:text-sm">
+                              {item.short_description}
+                            </p>
+                          </div>
+
+                          <div className="flex flex-wrap gap-2">
+                            <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-zinc-300">
+                              SKU {item.product_sku}
+                            </span>
+                            <span className="rounded-full border border-cyan-300/12 bg-cyan-300/[0.05] px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-cyan-100">
+                              {item.brand_name}
+                            </span>
+                            <span className="rounded-full border border-white/10 bg-white/[0.04] px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-zinc-300">
+                              {item.category_name}
+                            </span>
+                            {item.selected_color_name ? (
+                              <span className="inline-flex items-center gap-2 rounded-full border border-amber-200/14 bg-amber-200/[0.06] px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-amber-100">
+                                {item.selected_color_hex ? (
+                                  <span
+                                    className="size-2.5 rounded-full border border-white/20 shadow-[0_0_0_3px_rgba(255,255,255,0.03)]"
+                                    style={{ backgroundColor: item.selected_color_hex }}
+                                  />
+                                ) : null}
+                                {item.selected_color_name}
+                              </span>
+                            ) : null}
+                          </div>
                         </div>
 
-                        {discountPercent ? (
-                          <div className="inline-flex w-max items-center rounded-full border border-lime-300/18 bg-lime-300/[0.08] px-2.5 py-1 font-tech text-[10px] uppercase tracking-[0.16em] text-lime-100">
-                            -{discountPercent}%
+                        <div className="grid gap-3 rounded-xl border border-white/8 p-3">
+                          <div className="relative z-30 min-w-0">
+                            {item.color_options.length ? (
+                              <CyberNativeSelect
+                                label={text.colorLabel}
+                                value={String(item.selected_color_id ?? item.color_options[0]?.id ?? "")}
+                                onValueChange={(value) =>
+                                  setItemColor(item.product_id, item.selected_color_id, Number(value))
+                                }
+                                options={item.color_options.map((option) => ({
+                                  value: String(option.id),
+                                  label: option.name,
+                                }))}
+                                className="border-red-300/22 bg-red-500/[0.05] text-red-50 hover:bg-red-500/[0.08] focus-visible:border-red-300/60 focus-visible:ring-red-300/20"
+                              />
+                            ) : (
+                              <div className="rounded-xl border border-white/8 px-4 py-3">
+                                <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">{text.colorLabel}</p>
+                                <p className="mt-2 text-sm text-zinc-200">{item.selected_color_name || "—"}</p>
+                              </div>
+                            )}
                           </div>
-                        ) : null}
+
+                          <div className="grid gap-3 xl:grid-cols-[auto_minmax(0,1fr)] xl:items-center">
+                            <div className="inline-flex items-center overflow-hidden rounded-xl border border-white/10 bg-black/40 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02)]">
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setQuantity(item.product_id, item.quantity - 1, item.selected_color_id)
+                                }
+                                className="grid size-9 place-items-center border-r border-white/10 text-zinc-300 transition hover:bg-white/10 hover:text-white"
+                                aria-label="Decrease quantity"
+                              >
+                                <Minus className="size-3.5" />
+                              </button>
+                              <div className="min-w-10 px-3 text-center font-tech text-[11px] uppercase tracking-[0.14em] text-white">
+                                {item.quantity}
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setQuantity(
+                                    item.product_id,
+                                    Math.min(item.quantity + 1, item.quantity_in_stock),
+                                    item.selected_color_id,
+                                  )
+                                }
+                                className="grid size-9 place-items-center border-l border-white/10 text-zinc-300 transition hover:bg-white/10 hover:text-white"
+                                aria-label="Increase quantity"
+                              >
+                                <Plus className="size-3.5" />
+                              </button>
+                            </div>
+
+                            <div className="grid gap-3">
+                              <div className="grid gap-1 text-[13px] text-zinc-400">
+                                <p>
+                                  {text.available}:{" "}
+                                  <span className="font-medium text-zinc-100">{item.quantity_in_stock}</span>
+                                </p>
+                                {item.quantity >= item.quantity_in_stock ? (
+                                  <p className="text-xs text-amber-200">{text.stockWarning}</p>
+                                ) : null}
+                              </div>
+
+                              <div className="flex flex-wrap gap-2">
+                                <button
+                                  type="button"
+                                  onClick={() => openProductPreview(item.product_slug, item.selected_color_id)}
+                                  className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-white/12 bg-white/[0.04] px-4 text-[10px] uppercase tracking-[0.16em] text-zinc-200 transition hover:border-white/22 hover:bg-white/[0.08] hover:text-white"
+                                >
+                                  {text.details}
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => removeItem(item.product_id, item.selected_color_id)}
+                                  className="inline-flex h-10 items-center justify-center gap-2 rounded-full border border-red-400/20 bg-red-500/[0.06] px-4 text-[10px] uppercase tracking-[0.16em] text-red-100 transition hover:border-red-300/32 hover:bg-red-500/[0.14]"
+                                >
+                                  <Trash2 className="size-4" />
+                                  {text.remove}
+                                </button>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </CyberCardContent>
                   </CyberCard>
@@ -937,6 +1052,29 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
           </div>
         )}
       </section>
+      <ProductDetailsDialog
+        open={Boolean(previewProductSlug)}
+        onOpenChange={(open) => !open && closeProductPreview()}
+        locale={locale}
+        product={previewProduct}
+        labels={text}
+        selectedColorId={previewResolvedColorId}
+        onSelectColor={setPreviewSelectedColorId}
+        selectedMediaIndex={previewSelectedMediaIndex}
+        onSelectMediaIndex={setPreviewSelectedMediaIndex}
+        actionLabel={text.remove}
+        actionVariant="danger"
+        actionClassName="border-red-300/45 bg-red-500/[0.12] text-red-100 hover:border-red-300/60 hover:bg-red-500/[0.2]"
+        actionDisabled={!previewProduct}
+        onAction={() => {
+          if (previewProduct) {
+            removeItem(previewProduct.id, previewCartItemColorId);
+            closeProductPreview();
+          }
+        }}
+        loadingText={isPreviewLoading ? text.loading : undefined}
+        errorText={previewError || undefined}
+      />
       <Footer locale={locale} dictionary={dictionary} className="-mx-4 sm:-mx-6 lg:-mx-8" />
     </main>
   );
