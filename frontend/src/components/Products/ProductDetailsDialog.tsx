@@ -345,8 +345,8 @@ export function ProductDetailsDialog({
 
   return (
     <CyberDialog open={open} onOpenChange={onOpenChange}>
-      <CyberDialogContent className="max-h-[94svh] overflow-visible border-white/12 bg-[radial-gradient(circle_at_top_left,rgba(255,23,68,0.12),transparent_22%),radial-gradient(circle_at_top_right,rgba(251,191,36,0.05),transparent_18%),linear-gradient(180deg,rgba(10,8,10,0.985),rgba(4,4,6,0.995))] p-0 sm:max-w-6xl 2xl:max-w-[90rem]">
-        <CyberDialogHeader className="border-b border-white/10 px-6 pb-5 pt-6 sm:px-8">
+      <CyberDialogContent className="flex h-[94svh] max-h-[94svh] flex-col overflow-hidden border-white/12 bg-[radial-gradient(circle_at_top_left,rgba(255,23,68,0.12),transparent_22%),radial-gradient(circle_at_top_right,rgba(251,191,36,0.05),transparent_18%),linear-gradient(180deg,rgba(10,8,10,0.985),rgba(4,4,6,0.995))] p-0 sm:max-w-6xl 2xl:max-w-[90rem]">
+        <CyberDialogHeader className="shrink-0 border-b border-white/10 px-6 pb-5 pt-6 sm:px-8">
           <CyberDialogDescription className="font-tech text-[11px] uppercase tracking-[0.16em] text-cyan-200/70">
             {labels.detailsLead}
           </CyberDialogDescription>
@@ -356,9 +356,11 @@ export function ProductDetailsDialog({
         </CyberDialogHeader>
 
         {!product ? (
-          <div className="p-10 text-center text-zinc-400">{errorText || loadingText || labels.detailsLead}</div>
+          <div className="flex min-h-0 flex-1 items-center justify-center p-10 text-center text-zinc-400">
+            {errorText || loadingText || labels.detailsLead}
+          </div>
         ) : (
-          <div className="grid max-h-[90svh] grid-rows-[minmax(0,1fr)_auto]">
+          <div className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)_auto]">
             <div className="grid min-h-0 gap-0 lg:grid-cols-[minmax(0,1.22fr)_minmax(360px,0.88fr)]">
               <div className="relative min-h-[24rem] border-b border-white/10 bg-[radial-gradient(circle_at_24%_18%,rgba(255,23,68,0.18),transparent_30%),radial-gradient(circle_at_78%_16%,rgba(251,191,36,0.10),transparent_26%),linear-gradient(145deg,rgba(16,10,14,0.99),rgba(5,5,7,1))] lg:min-h-[42rem] lg:border-b-0 lg:border-r">
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:28px_28px] opacity-30" />
