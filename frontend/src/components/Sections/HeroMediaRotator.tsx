@@ -3,8 +3,8 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const HERO_ROTATION_MS = 6200;
-const HERO_TRANSITION_MS = 1400;
-const HERO_GAP_MS = 180;
+const HERO_TRANSITION_MS = 950;
+const HERO_GAP_MS = 60;
 
 export interface HeroMediaRotatorProps {
   images: string[];

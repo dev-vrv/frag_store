@@ -202,9 +202,10 @@ html {
   object-position: center;
   user-select: none;
   pointer-events: none;
-  transform: translateZ(0);
+  transform: translateZ(0) scale(1.06);
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
+  animation: hero-media-image-breathe 8.5s ease-in-out infinite alternate;
 }
 
 .hero-media-layer::before,
@@ -233,25 +234,25 @@ html {
 .hero-media-layer--active {
   opacity: 0.46;
   filter: saturate(1.04) brightness(0.68) contrast(1.08);
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 .hero-media-layer--hidden {
   opacity: 0;
   filter: saturate(0.86) brightness(0.42) contrast(1.06);
-  transform: scale(1.045);
+  transform: scale(1.035);
 }
 
 .hero-media-layer--visible {
   opacity: 0.46;
   filter: saturate(1.04) brightness(0.68) contrast(1.08);
-  transform: scale(1.03);
+  transform: scale(1.02);
 }
 
 .hero-media-layer--outgoing {
   opacity: 0;
   filter: saturate(0.86) brightness(0.42) contrast(1.06);
-  transform: scale(1.05);
+  transform: scale(1.04);
 }
 
 .hero-media-ambient {
@@ -962,6 +963,16 @@ html {
   }
 }
 
+@keyframes hero-media-image-breathe {
+  0% {
+    transform: translateZ(0) scale(1.04);
+  }
+
+  100% {
+    transform: translateZ(0) scale(1.09);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .home-shared-backdrop__glow,
   .home-shared-backdrop__beam,
@@ -972,7 +983,8 @@ html {
   .hero-media-layer,
   .hero-media-ambient,
   .hero-media-glow,
-  .hero-media-beam {
+  .hero-media-beam,
+  .hero-media-image {
     animation: none;
   }
 
