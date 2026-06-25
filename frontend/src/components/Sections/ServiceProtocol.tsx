@@ -73,10 +73,9 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
   return (
     <Section
       fullWidth
-      className="relative isolate overflow-hidden bg-[linear-gradient(180deg,#050507_0%,#0a0a0e_40%,#040405_100%)] text-zinc-50"
+      className="relative isolate overflow-hidden bg-transparent text-zinc-50"
     >
-      <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_18%_12%,rgba(34,211,238,0.12),transparent_26%),radial-gradient(circle_at_78%_16%,rgba(255,23,68,0.16),transparent_28%),radial-gradient(circle_at_48%_100%,rgba(217,70,239,0.1),transparent_28%)]" />
-      <div className="cyber-grid absolute inset-0 -z-10 opacity-25" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(92%_52%_at_-14%_24%,rgba(34,211,238,0.1),transparent_64%),radial-gradient(88%_48%_at_112%_22%,rgba(255,23,68,0.08),transparent_62%),radial-gradient(72%_38%_at_50%_112%,rgba(249,115,22,0.04),transparent_66%),linear-gradient(180deg,rgba(1,1,3,0.04)_0%,rgba(2,2,4,0.18)_24%,rgba(2,2,4,0.18)_78%,rgba(1,1,3,0.04)_100%)]" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/75 to-transparent" />
 
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 sm:gap-10">
@@ -108,7 +107,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
               key={label}
               as="div"
               delay={500 + index * 90}
-              className="rounded-[1.35rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.025))] p-4 backdrop-blur-xl"
+              className="rounded-[0.85rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.025))] p-4 backdrop-blur-xl"
             >
               <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">
                 {label}
@@ -131,7 +130,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
                 <button
                   type="button"
                   onClick={() => setActiveCardIndex(index)}
-                  className="group flex h-full w-full flex-col overflow-hidden rounded-[1.55rem] border border-white/10 bg-zinc-950/60 text-left shadow-[0_18px_48px_rgba(0,0,0,0.24)] transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-1.5 hover:border-cyan-300/28 hover:shadow-[0_22px_60px_rgba(34,211,238,0.10)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/35"
+                  className="group flex h-full w-full flex-col overflow-hidden rounded-[0.85rem] border border-white/10 bg-zinc-950/60 text-left shadow-[0_18px_48px_rgba(0,0,0,0.24)] transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-1.5 hover:border-cyan-300/28 hover:shadow-[0_22px_60px_rgba(34,211,238,0.10)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/35"
                   aria-label={`${card.title}. ${content.modalCta}`}
                 >
                   <div className={cn("relative aspect-[4/3] overflow-hidden border-b border-white/10", theme.surface)}>

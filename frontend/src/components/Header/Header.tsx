@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { ShoppingCart } from "lucide-react";
-import { usePathname } from "next/navigation";
+import { Heart, ShoppingCart } from "lucide-react";
+import { usePathname, useSearchParams } from "next/navigation";
 import { type ReactNode, useEffect, useRef, useState } from "react";
 import { FaUserAstronaut } from "react-icons/fa";
 
@@ -11,6 +11,7 @@ import { MobileHeaderMenu } from "@/components/Header/MobileHeaderMenu";
 import { Nav } from "@/components/Nav/Nav";
 import { useCart } from "@/components/Cart/CartProvider";
 import { AUTH_STATE_CHANGE_EVENT, getAuthSessionState } from "@/lib/auth";
+import { useFavoriteIds } from "@/lib/favorites";
 import { type Dictionary, type Locale, localizePath, stripLocaleFromPath } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
@@ -21,10 +22,13 @@ export interface HeaderProps {
 
 export function Header({ locale, dictionary }: HeaderProps) {
   const pathname = stripLocaleFromPath(usePathname() || "/");
+  const searchParams = useSearchParams();
   const { quantityTotal } = useCart();
+  const favoriteIds = useFavoriteIds();
   const [isHidden, setIsHidden] = useState(false);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const lastScrollYRef = useRef(0);
+  const isFavoritesCatalogView = pathname === "/catalog" && searchParams.get("favorites") === "1";
 
   useEffect(() => {
     function handleScroll() {
@@ -105,6 +109,16 @@ export function Header({ locale, dictionary }: HeaderProps) {
         <div className="hidden items-center gap-3 lg:flex">
           <LocaleSwitcher locale={locale} label="Сменить язык" />
           <HeaderIconLink
+            href="/catalog"
+            locale={locale}
+            label={dictionary.favorites}
+            active={isFavoritesCatalogView}
+            badge={favoriteIds.length}
+            query={{ favorites: "1" }}
+          >
+            <Heart aria-hidden="true" />
+          </HeaderIconLink>
+          <HeaderIconLink
             href="/cart"
             locale={locale}
             label={dictionary.cart}
@@ -133,6 +147,7 @@ export function Header({ locale, dictionary }: HeaderProps) {
             locale={locale}
             dictionary={dictionary}
             pathname={pathname}
+            favoriteCount={favoriteIds.length}
             isAuthenticated={isAuthenticated}
           />
         </div>
@@ -147,6 +162,7 @@ function HeaderIconLink({
   label,
   active,
   badge,
+  query,
   children,
 }: {
   href: string;
@@ -154,11 +170,18 @@ function HeaderIconLink({
   label: string;
   active: boolean;
   badge?: number;
+  query?: Record<string, string>;
   children: ReactNode;
 }) {
+  const localizedHref = localizePath(href, locale);
+  const resolvedHref =
+    query && Object.keys(query).length
+      ? `${localizedHref}?${new URLSearchParams(query).toString()}`
+      : localizedHref;
+
   return (
     <Link
-      href={localizePath(href, locale)}
+      href={resolvedHref}
       aria-label={label}
       aria-current={active ? "page" : undefined}
       className={cn(

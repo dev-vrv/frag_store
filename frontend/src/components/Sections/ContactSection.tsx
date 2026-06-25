@@ -17,10 +17,9 @@ export function ContactSection({ locale }: ContactSectionProps) {
   return (
     <Section
       fullWidth
-      className="relative isolate overflow-hidden bg-[linear-gradient(180deg,#040405_0%,#09080c_46%,#030304_100%)] text-zinc-50"
+      className="relative isolate overflow-hidden bg-transparent text-zinc-50"
     >
-      <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_18%_16%,rgba(255,23,68,0.14),transparent_24%),radial-gradient(circle_at_82%_14%,rgba(34,211,238,0.12),transparent_22%),radial-gradient(circle_at_50%_100%,rgba(167,139,250,0.07),transparent_26%)]" />
-      <div className="cyber-grid absolute inset-0 -z-10 opacity-25" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(82%_50%_at_-10%_28%,rgba(255,23,68,0.08),transparent_62%),radial-gradient(88%_52%_at_110%_18%,rgba(34,211,238,0.08),transparent_64%),linear-gradient(118deg,rgba(255,23,68,0.03)_0%,transparent_42%,transparent_64%,rgba(34,211,238,0.03)_100%),linear-gradient(180deg,rgba(1,1,3,0.03)_0%,rgba(2,2,4,0.18)_24%,rgba(2,2,4,0.18)_78%,rgba(1,1,3,0.03)_100%)]" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-400/70 to-transparent" />
 
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 sm:gap-10">

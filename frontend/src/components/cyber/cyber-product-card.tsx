@@ -57,6 +57,9 @@ export interface CyberProductCardProps
   onCtaClick?: () => void;
   onDetailsClick?: () => void;
   onFavoriteClick?: () => void;
+  radius?: "default" | "compact";
+  tone?: "default" | "featured" | "catalog";
+  liftOnHover?: boolean;
 }
 
 const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>(
@@ -80,6 +83,9 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
       onCtaClick,
       onDetailsClick,
       onFavoriteClick,
+      radius = "default",
+      tone = "default",
+      liftOnHover = true,
       ...props
     },
     ref,
@@ -87,20 +93,39 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
     const pathname = usePathname();
     const locale = getLocaleFromPathname(pathname);
     const labels = productCardLabels[locale];
+    const isCompactRadius = radius === "compact";
+    const isFeaturedTone = tone === "featured";
+    const isCatalogTone = tone === "catalog";
 
     return (
       <CyberCard
         ref={ref}
         variant="product"
-        hover
+        hover={liftOnHover}
         className={cn(
-          "flex h-full min-h-[35rem] flex-col overflow-hidden !rounded-[1.2rem] border-white/12 bg-[radial-gradient(circle_at_top_left,rgba(255,94,77,0.18),transparent_24%),radial-gradient(circle_at_top_right,rgba(251,146,60,0.12),transparent_22%),linear-gradient(180deg,rgba(18,10,11,0.98),rgba(9,7,8,0.99))] shadow-[0_22px_54px_rgba(0,0,0,0.36)]",
+          "flex h-full min-h-[35rem] flex-col overflow-hidden border-white/12 shadow-[0_22px_54px_rgba(0,0,0,0.36)]",
+          isFeaturedTone
+            ? "border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(255,23,68,0.12),transparent_22%),radial-gradient(circle_at_top_right,rgba(34,211,238,0.08),transparent_20%),linear-gradient(180deg,rgba(8,8,10,0.985),rgba(4,5,7,0.995))] hover:border-red-300/18 hover:shadow-[0_18px_44px_rgba(0,0,0,0.34)]"
+            : isCatalogTone
+              ? "border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(255,23,68,0.08),transparent_22%),radial-gradient(circle_at_top_right,rgba(168,85,247,0.06),transparent_20%),linear-gradient(180deg,rgba(10,10,12,0.99),rgba(5,5,7,1))] hover:border-white/16 hover:shadow-[0_18px_44px_rgba(0,0,0,0.32)]"
+              : "bg-[radial-gradient(circle_at_top_left,rgba(255,94,77,0.18),transparent_24%),radial-gradient(circle_at_top_right,rgba(251,146,60,0.12),transparent_22%),linear-gradient(180deg,rgba(18,10,11,0.98),rgba(9,7,8,0.99))]",
+          isCompactRadius ? "!rounded-[0.8rem]" : "!rounded-[1.2rem]",
           className,
         )}
         {...props}
       >
         <CyberCardContent className="relative flex flex-1 flex-col gap-4 p-3.5 sm:gap-5 sm:p-4">
-          <div className="relative aspect-[1/1] overflow-hidden rounded-[0.95rem] border border-white/10 bg-[radial-gradient(circle_at_18%_16%,rgba(255,94,77,0.28),transparent_26%),radial-gradient(circle_at_82%_12%,rgba(251,146,60,0.18),transparent_24%),linear-gradient(145deg,rgba(20,10,12,0.99),rgba(8,5,6,1))]">
+          <div
+            className={cn(
+              "relative aspect-[1/1] overflow-hidden border border-white/10",
+              isFeaturedTone
+                ? "bg-[radial-gradient(circle_at_18%_16%,rgba(255,23,68,0.16),transparent_24%),radial-gradient(circle_at_82%_12%,rgba(34,211,238,0.1),transparent_22%),linear-gradient(145deg,rgba(10,11,14,0.995),rgba(5,6,8,1))]"
+                : isCatalogTone
+                  ? "bg-[radial-gradient(circle_at_18%_16%,rgba(255,23,68,0.12),transparent_24%),radial-gradient(circle_at_82%_12%,rgba(168,85,247,0.08),transparent_22%),linear-gradient(145deg,rgba(12,12,16,0.995),rgba(6,6,9,1))]"
+                  : "bg-[radial-gradient(circle_at_18%_16%,rgba(255,94,77,0.28),transparent_26%),radial-gradient(circle_at_82%_12%,rgba(251,146,60,0.18),transparent_24%),linear-gradient(145deg,rgba(20,10,12,0.99),rgba(8,5,6,1))]",
+              isCompactRadius ? "rounded-[0.62rem]" : "rounded-[0.95rem]",
+            )}
+          >
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:24px_24px] opacity-35" />
             <div className="absolute inset-x-0 bottom-0 h-24 bg-[linear-gradient(180deg,transparent,rgba(0,0,0,0.54))]" />
             <div className="absolute inset-y-0 left-0 w-20 bg-[linear-gradient(90deg,rgba(255,255,255,0.06),transparent)] opacity-40" />
@@ -115,7 +140,16 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
               <div className="relative z-10 h-full w-full">{image}</div>
             ) : (
               <div className="relative z-10 flex h-full items-center justify-center">
-                <div className="h-28 w-44 rounded-[0.9rem] border border-red-200/25 bg-black/40 shadow-[0_0_42px_rgba(248,113,113,0.22)]" />
+                <div
+                  className={cn(
+                    "h-28 w-44 border bg-black/40",
+                    isFeaturedTone
+                      ? "rounded-[0.58rem] border-white/12 shadow-[0_0_36px_rgba(255,23,68,0.12)]"
+                      : isCatalogTone
+                        ? "rounded-[0.9rem] border-white/12 shadow-[0_0_36px_rgba(0,0,0,0.28)]"
+                        : "rounded-[0.9rem] border-red-200/25 shadow-[0_0_42px_rgba(248,113,113,0.22)]",
+                  )}
+                />
               </div>
             )}
             {badges.length > 0 ? (
@@ -168,13 +202,26 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
               </div>
             ) : null}
 
-            <div className="rounded-[0.95rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] px-3.5 py-3">
+            <div
+              className={cn(
+                "border border-white/8 px-3.5 py-3",
+                isFeaturedTone
+                  ? "bg-[linear-gradient(180deg,rgba(255,255,255,0.035),rgba(255,255,255,0.015))]"
+                  : "bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))]",
+                isCompactRadius ? "rounded-[0.62rem]" : "rounded-[0.95rem]",
+              )}
+            >
               <div className="flex min-h-[4.25rem] items-end justify-between gap-4">
                 <div className="space-y-1">
                   <div className="font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-500">
                     {labels.cta}
                   </div>
-                  <div className="font-display text-[1.9rem] font-normal leading-none text-amber-100 sm:text-[2.15rem]">
+                  <div
+                    className={cn(
+                      "font-display text-[1.9rem] font-normal leading-none sm:text-[2.15rem]",
+                      isFeaturedTone || isCatalogTone ? "text-white" : "text-amber-100",
+                    )}
+                  >
                     {price}
                   </div>
                 </div>
@@ -193,7 +240,9 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
               href={detailsHref}
               className={cn(
                 cyberButtonVariants({ variant: "ghost", size: "md" }),
-                "h-11 w-full border-white/14 bg-white/[0.02] text-zinc-200 hover:border-amber-200/35 hover:text-white",
+                isFeaturedTone
+                  ? "h-11 w-full border-white/12 bg-white/[0.03] text-zinc-200 hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+                  : "h-11 w-full border-white/14 bg-white/[0.02] text-zinc-200 hover:border-amber-200/35 hover:text-white",
               )}
             >
               <span className="relative z-10 inline-flex items-center justify-center gap-2 px-4 py-1">
@@ -202,7 +251,12 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
             </a>
           ) : (
             <CyberButton
-              className="h-11 w-full border-white/14 bg-white/[0.02] px-4 text-zinc-200 hover:border-amber-200/35 hover:text-white"
+              className={cn(
+                "h-11 w-full px-4",
+                isFeaturedTone
+                  ? "border-white/12 bg-white/[0.03] text-zinc-200 hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+                  : "border-white/14 bg-white/[0.02] text-zinc-200 hover:border-amber-200/35 hover:text-white",
+              )}
               variant="ghost"
               onClick={onDetailsClick}
             >
@@ -214,7 +268,9 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
               href={ctaHref}
               className={cn(
                 cyberButtonVariants({ variant: "primary", size: "md" }),
-                "h-11 w-full border-lime-300/75 bg-[linear-gradient(135deg,rgba(163,230,53,0.18),rgba(163,230,53,0.05))] text-lime-100 hover:bg-lime-300 hover:text-zinc-950",
+                isFeaturedTone
+                  ? "h-11 w-full border-lime-300/70 bg-[linear-gradient(135deg,rgba(163,230,53,0.18),rgba(163,230,53,0.05))] text-lime-100 hover:border-lime-200/80 hover:bg-lime-300 hover:text-zinc-950"
+                  : "h-11 w-full border-lime-300/75 bg-[linear-gradient(135deg,rgba(163,230,53,0.18),rgba(163,230,53,0.05))] text-lime-100 hover:bg-lime-300 hover:text-zinc-950",
               )}
             >
               <span className="relative z-10 inline-flex items-center justify-center gap-2 px-4 py-1">
@@ -223,7 +279,12 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
             </a>
           ) : (
             <CyberButton
-              className="h-11 w-full border-lime-300/75 bg-[linear-gradient(135deg,rgba(163,230,53,0.18),rgba(163,230,53,0.05))] px-4 text-lime-100 hover:bg-lime-300 hover:text-zinc-950"
+              className={cn(
+                "h-11 w-full px-4",
+                isFeaturedTone
+                  ? "border-lime-300/70 bg-[linear-gradient(135deg,rgba(163,230,53,0.18),rgba(163,230,53,0.05))] text-lime-100 hover:border-lime-200/80 hover:bg-lime-300 hover:text-zinc-950"
+                  : "border-lime-300/75 bg-[linear-gradient(135deg,rgba(163,230,53,0.18),rgba(163,230,53,0.05))] text-lime-100 hover:bg-lime-300 hover:text-zinc-950",
+              )}
               variant="primary"
               onClick={onCtaClick}
               disabled={ctaDisabled}

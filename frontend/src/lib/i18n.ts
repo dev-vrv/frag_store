@@ -32,6 +32,7 @@ export interface Dictionary {
     nav: NavItemDictionary[];
     info: NavDropdownDictionary;
     cart: string;
+    favorites: string;
     comparison: string;
     auth: string;
     profile: string;
@@ -243,6 +244,7 @@ const dictionaries: Record<Locale, Dictionary> = {
         ],
       },
       cart: "Корзина",
+      favorites: "Избранное",
       comparison: "Избранное",
       auth: "Войти",
       profile: "Профиль",
@@ -650,6 +652,7 @@ const dictionaries: Record<Locale, Dictionary> = {
         ],
       },
       cart: "Cart",
+      favorites: "Favorites",
       comparison: "Favorites",
       auth: "Log in",
       profile: "Profile",
@@ -1057,6 +1060,7 @@ const dictionaries: Record<Locale, Dictionary> = {
         ],
       },
       cart: "Себет",
+      favorites: "Тандалгандар",
       comparison: "Тандалгандар",
       auth: "Кирүү",
       profile: "Профиль",

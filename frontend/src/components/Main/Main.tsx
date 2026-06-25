@@ -17,14 +17,20 @@ export interface MainProps {
 
 export function Main({ locale, dictionary, bestSellerProducts, categories }: MainProps) {
   return (
-    <main className="page-shell w-full overflow-x-hidden bg-black">
-      <Header locale={locale} dictionary={dictionary.header} />
-      <Hero locale={locale} content={dictionary.hero} />
-      <FeaturedDrops locale={locale} content={dictionary.featured} products={bestSellerProducts} />
-      <LoadoutZones locale={locale} content={dictionary.loadout} categories={categories} />
-      <ServiceProtocol content={dictionary.service} />
-      <ContactSection locale={locale} />
-      <Footer locale={locale} dictionary={dictionary} />
+    <main className="page-shell relative isolate w-full overflow-x-hidden bg-black">
+      <div aria-hidden="true" className="home-shared-backdrop">
+        <div className="home-shared-backdrop__base" />
+        <div className="cyber-grid home-shared-backdrop__grid" />
+      </div>
+      <div className="relative z-10">
+        <Header locale={locale} dictionary={dictionary.header} />
+        <Hero locale={locale} content={dictionary.hero} />
+        <FeaturedDrops locale={locale} content={dictionary.featured} products={bestSellerProducts} />
+        <LoadoutZones locale={locale} content={dictionary.loadout} categories={categories} />
+        <ServiceProtocol content={dictionary.service} />
+        <ContactSection locale={locale} />
+        <Footer locale={locale} dictionary={dictionary} />
+      </div>
     </main>
   );
 }

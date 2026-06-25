@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Menu, ShoppingCart } from "lucide-react";
+import { Heart, Menu, ShoppingCart } from "lucide-react";
 import { FaUserAstronaut } from "react-icons/fa";
 
 import {
@@ -19,6 +19,7 @@ export interface MobileHeaderMenuProps {
   locale: Locale;
   dictionary: Dictionary["header"];
   pathname: string;
+  favoriteCount: number;
   isAuthenticated: boolean;
 }
 
@@ -26,11 +27,19 @@ export function MobileHeaderMenu({
   locale,
   dictionary,
   pathname,
+  favoriteCount,
   isAuthenticated,
 }: MobileHeaderMenuProps) {
   const primaryLinks = dictionary.nav;
   const infoLinks = dictionary.info.items;
   const actionLinks = [
+    {
+      href: "/catalog",
+      label: dictionary.favorites,
+      icon: <Heart aria-hidden="true" />,
+      query: { favorites: "1" },
+      badge: favoriteCount,
+    },
     {
       href: "/cart",
       label: dictionary.cart,
@@ -82,8 +91,10 @@ export function MobileHeaderMenu({
                 href={item.href}
                 locale={locale}
                 label={item.label}
-                active={pathname === item.href}
+                active={item.href === "/catalog" ? pathname === "/catalog" : pathname === item.href}
                 icon={item.icon}
+                query={item.query}
+                badge={item.badge}
               />
             ))}
           </div>
@@ -117,25 +128,40 @@ function MobileMenuLink({
   label,
   active,
   icon,
+  query,
+  badge,
 }: {
   href: string;
   locale: Locale;
   label: string;
   active: boolean;
   icon?: React.ReactNode;
+  query?: Record<string, string>;
+  badge?: number;
 }) {
+  const localizedHref = localizePath(href, locale);
+  const resolvedHref =
+    query && Object.keys(query).length
+      ? `${localizedHref}?${new URLSearchParams(query).toString()}`
+      : localizedHref;
+
   return (
     <SheetClose asChild>
       <Link
-        href={localizePath(href, locale)}
+        href={resolvedHref}
         aria-current={active ? "page" : undefined}
         className={cn(
-          "font-tech flex min-h-12 items-center gap-3 border border-white/10 bg-white/[0.035] px-4 text-sm font-semibold uppercase tracking-[0.08em] text-zinc-300 transition hover:border-red-400/35 hover:bg-red-500/10 hover:text-red-100 [&_svg]:size-4",
+          "font-tech relative flex min-h-12 items-center gap-3 border border-white/10 bg-white/[0.035] px-4 text-sm font-semibold uppercase tracking-[0.08em] text-zinc-300 transition hover:border-red-400/35 hover:bg-red-500/10 hover:text-red-100 [&_svg]:size-4",
           active && "border-red-400/55 bg-red-500/14 text-red-100",
         )}
       >
         {icon}
         <span>{label}</span>
+        {badge ? (
+          <span className="ml-auto grid min-w-5 place-items-center rounded-full border border-lime-300/35 bg-lime-300/90 px-1 text-[10px] font-bold leading-5 text-black shadow-[0_0_18px_rgba(190,242,100,0.3)]">
+            {badge > 99 ? "99+" : badge}
+          </span>
+        ) : null}
       </Link>
     </SheetClose>
   );

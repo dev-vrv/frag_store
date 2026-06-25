@@ -527,8 +527,9 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
     <Section
       id="loadout"
       fullWidth
-      className="relative isolate overflow-hidden bg-[linear-gradient(180deg,#050507_0%,#09090d_46%,#040405_100%)] text-zinc-50"
+      className="relative isolate overflow-hidden bg-transparent text-zinc-50"
     >
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(84%_48%_at_-10%_22%,rgba(255,23,68,0.08),transparent_62%),radial-gradient(90%_52%_at_110%_18%,rgba(34,211,238,0.08),transparent_62%),radial-gradient(68%_38%_at_48%_110%,rgba(217,70,239,0.04),transparent_64%),linear-gradient(180deg,rgba(1,1,3,0.02)_0%,rgba(2,2,4,0.15)_20%,rgba(2,2,4,0.15)_80%,rgba(1,1,3,0.03)_100%)]" />
       <style jsx>{`
         @keyframes loadout-modal-enter {
           from {
@@ -543,8 +544,6 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
           }
         }
       `}</style>
-      <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_15%_20%,rgba(255,23,68,0.18),transparent_28%),radial-gradient(circle_at_82%_18%,rgba(34,211,238,0.12),transparent_26%),radial-gradient(circle_at_50%_100%,rgba(167,139,250,0.07),transparent_28%)]" />
-      <div className="cyber-grid absolute inset-0 -z-10 opacity-35" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-400/70 to-transparent" />
 
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 sm:gap-10">
@@ -586,7 +585,7 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
                 delay={620 + index * 120}
                 className="group/loadout-card relative z-0 h-full transition-[z-index] duration-0 hover:z-10 focus-within:z-10"
               >
-                <div className="relative isolate h-full translate-y-0 overflow-hidden rounded-[1.5rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.025))] p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02),0_24px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl transition-[transform,border-color,box-shadow,background-color] duration-500 ease-out will-change-transform transform-gpu group-hover/loadout-card:-translate-y-[3px] group-hover/loadout-card:border-white/14 group-hover/loadout-card:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03),0_30px_70px_rgba(0,0,0,0.28)] sm:rounded-[1.8rem] sm:p-6">
+                <div className="relative isolate h-full translate-y-0 overflow-hidden rounded-[0.9rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.025))] p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02),0_24px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl transition-[transform,border-color,box-shadow,background-color] duration-500 ease-out will-change-transform transform-gpu group-hover/loadout-card:-translate-y-[3px] group-hover/loadout-card:border-white/14 group-hover/loadout-card:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03),0_30px_70px_rgba(0,0,0,0.28)] sm:rounded-[1rem] sm:p-6">
                   <div className={cn("pointer-events-none absolute inset-0 bg-gradient-to-br opacity-90 transition-opacity duration-500 ease-out group-hover/loadout-card:opacity-100", theme.glow)} />
                   <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(6,6,10,0.08),rgba(6,6,10,0.42)_54%,rgba(6,6,10,0.82))]" />
                   <div className="pointer-events-none absolute inset-0 opacity-45 [background-image:linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:24px_24px] transition-opacity duration-500 ease-out group-hover/loadout-card:opacity-70" />
@@ -600,7 +599,7 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
                     <div className="flex items-center justify-between gap-4">
                       <div className="relative">
                         <div className={cn("pointer-events-none absolute inset-0 rounded-[1.15rem] blur-xl transition-transform duration-500 ease-out group-hover/loadout-card:scale-105", theme.pulse)} />
-                        <div className={cn("relative flex size-12 items-center justify-center rounded-[1.15rem] border bg-black/45 shadow-[0_0_24px_rgba(0,0,0,0.2)] transition-[transform,border-color,box-shadow,background-color] duration-500 ease-out group-hover/loadout-card:scale-[1.02] group-hover/loadout-card:bg-black/52 sm:size-14 sm:rounded-[1.35rem]", theme.ring)}>
+                        <div className={cn("relative flex size-12 items-center justify-center rounded-[1.15rem] border bg-black/45 shadow-[0_0_24px_rgba(0,0,0,0.2)] transition-[transform,border-color,box-shadow,background-color] duration-500 ease-out group-hover/loadout-card:scale-[1.02] group-hover/loadout-card:bg-black/52 sm:size-14 sm:rounded-[0.85rem]", theme.ring)}>
                           <Icon className="size-6 transition-transform duration-500 ease-out group-hover/loadout-card:-translate-y-px group-hover/loadout-card:scale-105" />
                         </div>
                       </div>

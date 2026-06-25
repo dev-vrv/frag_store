@@ -6,13 +6,7 @@ import {
   Check,
   ChevronLeft,
   ChevronRight,
-  Cpu,
   Filter,
-  Gamepad2,
-  Headphones,
-  Keyboard,
-  Monitor,
-  Mouse,
   PackageCheck,
   Search,
   Sparkles,
@@ -41,6 +35,7 @@ import {
 import { useCart } from "@/components/Cart/CartProvider";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
+import { ProductTypeIcon } from "@/components/Products/ProductTypeIcon";
 import { toggleFavorite, useFavoriteIds } from "@/lib/favorites";
 import { type Dictionary, type Locale } from "@/lib/i18n";
 import {
@@ -91,6 +86,7 @@ interface QuickFilterOption {
 }
 
 const pageSize = 6;
+const paginationWindowSize = 10;
 
 function parseInitialCategories(value?: string[]) {
   if (!value?.length) {
@@ -290,13 +286,7 @@ const catalogText: Record<
 };
 
 function getCategoryIcon(deviceType: string) {
-  if (deviceType === "mouse") return <Mouse aria-hidden="true" />;
-  if (deviceType === "keyboard") return <Keyboard aria-hidden="true" />;
-  if (deviceType === "headset") return <Headphones aria-hidden="true" />;
-  if (deviceType === "monitor") return <Monitor aria-hidden="true" />;
-  if (deviceType === "component") return <Cpu aria-hidden="true" />;
-  if (deviceType === "accessory") return <PackageCheck aria-hidden="true" />;
-  return <Gamepad2 aria-hidden="true" />;
+  return <ProductTypeIcon deviceType={deviceType} className="size-5" />;
 }
 
 function ProductVisual({ product }: { product: Product }) {
@@ -352,6 +342,14 @@ export function CatalogPage({
     favorites: false,
   });
   const favoriteIdSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
+  const favoritesFromQuery = searchParams.get("favorites") === "1";
+  const activeQuickFilters = useMemo(
+    () => ({
+      ...quickFilters,
+      favorites: favoritesFromQuery,
+    }),
+    [favoritesFromQuery, quickFilters],
+  );
 
   const categoryOptions = useMemo<CatalogCategoryOption[]>(
     () => [
@@ -397,12 +395,12 @@ export function CatalogPage({
         product.short_description.toLowerCase().includes(normalizedQuery) ||
         product.brand.name.toLowerCase().includes(normalizedQuery);
       const matchesQuickFilters =
-        (!quickFilters.bestSeller || product.is_best_seller) &&
-        (!quickFilters.discount || product.has_discount) &&
-        (!quickFilters.newArrival || product.is_new_arrival) &&
-        (!quickFilters.featured || product.is_featured) &&
-        (!quickFilters.inStock || product.quantity_in_stock > 0) &&
-        (!quickFilters.favorites || favoriteIdSet.has(product.id));
+        (!activeQuickFilters.bestSeller || product.is_best_seller) &&
+        (!activeQuickFilters.discount || product.has_discount) &&
+        (!activeQuickFilters.newArrival || product.is_new_arrival) &&
+        (!activeQuickFilters.featured || product.is_featured) &&
+        (!activeQuickFilters.inStock || product.quantity_in_stock > 0) &&
+        (!activeQuickFilters.favorites || favoriteIdSet.has(product.id));
 
       return matchesCategory && matchesBrand && matchesQuery && matchesQuickFilters;
     });
@@ -427,16 +425,23 @@ export function CatalogPage({
         (Number(a.is_best_seller) * 3 + Number(a.is_featured) * 2 + Number(a.has_discount))
       );
     });
-  }, [brand, favoriteIdSet, products, query, quickFilters, selectedCategorySet, sort]);
+  }, [activeQuickFilters, brand, favoriteIdSet, products, query, selectedCategorySet, sort]);
 
   const totalPages = Math.max(1, Math.ceil(filteredProducts.length / pageSize));
   const safePageIndex = Math.min(pageIndex, totalPages);
+  const paginationWindowStart =
+    Math.floor((safePageIndex - 1) / paginationWindowSize) * paginationWindowSize + 1;
+  const paginationWindowEnd = Math.min(totalPages, paginationWindowStart + paginationWindowSize - 1);
+  const visiblePageItems = Array.from(
+    { length: paginationWindowEnd - paginationWindowStart + 1 },
+    (_, index) => paginationWindowStart + index,
+  );
   const paginatedProducts = filteredProducts.slice(
     (safePageIndex - 1) * pageSize,
     safePageIndex * pageSize,
   );
 
-  const activeQuickFilterCount = Object.values(quickFilters).filter(Boolean).length;
+  const activeQuickFilterCount = Object.values(activeQuickFilters).filter(Boolean).length;
   const hasActiveFilters = Boolean(
     query ||
       selectedCategories.length > 0 ||
@@ -472,6 +477,21 @@ export function CatalogPage({
   }
 
   function toggleQuickFilter(key: QuickFilterKey) {
+    if (key === "favorites") {
+      const params = new URLSearchParams(searchParams.toString());
+
+      if (favoritesFromQuery) {
+        params.delete("favorites");
+      } else {
+        params.set("favorites", "1");
+      }
+
+      const nextQuery = params.toString();
+      router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
+      setPageIndex(1);
+      return;
+    }
+
     setQuickFilters((current) => ({
       ...current,
       [key]: !current[key],
@@ -509,6 +529,10 @@ export function CatalogPage({
       inStock: false,
       favorites: false,
     });
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("favorites");
+    const nextQuery = params.toString();
+    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
     setPageIndex(1);
   }
 
@@ -562,11 +586,11 @@ export function CatalogPage({
               onClick={() => toggleCategory(item.value)}
               aria-pressed={item.value === "all" ? selectedCategories.length === 0 : selectedCategorySet.has(item.value)}
               className={cn(
-                "font-tech inline-flex min-h-[3rem] items-center justify-start gap-2 rounded-xl border border-white/10 bg-white/[0.035] px-3 py-2 text-left text-[11px] uppercase leading-[1.15] tracking-[0.06em] text-zinc-300 transition duration-300 hover:border-amber-200/35 hover:bg-white/[0.07] hover:text-white [&_svg]:size-3.5 [&_svg]:shrink-0",
+                "font-tech inline-flex min-h-[3rem] items-center justify-start gap-2 rounded-xl border border-white/10 bg-white/[0.035] px-3 py-2 text-left text-[11px] uppercase leading-[1.15] tracking-[0.06em] text-zinc-300 transition duration-300 hover:border-red-300/28 hover:bg-white/[0.07] hover:text-white [&_svg]:size-3.5 [&_svg]:shrink-0",
                 item.value === "all" && "col-span-2 justify-center",
                 ((item.value === "all" && selectedCategories.length === 0) ||
                   selectedCategorySet.has(item.value)) &&
-                  "border-amber-200/45 bg-amber-200/[0.10] text-amber-100 shadow-[0_12px_30px_rgba(251,191,36,0.08)]",
+                  "border-red-300/32 bg-red-500/[0.08] text-red-50 shadow-[0_12px_30px_rgba(255,23,68,0.08)]",
               )}
             >
               {item.icon}
@@ -582,7 +606,7 @@ export function CatalogPage({
         </p>
         <div className="grid grid-cols-2 gap-2">
             {text.quickFilterOptions.map((option) => {
-              const isActive = quickFilters[option.key];
+              const isActive = activeQuickFilters[option.key];
 
             return (
               <button
@@ -631,7 +655,7 @@ export function CatalogPage({
           <p className="font-tech text-[8px] uppercase leading-4 tracking-[0.14em] text-zinc-500">
             {text.filters}
           </p>
-          <p className="mt-2 font-display text-lg leading-none text-amber-200">
+          <p className="mt-2 font-display text-lg leading-none text-red-100">
             {activeQuickFilterCount + selectedCategories.length + Number(brand !== "all")}
           </p>
         </div>
@@ -656,31 +680,31 @@ export function CatalogPage({
   );
 
   return (
-    <main className="page-shell relative overflow-hidden bg-[linear-gradient(180deg,#12070a_0%,#17090c_26%,#10070a_56%,#050304_100%)] px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative overflow-hidden bg-[linear-gradient(180deg,#080708_0%,#090708_24%,#060506_54%,#020203_100%)] px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
-      <div className="absolute inset-0 -z-40 bg-[radial-gradient(circle_at_14%_16%,rgba(255,94,77,0.34),transparent_24%),radial-gradient(circle_at_84%_12%,rgba(220,38,38,0.30),transparent_24%),radial-gradient(circle_at_50%_82%,rgba(251,146,60,0.16),transparent_28%),linear-gradient(180deg,#16090b_0%,#14070a_28%,#0d0507_56%,#040304_100%)]" />
+      <div className="absolute inset-0 -z-40 bg-[radial-gradient(circle_at_12%_18%,rgba(255,23,68,0.2),transparent_24%),radial-gradient(circle_at_86%_14%,rgba(168,85,247,0.12),transparent_24%),radial-gradient(circle_at_50%_84%,rgba(251,191,36,0.05),transparent_28%),linear-gradient(180deg,#0d0708_0%,#0a0708_28%,#060405_56%,#020203_100%)]" />
       <div className="pointer-events-none absolute inset-0 -z-30 overflow-hidden">
-        <div className="absolute -left-[10%] top-[2%] h-[24rem] w-[24rem] animate-[catalogAurora_22s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgba(255,94,77,0.48),rgba(255,94,77,0.16)_42%,transparent_74%)] blur-3xl sm:h-[30rem] sm:w-[30rem]" />
-        <div className="absolute right-[-8%] top-[8%] h-[24rem] w-[24rem] animate-[catalogAurora_28s_ease-in-out_infinite_reverse] rounded-full bg-[radial-gradient(circle,rgba(220,38,38,0.44),rgba(220,38,38,0.16)_40%,transparent_74%)] blur-3xl sm:h-[32rem] sm:w-[32rem]" />
-        <div className="absolute left-[18%] bottom-[8%] h-[18rem] w-[36rem] animate-[catalogPulse_20s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgba(251,146,60,0.26),transparent_64%)] blur-3xl" />
-        <div className="absolute left-1/2 top-[14%] h-[34rem] w-[34rem] -translate-x-1/2 animate-[catalogHalo_26s_linear_infinite] rounded-full border border-red-200/12 opacity-60" />
-        <div className="absolute left-1/2 top-[14%] h-[25rem] w-[25rem] -translate-x-1/2 animate-[catalogHaloReverse_18s_linear_infinite] rounded-full border border-orange-300/12 opacity-45" />
-        <div className="absolute left-[8%] top-[22%] h-40 w-40 rotate-45 animate-[catalogFloatShape_20s_ease-in-out_infinite] border border-red-200/18 bg-red-200/[0.05] backdrop-blur-[2px]" />
-        <div className="absolute right-[12%] top-[48%] h-28 w-28 rotate-12 animate-[catalogFloatShapeAlt_24s_ease-in-out_infinite] border border-orange-300/18 bg-orange-300/[0.05] backdrop-blur-[2px]" />
-        <div className="absolute left-[14%] top-[52%] h-52 w-52 animate-[catalogPolygon_20s_linear_infinite] border border-red-200/14 opacity-70 [clip-path:polygon(50%_0%,100%_38%,82%_100%,18%_100%,0%_38%)]" />
-        <div className="absolute right-[18%] top-[18%] h-44 w-44 animate-[catalogPolygon_26s_linear_infinite_reverse] border border-rose-300/12 opacity-55 [clip-path:polygon(12%_12%,88%_0%,100%_76%,40%_100%,0%_64%)]" />
-        <div className="absolute left-[38%] top-[18%] h-40 w-40 animate-[catalogDiamond_22s_linear_infinite] border border-orange-200/12 opacity-50 [clip-path:polygon(50%_0%,100%_50%,50%_100%,0%_50%)]" />
-        <div className="absolute right-[22%] bottom-[14%] h-36 w-36 animate-[catalogDiamond_18s_linear_infinite_reverse] border border-red-100/10 opacity-40 [clip-path:polygon(50%_0%,100%_50%,50%_100%,0%_50%)]" />
-        <div className="absolute left-[-8%] top-[24%] h-32 w-[36rem] animate-[catalogBeam_18s_ease-in-out_infinite] rotate-[-12deg] bg-[linear-gradient(90deg,transparent,rgba(255,94,77,0.24),transparent)] blur-2xl" />
-        <div className="absolute right-[-10%] top-[52%] h-28 w-[30rem] animate-[catalogBeam_24s_ease-in-out_infinite_reverse] rotate-[18deg] bg-[linear-gradient(90deg,transparent,rgba(220,38,38,0.20),transparent)] blur-2xl" />
-        <div className="absolute inset-x-0 top-[22%] h-px animate-[catalogScanline_9s_linear_infinite] bg-[linear-gradient(90deg,transparent,rgba(255,115,115,0.42),transparent)] opacity-80" />
-        <div className="absolute inset-x-0 top-[58%] h-px animate-[catalogScanline_13s_linear_infinite_reverse] bg-[linear-gradient(90deg,transparent,rgba(251,146,60,0.30),transparent)] opacity-70" />
+        <div className="absolute -left-[10%] top-[2%] h-[24rem] w-[24rem] animate-[catalogAurora_22s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgba(255,23,68,0.28),rgba(255,23,68,0.12)_42%,transparent_74%)] blur-3xl sm:h-[30rem] sm:w-[30rem]" />
+        <div className="absolute right-[-8%] top-[8%] h-[24rem] w-[24rem] animate-[catalogAurora_28s_ease-in-out_infinite_reverse] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.18),rgba(168,85,247,0.08)_40%,transparent_74%)] blur-3xl sm:h-[32rem] sm:w-[32rem]" />
+        <div className="absolute left-[18%] bottom-[8%] h-[18rem] w-[36rem] animate-[catalogPulse_20s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgba(251,191,36,0.1),transparent_64%)] blur-3xl" />
+        <div className="absolute left-1/2 top-[14%] h-[34rem] w-[34rem] -translate-x-1/2 animate-[catalogHalo_26s_linear_infinite] rounded-full border border-red-200/10 opacity-40" />
+        <div className="absolute left-1/2 top-[14%] h-[25rem] w-[25rem] -translate-x-1/2 animate-[catalogHaloReverse_18s_linear_infinite] rounded-full border border-fuchsia-300/10 opacity-28" />
+        <div className="absolute left-[8%] top-[22%] h-40 w-40 rotate-45 animate-[catalogFloatShape_20s_ease-in-out_infinite] border border-red-200/16 bg-red-200/[0.04] backdrop-blur-[2px]" />
+        <div className="absolute right-[12%] top-[48%] h-28 w-28 rotate-12 animate-[catalogFloatShapeAlt_24s_ease-in-out_infinite] border border-fuchsia-300/14 bg-fuchsia-300/[0.03] backdrop-blur-[2px]" />
+        <div className="absolute left-[14%] top-[52%] h-52 w-52 animate-[catalogPolygon_20s_linear_infinite] border border-red-200/12 opacity-48 [clip-path:polygon(50%_0%,100%_38%,82%_100%,18%_100%,0%_38%)]" />
+        <div className="absolute right-[18%] top-[18%] h-44 w-44 animate-[catalogPolygon_26s_linear_infinite_reverse] border border-fuchsia-300/10 opacity-36 [clip-path:polygon(12%_12%,88%_0%,100%_76%,40%_100%,0%_64%)]" />
+        <div className="absolute left-[38%] top-[18%] h-40 w-40 animate-[catalogDiamond_22s_linear_infinite] border border-amber-200/10 opacity-30 [clip-path:polygon(50%_0%,100%_50%,50%_100%,0%_50%)]" />
+        <div className="absolute right-[22%] bottom-[14%] h-36 w-36 animate-[catalogDiamond_18s_linear_infinite_reverse] border border-red-100/8 opacity-26 [clip-path:polygon(50%_0%,100%_50%,50%_100%,0%_50%)]" />
+        <div className="absolute left-[-8%] top-[24%] h-32 w-[36rem] animate-[catalogBeam_18s_ease-in-out_infinite] rotate-[-12deg] bg-[linear-gradient(90deg,transparent,rgba(255,23,68,0.12),transparent)] blur-2xl" />
+        <div className="absolute right-[-10%] top-[52%] h-28 w-[30rem] animate-[catalogBeam_24s_ease-in-out_infinite_reverse] rotate-[18deg] bg-[linear-gradient(90deg,transparent,rgba(168,85,247,0.1),transparent)] blur-2xl" />
+        <div className="absolute inset-x-0 top-[22%] h-px animate-[catalogScanline_9s_linear_infinite] bg-[linear-gradient(90deg,transparent,rgba(255,131,131,0.22),transparent)] opacity-55" />
+        <div className="absolute inset-x-0 top-[58%] h-px animate-[catalogScanline_13s_linear_infinite_reverse] bg-[linear-gradient(90deg,transparent,rgba(217,70,239,0.18),transparent)] opacity-42" />
       </div>
       <div className="cyber-grid absolute inset-0 -z-20 opacity-[0.32]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 animate-[catalogGridDrift_36s_linear_infinite] bg-[linear-gradient(rgba(255,115,115,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(251,146,60,0.06)_1px,transparent_1px)] bg-[size:68px_68px] opacity-[0.34] [mask-image:linear-gradient(180deg,rgba(0,0,0,0.94),rgba(0,0,0,0.58)_58%,transparent)]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(255,94,77,0.06),transparent_18%,transparent_82%,rgba(220,38,38,0.06))]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.34] [background-image:radial-gradient(circle_at_center,rgba(253,186,116,0.20)_1px,transparent_1px)] [background-size:30px_30px] [mask-image:linear-gradient(180deg,transparent,rgba(0,0,0,0.88)_16%,rgba(0,0,0,0.88)_84%,transparent)]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[conic-gradient(from_180deg_at_50%_50%,rgba(255,94,77,0.08),transparent_18%,rgba(251,146,60,0.07)_40%,transparent_58%,rgba(220,38,38,0.08)_82%,transparent)] opacity-80" />
+      <div className="pointer-events-none absolute inset-0 -z-10 animate-[catalogGridDrift_36s_linear_infinite] bg-[linear-gradient(rgba(255,110,110,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(217,70,239,0.03)_1px,transparent_1px)] bg-[size:68px_68px] opacity-[0.18] [mask-image:linear-gradient(180deg,rgba(0,0,0,0.94),rgba(0,0,0,0.58)_58%,transparent)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(255,23,68,0.04),transparent_18%,transparent_82%,rgba(168,85,247,0.035))]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.16] [background-image:radial-gradient(circle_at_center,rgba(251,191,36,0.12)_1px,transparent_1px)] [background-size:30px_30px] [mask-image:linear-gradient(180deg,transparent,rgba(0,0,0,0.88)_16%,rgba(0,0,0,0.88)_84%,transparent)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[conic-gradient(from_180deg_at_50%_50%,rgba(255,23,68,0.045),transparent_18%,rgba(168,85,247,0.04)_40%,transparent_58%,rgba(251,191,36,0.03)_82%,transparent)] opacity-42" />
       <style jsx>{`
         @keyframes catalogAurora {
           0%,
@@ -880,6 +904,7 @@ export function CatalogPage({
                     <CyberProductCard
                       key={product.id}
                       className="translate-y-0 transition-transform duration-500 hover:-translate-y-1.5"
+                      tone="catalog"
                       image={<ProductVisual product={product} />}
                       title={getLocalizedProductName(product, locale)}
                       description={product.short_description}
@@ -928,7 +953,7 @@ export function CatalogPage({
             >
               <ChevronLeft className="size-4" aria-hidden="true" />
             </button>
-            {Array.from({ length: totalPages }, (_, index) => index + 1).map((item) => (
+            {visiblePageItems.map((item) => (
               <button
                 key={item}
                 type="button"

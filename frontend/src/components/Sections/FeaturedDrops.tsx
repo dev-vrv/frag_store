@@ -2,18 +2,13 @@
 
 import {
   ArrowRight,
-  Cpu,
-  Gamepad2,
-  Headphones,
-  Keyboard,
-  Monitor,
-  Mouse,
   PackageCheck,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
 import { CyberBadge, CyberButton, CyberCard, CyberCardContent, CyberProductCard } from "@/components/cyber";
 import { useCart } from "@/components/Cart/CartProvider";
+import { ProductTypeIcon } from "@/components/Products/ProductTypeIcon";
 import { Section } from "@/components/Sections/Section";
 import RevealOnScroll from "@/components/ui/RevealOnScroll";
 import AnimatedText from "@/components/ui/animatedText";
@@ -33,22 +28,6 @@ export interface FeaturedDropsProps {
 }
 
 function ProductVisual({ product }: { product: Product }) {
-  const deviceType = product.category.device_type;
-  const Icon =
-    deviceType === "mouse"
-      ? Mouse
-      : deviceType === "keyboard"
-        ? Keyboard
-        : deviceType === "headset"
-          ? Headphones
-          : deviceType === "monitor"
-            ? Monitor
-            : deviceType === "component"
-              ? Cpu
-              : deviceType === "accessory"
-                ? PackageCheck
-                : Gamepad2;
-
   if (product.primary_media?.file) {
     return (
       // eslint-disable-next-line @next/next/no-img-element
@@ -63,7 +42,10 @@ function ProductVisual({ product }: { product: Product }) {
   return (
     <div className="flex h-full items-center justify-center">
       <div className="grid size-24 place-items-center border border-red-300/25 bg-black/45 text-red-100 shadow-[0_0_46px_rgba(255,23,68,0.18)] sm:size-28">
-        <Icon className="size-10 sm:size-12" aria-hidden="true" />
+        <ProductTypeIcon
+          deviceType={product.category.device_type}
+          className="size-10 sm:size-12"
+        />
       </div>
     </div>
   );
@@ -214,10 +196,9 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
   return (
     <Section
       fullWidth
-      className="relative isolate overflow-hidden bg-[linear-gradient(180deg,#050507_0%,#0a0a0e_40%,#040405_100%)] text-zinc-50"
+      className="relative isolate overflow-hidden bg-transparent text-zinc-50"
     >
-      <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_18%_12%,rgba(34,211,238,0.12),transparent_26%),radial-gradient(circle_at_78%_16%,rgba(255,23,68,0.16),transparent_28%),radial-gradient(circle_at_48%_100%,rgba(217,70,239,0.1),transparent_28%)]" />
-      <div className="cyber-grid absolute inset-0 -z-10 opacity-25" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(88%_52%_at_-12%_28%,rgba(34,211,238,0.1),transparent_62%),radial-gradient(92%_54%_at_114%_72%,rgba(255,23,68,0.1),transparent_64%),linear-gradient(126deg,rgba(34,211,238,0.04)_0%,transparent_38%,transparent_64%,rgba(255,23,68,0.04)_100%),linear-gradient(180deg,rgba(1,1,3,0.04)_0%,rgba(2,2,4,0.18)_22%,rgba(2,2,4,0.18)_78%,rgba(1,1,3,0.04)_100%)]" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/75 to-transparent" />
 
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 sm:gap-10">
@@ -307,6 +288,10 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
                       aria-hidden={!inPrimarySet}
                     >
                       <CyberProductCard
+                        radius="compact"
+                        tone="featured"
+                        liftOnHover
+                        className="min-h-[26.5rem] hover:-translate-y-0.5 hover:shadow-[0_20px_42px_rgba(0,0,0,0.36)]"
                         image={<ProductVisual product={product} />}
                         title={getLocalizedProductName(product, locale)}
                         description={product.short_description}

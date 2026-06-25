@@ -3,19 +3,22 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const HERO_ROTATION_MS = 6200;
-const HERO_TRANSITION_MS = 2800;
+const HERO_TRANSITION_MS = 1400;
+const HERO_GAP_MS = 180;
 
 export interface HeroMediaRotatorProps {
   images: string[];
 }
 
+type HeroMediaPhase = "visible" | "hiding" | "hidden" | "showing";
+
 export function HeroMediaRotator({ images }: HeroMediaRotatorProps) {
   const heroImages = useMemo(() => images.filter(Boolean), [images]);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [outgoingIndex, setOutgoingIndex] = useState<number | null>(null);
+  const [phase, setPhase] = useState<HeroMediaPhase>("visible");
   const [reducedMotion, setReducedMotion] = useState(false);
   const activeIndexRef = useRef(0);
-  const clearOutgoingTimeoutRef = useRef<number | null>(null);
+  const frameTimeoutRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -41,8 +44,8 @@ export function HeroMediaRotator({ images }: HeroMediaRotatorProps) {
 
   useEffect(() => {
     return () => {
-      if (clearOutgoingTimeoutRef.current !== null) {
-        window.clearTimeout(clearOutgoingTimeoutRef.current);
+      if (frameTimeoutRef.current !== null) {
+        window.clearTimeout(frameTimeoutRef.current);
       }
     };
   }, []);
@@ -52,25 +55,41 @@ export function HeroMediaRotator({ images }: HeroMediaRotatorProps) {
       return undefined;
     }
 
-    const intervalId = window.setInterval(() => {
-      const currentIndex = activeIndexRef.current;
-      const nextIndex = (currentIndex + 1) % heroImages.length;
-
-      setOutgoingIndex(currentIndex);
-      setActiveIndex(nextIndex);
-      activeIndexRef.current = nextIndex;
-
-      if (clearOutgoingTimeoutRef.current !== null) {
-        window.clearTimeout(clearOutgoingTimeoutRef.current);
+    const clearFrameTimeout = () => {
+      if (frameTimeoutRef.current !== null) {
+        window.clearTimeout(frameTimeoutRef.current);
+        frameTimeoutRef.current = null;
       }
+    };
 
-      clearOutgoingTimeoutRef.current = window.setTimeout(() => {
-        setOutgoingIndex(null);
-      }, HERO_TRANSITION_MS);
-    }, HERO_ROTATION_MS);
+    const scheduleCycle = () => {
+      clearFrameTimeout();
+
+      frameTimeoutRef.current = window.setTimeout(() => {
+        setPhase("hiding");
+
+        frameTimeoutRef.current = window.setTimeout(() => {
+          const nextIndex = (activeIndexRef.current + 1) % heroImages.length;
+
+          setPhase("hidden");
+          setActiveIndex(nextIndex);
+          activeIndexRef.current = nextIndex;
+          frameTimeoutRef.current = window.setTimeout(() => {
+            setPhase("showing");
+
+            frameTimeoutRef.current = window.setTimeout(() => {
+              setPhase("visible");
+              scheduleCycle();
+            }, HERO_TRANSITION_MS);
+          }, 34);
+        }, HERO_TRANSITION_MS + HERO_GAP_MS);
+      }, HERO_ROTATION_MS);
+    };
+
+    scheduleCycle();
 
     return () => {
-      window.clearInterval(intervalId);
+      clearFrameTimeout();
     };
   }, [heroImages.length, reducedMotion]);
 
@@ -84,8 +103,16 @@ export function HeroMediaRotator({ images }: HeroMediaRotatorProps) {
   }
 
   const displayActiveIndex = reducedMotion ? 0 : activeIndex % heroImages.length;
-  const displayOutgoingIndex =
-    reducedMotion || outgoingIndex === null ? null : outgoingIndex % heroImages.length;
+  const renderPhase: HeroMediaPhase =
+    reducedMotion || heroImages.length <= 1 ? "visible" : phase;
+  const mediaLayerClassName =
+    renderPhase === "hiding"
+      ? "hero-media-layer hero-media-layer--outgoing"
+      : renderPhase === "hidden"
+        ? "hero-media-layer hero-media-layer--hidden"
+        : renderPhase === "showing"
+        ? "hero-media-layer hero-media-layer--active"
+        : "hero-media-layer hero-media-layer--visible";
 
   return (
     <div
@@ -100,18 +127,16 @@ export function HeroMediaRotator({ images }: HeroMediaRotatorProps) {
       <div className="hero-media-beam" />
 
       <div
-        className="hero-media-layer hero-media-layer--active"
-        key={`active-${heroImages[displayActiveIndex]}`}
-        style={{ backgroundImage: `url(${heroImages[displayActiveIndex]})` }}
-      />
-
-      {displayOutgoingIndex !== null && displayOutgoingIndex !== displayActiveIndex ? (
-        <div
-          className="hero-media-layer hero-media-layer--outgoing"
-          key={`outgoing-${heroImages[displayOutgoingIndex]}`}
-          style={{ backgroundImage: `url(${heroImages[displayOutgoingIndex]})` }}
+        className={mediaLayerClassName}
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={heroImages[displayActiveIndex]}
+          alt=""
+          className="hero-media-image"
+          draggable={false}
         />
-      ) : null}
+      </div>
     </div>
   );
 }

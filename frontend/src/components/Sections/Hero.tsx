@@ -19,16 +19,14 @@ export async function Hero({ locale, content }: HeroProps) {
   return (
     <Section
       fullWidth
-      className="relative isolate overflow-hidden bg-black text-zinc-50"
+      className="relative isolate overflow-hidden bg-transparent text-zinc-50"
       containerClassName="section-hero relative"
     >
-      <div className="absolute inset-0 -z-30 bg-[radial-gradient(circle_at_18%_24%,rgba(255,23,68,0.3),transparent_31%),radial-gradient(circle_at_78%_18%,rgba(127,29,29,0.42),transparent_30%),radial-gradient(circle_at_58%_78%,rgba(217,70,239,0.08),transparent_24%),linear-gradient(180deg,#050507_0%,#120507_48%,#000_100%)]" />
       <HeroMediaRotator images={heroImages} />
-      <div className="cyber-grid absolute inset-0 -z-20 opacity-70" />
+      <div className="absolute inset-0 -z-20 bg-[radial-gradient(90%_58%_at_-10%_18%,rgba(255,23,68,0.13),transparent_62%),radial-gradient(84%_54%_at_112%_14%,rgba(34,211,238,0.11),transparent_60%),linear-gradient(112deg,rgba(255,23,68,0.05)_0%,transparent_34%,transparent_68%,rgba(34,211,238,0.05)_100%),linear-gradient(180deg,rgba(1,1,3,0.08)_0%,rgba(2,2,4,0.22)_26%,rgba(2,2,4,0.18)_64%,rgba(1,1,3,0.06)_100%)]" />
       <div className="cyber-scanline absolute inset-0 -z-10 opacity-35" />
-      <div className="absolute left-1/2 top-1/2 -z-10 h-[21rem] w-[21rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,23,68,0.22)_0%,rgba(255,23,68,0.08)_34%,transparent_72%)] blur-3xl sm:h-[26rem] sm:w-[26rem] lg:h-[32rem] lg:w-[32rem]" />
-      <div className="absolute left-1/2 top-1/2 -z-10 h-[13rem] w-[13rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-red-400/15 sm:h-[16rem] sm:w-[16rem] lg:h-[20rem] lg:w-[20rem]" />
-      <div className="absolute left-1/2 top-1/2 -z-10 h-[18rem] w-[18rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-cyan-300/10 sm:h-[22rem] sm:w-[22rem] lg:h-[28rem] lg:w-[28rem]" />
+      <div className="absolute -left-[16%] top-[10%] -z-10 h-[22rem] w-[30rem] bg-[radial-gradient(ellipse,rgba(255,23,68,0.12)_0%,rgba(255,23,68,0.05)_38%,transparent_74%)] blur-3xl sm:h-[28rem] sm:w-[38rem] lg:h-[34rem] lg:w-[46rem]" />
+      <div className="absolute -right-[18%] top-[6%] -z-10 h-[22rem] w-[28rem] bg-[radial-gradient(ellipse,rgba(34,211,238,0.1)_0%,rgba(34,211,238,0.04)_40%,transparent_76%)] blur-3xl sm:h-[28rem] sm:w-[36rem] lg:h-[34rem] lg:w-[44rem]" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-400/85 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-red-500/70 to-transparent" />
 
