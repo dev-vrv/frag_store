@@ -228,14 +228,14 @@ function ProductMediaGallery({
 
   return (
     <div className="relative flex h-full flex-col">
-      <div className="relative flex-1 overflow-hidden rounded-[1rem] bg-transparent p-3">
-        <div className="block h-full w-full overflow-hidden rounded-[1rem]">
+      <div className="relative flex-1 overflow-hidden rounded-md bg-transparent p-3">
+        <div className="block h-full w-full overflow-hidden rounded-md">
           {source && activeMedia ? (
             isVideoMedia(activeMedia) ? (
               <video
                 key={source}
                 src={source}
-                className="h-full w-full rounded-[1rem] object-contain"
+                className="h-full w-full rounded-md object-contain"
                 controls
                 playsInline
                 preload="metadata"
@@ -245,7 +245,7 @@ function ProductMediaGallery({
               <img
                 src={source}
                 alt={activeMedia.alt_text || product.name}
-                className="h-full w-full rounded-[1rem] object-contain"
+                className="h-full w-full rounded-md object-contain"
               />
             )
           ) : (
@@ -287,7 +287,7 @@ function ProductMediaGallery({
                 type="button"
                 onClick={() => onChange(index)}
                 className={cn(
-                  "relative aspect-square overflow-hidden rounded-[0.8rem] border bg-transparent transition",
+                  "relative aspect-square overflow-hidden rounded-md border bg-transparent transition",
                   selected
                     ? "border-cyan-200/45 shadow-[0_0_24px_rgba(34,211,238,0.16)]"
                     : "border-white/10 hover:border-white/24",
@@ -366,7 +366,7 @@ export function ProductDetailsDialog({
                 <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:28px_28px] opacity-30" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,23,68,0.12),transparent_54%)]" />
                 <div className="relative z-10 h-full p-4 sm:p-6">
-                  <div className="h-full overflow-hidden rounded-[1rem] border border-cyan-200/14 bg-transparent shadow-[0_0_46px_rgba(34,211,238,0.10)]">
+                  <div className="h-full overflow-hidden rounded-md border border-cyan-200/14 bg-transparent shadow-[0_0_46px_rgba(34,211,238,0.10)]">
                     <ProductMediaGallery
                       product={product}
                       activeIndex={selectedMediaIndex}

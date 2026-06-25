@@ -222,7 +222,7 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
         <CyberCard
           variant="glass"
           className={cn(
-            "rounded-none p-2 transition-all duration-700 lg:flex lg:min-h-screen lg:items-center",
+            "rounded-md p-2 transition-all duration-700 lg:flex lg:min-h-screen lg:items-center",
             mode === "login"
               ? "border-red-500/20 bg-black/38 shadow-[0_0_44px_rgba(255,23,68,0.12)]"
               : "border-fuchsia-400/25 bg-black/42 shadow-[0_0_54px_rgba(217,70,239,0.16)]",
@@ -258,7 +258,7 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
             >
               <CyberTabsList
                 className={cn(
-                  "grid w-full grid-cols-2 rounded-none transition-all duration-700",
+                  "grid w-full grid-cols-2 rounded-md transition-all duration-700",
                   mode === "login"
                     ? "border-red-300/15 bg-black/45 shadow-[inset_0_0_22px_rgba(248,113,113,0.05)]"
                     : "border-fuchsia-300/20 bg-black/50 shadow-[inset_0_0_26px_rgba(217,70,239,0.09)]",
@@ -293,7 +293,7 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
               <CyberTabsContent
                 value="login"
                 className={cn(
-                  "mt-5 animate-in rounded-none border fade-in-50 slide-in-from-bottom-2 duration-300",
+                  "mt-5 animate-in rounded-md border fade-in-50 slide-in-from-bottom-2 duration-300",
                   mode === "login"
                     ? "border-red-400/15 bg-red-500/[0.035] shadow-[inset_0_0_30px_rgba(255,23,68,0.05)]"
                     : "border-cyan-300/12 bg-cyan-500/[0.03] shadow-[inset_0_0_30px_rgba(34,211,238,0.04)]",
@@ -345,7 +345,7 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
               <CyberTabsContent
                 value="register"
                 className={cn(
-                  "mt-5 animate-in rounded-none border fade-in-50 slide-in-from-bottom-2 duration-300",
+                  "mt-5 animate-in rounded-md border fade-in-50 slide-in-from-bottom-2 duration-300",
                   mode === "login"
                     ? "border-fuchsia-300/15 bg-fuchsia-500/[0.04] shadow-[inset_0_0_30px_rgba(217,70,239,0.05)]"
                     : "border-fuchsia-300/24 bg-fuchsia-500/[0.055] shadow-[inset_0_0_36px_rgba(217,70,239,0.08)]",

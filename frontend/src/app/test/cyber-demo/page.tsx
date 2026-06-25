@@ -281,7 +281,7 @@ export default function CyberDemoPage() {
                       Confirm the loadout profile before sending it to the assembly queue.
                     </CyberDialogDescription>
                   </CyberDialogHeader>
-                  <div className="rounded-lg border border-white/10 bg-black/35 p-4">
+                  <div className="rounded-md border border-white/10 bg-black/35 p-4">
                     <div className="flex items-center gap-3">
                       <Layers3 className="size-5 text-red-200" />
                       <div>
@@ -324,7 +324,7 @@ export default function CyberDemoPage() {
                     {sheetActions.map(([Icon, label]) => (
                       <button
                         key={label}
-                        className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/[0.04] px-4 py-3 text-left text-sm text-zinc-200 transition hover:border-red-300/30 hover:bg-red-300/10"
+                        className="flex items-center gap-3 rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-left text-sm text-zinc-200 transition hover:border-red-300/30 hover:bg-red-300/10"
                       >
                         <Icon className="size-4 text-red-200" />
                         {label}

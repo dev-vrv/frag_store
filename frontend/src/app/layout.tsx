@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Exo_2, JetBrains_Mono } from "next/font/google";
 
+import AiAssistantLauncher from "@/components/Ai/AiAssistantLauncher";
 import { CyberLoader } from "@/components/Loaders/CyberLoader";
 import { CartProvider } from "@/components/Cart/CartProvider";
 import { ContactProvider } from "@/components/Contacts/ContactProvider";
@@ -51,6 +52,7 @@ export default async function RootLayout({
           <CartProvider>
             <ContactProvider contacts={contacts}>
               {children}
+              <AiAssistantLauncher />
               <BackToTopButton />
             </ContactProvider>
           </CartProvider>

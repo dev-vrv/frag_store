@@ -52,14 +52,14 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 rounded-xl border border-white/10 bg-zinc-950 p-6 text-zinc-50 shadow-2xl outline-none",
+          "fixed top-1/2 left-1/2 z-50 grid w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 gap-4 rounded-md border border-white/10 bg-zinc-950 p-6 text-zinc-50 shadow-2xl outline-none",
           className,
         )}
         {...props}
       >
         {children}
         {showCloseButton ? (
-          <DialogPrimitive.Close className="absolute top-4 right-4 z-20 rounded-xs opacity-70 outline-none transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-red-300/50 disabled:pointer-events-none">
+          <DialogPrimitive.Close className="absolute top-4 right-4 z-20 rounded-md opacity-70 outline-none transition-opacity hover:opacity-100 focus-visible:ring-2 focus-visible:ring-red-300/50 disabled:pointer-events-none">
             <X className="size-4" />
             <span className="sr-only">{closeLabels[locale]}</span>
           </DialogPrimitive.Close>

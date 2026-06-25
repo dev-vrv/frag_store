@@ -81,7 +81,7 @@ export async function BlogDetailPage({ locale, dictionary, slug }: BlogDetailPag
               <video
                 src={post.video}
                 controls
-                className="aspect-video w-full rounded-lg border border-white/10 bg-black"
+                className="aspect-video w-full rounded-md border border-white/10 bg-black"
               />
             ) : null}
           </CyberCardContent>

@@ -123,7 +123,7 @@ export function ProfileOrdersPanel({
 
         {orders.length ? (
           <>
-            <div className="grid gap-4 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:grid-cols-2 xl:grid-cols-[minmax(0,1.4fr)_220px_220px_auto] xl:items-end">
+            <div className="grid gap-4 rounded-md border border-white/10 bg-white/[0.03] p-4 sm:grid-cols-2 xl:grid-cols-[minmax(0,1.4fr)_220px_220px_auto] xl:items-end">
               <CyberInput
                 label={profile.ordersSearchLabel}
                 value={query}
@@ -182,7 +182,7 @@ export function ProfileOrdersPanel({
                 {filteredOrders.map((order) => (
                   <div
                     key={order.id}
-                    className="grid gap-5 rounded-2xl border border-white/10 bg-white/[0.03] p-4 sm:p-5 xl:grid-cols-[280px_minmax(0,1fr)]"
+                    className="grid gap-5 rounded-md border border-white/10 bg-white/[0.03] p-4 sm:p-5 xl:grid-cols-[280px_minmax(0,1fr)]"
                   >
                     <div className="min-w-0 space-y-3 border-b border-white/10 pb-4 xl:border-b-0 xl:border-r xl:pb-0 xl:pr-5">
                       <div className="flex flex-wrap items-center gap-3">
@@ -222,7 +222,7 @@ export function ProfileOrdersPanel({
                       {order.items.map((item) => (
                         <div
                           key={item.id}
-                          className="grid gap-3 rounded-xl border border-white/8 bg-black/25 px-4 py-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
+                          className="grid gap-3 rounded-md border border-white/8 bg-black/25 px-4 py-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
                         >
                           <div className="min-w-0">
                             <p className="break-words text-sm uppercase tracking-[0.08em] text-zinc-100">
@@ -252,7 +252,7 @@ export function ProfileOrdersPanel({
                 ))}
               </div>
             ) : (
-              <div className="rounded-2xl border border-dashed border-white/15 bg-white/[0.03] px-6 py-12 text-center sm:px-8 sm:py-14">
+              <div className="rounded-md border border-dashed border-white/15 bg-white/[0.03] px-6 py-12 text-center sm:px-8 sm:py-14">
                 <p className="font-display text-2xl uppercase tracking-[0.08em] text-white">
                   {profile.ordersNoResultsTitle}
                 </p>
@@ -263,7 +263,7 @@ export function ProfileOrdersPanel({
             )}
           </>
         ) : (
-          <div className="rounded-2xl border border-dashed border-white/15 bg-white/[0.03] px-6 py-12 text-center sm:px-8 sm:py-14">
+          <div className="rounded-md border border-dashed border-white/15 bg-white/[0.03] px-6 py-12 text-center sm:px-8 sm:py-14">
             <p className="font-display text-2xl uppercase tracking-[0.08em] text-white">
               {profile.ordersEmptyTitle}
             </p>

@@ -117,7 +117,7 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
             : isCatalogTone
               ? "border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(255,23,68,0.08),transparent_22%),radial-gradient(circle_at_top_right,rgba(168,85,247,0.06),transparent_20%),linear-gradient(180deg,rgba(10,10,12,0.99),rgba(5,5,7,1))] hover:border-white/16 hover:shadow-[0_18px_44px_rgba(0,0,0,0.32)]"
               : "bg-[radial-gradient(circle_at_top_left,rgba(255,94,77,0.18),transparent_24%),radial-gradient(circle_at_top_right,rgba(251,146,60,0.12),transparent_22%),linear-gradient(180deg,rgba(18,10,11,0.98),rgba(9,7,8,0.99))]",
-          isCompactRadius ? "!rounded-[0.8rem]" : "!rounded-[1.2rem]",
+          isCompactRadius ? "!rounded-md" : "!rounded-md",
           className,
         )}
         {...props}
@@ -131,7 +131,7 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
                 : isCatalogTone
                   ? "bg-[radial-gradient(circle_at_18%_16%,rgba(255,23,68,0.12),transparent_24%),radial-gradient(circle_at_82%_12%,rgba(168,85,247,0.08),transparent_22%),linear-gradient(145deg,rgba(12,12,16,0.995),rgba(6,6,9,1))]"
                   : "bg-[radial-gradient(circle_at_18%_16%,rgba(255,94,77,0.28),transparent_26%),radial-gradient(circle_at_82%_12%,rgba(251,146,60,0.18),transparent_24%),linear-gradient(145deg,rgba(20,10,12,0.99),rgba(8,5,6,1))]",
-              isCompactRadius ? "rounded-[0.62rem]" : "rounded-[0.95rem]",
+              isCompactRadius ? "rounded-md" : "rounded-md",
             )}
           >
             <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:24px_24px] opacity-35" />
@@ -152,10 +152,10 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
                   className={cn(
                     "h-28 w-44 border bg-black/40",
                     isFeaturedTone
-                      ? "rounded-[0.58rem] border-white/12 shadow-[0_0_36px_rgba(255,23,68,0.12)]"
+                      ? "rounded-md border-white/12 shadow-[0_0_36px_rgba(255,23,68,0.12)]"
                       : isCatalogTone
-                        ? "rounded-[0.9rem] border-white/12 shadow-[0_0_36px_rgba(0,0,0,0.28)]"
-                        : "rounded-[0.9rem] border-red-200/25 shadow-[0_0_42px_rgba(248,113,113,0.22)]",
+                        ? "rounded-md border-white/12 shadow-[0_0_36px_rgba(0,0,0,0.28)]"
+                        : "rounded-md border-red-200/25 shadow-[0_0_42px_rgba(248,113,113,0.22)]",
                   )}
                 />
               </div>
@@ -194,7 +194,7 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
                   "pointer-events-none absolute inset-x-3 bottom-3 z-20 translate-y-3 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 max-md:hidden",
                 )}
               >
-                <div className="rounded-[0.9rem] border border-white/16 bg-black/88 px-3 py-3 shadow-[0_20px_40px_rgba(0,0,0,0.45)] backdrop-blur-md">
+                <div className="rounded-md border border-white/16 bg-black/88 px-3 py-3 shadow-[0_20px_40px_rgba(0,0,0,0.45)] backdrop-blur-md">
                   {hoverPanel}
                 </div>
               </div>

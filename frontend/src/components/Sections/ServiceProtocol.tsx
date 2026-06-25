@@ -107,7 +107,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
               key={label}
               as="div"
               delay={500 + index * 90}
-              className="rounded-[0.85rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.025))] p-4 backdrop-blur-xl"
+              className="rounded-md border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.025))] p-4 backdrop-blur-xl"
             >
               <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">
                 {label}
@@ -130,7 +130,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
                 <button
                   type="button"
                   onClick={() => setActiveCardIndex(index)}
-                  className="group flex h-full w-full flex-col overflow-hidden rounded-[0.85rem] border border-white/10 bg-zinc-950/60 text-left shadow-[0_18px_48px_rgba(0,0,0,0.24)] transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-1.5 hover:border-cyan-300/28 hover:shadow-[0_22px_60px_rgba(34,211,238,0.10)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/35"
+                  className="group flex h-full w-full flex-col overflow-hidden rounded-md border border-white/10 bg-zinc-950/60 text-left shadow-[0_18px_48px_rgba(0,0,0,0.24)] transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-1.5 hover:border-cyan-300/28 hover:shadow-[0_22px_60px_rgba(34,211,238,0.10)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/35"
                   aria-label={`${card.title}. ${content.modalCta}`}
                 >
                   <div className={cn("relative aspect-[4/3] overflow-hidden border-b border-white/10", theme.surface)}>
@@ -147,7 +147,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
                       </div>
 
                       <div className="flex flex-1 items-center justify-end py-5 sm:py-6">
-                        <div className="grid size-12 place-items-center rounded-2xl border border-white/10 bg-black/35 text-white shadow-[0_0_38px_rgba(255,255,255,0.08)] sm:size-14">
+                        <div className="grid size-12 place-items-center rounded-md border border-white/10 bg-black/35 text-white shadow-[0_0_38px_rgba(255,255,255,0.08)] sm:size-14">
                           <Icon className="size-6 sm:size-7" />
                         </div>
                       </div>
@@ -225,7 +225,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
                   </div>
 
                   <div className="mt-8 flex items-center justify-center">
-                    <div className={cn("relative grid aspect-square w-full max-w-[16rem] place-items-center overflow-hidden rounded-[2rem] border border-white/10", activeTheme.surface)}>
+                    <div className={cn("relative grid aspect-square w-full max-w-[16rem] place-items-center overflow-hidden rounded-md border border-white/10", activeTheme.surface)}>
                       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.07)_1px,transparent_1px)] bg-[size:22px_22px] opacity-40" />
                       <div className={cn("absolute -right-6 top-6 size-24 rounded-full blur-3xl", activeTheme.orb)} />
                       {(() => {
@@ -281,7 +281,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
                       {activeCard.highlights.map((highlight) => (
                         <div
                           key={highlight}
-                          className="rounded-[1.15rem] border border-white/10 bg-white/[0.04] px-4 py-4 text-sm leading-7 text-zinc-300"
+                          className="rounded-md border border-white/10 bg-white/[0.04] px-4 py-4 text-sm leading-7 text-zinc-300"
                         >
                           {highlight}
                         </div>
@@ -289,7 +289,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
                     </div>
                   </div>
 
-                  <div className="mt-8 rounded-[1.3rem] border border-white/10 bg-black/20 p-5">
+                  <div className="mt-8 rounded-md border border-white/10 bg-black/20 p-5">
                     <p className="text-sm leading-7 text-zinc-400">{activeCard.note}</p>
                   </div>
 

@@ -585,7 +585,7 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
                 delay={620 + index * 120}
                 className="group/loadout-card relative z-0 h-full transition-[z-index] duration-0 hover:z-10 focus-within:z-10"
               >
-                <div className="relative isolate h-full translate-y-0 overflow-hidden rounded-[0.9rem] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.025))] p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02),0_24px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl transition-[transform,border-color,box-shadow,background-color] duration-500 ease-out will-change-transform transform-gpu group-hover/loadout-card:-translate-y-[3px] group-hover/loadout-card:border-white/14 group-hover/loadout-card:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03),0_30px_70px_rgba(0,0,0,0.28)] sm:rounded-[1rem] sm:p-6">
+                <div className="relative isolate h-full translate-y-0 overflow-hidden rounded-md border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.025))] p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02),0_24px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl transition-[transform,border-color,box-shadow,background-color] duration-500 ease-out will-change-transform transform-gpu group-hover/loadout-card:-translate-y-[3px] group-hover/loadout-card:border-white/14 group-hover/loadout-card:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03),0_30px_70px_rgba(0,0,0,0.28)] sm:rounded-md sm:p-6">
                   <div className={cn("pointer-events-none absolute inset-0 bg-gradient-to-br opacity-90 transition-opacity duration-500 ease-out group-hover/loadout-card:opacity-100", theme.glow)} />
                   <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(6,6,10,0.08),rgba(6,6,10,0.42)_54%,rgba(6,6,10,0.82))]" />
                   <div className="pointer-events-none absolute inset-0 opacity-45 [background-image:linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:24px_24px] transition-opacity duration-500 ease-out group-hover/loadout-card:opacity-70" />
@@ -598,8 +598,8 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
                   <div className="relative z-10 max-w-7xl mx-auto flex h-full flex-col">
                     <div className="flex items-center justify-between gap-4">
                       <div className="relative">
-                        <div className={cn("pointer-events-none absolute inset-0 rounded-[1.15rem] blur-xl transition-transform duration-500 ease-out group-hover/loadout-card:scale-105", theme.pulse)} />
-                        <div className={cn("relative flex size-12 items-center justify-center rounded-[1.15rem] border bg-black/45 shadow-[0_0_24px_rgba(0,0,0,0.2)] transition-[transform,border-color,box-shadow,background-color] duration-500 ease-out group-hover/loadout-card:scale-[1.02] group-hover/loadout-card:bg-black/52 sm:size-14 sm:rounded-[0.85rem]", theme.ring)}>
+                        <div className={cn("pointer-events-none absolute inset-0 rounded-md blur-xl transition-transform duration-500 ease-out group-hover/loadout-card:scale-105", theme.pulse)} />
+                        <div className={cn("relative flex size-12 items-center justify-center rounded-md border bg-black/45 shadow-[0_0_24px_rgba(0,0,0,0.2)] transition-[transform,border-color,box-shadow,background-color] duration-500 ease-out group-hover/loadout-card:scale-[1.02] group-hover/loadout-card:bg-black/52 sm:size-14 sm:rounded-md", theme.ring)}>
                           <Icon className="size-6 transition-transform duration-500 ease-out group-hover/loadout-card:-translate-y-px group-hover/loadout-card:scale-105" />
                         </div>
                       </div>
@@ -702,7 +702,7 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
                   {activeDetails.stats.map((stat) => (
                     <div
                       key={stat.label}
-                      className={cn("rounded-[1.2rem] border px-4 py-4 backdrop-blur", activeDetails.statSurface)}
+                      className={cn("rounded-md border px-4 py-4 backdrop-blur", activeDetails.statSurface)}
                     >
                       <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-400">
                         {stat.label}
@@ -715,7 +715,7 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
                 </div>
 
                 <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-                  <div className="rounded-[1.5rem] border border-white/10 bg-black/25 p-5 backdrop-blur">
+                  <div className="rounded-md border border-white/10 bg-black/25 p-5 backdrop-blur">
                     <p className={cn("font-tech text-[11px] uppercase tracking-[0.18em]", activeDetails.accent)}>
                       {activeDetails.technologiesLabel}
                     </p>
@@ -723,7 +723,7 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
                       {activeDetails.technologies.map((item) => (
                         <div
                           key={item}
-                          className={cn("rounded-[1rem] border px-4 py-3 text-sm leading-6 text-zinc-200", activeDetails.technologyTone)}
+                          className={cn("rounded-md border px-4 py-3 text-sm leading-6 text-zinc-200", activeDetails.technologyTone)}
                         >
                           {item}
                         </div>
@@ -732,7 +732,7 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
                   </div>
 
                   <div className="space-y-4">
-                    <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-5">
+                    <div className="rounded-md border border-white/10 bg-white/[0.04] p-5">
                       <p className="font-tech text-[11px] uppercase tracking-[0.18em] text-zinc-400">
                         {activeDetails.useCaseLabel}
                       </p>
@@ -740,7 +740,7 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
                         {activeDetails.useCase}
                       </p>
                     </div>
-                    <div className="rounded-[1.5rem] border border-white/10 bg-white/[0.04] p-5">
+                    <div className="rounded-md border border-white/10 bg-white/[0.04] p-5">
                       <p className="font-tech text-[11px] uppercase tracking-[0.18em] text-zinc-400">
                         {activeDetails.idealForLabel}
                       </p>

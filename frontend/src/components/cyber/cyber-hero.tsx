@@ -91,8 +91,8 @@ const CyberHero = React.forwardRef<HTMLElement, CyberHeroProps>(
 
         <div className="relative min-h-[320px] lg:min-h-[520px]">
           {media ?? (
-            <div className="absolute inset-0 rounded-[1.4rem] border border-red-300/20 bg-[radial-gradient(circle_at_50%_20%,rgba(248,113,113,0.2),transparent_34%),linear-gradient(135deg,rgba(39,39,42,0.6),rgba(9,9,11,0.95))] shadow-[0_0_70px_rgba(248,113,113,0.18)]">
-              <div className="absolute inset-4 rounded-xl border border-white/10 bg-black/35 backdrop-blur-sm" />
+            <div className="absolute inset-0 rounded-md border border-red-300/20 bg-[radial-gradient(circle_at_50%_20%,rgba(248,113,113,0.2),transparent_34%),linear-gradient(135deg,rgba(39,39,42,0.6),rgba(9,9,11,0.95))] shadow-[0_0_70px_rgba(248,113,113,0.18)]">
+              <div className="absolute inset-4 rounded-md border border-white/10 bg-black/35 backdrop-blur-sm" />
               <div className="absolute inset-x-12 top-16 h-28 rounded-full border border-fuchsia-300/25 bg-fuchsia-400/10 blur-sm" />
               <div className="absolute right-12 bottom-12 left-12 grid grid-cols-3 gap-3">
                 {["GPU", "SYNC", "240HZ"].map((item) => (

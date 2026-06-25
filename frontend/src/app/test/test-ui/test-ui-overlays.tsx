@@ -64,7 +64,7 @@ export function TestUiOverlays() {
                   Overlay style check for spacing, border glow, and close button behavior.
                 </CyberDialogDescription>
               </CyberDialogHeader>
-              <div className="rounded-lg border border-white/10 bg-black/35 p-4">
+              <div className="rounded-md border border-white/10 bg-black/35 p-4">
                 <div className="flex items-center gap-3">
                   <Star className="size-5 text-lime-200" />
                   <span className="text-sm text-zinc-300">Modal body content slot</span>
@@ -104,7 +104,7 @@ export function TestUiOverlays() {
                 {sheetActions.map(([Icon, label]) => (
                   <button
                     key={label}
-                    className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/[0.04] px-4 py-3 text-left text-sm text-zinc-200 transition hover:border-red-300/30 hover:bg-red-300/10"
+                    className="flex items-center gap-3 rounded-md border border-white/10 bg-white/[0.04] px-4 py-3 text-left text-sm text-zinc-200 transition hover:border-red-300/30 hover:bg-red-300/10"
                   >
                     <Icon className="size-4 text-red-200" />
                     {label}

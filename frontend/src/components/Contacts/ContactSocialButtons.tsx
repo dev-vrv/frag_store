@@ -69,7 +69,7 @@ export function ContactSocialButtons({
           rel="noreferrer"
           aria-label={label}
           className={cn(
-            "grid size-11 place-items-center border border-white/15 bg-white/5 text-zinc-100 transition hover:border-lime-300/60 hover:text-lime-200",
+            "grid size-11 place-items-center rounded-md border border-white/15 bg-white/5 text-zinc-100 transition hover:border-lime-300/60 hover:text-lime-200",
             linkClassName,
           )}
         >

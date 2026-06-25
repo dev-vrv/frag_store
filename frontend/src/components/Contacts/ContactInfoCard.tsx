@@ -45,7 +45,7 @@ export function ContactInfoCard({
           {dictionary.title}
         </h2>
         {contactInfo?.working_hours ? (
-          <div className="flex items-center gap-2 border border-fuchsia-300/20 bg-white/[0.04] px-3 py-2 text-xs text-zinc-300 sm:text-sm">
+          <div className="flex items-center gap-2 rounded-md border border-fuchsia-300/20 bg-white/[0.04] px-3 py-2 text-xs text-zinc-300 sm:text-sm">
             <Timer className="size-4 text-fuchsia-200" aria-hidden="true" />
             <span>{contactInfo.working_hours}</span>
           </div>
@@ -56,7 +56,7 @@ export function ContactInfoCard({
         <div className="grid gap-3 sm:grid-cols-2">
           {contactInfo.phone ? (
             <a
-              className="flex min-h-14 items-center gap-3 border border-lime-300/20 bg-black/30 p-3 text-sm text-zinc-200 transition hover:border-lime-300/55 sm:min-h-16 sm:text-base"
+              className="flex min-h-14 items-center gap-3 rounded-md border border-lime-300/20 bg-black/30 p-3 text-sm text-zinc-200 transition hover:border-lime-300/55 sm:min-h-16 sm:text-base"
               href={getPhoneHref(contactInfo.phone)}
             >
               <Phone className="size-5 text-lime-200" aria-hidden="true" />
@@ -67,7 +67,7 @@ export function ContactInfoCard({
           ) : null}
           {contactInfo.email ? (
             <a
-              className="flex min-h-14 items-center gap-3 border border-cyan-300/20 bg-black/30 p-3 text-sm text-zinc-200 transition hover:border-cyan-300/55 sm:min-h-16 sm:text-base"
+              className="flex min-h-14 items-center gap-3 rounded-md border border-cyan-300/20 bg-black/30 p-3 text-sm text-zinc-200 transition hover:border-cyan-300/55 sm:min-h-16 sm:text-base"
               href={`mailto:${contactInfo.email}`}
             >
               <Mail className="size-5 text-cyan-200" aria-hidden="true" />
@@ -77,7 +77,7 @@ export function ContactInfoCard({
             </a>
           ) : null}
           {contactInfo.address ? (
-            <div className="flex min-h-14 items-center gap-3 border border-red-300/20 bg-black/30 p-3 text-sm text-zinc-200 sm:col-span-2 sm:min-h-16 sm:text-base">
+            <div className="flex min-h-14 items-center gap-3 rounded-md border border-red-300/20 bg-black/30 p-3 text-sm text-zinc-200 sm:col-span-2 sm:min-h-16 sm:text-base">
               <MapPin className="size-5 text-red-200" aria-hidden="true" />
               <span className="min-w-0 break-words">{contactInfo.address}</span>
             </div>
@@ -96,7 +96,7 @@ export function ContactInfoCard({
             {dictionary.helpItems.map((item) => (
               <li
                 key={item}
-                className="border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300"
+                className="rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300"
               >
                 {item}
               </li>
@@ -122,7 +122,7 @@ export function ContactInfoCard({
           </h3>
           <dl className="grid gap-3 sm:grid-cols-2">
             {extraContacts.map(([label, value]) => (
-              <div key={label} className="border border-white/10 bg-white/5 p-4">
+              <div key={label} className="rounded-md border border-white/10 bg-white/5 p-4">
                 <dt className="font-tech text-xs uppercase text-zinc-500">
                   {label}
                 </dt>

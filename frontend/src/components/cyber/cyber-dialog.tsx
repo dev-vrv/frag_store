@@ -30,7 +30,7 @@ function CyberDialogContent({
   return (
     <DialogContent
       className={cn(
-        "border-red-300/25 bg-zinc-950/88 shadow-[0_0_70px_rgba(248,113,113,0.18)] backdrop-blur-2xl before:pointer-events-none before:absolute before:inset-0 before:rounded-xl before:bg-[linear-gradient(135deg,rgba(248,113,113,0.09),transparent_45%,rgba(217,70,239,0.08))]",
+        "border-red-300/25 bg-zinc-950/88 shadow-[0_0_70px_rgba(248,113,113,0.18)] backdrop-blur-2xl before:pointer-events-none before:absolute before:inset-0 before:rounded-md before:bg-[linear-gradient(135deg,rgba(248,113,113,0.09),transparent_45%,rgba(217,70,239,0.08))]",
         className,
       )}
       {...props}

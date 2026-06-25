@@ -450,7 +450,7 @@ function ProductHoverSpecs({
         {items.slice(0, 6).map((item) => (
           <div
             key={`${item.label}-${item.value}`}
-            className="min-w-0 rounded-[0.8rem] border border-white/10 bg-white/[0.045] px-2.5 py-2"
+            className="min-w-0 rounded-md border border-white/10 bg-white/[0.045] px-2.5 py-2"
           >
             <p className="truncate font-tech text-[9px] uppercase tracking-[0.14em] text-zinc-500">
               {item.label}
@@ -837,7 +837,7 @@ export function CatalogPage({
               onClick={() => toggleCategory(item.value)}
               aria-pressed={item.value === "all" ? selectedCategories.length === 0 : selectedCategorySet.has(item.value)}
               className={cn(
-                "font-tech inline-flex min-h-[3rem] items-center justify-start gap-2 rounded-xl border border-white/10 bg-white/[0.035] px-3 py-2 text-left text-[11px] uppercase leading-[1.15] tracking-[0.06em] text-zinc-300 transition duration-300 hover:border-red-300/28 hover:bg-white/[0.07] hover:text-white [&_svg]:size-3.5 [&_svg]:shrink-0",
+                "font-tech inline-flex min-h-[3rem] items-center justify-start gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-left text-[11px] uppercase leading-[1.15] tracking-[0.06em] text-zinc-300 transition duration-300 hover:border-red-300/28 hover:bg-white/[0.07] hover:text-white [&_svg]:size-3.5 [&_svg]:shrink-0",
                 item.value === "all" && "col-span-2 justify-center",
                 ((item.value === "all" && selectedCategories.length === 0) ||
                   selectedCategorySet.has(item.value)) &&
@@ -866,7 +866,7 @@ export function CatalogPage({
                 onClick={() => toggleQuickFilter(option.key)}
                 aria-pressed={isActive}
                 className={cn(
-                  "group flex min-h-[3rem] items-center gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 text-left transition duration-300 hover:border-cyan-200/30 hover:bg-white/[0.06]",
+                  "group flex min-h-[3rem] items-center gap-2 rounded-md border border-white/10 bg-white/[0.03] px-3 py-2 text-left transition duration-300 hover:border-cyan-200/30 hover:bg-white/[0.06]",
                   isActive &&
                     "border-cyan-300/40 bg-cyan-300/[0.10] shadow-[0_10px_28px_rgba(34,211,238,0.08)]",
                 )}
@@ -946,8 +946,6 @@ export function CatalogPage({
         <div className="absolute left-[18%] bottom-[8%] h-[18rem] w-[36rem] animate-[catalogPulse_20s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgba(251,191,36,0.1),transparent_64%)] blur-3xl" />
         <div className="absolute left-1/2 top-[14%] h-[34rem] w-[34rem] -translate-x-1/2 animate-[catalogHalo_26s_linear_infinite] rounded-full border border-red-200/10 opacity-40" />
         <div className="absolute left-1/2 top-[14%] h-[25rem] w-[25rem] -translate-x-1/2 animate-[catalogHaloReverse_18s_linear_infinite] rounded-full border border-fuchsia-300/10 opacity-28" />
-        <div className="absolute left-[8%] top-[22%] h-40 w-40 rotate-45 animate-[catalogFloatShape_20s_ease-in-out_infinite] border border-red-200/16 bg-red-200/[0.04] backdrop-blur-[2px]" />
-        <div className="absolute right-[12%] top-[48%] h-28 w-28 rotate-12 animate-[catalogFloatShapeAlt_24s_ease-in-out_infinite] border border-fuchsia-300/14 bg-fuchsia-300/[0.03] backdrop-blur-[2px]" />
         <div className="absolute left-[14%] top-[52%] h-52 w-52 animate-[catalogPolygon_20s_linear_infinite] border border-red-200/12 opacity-48 [clip-path:polygon(50%_0%,100%_38%,82%_100%,18%_100%,0%_38%)]" />
         <div className="absolute right-[18%] top-[18%] h-44 w-44 animate-[catalogPolygon_26s_linear_infinite_reverse] border border-fuchsia-300/10 opacity-36 [clip-path:polygon(12%_12%,88%_0%,100%_76%,40%_100%,0%_64%)]" />
         <div className="absolute left-[38%] top-[18%] h-40 w-40 animate-[catalogDiamond_22s_linear_infinite] border border-amber-200/10 opacity-30 [clip-path:polygon(50%_0%,100%_50%,50%_100%,0%_50%)]" />
