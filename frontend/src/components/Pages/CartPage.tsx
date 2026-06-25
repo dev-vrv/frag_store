@@ -2,8 +2,10 @@
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import {
   AlertTriangle,
+  CheckCheck,
   Minus,
   PackageCheck,
   Plus,
@@ -109,6 +111,9 @@ const cartText = {
     checkoutPending: "Оформляем...",
     successTitle: "Заказ отправлен",
     successText: "Менеджер подтвердит наличие, стоимость и детали доставки.",
+    successRedirect: "Автопереход в раздел заказов через",
+    successRedirectSeconds: "сек.",
+    successViewOrders: "Перейти к заказам",
     orderNumber: "Номер заказа",
     continueShopping: "Продолжить покупки",
     qty: "Кол-во",
@@ -177,6 +182,9 @@ const cartText = {
     checkoutPending: "Submitting...",
     successTitle: "Order submitted",
     successText: "A manager will confirm stock, final amount, and delivery details.",
+    successRedirect: "Auto redirect to orders in",
+    successRedirectSeconds: "sec.",
+    successViewOrders: "Open orders",
     orderNumber: "Order number",
     continueShopping: "Continue shopping",
     qty: "Qty",
@@ -245,6 +253,9 @@ const cartText = {
     checkoutPending: "Жөнөтүлүүдө...",
     successTitle: "Заказ жөнөтүлдү",
     successText: "Менеджер калдыкты, акыркы сумманы жана жеткирүү шарттарын тактайт.",
+    successRedirect: "Заказдар бөлүмүнө автоматтык өтүү",
+    successRedirectSeconds: "сек. кийин",
+    successViewOrders: "Заказдарды ачуу",
     orderNumber: "Заказ номери",
     continueShopping: "Сооданы улантуу",
     qty: "Саны",
@@ -295,6 +306,7 @@ function createInitialFormState(user: AuthUser | null): CartFormState {
 export function CartPage({ locale, dictionary, user }: CartPageProps) {
   const text = cartText[locale];
   const { items, hydrated, setQuantity, setItemColor, removeItem, clearCart } = useCart();
+  const router = useRouter();
   const [promoCode, setPromoCode] = useState("");
   const [appliedPromoCode, setAppliedPromoCode] = useState("");
   const [summary, setSummary] = useState<CartSummary | null>(null);
@@ -303,6 +315,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
   const [form, setForm] = useState<CartFormState>(() => createInitialFormState(user));
   const [checkoutError, setCheckoutError] = useState("");
   const [checkoutSuccess, setCheckoutSuccess] = useState<CartCheckoutResponse | null>(null);
+  const [redirectCountdown, setRedirectCountdown] = useState(10);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isCheckingPromo, setIsCheckingPromo] = useState(false);
   const [isClearCartDialogOpen, setIsClearCartDialogOpen] = useState(false);
@@ -314,6 +327,8 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
   const [previewSelectedColorId, setPreviewSelectedColorId] = useState<number | null>(null);
   const [previewSelectedMediaIndex, setPreviewSelectedMediaIndex] = useState(0);
   const catalogHref = localizePath("/catalog", locale);
+  const profileHref = localizePath("/profile", locale);
+  const profileOrdersHref = `${profileHref}?tab=orders`;
   const isSummaryLoading = items.length > 0 && !summary && !summaryError;
   const previewResolvedColorId = previewSelectedColorId ?? previewProduct?.color_options[0]?.id ?? null;
 
@@ -387,6 +402,25 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
     };
   }, [previewCartItemColorId, previewProductSlug]);
 
+  useEffect(() => {
+    if (!checkoutSuccess) {
+      return;
+    }
+
+    const countdownId = window.setInterval(() => {
+      setRedirectCountdown((current) => (current > 1 ? current - 1 : 1));
+    }, 1000);
+
+    const timeoutId = window.setTimeout(() => {
+      router.push(profileOrdersHref);
+    }, 10000);
+
+    return () => {
+      window.clearInterval(countdownId);
+      window.clearTimeout(timeoutId);
+    };
+  }, [checkoutSuccess, profileOrdersHref, router]);
+
   const canSubmit = useMemo(() => {
     if (!summary || summary.items.length === 0) {
       return false;
@@ -427,6 +461,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
       });
 
       setCheckoutSuccess(order);
+      setRedirectCountdown(10);
       clearCart();
       setPromoCode("");
       setAppliedPromoCode("");
@@ -510,43 +545,6 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
           <div className="py-16 text-sm text-zinc-500">{text.loading}</div>
         ) : items.length === 0 ? (
           <div className="mt-8 grid gap-5">
-            {checkoutSuccess ? (
-              <CyberCard variant="glass" className="border border-emerald-300/18 bg-emerald-500/[0.05]">
-                <CyberCardContent className="space-y-4 p-6">
-                  <div className="flex items-center gap-3">
-                    <div className="grid size-12 place-items-center border border-emerald-300/25 bg-emerald-400/10 text-emerald-100">
-                      <ShieldCheck className="size-5" />
-                    </div>
-                    <div>
-                      <p className="font-display text-2xl uppercase tracking-[0.06em] text-white">
-                        {text.successTitle}
-                      </p>
-                      <p className="mt-1 text-sm text-zinc-300">{text.successText}</p>
-                    </div>
-                  </div>
-                  <div className="grid gap-3 sm:grid-cols-2">
-                    <div className="border border-white/10 bg-black/20 px-4 py-3">
-                      <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">
-                        {text.orderNumber}
-                      </p>
-                      <p className="mt-2 font-display text-xl text-white">{checkoutSuccess.number}</p>
-                    </div>
-                    <div className="border border-white/10 bg-black/20 px-4 py-3">
-                      <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">
-                        {text.total}
-                      </p>
-                      <p className="mt-2 font-display text-xl text-lime-100">
-                        {formatCartMoney(checkoutSuccess.total, checkoutSuccess.currency, locale)}
-                      </p>
-                    </div>
-                  </div>
-                  <CyberButton asChild variant="primary">
-                    <Link href={catalogHref}>{text.continueShopping}</Link>
-                  </CyberButton>
-                </CyberCardContent>
-              </CyberCard>
-            ) : null}
-
             <CyberCard variant="glass" className="border border-white/10 bg-black/35">
               <CyberCardContent className="flex flex-col items-center gap-6 px-6 py-14 text-center sm:px-10 sm:py-16">
                 <div className="grid size-18 place-items-center rounded-full border border-red-300/20 bg-red-500/10 text-red-100 shadow-[0_0_34px_rgba(255,23,68,0.14)]">
@@ -569,7 +567,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
         ) : (
           <div className="mt-8 grid gap-7 xl:grid-cols-[minmax(0,1.3fr)_400px]">
             <div className="flex flex-col gap-6">
-              <div className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2 sm:px-3.5">
+              <div className="flex flex-wrap items-center justify-between gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-2 sm:px-3.5">
                 <div className="text-[13px] text-zinc-400">
                   {summary ? `${summary.items_count} ${text.items.toLowerCase()}` : ""}
                 </div>
@@ -633,40 +631,6 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                 </div>
               ) : null}
 
-              {checkoutSuccess ? (
-                <CyberCard variant="glass" className="border border-emerald-300/18 bg-emerald-500/[0.05]">
-                  <CyberCardContent className="space-y-4 p-6">
-                    <div className="flex items-center gap-3">
-                      <div className="grid size-12 place-items-center border border-emerald-300/25 bg-emerald-400/10 text-emerald-100">
-                        <ShieldCheck className="size-5" />
-                      </div>
-                      <div>
-                        <p className="font-display text-2xl uppercase tracking-[0.06em] text-white">
-                          {text.successTitle}
-                        </p>
-                        <p className="mt-1 text-sm text-zinc-300">{text.successText}</p>
-                      </div>
-                    </div>
-                    <div className="grid gap-3 sm:grid-cols-2">
-                      <div className="border border-white/10 bg-black/20 px-4 py-3">
-                        <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">
-                          {text.orderNumber}
-                        </p>
-                        <p className="mt-2 font-display text-xl text-white">{checkoutSuccess.number}</p>
-                      </div>
-                      <div className="border border-white/10 bg-black/20 px-4 py-3">
-                        <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">
-                          {text.total}
-                        </p>
-                        <p className="mt-2 font-display text-xl text-lime-100">
-                          {formatCartMoney(checkoutSuccess.total, checkoutSuccess.currency, locale)}
-                        </p>
-                      </div>
-                    </div>
-                  </CyberCardContent>
-                </CyberCard>
-              ) : null}
-
               {summary?.items.map((item) => {
                 const unitPriceAmount = Number(item.unit_price);
                 const oldPriceAmount = item.unit_old_price ? Number(item.unit_old_price) : null;
@@ -683,7 +647,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                   <CyberCard
                     key={item.product_id}
                     variant="glass"
-                    className="group/cart-item overflow-visible !rounded-xl border border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(255,94,77,0.12),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(251,191,36,0.08),transparent_26%),linear-gradient(180deg,rgba(15,15,17,0.96),rgba(10,10,12,0.98))] shadow-[0_20px_48px_rgba(0,0,0,0.28)] transition-[transform,border-color,box-shadow] duration-300 hover:border-red-300/20 hover:shadow-[0_26px_62px_rgba(0,0,0,0.34)]"
+                    className="group/cart-item overflow-visible !rounded-2xl border border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(255,94,77,0.12),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(251,191,36,0.08),transparent_26%),linear-gradient(180deg,rgba(15,15,17,0.96),rgba(10,10,12,0.98))] shadow-[0_20px_48px_rgba(0,0,0,0.28)] transition-[transform,border-color,box-shadow] duration-300 hover:border-red-300/20 hover:shadow-[0_26px_62px_rgba(0,0,0,0.34)]"
                   >
                     <CyberCardContent className="relative grid gap-4 overflow-visible p-4 sm:gap-5 sm:p-5 xl:grid-cols-[172px_minmax(0,1fr)] xl:items-start">
                       <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-red-300/40 to-transparent opacity-80" />
@@ -914,12 +878,12 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                     {text.promoApply}
                   </CyberButton>
                   {promoStatus && appliedPromoCode ? (
-                    <div className="border border-lime-300/18 bg-lime-300/[0.08] px-4 py-3 text-sm text-lime-100">
+                    <div className="rounded-xl border border-lime-300/18 bg-lime-300/[0.08] px-4 py-3 text-sm text-lime-100">
                       {text.promoApplied}: <span className="font-semibold">{appliedPromoCode}</span>
                     </div>
                   ) : null}
 
-                  <div className="rounded-[1.15rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-4 text-sm text-zinc-300">
+                  <div className="rounded-xl border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-4 text-sm text-zinc-300">
                     <div className="space-y-3">
                     <SummaryRow label={text.items} value={summary?.quantity_total ?? items.reduce((total, item) => total + item.quantity, 0)} />
                     <SummaryRow
@@ -961,14 +925,14 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                       </p>
                       <p className="mt-2 text-sm text-zinc-400">{text.contactsHint}</p>
                       {user ? (
-                        <div className="mt-4 inline-flex items-center gap-2 border border-lime-300/18 bg-lime-300/[0.08] px-3 py-2 text-[11px] uppercase tracking-[0.14em] text-lime-100">
+                        <div className="mt-4 inline-flex items-center gap-2 rounded-xl border border-lime-300/18 bg-lime-300/[0.08] px-3 py-2 text-[11px] uppercase tracking-[0.14em] text-lime-100">
                           <ShieldCheck className="size-3.5" />
                           {text.profileAutofill}
                         </div>
                       ) : null}
                     </div>
 
-                    <div className="grid gap-4 rounded-[1.2rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-4 sm:p-5">
+                    <div className="grid gap-4 rounded-xl border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-4 sm:p-5">
                       <CyberInput
                         label={text.customerName}
                         value={form.customer_name}
@@ -1000,7 +964,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                         </div>
                       </div>
 
-                      <div className="grid gap-4 rounded-[1.2rem] border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-4 sm:p-5">
+                      <div className="grid gap-4 rounded-xl border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-4 sm:p-5">
                         <CyberNativeSelect
                           label={text.deliveryMethod}
                           value={form.delivery_method}
@@ -1032,7 +996,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                     </div>
 
                     {checkoutError ? (
-                      <div className="border border-red-400/25 bg-red-500/[0.06] px-3 py-2 text-xs uppercase tracking-[0.12em] text-red-100">
+                      <div className="rounded-xl border border-red-400/25 bg-red-500/[0.06] px-3 py-2 text-xs uppercase tracking-[0.12em] text-red-100">
                         {checkoutError}
                       </div>
                     ) : null}
@@ -1075,6 +1039,72 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
         loadingText={isPreviewLoading ? text.loading : undefined}
         errorText={previewError || undefined}
       />
+      {checkoutSuccess ? (
+        <div className="fixed inset-0 z-[80] flex items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_20%_18%,rgba(163,230,53,0.16),transparent_22%),radial-gradient(circle_at_82%_16%,rgba(34,211,238,0.12),transparent_20%),linear-gradient(180deg,rgba(5,5,7,0.82),rgba(3,3,5,0.94))] backdrop-blur-xl">
+          <div className="pointer-events-none absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:52px_52px]" />
+          <div className="pointer-events-none absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-[linear-gradient(90deg,transparent,rgba(190,242,100,0.34),transparent)]" />
+          <div className="pointer-events-none absolute left-1/2 top-1/2 h-[32rem] w-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-lime-300/14 opacity-40 animate-ping" />
+
+          <div className="relative z-10 mx-4 w-full max-w-2xl animate-[successOverlayReveal_700ms_cubic-bezier(0.16,1,0.3,1)_both] rounded-2xl border border-lime-300/18 bg-[radial-gradient(circle_at_top_left,rgba(163,230,53,0.14),transparent_26%),radial-gradient(circle_at_top_right,rgba(34,211,238,0.08),transparent_24%),linear-gradient(180deg,rgba(14,16,12,0.96),rgba(6,8,6,0.98))] p-6 shadow-[0_30px_90px_rgba(0,0,0,0.42)] sm:p-8">
+            <div className="flex flex-col items-center text-center">
+              <div className="grid size-20 place-items-center rounded-full border border-lime-300/30 bg-lime-300/[0.10] text-lime-100 shadow-[0_0_42px_rgba(190,242,100,0.22)]">
+                <CheckCheck className="size-10" />
+              </div>
+              <p className="mt-6 font-display text-3xl uppercase tracking-[0.08em] text-white sm:text-4xl">
+                {text.successTitle}
+              </p>
+              <p className="mt-3 max-w-xl text-sm leading-7 text-zinc-300 sm:text-base">
+                {text.successText}
+              </p>
+            </div>
+
+            <div className="mt-8 grid gap-3 sm:grid-cols-2">
+              <div className="rounded-xl border border-white/10 bg-black/20 px-4 py-4">
+                <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">
+                  {text.orderNumber}
+                </p>
+                <p className="mt-2 font-display text-2xl text-white">{checkoutSuccess.number}</p>
+              </div>
+              <div className="rounded-xl border border-white/10 bg-black/20 px-4 py-4">
+                <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">
+                  {text.total}
+                </p>
+                <p className="mt-2 font-display text-2xl text-lime-100">
+                  {formatCartMoney(checkoutSuccess.total, checkoutSuccess.currency, locale)}
+                </p>
+              </div>
+            </div>
+
+            <div className="mt-6 rounded-xl border border-cyan-300/14 bg-cyan-300/[0.05] px-4 py-3 text-center font-tech text-[11px] uppercase tracking-[0.16em] text-cyan-100">
+              {text.successRedirect} {redirectCountdown} {text.successRedirectSeconds}
+            </div>
+
+            <CyberButton
+              type="button"
+              variant="primary"
+              className="mt-4 w-full"
+              onClick={() => router.push(profileOrdersHref)}
+            >
+              {text.successViewOrders}
+            </CyberButton>
+          </div>
+
+          <style jsx>{`
+            @keyframes successOverlayReveal {
+              from {
+                opacity: 0;
+                transform: translateY(26px) scale(0.96);
+                filter: blur(14px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+              }
+            }
+          `}</style>
+        </div>
+      ) : null}
       <Footer locale={locale} dictionary={dictionary} className="-mx-4 sm:-mx-6 lg:-mx-8" />
     </main>
   );

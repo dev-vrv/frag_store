@@ -106,6 +106,38 @@ export interface Dictionary {
     ordersSubtitle: string;
     ordersEmptyTitle: string;
     ordersEmptyText: string;
+    ordersSearchLabel: string;
+    ordersSearchPlaceholder: string;
+    ordersStatusFilterLabel: string;
+    ordersSortLabel: string;
+    ordersResultsLabel: string;
+    ordersNoResultsTitle: string;
+    ordersNoResultsText: string;
+    ordersResetFiltersLabel: string;
+    orderStatusFilters: {
+      all: string;
+      active: string;
+      new: string;
+      confirmed: string;
+      processing: string;
+      shipped: string;
+      delivered: string;
+      canceled: string;
+    };
+    orderSortOptions: {
+      newest: string;
+      oldest: string;
+      totalDesc: string;
+      totalAsc: string;
+    };
+    orderStatuses: {
+      new: string;
+      confirmed: string;
+      processing: string;
+      shipped: string;
+      delivered: string;
+      canceled: string;
+    };
     catalogLabel: string;
     orderStatusLabel: string;
     orderDateLabel: string;
@@ -322,6 +354,38 @@ const dictionaries: Record<Locale, Dictionary> = {
       ordersSubtitle: "Здесь отображаются оформленные заказы, их статус и состав.",
       ordersEmptyTitle: "Пока без заказов",
       ordersEmptyText: "Когда появится первый заказ, он отобразится здесь вместе с составом и суммой.",
+      ordersSearchLabel: "Поиск по заказам",
+      ordersSearchPlaceholder: "Номер заказа, товар, SKU...",
+      ordersStatusFilterLabel: "Фильтр по статусу",
+      ordersSortLabel: "Сортировка",
+      ordersResultsLabel: "заказов найдено",
+      ordersNoResultsTitle: "Заказы не найдены",
+      ordersNoResultsText: "Попробуйте изменить поиск, фильтр по статусу или сортировку.",
+      ordersResetFiltersLabel: "Сбросить фильтры",
+      orderStatusFilters: {
+        all: "Все статусы",
+        active: "Активные",
+        new: "Новые",
+        confirmed: "Подтвержденные",
+        processing: "В обработке",
+        shipped: "Отправленные",
+        delivered: "Доставленные",
+        canceled: "Отмененные",
+      },
+      orderSortOptions: {
+        newest: "Сначала новые",
+        oldest: "Сначала старые",
+        totalDesc: "Сумма: больше",
+        totalAsc: "Сумма: меньше",
+      },
+      orderStatuses: {
+        new: "Новый",
+        confirmed: "Подтвержден",
+        processing: "В обработке",
+        shipped: "Отправлен",
+        delivered: "Доставлен",
+        canceled: "Отменен",
+      },
       catalogLabel: "Перейти в каталог",
       orderStatusLabel: "Статус",
       orderDateLabel: "Дата",
@@ -730,6 +794,38 @@ const dictionaries: Record<Locale, Dictionary> = {
       ordersSubtitle: "Your placed orders, statuses, and line items appear here.",
       ordersEmptyTitle: "No orders yet",
       ordersEmptyText: "Your first completed checkout will appear here with full order details.",
+      ordersSearchLabel: "Search orders",
+      ordersSearchPlaceholder: "Order number, product, SKU...",
+      ordersStatusFilterLabel: "Status filter",
+      ordersSortLabel: "Sort orders",
+      ordersResultsLabel: "orders found",
+      ordersNoResultsTitle: "No matching orders",
+      ordersNoResultsText: "Try adjusting the search, status filter, or sorting.",
+      ordersResetFiltersLabel: "Reset filters",
+      orderStatusFilters: {
+        all: "All statuses",
+        active: "Active",
+        new: "New",
+        confirmed: "Confirmed",
+        processing: "Processing",
+        shipped: "Shipped",
+        delivered: "Delivered",
+        canceled: "Canceled",
+      },
+      orderSortOptions: {
+        newest: "Newest first",
+        oldest: "Oldest first",
+        totalDesc: "Total: high to low",
+        totalAsc: "Total: low to high",
+      },
+      orderStatuses: {
+        new: "New",
+        confirmed: "Confirmed",
+        processing: "Processing",
+        shipped: "Shipped",
+        delivered: "Delivered",
+        canceled: "Canceled",
+      },
       catalogLabel: "Open catalog",
       orderStatusLabel: "Status",
       orderDateLabel: "Date",
@@ -1138,6 +1234,38 @@ const dictionaries: Record<Locale, Dictionary> = {
       ordersSubtitle: "Бул жерде жасалган заказдар, алардын абалы жана курамы көрсөтүлөт.",
       ordersEmptyTitle: "Азырынча заказ жок",
       ordersEmptyText: "Биринчи заказ чыккандан кийин бул жерде суммасы жана курамы менен көрүнөт.",
+      ordersSearchLabel: "Заказ издөө",
+      ordersSearchPlaceholder: "Заказ номери, товар, SKU...",
+      ordersStatusFilterLabel: "Статус фильтри",
+      ordersSortLabel: "Иреттөө",
+      ordersResultsLabel: "заказ табылды",
+      ordersNoResultsTitle: "Заказ табылган жок",
+      ordersNoResultsText: "Издөөнү, статус фильтрин же иреттөөнү өзгөртүп көрүңүз.",
+      ordersResetFiltersLabel: "Фильтрлерди тазалоо",
+      orderStatusFilters: {
+        all: "Бардык статус",
+        active: "Активдүү",
+        new: "Жаңы",
+        confirmed: "Тастыкталган",
+        processing: "Иштетилүүдө",
+        shipped: "Жөнөтүлгөн",
+        delivered: "Жеткирилген",
+        canceled: "Жокко чыгарылган",
+      },
+      orderSortOptions: {
+        newest: "Жаңылары алдыда",
+        oldest: "Эскилери алдыда",
+        totalDesc: "Сумма: көптөн азга",
+        totalAsc: "Сумма: аздан көпкө",
+      },
+      orderStatuses: {
+        new: "Жаңы",
+        confirmed: "Тастыкталды",
+        processing: "Иштетилүүдө",
+        shipped: "Жөнөтүлдү",
+        delivered: "Жеткирилди",
+        canceled: "Жокко чыгарылды",
+      },
       catalogLabel: "Каталогго өтүү",
       orderStatusLabel: "Абалы",
       orderDateLabel: "Дата",

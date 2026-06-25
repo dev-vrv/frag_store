@@ -1,6 +1,5 @@
 import {
   CyberBadge,
-  CyberButton,
   CyberCard,
   CyberCardContent,
 } from "@/components/cyber";
@@ -9,9 +8,11 @@ import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
 import { ContactCyberBackground } from "@/components/Pages/ContactsPage/ContactCyberBackground";
 import { ProfileDetailsForm } from "@/components/Pages/ProfileDetailsForm";
+import { ProfileOrdersPanel } from "@/components/Pages/ProfileOrdersPanel";
 import { ProfileLogoutButton } from "@/components/Pages/ProfileLogoutButton";
+import { ProfileTabs } from "@/components/Pages/ProfileTabs";
 import { type AuthUser } from "@/lib/auth";
-import { type Dictionary, type Locale } from "@/lib/i18n";
+import { localizePath, type Dictionary, type Locale } from "@/lib/i18n";
 
 export interface ProfilePageProps {
   locale: Locale;
@@ -26,10 +27,9 @@ export function ProfilePage({ locale, dictionary, user }: ProfilePageProps) {
     dateStyle: "long",
   }).format(new Date(user.date_joined));
   const orders = user.orders ?? [];
-
-  function formatMoney(value: string, currency: string) {
-    return `${value} ${currency}`;
-  }
+  const activeOrderStatuses = new Set(["new", "confirmed", "processing", "shipped"]);
+  const activeOrdersCount = orders.filter((order) => activeOrderStatuses.has(order.status)).length;
+  const catalogHref = dictionary.header.nav.find((item) => item.href.includes("catalog"))?.href ?? localizePath("/catalog", locale);
 
   return (
     <main className="page-shell relative isolate overflow-hidden bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.06),transparent_22%),linear-gradient(180deg,#060606_0%,#0b0b0c_38%,#050505_100%)] px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
@@ -108,115 +108,20 @@ export function ProfilePage({ locale, dictionary, user }: ProfilePageProps) {
           </div>
 
           <div className="grid gap-6">
-            <ProfileDetailsForm dictionary={profile} user={user} />
-
-            <CyberCard variant="glass" className="border border-white/10 bg-zinc-950/80">
-              <CyberCardContent className="space-y-6 p-5 sm:p-7">
-                <div className="flex flex-col gap-3 border-b border-white/10 pb-5 sm:flex-row sm:items-end sm:justify-between">
-                  <div>
-                    <CyberBadge variant="neutral">
-                      {profile.ordersBadge}
-                    </CyberBadge>
-                    <p className="mt-4 font-display text-2xl uppercase tracking-[0.08em] text-white sm:text-3xl">
-                      {profile.ordersTitle}
-                    </p>
-                    <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-400 sm:text-[15px]">
-                      {profile.ordersSubtitle}
-                    </p>
-                  </div>
-                  <CyberButton asChild variant="ghost">
-                    <a href={dictionary.header.nav.find((item) => item.href.includes("catalog"))?.href ?? "/catalog"}>
-                      {profile.catalogLabel}
-                    </a>
-                  </CyberButton>
-                </div>
-
-                {orders.length ? (
-                  <div className="grid gap-4">
-                    {orders.map((order) => (
-                      <div
-                        key={order.id}
-                        className="grid gap-5 border border-white/10 bg-white/[0.03] p-4 sm:p-5 xl:grid-cols-[280px_minmax(0,1fr)]"
-                      >
-                        <div className="min-w-0 space-y-3 border-b border-white/10 pb-4 xl:border-b-0 xl:border-r xl:pb-0 xl:pr-5">
-                          <div className="flex flex-wrap items-center gap-3">
-                            <p className="break-all font-display text-lg uppercase tracking-[0.08em] text-white sm:text-xl">
-                              {order.number}
-                            </p>
-                            <span className="border border-white/15 bg-white/[0.05] px-3 py-1 text-[11px] uppercase tracking-[0.16em] text-zinc-200">
-                              {order.status}
-                            </span>
-                          </div>
-                          <div className="grid gap-2 text-sm text-zinc-300">
-                            <p>
-                              {profile.orderDateLabel}:{" "}
-                              <span className="text-zinc-100">
-                                {new Intl.DateTimeFormat(locale, {
-                                  dateStyle: "medium",
-                                  timeStyle: "short",
-                                }).format(new Date(order.created_at))}
-                              </span>
-                            </p>
-                            <p>
-                              {profile.orderTotalLabel}:{" "}
-                              <span className="text-zinc-100">
-                                {formatMoney(order.total, order.currency)}
-                              </span>
-                            </p>
-                            <p>
-                              {profile.orderDiscountLabel}:{" "}
-                              <span className="text-amber-200">
-                                {formatMoney(order.discount_total, order.currency)}
-                              </span>
-                            </p>
-                          </div>
-                        </div>
-
-                        <div className="grid min-w-0 gap-3">
-                          {order.items.map((item) => (
-                            <div
-                              key={item.id}
-                              className="grid gap-3 border border-white/8 bg-black/25 px-4 py-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
-                            >
-                              <div className="min-w-0">
-                                <p className="break-words text-sm uppercase tracking-[0.08em] text-zinc-100">
-                                  {item.product_name}
-                                </p>
-                                <p className="mt-1 break-all text-xs uppercase tracking-[0.12em] text-zinc-500">
-                                  SKU: {item.product_sku}
-                                </p>
-                                {item.selected_color_name ? (
-                                  <p className="mt-2 text-xs uppercase tracking-[0.12em] text-zinc-400">
-                                    Цвет: {item.selected_color_name}
-                                  </p>
-                                ) : null}
-                              </div>
-                              <div className="text-left sm:text-right">
-                                <p className="text-sm text-zinc-300">
-                                  {profile.orderQuantityLabel}: {item.quantity}
-                                </p>
-                                <p className="mt-1 text-sm text-zinc-100">
-                                  {formatMoney(item.line_total, item.currency)}
-                                </p>
-                              </div>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="border border-dashed border-white/15 bg-white/[0.03] px-6 py-12 text-center sm:px-8 sm:py-14">
-                    <p className="font-display text-2xl uppercase tracking-[0.08em] text-white">
-                      {profile.ordersEmptyTitle}
-                    </p>
-                    <p className="mx-auto mt-3 max-w-xl text-sm leading-7 text-zinc-400">
-                      {profile.ordersEmptyText}
-                    </p>
-                  </div>
-                )}
-              </CyberCardContent>
-            </CyberCard>
+            <ProfileTabs
+              detailsLabel={profile.badge}
+              ordersLabel={profile.ordersBadge}
+              activeOrdersCount={activeOrdersCount}
+              detailsContent={<ProfileDetailsForm dictionary={profile} user={user} />}
+              ordersContent={(
+                <ProfileOrdersPanel
+                  locale={locale}
+                  profile={profile}
+                  orders={orders}
+                  catalogHref={catalogHref}
+                />
+              )}
+            />
           </div>
         </div>
       </section>

@@ -1,5 +1,6 @@
-from rest_framework import mixins, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 
 from .models import Order
 from .serializers import OrderCreateSerializer, OrderSerializer
@@ -30,3 +31,11 @@ class OrderViewSet(
         if self.action == 'create':
             return OrderCreateSerializer
         return OrderSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        order = serializer.save()
+        response_serializer = OrderSerializer(order, context=self.get_serializer_context())
+        headers = self.get_success_headers(response_serializer.data)
+        return Response(response_serializer.data, status=status.HTTP_201_CREATED, headers=headers)
