@@ -1,9 +1,11 @@
 import { ChevronDown, Zap } from "lucide-react";
 
 import { CyberBadge, CyberButton } from "@/components/cyber";
+import { HeroMediaRotator } from "@/components/Sections/HeroMediaRotator";
 import { Section } from "@/components/Sections/Section";
 import RevealOnScroll from "@/components/ui/RevealOnScroll";
 import AnimatedText from "@/components/ui/animatedText";
+import { getHeroMediaPaths } from "@/lib/hero-media";
 import { type Dictionary, type Locale, localizePath } from "@/lib/i18n";
 
 export interface HeroProps {
@@ -11,7 +13,9 @@ export interface HeroProps {
   content: Dictionary["hero"];
 }
 
-export function Hero({ locale, content }: HeroProps) {
+export async function Hero({ locale, content }: HeroProps) {
+  const heroImages = await getHeroMediaPaths();
+
   return (
     <Section
       fullWidth
@@ -19,6 +23,7 @@ export function Hero({ locale, content }: HeroProps) {
       containerClassName="section-hero relative"
     >
       <div className="absolute inset-0 -z-30 bg-[radial-gradient(circle_at_18%_24%,rgba(255,23,68,0.3),transparent_31%),radial-gradient(circle_at_78%_18%,rgba(127,29,29,0.42),transparent_30%),radial-gradient(circle_at_58%_78%,rgba(217,70,239,0.08),transparent_24%),linear-gradient(180deg,#050507_0%,#120507_48%,#000_100%)]" />
+      <HeroMediaRotator images={heroImages} />
       <div className="cyber-grid absolute inset-0 -z-20 opacity-70" />
       <div className="cyber-scanline absolute inset-0 -z-10 opacity-35" />
       <div className="absolute left-1/2 top-1/2 -z-10 h-[21rem] w-[21rem] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,rgba(255,23,68,0.22)_0%,rgba(255,23,68,0.08)_34%,transparent_72%)] blur-3xl sm:h-[26rem] sm:w-[26rem] lg:h-[32rem] lg:w-[32rem]" />

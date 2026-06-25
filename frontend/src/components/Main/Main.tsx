@@ -20,8 +20,8 @@ export function Main({ locale, dictionary, bestSellerProducts, categories }: Mai
     <main className="page-shell w-full overflow-x-hidden bg-black">
       <Header locale={locale} dictionary={dictionary.header} />
       <Hero locale={locale} content={dictionary.hero} />
-      <LoadoutZones locale={locale} content={dictionary.loadout} categories={categories} />
       <FeaturedDrops locale={locale} content={dictionary.featured} products={bestSellerProducts} />
+      <LoadoutZones locale={locale} content={dictionary.loadout} categories={categories} />
       <ServiceProtocol content={dictionary.service} />
       <ContactSection locale={locale} />
       <Footer locale={locale} dictionary={dictionary} />

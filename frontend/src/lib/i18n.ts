@@ -330,13 +330,11 @@ const dictionaries: Record<Locale, Dictionary> = {
     },
     hero: {
       eyebrow: "Frag Store // Gaming Gear",
-      title: "Техника для гейминга и сильного сетапа",
-      subtitle:
-        "Мыши, клавиатуры, гарнитуры, коврики и аксессуары, которые реально влияют на комфорт, реакцию и контроль в игре.",
+      title: "Гейминг девайсы без компромиссов",
+      subtitle: "Мыши, клавиатуры, гарнитуры и коврики для точной игры.",
       primaryCta: "Перейти в каталог",
       secondaryCta: "Открыть блог",
-      microcopy:
-        "Собираем сетап под жанр, бюджет и стиль игры: от одного девайса до полностью укомплектованного рабочего места.",
+      microcopy: "Подбор под жанр, бюджет и стиль игры.",
       chips: ["FPS", "Ranked", "Low Latency", "RGB Control"],
       panelEyebrow: "Combat sync",
       panelTitle: "Enter the match",
@@ -739,13 +737,11 @@ const dictionaries: Record<Locale, Dictionary> = {
     },
     hero: {
       eyebrow: "Frag Store // Gaming Gear",
-      title: "Gear for gaming and a stronger setup",
-      subtitle:
-        "Mice, keyboards, headsets, mousepads, and accessories that make a real difference in comfort, response, and control.",
+      title: "Gaming gear without compromise",
+      subtitle: "Mice, keyboards, headsets, and mousepads for precise play.",
       primaryCta: "Open catalog",
       secondaryCta: "Open blog",
-      microcopy:
-        "We help build setups by genre, budget, and playstyle, from a single upgrade to a complete desk loadout.",
+      microcopy: "Setup picks by genre, budget, and playstyle.",
       chips: ["FPS", "Ranked", "Low Latency", "RGB Control"],
       panelEyebrow: "Combat sync",
       panelTitle: "Enter the match",
@@ -1148,13 +1144,11 @@ const dictionaries: Record<Locale, Dictionary> = {
     },
     hero: {
       eyebrow: "Frag Store // Gaming Gear",
-      title: "Гейминг жана күчтүү сетап үчүн техника",
-      subtitle:
-        "Оюндагы комфортко, реакцияга жана так башкарууга таасир берген чычкандар, клавиатуралар, гарнитуралар жана аксессуарлар.",
+      title: "Компромисссиз гейминг девайстар",
+      subtitle: "Так оюн үчүн чычкан, клавиатура, гарнитура жана килемче.",
       primaryCta: "Каталогду ачуу",
       secondaryCta: "Блогду ачуу",
-      microcopy:
-        "Биз сетапты жанрга, бюджетке жана оюн стилине жараша чогултабыз: бир девайстан баштап толук жумуш аймагына чейин.",
+      microcopy: "Тандоо жанрга, бюджетке жана оюн стилине жараша.",
       chips: ["FPS", "Ranked", "Low Latency", "RGB Control"],
       panelEyebrow: "Combat sync",
       panelTitle: "Enter the match",
