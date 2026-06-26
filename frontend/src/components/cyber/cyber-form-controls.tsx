@@ -129,7 +129,7 @@ const CyberNativeSelect = React.forwardRef<HTMLDivElement, CyberNativeSelectProp
               }
             }}
             className={cn(
-              "cyber-cut-small font-tech flex h-13 w-full cursor-pointer items-center justify-between rounded-md border border-lime-300/35 bg-black/45 px-4 pr-10 text-left text-sm uppercase tracking-[0.1em] text-lime-100 outline-none shadow-[inset_0_0_18px_rgba(190,242,100,0.05)] transition hover:bg-lime-300/8 focus-visible:border-lime-300/80 focus-visible:ring-2 focus-visible:ring-lime-300/25 disabled:cursor-not-allowed disabled:opacity-50",
+              "cyber-cut-small font-tech flex h-13 w-full cursor-pointer items-center justify-between rounded-sm border border-lime-300/35 bg-black/45 px-4 pr-10 text-left text-sm uppercase tracking-[0.1em] text-lime-100 outline-none shadow-[inset_0_0_18px_rgba(190,242,100,0.05)] transition hover:bg-lime-300/8 focus-visible:border-lime-300/80 focus-visible:ring-2 focus-visible:ring-lime-300/25 disabled:cursor-not-allowed disabled:opacity-50",
               className,
             )}
           >
@@ -141,7 +141,7 @@ const CyberNativeSelect = React.forwardRef<HTMLDivElement, CyberNativeSelectProp
               id={listboxId}
               role="listbox"
               aria-required={required || undefined}
-              className="cyber-cut-surface font-tech absolute left-0 top-[calc(100%+0.5rem)] z-40 max-h-72 w-full overflow-y-auto rounded-md border border-lime-300/30 bg-zinc-950/95 p-2 text-sm uppercase tracking-[0.08em] shadow-[0_0_36px_rgba(190,242,100,0.16)]"
+              className="cyber-cut-surface font-tech absolute left-0 top-[calc(100%+0.5rem)] z-40 max-h-72 w-full overflow-y-auto rounded-sm border border-lime-300/30 bg-zinc-950/95 p-2 text-sm uppercase tracking-[0.08em] shadow-[0_0_36px_rgba(190,242,100,0.16)]"
             >
               {options.map((option) => {
                 const selected = option.value === selectedValue;
@@ -155,7 +155,7 @@ const CyberNativeSelect = React.forwardRef<HTMLDivElement, CyberNativeSelectProp
                     disabled={option.disabled}
                     onClick={() => selectOption(option)}
                     className={cn(
-                      "cyber-cut-small flex w-full cursor-pointer items-center gap-2 rounded-md border border-transparent px-3 py-2.5 text-left text-zinc-300 outline-none transition hover:border-lime-300/25 hover:bg-lime-300/10 hover:text-lime-100 disabled:cursor-not-allowed disabled:opacity-45",
+                      "cyber-cut-small flex w-full cursor-pointer items-center gap-2 rounded-sm border border-transparent px-3 py-2.5 text-left text-zinc-300 outline-none transition hover:border-lime-300/25 hover:bg-lime-300/10 hover:text-lime-100 disabled:cursor-not-allowed disabled:opacity-45",
                       selected && "border-lime-300/30 bg-lime-300/10 text-lime-100",
                     )}
                   >
