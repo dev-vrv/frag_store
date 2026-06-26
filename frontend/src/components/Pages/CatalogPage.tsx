@@ -1190,8 +1190,8 @@ export function CatalogPage({
       </div>
       <div className="pointer-events-none absolute inset-0 -z-10 animate-[catalogGridDrift_36s_linear_infinite] bg-[linear-gradient(rgba(255,110,110,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.045)_1px,transparent_1px)] bg-[size:68px_68px] opacity-[0.24] [mask-image:linear-gradient(180deg,rgba(0,0,0,0.94),rgba(0,0,0,0.58)_58%,transparent)]" />
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(255,23,68,0.06),transparent_18%,transparent_82%,rgba(168,85,247,0.05))]" />
-      <div className="pointer-events-none absolute inset-x-0 top-[18%] -z-10 h-px bg-[linear-gradient(90deg,transparent,rgba(34,211,238,0.3),transparent)]" />
-      <div className="pointer-events-none absolute inset-x-0 top-[64%] -z-10 h-px bg-[linear-gradient(90deg,transparent,rgba(255,23,68,0.24),transparent)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-[18%] -z-10 h-px bg-[linear-gradient(90deg,transparent,rgba(34,211,238,0.52),transparent)] shadow-[0_0_18px_rgba(34,211,238,0.18)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-[64%] -z-10 h-px bg-[linear-gradient(90deg,transparent,rgba(255,23,68,0.44),transparent)] shadow-[0_0_18px_rgba(255,23,68,0.16)]" />
       <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.16] [background-image:radial-gradient(circle_at_center,rgba(251,191,36,0.12)_1px,transparent_1px)] [background-size:30px_30px] [mask-image:linear-gradient(180deg,transparent,rgba(0,0,0,0.88)_16%,rgba(0,0,0,0.88)_84%,transparent)]" />
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[conic-gradient(from_180deg_at_50%_50%,rgba(255,23,68,0.045),transparent_18%,rgba(168,85,247,0.04)_40%,transparent_58%,rgba(251,191,36,0.03)_82%,transparent)] opacity-42" />
       <style jsx>{`

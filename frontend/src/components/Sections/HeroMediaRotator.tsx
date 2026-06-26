@@ -4,18 +4,17 @@ import { useEffect, useMemo, useRef, useState } from "react";
 
 const HERO_ROTATION_MS = 6200;
 const HERO_TRANSITION_MS = 950;
-const HERO_GAP_MS = 60;
+const HERO_OVERLAP_DELAY_MS = 110;
 
 export interface HeroMediaRotatorProps {
   images: string[];
 }
 
-type HeroMediaPhase = "visible" | "hiding" | "hidden" | "showing";
-
 export function HeroMediaRotator({ images }: HeroMediaRotatorProps) {
   const heroImages = useMemo(() => images.filter(Boolean), [images]);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [phase, setPhase] = useState<HeroMediaPhase>("visible");
+  const [previousIndex, setPreviousIndex] = useState<number | null>(null);
+  const [isTransitioning, setIsTransitioning] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
   const activeIndexRef = useRef(0);
   const frameTimeoutRef = useRef<number | null>(null);
@@ -66,23 +65,22 @@ export function HeroMediaRotator({ images }: HeroMediaRotatorProps) {
       clearFrameTimeout();
 
       frameTimeoutRef.current = window.setTimeout(() => {
-        setPhase("hiding");
+        const nextIndex = (activeIndexRef.current + 1) % heroImages.length;
+
+        setPreviousIndex(activeIndexRef.current);
+        setActiveIndex(nextIndex);
+        setIsTransitioning(false);
+        activeIndexRef.current = nextIndex;
 
         frameTimeoutRef.current = window.setTimeout(() => {
-          const nextIndex = (activeIndexRef.current + 1) % heroImages.length;
+          setIsTransitioning(true);
 
-          setPhase("hidden");
-          setActiveIndex(nextIndex);
-          activeIndexRef.current = nextIndex;
           frameTimeoutRef.current = window.setTimeout(() => {
-            setPhase("showing");
-
-            frameTimeoutRef.current = window.setTimeout(() => {
-              setPhase("visible");
-              scheduleCycle();
-            }, HERO_TRANSITION_MS);
-          }, 34);
-        }, HERO_TRANSITION_MS + HERO_GAP_MS);
+            setPreviousIndex(null);
+            setIsTransitioning(false);
+            scheduleCycle();
+          }, HERO_TRANSITION_MS);
+        }, HERO_OVERLAP_DELAY_MS);
       }, HERO_ROTATION_MS);
     };
 
@@ -103,16 +101,8 @@ export function HeroMediaRotator({ images }: HeroMediaRotatorProps) {
   }
 
   const displayActiveIndex = reducedMotion ? 0 : activeIndex % heroImages.length;
-  const renderPhase: HeroMediaPhase =
-    reducedMotion || heroImages.length <= 1 ? "visible" : phase;
-  const mediaLayerClassName =
-    renderPhase === "hiding"
-      ? "hero-media-layer hero-media-layer--outgoing"
-      : renderPhase === "hidden"
-        ? "hero-media-layer hero-media-layer--hidden"
-        : renderPhase === "showing"
-        ? "hero-media-layer hero-media-layer--active"
-        : "hero-media-layer hero-media-layer--visible";
+  const displayPreviousIndex =
+    reducedMotion || previousIndex === null ? null : previousIndex % heroImages.length;
 
   return (
     <div
@@ -126,8 +116,32 @@ export function HeroMediaRotator({ images }: HeroMediaRotatorProps) {
       <div className="hero-media-glow hero-media-glow--cool" />
       <div className="hero-media-beam" />
 
+      {displayPreviousIndex !== null ? (
+        <div
+          className={
+            isTransitioning
+              ? "hero-media-layer hero-media-layer--outgoing"
+              : "hero-media-layer hero-media-layer--visible"
+          }
+        >
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src={heroImages[displayPreviousIndex]}
+            alt=""
+            className="hero-media-image"
+            draggable={false}
+          />
+        </div>
+      ) : null}
+
       <div
-        className={mediaLayerClassName}
+        className={
+          displayPreviousIndex !== null
+            ? isTransitioning
+              ? "hero-media-layer hero-media-layer--active"
+              : "hero-media-layer hero-media-layer--hidden"
+            : "hero-media-layer hero-media-layer--visible"
+        }
       >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
