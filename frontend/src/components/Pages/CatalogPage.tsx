@@ -8,8 +8,10 @@ import {
   ChevronRight,
   Filter,
   PackageCheck,
+  Scale,
   Search,
   Sparkles,
+  X,
 } from "lucide-react";
 
 import {
@@ -31,8 +33,10 @@ import { GeometricBackdrop } from "@/components/Background/GeometricBackdrop";
 import { useCart } from "@/components/Cart/CartProvider";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
+import { ProductComparisonDialog } from "@/components/Products/ProductComparisonDialog";
 import { ProductDetailsDialog } from "@/components/Products/ProductDetailsDialog";
 import { ProductTypeIcon } from "@/components/Products/ProductTypeIcon";
+import { reconcileComparisonIds, useComparisonIds, writeComparisonIds } from "@/lib/comparison";
 import { reconcileFavoriteIds, toggleFavorite, useFavoriteIds } from "@/lib/favorites";
 import { type Dictionary, type Locale } from "@/lib/i18n";
 import {
@@ -44,7 +48,6 @@ import {
   type Product,
   type ProductCategory,
   type ProductMedia,
-  type ProductTechnicalHighlight,
 } from "@/lib/products";
 import { cn } from "@/lib/utils";
 
@@ -58,6 +61,8 @@ interface CatalogPageProps {
   initialBrand?: string;
   initialQuickFilters?: Partial<Record<QuickFilterKey, boolean>>;
 }
+
+type CompareActionResult = "added" | "removed" | "limit" | "categoryMismatch";
 
 type SortKey = "popular" | "priceAsc" | "priceDesc" | "newest";
 
@@ -141,6 +146,41 @@ const catalogText: Record<
     badgeNew: string;
     badgeHit: string;
     badgeSale: string;
+    compareLabel: string;
+    compareActive: string;
+    compareTrayTitle: string;
+    compareTrayHint: string;
+    compareTrayCategoryHint: string;
+    compareTrayReady: string;
+    compareTrayOpen: string;
+    compareTrayClear: string;
+    compareTrayLimit: string;
+    compareMismatch: string;
+    compareToastAdded: string;
+    compareToastRemoved: string;
+    compareDialog: {
+      badge: string;
+      title: string;
+      subtitle: string;
+      close: string;
+      clear: string;
+      openProduct: string;
+      removeProduct: string;
+      differencesOnly: string;
+      productsSelected: string;
+      pickMore: string;
+      categoryLabel: string;
+      brandLabel: string;
+      availabilityLabel: string;
+      priceLabel: string;
+      skuLabel: string;
+      highlightsLabel: string;
+      specsLabel: string;
+      inStock: string;
+      outOfStock: string;
+      emptyValue: string;
+      parameterLabel: string;
+    };
   }
 > = {
   ru: {
@@ -198,6 +238,41 @@ const catalogText: Record<
     badgeNew: "Новинка",
     badgeHit: "Хит",
     badgeSale: "Скидка",
+    compareLabel: "Сравнить",
+    compareActive: "В сравнении",
+    compareTrayTitle: "Сравнение товаров",
+    compareTrayHint: "Выберите еще один товар этой же категории, чтобы открыть сравнение.",
+    compareTrayCategoryHint: "Сравнивайте товары только внутри одной категории.",
+    compareTrayReady: "Можно открыть подробное сравнение.",
+    compareTrayOpen: "Открыть сравнение",
+    compareTrayClear: "Очистить",
+    compareTrayLimit: "До 3 товаров",
+    compareMismatch: "Для сравнения выберите товары одной категории.",
+    compareToastAdded: "Товар добавлен в сравнение.",
+    compareToastRemoved: "Товар убран из сравнения.",
+    compareDialog: {
+      badge: "Сравнение",
+      title: "СРАВНЕНИЕ ТОВАРОВ",
+      subtitle: "Смотрите ключевые различия по цене, наличию, характеристикам и сильным сторонам без переходов между карточками.",
+      close: "Закрыть",
+      clear: "Очистить",
+      openProduct: "Подробнее",
+      removeProduct: "Убрать",
+      differencesOnly: "Только различия",
+      productsSelected: "товара выбрано",
+      pickMore: "Выделенные отличия подсвечены, чтобы быстрее понять разницу между моделями.",
+      categoryLabel: "Категория",
+      brandLabel: "Марка",
+      availabilityLabel: "Наличие",
+      priceLabel: "Цена",
+      skuLabel: "Артикул",
+      highlightsLabel: "Сильные стороны",
+      specsLabel: "Характеристики",
+      inStock: "В наличии",
+      outOfStock: "Нет в наличии",
+      emptyValue: "Нет данных",
+      parameterLabel: "Параметр",
+    },
   },
   en: {
     search: "Search",
@@ -254,6 +329,41 @@ const catalogText: Record<
     badgeNew: "New",
     badgeHit: "Hit",
     badgeSale: "Sale",
+    compareLabel: "Compare",
+    compareActive: "Comparing",
+    compareTrayTitle: "Product comparison",
+    compareTrayHint: "Select one more product from the same category to open the comparison view.",
+    compareTrayCategoryHint: "Compare products within one category only.",
+    compareTrayReady: "Detailed comparison is ready.",
+    compareTrayOpen: "Open comparison",
+    compareTrayClear: "Clear",
+    compareTrayLimit: "Up to 3 products",
+    compareMismatch: "Choose products from the same category for comparison.",
+    compareToastAdded: "Product added to comparison.",
+    compareToastRemoved: "Product removed from comparison.",
+    compareDialog: {
+      badge: "Compare",
+      title: "PRODUCT COMPARISON",
+      subtitle: "Review pricing, availability, specs, and strengths side by side without jumping between product cards.",
+      close: "Close",
+      clear: "Clear",
+      openProduct: "Details",
+      removeProduct: "Remove",
+      differencesOnly: "Differences only",
+      productsSelected: "products selected",
+      pickMore: "Changed values are highlighted so the main differences are easier to scan.",
+      categoryLabel: "Category",
+      brandLabel: "Brand",
+      availabilityLabel: "Availability",
+      priceLabel: "Price",
+      skuLabel: "SKU",
+      highlightsLabel: "Highlights",
+      specsLabel: "Specifications",
+      inStock: "In stock",
+      outOfStock: "Out of stock",
+      emptyValue: "No data",
+      parameterLabel: "Parameter",
+    },
   },
   kg: {
     search: "Издөө",
@@ -310,6 +420,41 @@ const catalogText: Record<
     badgeNew: "Жаңы",
     badgeHit: "Хит",
     badgeSale: "Арзан",
+    compareLabel: "Салыштыруу",
+    compareActive: "Салыштырылууда",
+    compareTrayTitle: "Товарларды салыштыруу",
+    compareTrayHint: "Салыштыруу ачылышы үчүн ушул эле категориядан дагы бир товар тандаңыз.",
+    compareTrayCategoryHint: "Товарларды бир категория ичинде гана салыштырыңыз.",
+    compareTrayReady: "Толук салыштыруу даяр.",
+    compareTrayOpen: "Салыштырууну ачуу",
+    compareTrayClear: "Тазалоо",
+    compareTrayLimit: "3 товарга чейин",
+    compareMismatch: "Салыштыруу үчүн бир категориядагы товарларды тандаңыз.",
+    compareToastAdded: "Товар салыштырууга кошулду.",
+    compareToastRemoved: "Товар салыштыруудан алынды.",
+    compareDialog: {
+      badge: "Салыштыруу",
+      title: "ТОВАРЛАРДЫ САЛЫШТЫРУУ",
+      subtitle: "Бааны, жеткиликтүүлүктү, мүнөздөмөлөрдү жана артыкчылыктарды бир экрандан катар көрүңүз.",
+      close: "Жабуу",
+      clear: "Тазалоо",
+      openProduct: "Кененирээк",
+      removeProduct: "Алып салуу",
+      differencesOnly: "Айырмасы гана",
+      productsSelected: "товар тандалды",
+      pickMore: "Айырмаланган маанилер тез табылышы үчүн өзүнчө белгиленет.",
+      categoryLabel: "Категория",
+      brandLabel: "Марка",
+      availabilityLabel: "Жеткиликтүүлүк",
+      priceLabel: "Баасы",
+      skuLabel: "Артикул",
+      highlightsLabel: "Артыкчылыктар",
+      specsLabel: "Мүнөздөмөлөр",
+      inStock: "Бар",
+      outOfStock: "Жок",
+      emptyValue: "Маалымат жок",
+      parameterLabel: "Параметр",
+    },
   },
 };
 
@@ -483,7 +628,9 @@ export function CatalogPage({
   const searchParams = useSearchParams();
   const catalogSectionRef = useRef<HTMLElement | null>(null);
   const addToCartFeedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const compareFeedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const favoriteIds = useFavoriteIds();
+  const comparisonIds = useComparisonIds();
   const [query, setQuery] = useState("");
   const [selectedCategories, setSelectedCategories] = useState(() =>
     parseInitialCategories(initialCategory),
@@ -494,6 +641,8 @@ export function CatalogPage({
   const [selectedProductColorId, setSelectedProductColorId] = useState<number | null>(null);
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
   const [lastAddedCartItemKey, setLastAddedCartItemKey] = useState<string | null>(null);
+  const [compareFeedback, setCompareFeedback] = useState<string | null>(null);
+  const [isComparisonDialogOpen, setIsComparisonDialogOpen] = useState(false);
   const [quickFilters, setQuickFilters] = useState<Record<QuickFilterKey, boolean>>({
     bestSeller: false,
     discount: false,
@@ -503,6 +652,15 @@ export function CatalogPage({
     favorites: false,
   });
   const favoriteIdSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
+  const comparisonProducts = useMemo(
+    () =>
+      comparisonIds
+        .map((id) => products.find((product) => product.id === id) ?? null)
+        .filter((product): product is Product => Boolean(product)),
+    [comparisonIds, products],
+  );
+  const comparisonIdSet = useMemo(() => new Set(comparisonIds), [comparisonIds]);
+  const comparisonCategory = comparisonProducts[0]?.category ?? null;
   const favoritesFromQuery = searchParams.get("favorites") === "1";
   const activeQuickFilters = useMemo(
     () => ({
@@ -519,6 +677,14 @@ export function CatalogPage({
 
     reconcileFavoriteIds(products.map((product) => product.id));
   }, [favoriteIds, products]);
+
+  useEffect(() => {
+    if (!comparisonIds.length) {
+      return;
+    }
+
+    reconcileComparisonIds(products.map((product) => product.id));
+  }, [comparisonIds, products]);
 
   const categoryOptions = useMemo<CatalogCategoryOption[]>(
     () => [
@@ -638,6 +804,9 @@ export function CatalogPage({
       if (addToCartFeedbackTimeoutRef.current) {
         clearTimeout(addToCartFeedbackTimeoutRef.current);
       }
+      if (compareFeedbackTimeoutRef.current) {
+        clearTimeout(compareFeedbackTimeoutRef.current);
+      }
     };
   }, []);
 
@@ -676,6 +845,19 @@ export function CatalogPage({
     }, 2200);
   }
 
+  function showCompareFeedback(message: string) {
+    setCompareFeedback(message);
+
+    if (compareFeedbackTimeoutRef.current) {
+      clearTimeout(compareFeedbackTimeoutRef.current);
+    }
+
+    compareFeedbackTimeoutRef.current = setTimeout(() => {
+      setCompareFeedback((current) => (current === message ? null : current));
+      compareFeedbackTimeoutRef.current = null;
+    }, 2400);
+  }
+
   function handleCatalogCardAddToCart(product: Product) {
     if (product.quantity_in_stock <= 0) {
       return;
@@ -703,6 +885,51 @@ export function CatalogPage({
 
     addItem(selectedProduct.id, 1, resolvedSelectedProductColorId);
     triggerAddToCartFeedback(`${selectedProduct.id}:${resolvedSelectedProductColorId ?? "none"}`);
+  }
+
+  function toggleComparison(product: Product): CompareActionResult {
+    if (comparisonIdSet.has(product.id)) {
+      writeComparisonIds(comparisonIds.filter((id) => id !== product.id));
+      return "removed";
+    }
+
+    if (comparisonCategory && comparisonCategory.slug !== product.category.slug) {
+      return "categoryMismatch";
+    }
+
+    if (comparisonIds.length >= 3) {
+      return "limit";
+    }
+
+    writeComparisonIds([...comparisonIds, product.id]);
+    return "added";
+  }
+
+  function handleComparisonToggle(product: Product) {
+    const result = toggleComparison(product);
+
+    if (result === "added") {
+      showCompareFeedback(text.compareToastAdded);
+      return;
+    }
+
+    if (result === "removed") {
+      showCompareFeedback(text.compareToastRemoved);
+      return;
+    }
+
+    if (result === "limit") {
+      showCompareFeedback(text.compareTrayLimit);
+      return;
+    }
+
+    showCompareFeedback(text.compareMismatch);
+  }
+
+  function clearComparison() {
+    writeComparisonIds([]);
+    setCompareFeedback(null);
+    setIsComparisonDialogOpen(false);
   }
 
   function toggleQuickFilter(key: QuickFilterKey) {
@@ -1178,8 +1405,11 @@ export function CatalogPage({
                       }
                       detailsLabel={text.details}
                       favoriteLabel={text.favorite}
+                      compareLabel={comparisonIdSet.has(product.id) ? text.compareActive : text.compareLabel}
                       favoriteActive={favoriteIdSet.has(product.id)}
+                      compareActive={comparisonIdSet.has(product.id)}
                       onFavoriteClick={() => toggleFavorite(product.id)}
+                      onCompareClick={() => handleComparisonToggle(product)}
                       onDetailsClick={() => updateProductQuery(product.slug)}
                       onCtaClick={() => handleCatalogCardAddToCart(product)}
                       ctaDisabled={product.quantity_in_stock <= 0 || cardAlreadyInCart}
@@ -1243,6 +1473,66 @@ export function CatalogPage({
 
       <Footer locale={locale} dictionary={dictionary} />
 
+      {comparisonProducts.length ? (
+        <div className="pointer-events-none fixed inset-x-0 bottom-4 z-40 px-4">
+          <div className="mx-auto w-full max-w-5xl">
+            {compareFeedback ? (
+              <div className="pointer-events-auto mx-auto mb-3 w-fit rounded-md border border-cyan-300/24 bg-zinc-950/88 px-4 py-2 text-sm text-cyan-50 shadow-[0_0_28px_rgba(34,211,238,0.12)] backdrop-blur-xl">
+                {compareFeedback}
+              </div>
+            ) : null}
+            <CyberCard variant="glass" className="pointer-events-auto overflow-hidden border-cyan-300/18 bg-zinc-950/88 shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
+              <CyberCardContent className="p-4 sm:p-5">
+                <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+                  <div className="min-w-0 space-y-3">
+                    <div className="flex flex-wrap items-center gap-2">
+                      <CyberBadge variant="cyan" glow>
+                        <Scale className="mr-2 size-3.5" aria-hidden="true" />
+                        {text.compareTrayTitle}
+                      </CyberBadge>
+                      <span className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">
+                        {comparisonProducts.length}/3
+                      </span>
+                    </div>
+                    <p className="text-sm leading-6 text-zinc-300">
+                      {comparisonProducts.length >= 2 ? text.compareTrayReady : text.compareTrayHint}{" "}
+                      <span className="text-zinc-500">{text.compareTrayCategoryHint}</span>
+                    </p>
+                    <div className="flex flex-wrap gap-2">
+                      {comparisonProducts.map((product) => (
+                        <button
+                          key={product.id}
+                          type="button"
+                          onClick={() => handleComparisonToggle(product)}
+                          className="inline-flex min-h-10 items-center gap-2 rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-left text-sm text-zinc-200 transition hover:border-cyan-300/32 hover:bg-white/[0.07]"
+                        >
+                          <span className="max-w-[14rem] truncate">{getLocalizedProductName(product, locale)}</span>
+                          <X className="size-3.5 text-zinc-500" aria-hidden="true" />
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex shrink-0 flex-col gap-2 sm:flex-row">
+                    <CyberButton variant="ghost" onClick={clearComparison}>
+                      {text.compareTrayClear}
+                    </CyberButton>
+                    <CyberButton
+                      variant="secondary"
+                      onClick={() => setIsComparisonDialogOpen(true)}
+                      disabled={comparisonProducts.length < 2}
+                    >
+                      <Scale className="size-4" aria-hidden="true" />
+                      {text.compareTrayOpen}
+                    </CyberButton>
+                  </div>
+                </div>
+              </CyberCardContent>
+            </CyberCard>
+          </div>
+        </div>
+      ) : null}
+
       <ProductDetailsDialog
         open={Boolean(selectedProduct)}
         onOpenChange={(open) => !open && updateProductQuery(null)}
@@ -1282,6 +1572,26 @@ export function CatalogPage({
         }
         favoriteActive={selectedProduct ? favoriteIdSet.has(selectedProduct.id) : false}
         onToggleFavorite={selectedProduct ? () => toggleFavorite(selectedProduct.id) : undefined}
+      />
+
+      <ProductComparisonDialog
+        open={isComparisonDialogOpen}
+        onOpenChange={setIsComparisonDialogOpen}
+        locale={locale}
+        products={comparisonProducts}
+        labels={text.compareDialog}
+        onOpenProduct={(product) => {
+          setIsComparisonDialogOpen(false);
+          updateProductQuery(product.slug);
+        }}
+        onRemoveProduct={(productId) => {
+          const nextIds = comparisonIds.filter((id) => id !== productId);
+          writeComparisonIds(nextIds);
+          if (!nextIds.length) {
+            setIsComparisonDialogOpen(false);
+          }
+        }}
+        onClear={clearComparison}
       />
 
     </main>

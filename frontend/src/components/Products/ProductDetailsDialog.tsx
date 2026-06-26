@@ -16,6 +16,7 @@ import {
   formatProductPrice,
   getLocalizedCategoryName,
   getLocalizedProductName,
+  getProductTechnicalSpecs,
   type Product,
   type ProductMedia,
 } from "@/lib/products";
@@ -77,52 +78,6 @@ function getProductMediaGalleryItems(product: Product) {
   }
 
   return [];
-}
-
-function getTechnicalSpecGrid(product: Product) {
-  const details = product.technical_details;
-
-  if (!details) {
-    return [];
-  }
-
-  return [
-    ["Подключение", details.connectivity],
-    ["Форм-фактор", details.form_factor],
-    ["Совместимость", details.compatibility],
-    ["ПО / драйверы", details.software_support],
-    ["Автономность", details.battery_life_hours ? `${details.battery_life_hours} ч` : ""],
-    ["Длина кабеля", details.cable_length_m ? `${details.cable_length_m} м` : ""],
-    ["Сенсор", details.sensor_model],
-    ["DPI", details.dpi ? String(details.dpi) : ""],
-    ["Polling rate", details.polling_rate_hz ? `${details.polling_rate_hz} Гц` : ""],
-    ["Отклик", details.response_time_ms ? `${details.response_time_ms} мс` : ""],
-    ["Тип переключателей", details.switch_type],
-    ["Программируемые кнопки", details.programmable_buttons ? String(details.programmable_buttons) : ""],
-    ["Формат клавиатуры", details.keyboard_layout],
-    ["Количество клавиш", details.key_count ? String(details.key_count) : ""],
-    ["Профиль свитчей", details.switch_profile],
-    ["Hot-swap", details.hot_swap ? "Да" : ""],
-    ["Подсветка", details.backlight],
-    ["Драйверы", details.driver_size_mm ? `${details.driver_size_mm} мм` : ""],
-    ["Микрофон", details.microphone],
-    ["Звук", details.surround_sound],
-    ["Частотный диапазон", details.frequency_response],
-    ["Сопротивление", details.impedance_ohm ? `${details.impedance_ohm} Ом` : ""],
-    ["Чувствительность", details.sensitivity_db ? `${details.sensitivity_db} дБ` : ""],
-    ["Поверхность", details.surface_type],
-    ["Размер коврика", details.pad_size],
-    ["Толщина", details.thickness_mm ? `${details.thickness_mm} мм` : ""],
-    ["Прошитые края", details.stitched_edges ? "Да" : ""],
-    ["Основание", details.base_material],
-    ["Матрица", details.panel_type],
-    ["Разрешение", details.resolution],
-    ["Частота обновления", details.refresh_rate_hz ? `${details.refresh_rate_hz} Гц` : ""],
-    ["Яркость", details.brightness_nits ? `${details.brightness_nits} нит` : ""],
-    ["Контрастность", details.contrast_ratio],
-    ["Материал", details.material],
-    ["Дополнительно", details.extra_notes],
-  ].filter(([, value]) => Boolean(value));
 }
 
 function ProductVisual({ product }: { product: Product }) {
@@ -342,6 +297,7 @@ export function ProductDetailsDialog({
   onToggleFavorite,
 }: ProductDetailsDialogProps) {
   const title = product ? getLocalizedProductName(product, locale) : labels.detailsLead;
+  const technicalSpecs = product ? getProductTechnicalSpecs(product, locale) : [];
 
   return (
     <CyberDialog open={open} onOpenChange={onOpenChange}>
@@ -439,32 +395,14 @@ export function ProductDetailsDialog({
                       label={labels.colorLabel}
                     />
 
-                    {getTechnicalSpecGrid(product).length ? (
+                    {technicalSpecs.length ? (
                       <div className="space-y-3">
                         <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">{labels.specsLabel}</p>
                         <div className="grid gap-3 sm:grid-cols-2">
-                          {getTechnicalSpecGrid(product).map(([label, value]) => (
-                            <div key={`${label}-${value}`} className="border border-white/10 bg-white/[0.03] px-4 py-3">
-                              <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">{label}</p>
-                              <p className="mt-2 text-base text-zinc-100">{value}</p>
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    ) : null}
-
-                    {product.specifications?.length ? (
-                      <div className="space-y-3">
-                        <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">{labels.specsLabel}</p>
-                        <div className="grid gap-3 sm:grid-cols-2">
-                          {product.specifications.map((spec) => (
-                            <div key={spec.id} className="border border-white/10 bg-white/[0.03] px-4 py-3">
-                              <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">
-                                {spec.group ? `${spec.group} / ${spec.name}` : spec.name}
-                              </p>
-                              <p className="mt-2 text-base text-zinc-100">
-                                {spec.value}{spec.unit ? ` ${spec.unit}` : ""}
-                              </p>
+                          {technicalSpecs.map((spec) => (
+                            <div key={spec.key} className="border border-white/10 bg-white/[0.03] px-4 py-3">
+                              <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">{spec.label}</p>
+                              <p className="mt-2 text-base text-zinc-100">{spec.value}</p>
                             </div>
                           ))}
                         </div>

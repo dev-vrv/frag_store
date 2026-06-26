@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Heart, Star } from "lucide-react";
+import { Heart, Scale, Star } from "lucide-react";
 import { usePathname } from "next/navigation";
 
 import { getLocaleFromPathname } from "@/lib/i18n";
@@ -56,13 +56,17 @@ export interface CyberProductCardProps
   ctaLabel?: React.ReactNode;
   detailsLabel?: React.ReactNode;
   favoriteLabel?: string;
+  compareLabel?: string;
   favoriteActive?: boolean;
+  compareActive?: boolean;
   ctaHref?: string;
   ctaDisabled?: boolean;
   detailsHref?: string;
+  compareDisabled?: boolean;
   onCtaClick?: () => void;
   onDetailsClick?: () => void;
   onFavoriteClick?: () => void;
+  onCompareClick?: () => void;
   hoverPanel?: React.ReactNode;
   radius?: "default" | "compact";
   tone?: "default" | "featured" | "catalog";
@@ -83,13 +87,17 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
       ctaLabel,
       detailsLabel,
       favoriteLabel,
+      compareLabel,
       favoriteActive = false,
+      compareActive = false,
       ctaHref,
       ctaDisabled,
       detailsHref,
+      compareDisabled = false,
       onCtaClick,
       onDetailsClick,
       onFavoriteClick,
+      onCompareClick,
       hoverPanel,
       radius = "default",
       tone = "default",
@@ -188,6 +196,23 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
             >
               <Heart className={cn("size-4", favoriteActive && "fill-current")} aria-hidden="true" />
             </button>
+            {onCompareClick ? (
+              <button
+                type="button"
+                onClick={onCompareClick}
+                aria-pressed={compareActive}
+                aria-label={compareLabel}
+                disabled={compareDisabled}
+                className={cn(
+                  "absolute right-3 top-14 z-20 grid size-10 place-items-center rounded-full border backdrop-blur-md transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/30 disabled:cursor-not-allowed disabled:opacity-45",
+                  compareActive
+                    ? "border-cyan-300/55 bg-cyan-400/16 text-cyan-50 shadow-[0_0_24px_rgba(34,211,238,0.16)]"
+                    : "border-white/12 bg-black/55 text-zinc-200 hover:border-cyan-300/45 hover:bg-cyan-400/10 hover:text-cyan-50",
+                )}
+              >
+                <Scale className="size-4" aria-hidden="true" />
+              </button>
+            ) : null}
             {hoverPanel ? (
               <div
                 className={cn(
