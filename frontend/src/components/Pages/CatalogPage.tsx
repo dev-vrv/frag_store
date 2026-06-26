@@ -1161,13 +1161,17 @@ export function CatalogPage({
 
   return (
     <main className="page-shell relative overflow-x-clip bg-[linear-gradient(180deg,#080708_0%,#090708_24%,#060506_54%,#020203_100%)] px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
+      <div aria-hidden="true" className="home-shared-backdrop">
+        <div className="home-shared-backdrop__base opacity-[0.95]" />
+        <div className="cyber-grid home-shared-backdrop__grid opacity-[0.08]" />
+      </div>
       <Header locale={locale} dictionary={dictionary.header} />
-      <div className="absolute inset-0 -z-40 bg-[radial-gradient(circle_at_12%_18%,rgba(255,23,68,0.2),transparent_24%),radial-gradient(circle_at_86%_14%,rgba(168,85,247,0.12),transparent_24%),radial-gradient(circle_at_50%_84%,rgba(251,191,36,0.05),transparent_28%),linear-gradient(180deg,#0d0708_0%,#0a0708_28%,#060405_56%,#020203_100%)]" />
+      <div className="absolute inset-0 -z-40 bg-[radial-gradient(circle_at_12%_18%,rgba(255,23,68,0.28),transparent_24%),radial-gradient(circle_at_86%_14%,rgba(34,211,238,0.12),transparent_22%),radial-gradient(circle_at_82%_24%,rgba(168,85,247,0.16),transparent_28%),radial-gradient(circle_at_50%_84%,rgba(251,191,36,0.08),transparent_30%),linear-gradient(128deg,rgba(255,23,68,0.06)_0%,transparent_34%,transparent_70%,rgba(34,211,238,0.05)_100%),linear-gradient(180deg,#0d0708_0%,#0a0708_28%,#060405_56%,#020203_100%)]" />
       <GeometricBackdrop
         className="absolute inset-0 -z-30"
         variant="catalog"
-        gridOpacityClassName="opacity-[0.32]"
-        scanlineOpacityClassName="opacity-[0.18]"
+        gridOpacityClassName="opacity-[0.46]"
+        scanlineOpacityClassName="opacity-[0.22]"
       />
       <div className="pointer-events-none absolute inset-0 -z-30 overflow-hidden">
         <div className="absolute -left-[10%] top-[2%] h-[24rem] w-[24rem] animate-[catalogAurora_22s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgba(255,23,68,0.28),rgba(255,23,68,0.12)_42%,transparent_74%)] blur-3xl sm:h-[30rem] sm:w-[30rem]" />
@@ -1184,8 +1188,10 @@ export function CatalogPage({
         <div className="absolute inset-x-0 top-[22%] h-px animate-[catalogScanline_9s_linear_infinite] bg-[linear-gradient(90deg,transparent,rgba(255,131,131,0.22),transparent)] opacity-55" />
         <div className="absolute inset-x-0 top-[58%] h-px animate-[catalogScanline_13s_linear_infinite_reverse] bg-[linear-gradient(90deg,transparent,rgba(217,70,239,0.18),transparent)] opacity-42" />
       </div>
-      <div className="pointer-events-none absolute inset-0 -z-10 animate-[catalogGridDrift_36s_linear_infinite] bg-[linear-gradient(rgba(255,110,110,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(217,70,239,0.03)_1px,transparent_1px)] bg-[size:68px_68px] opacity-[0.18] [mask-image:linear-gradient(180deg,rgba(0,0,0,0.94),rgba(0,0,0,0.58)_58%,transparent)]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(255,23,68,0.04),transparent_18%,transparent_82%,rgba(168,85,247,0.035))]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 animate-[catalogGridDrift_36s_linear_infinite] bg-[linear-gradient(rgba(255,110,110,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.045)_1px,transparent_1px)] bg-[size:68px_68px] opacity-[0.24] [mask-image:linear-gradient(180deg,rgba(0,0,0,0.94),rgba(0,0,0,0.58)_58%,transparent)]" />
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(255,23,68,0.06),transparent_18%,transparent_82%,rgba(168,85,247,0.05))]" />
+      <div className="pointer-events-none absolute inset-x-0 top-[18%] -z-10 h-px bg-[linear-gradient(90deg,transparent,rgba(34,211,238,0.3),transparent)]" />
+      <div className="pointer-events-none absolute inset-x-0 top-[64%] -z-10 h-px bg-[linear-gradient(90deg,transparent,rgba(255,23,68,0.24),transparent)]" />
       <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.16] [background-image:radial-gradient(circle_at_center,rgba(251,191,36,0.12)_1px,transparent_1px)] [background-size:30px_30px] [mask-image:linear-gradient(180deg,transparent,rgba(0,0,0,0.88)_16%,rgba(0,0,0,0.88)_84%,transparent)]" />
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[conic-gradient(from_180deg_at_50%_50%,rgba(255,23,68,0.045),transparent_18%,rgba(168,85,247,0.04)_40%,transparent_58%,rgba(251,191,36,0.03)_82%,transparent)] opacity-42" />
       <style jsx>{`
@@ -1304,74 +1310,75 @@ export function CatalogPage({
         }
       `}</style>
 
-      <section ref={catalogSectionRef} className="mx-auto w-full max-w-7xl py-8">
-        <div className="mb-6 flex flex-col gap-4 border-b border-white/10 pb-5 sm:mb-7 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <CyberBadge variant="warning" glow>
-              {dictionary.pages.catalog.badge}
-            </CyberBadge>
-            <p className="mt-4 font-display text-3xl uppercase tracking-[0.05em] text-white sm:text-4xl">
-              {dictionary.pages.catalog.title}
-            </p>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-400 sm:text-[15px] sm:leading-7">
-              {dictionary.pages.catalog.subtitle}
-            </p>
-          </div>
-          <div className="xl:hidden">
-            <CyberSheet>
-              <CyberSheetTrigger asChild>
-                <CyberButton variant="outline" className="border-white/20 text-white hover:border-white/40 hover:bg-white/10 hover:text-white">
-                  <Filter aria-hidden="true" />
-                  {text.filters}
-                </CyberButton>
-              </CyberSheetTrigger>
-              <CyberSheetContent side="left" className="w-[88vw] border-white/10 bg-zinc-950/95 p-5 sm:max-w-md">
-                <CyberSheetHeader className="border-b border-white/10 pb-4">
-                  <CyberSheetTitle className="font-display text-2xl uppercase tracking-[0.05em] text-white">
+      <div className="relative z-10">
+        <section ref={catalogSectionRef} className="mx-auto w-full max-w-7xl py-8">
+          <div className="mb-6 flex flex-col gap-4 border-b border-white/10 pb-5 sm:mb-7 sm:flex-row sm:items-end sm:justify-between">
+            <div>
+              <CyberBadge variant="warning" glow>
+                {dictionary.pages.catalog.badge}
+              </CyberBadge>
+              <p className="mt-4 font-display text-3xl uppercase tracking-[0.05em] text-white sm:text-4xl">
+                {dictionary.pages.catalog.title}
+              </p>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-400 sm:text-[15px] sm:leading-7">
+                {dictionary.pages.catalog.subtitle}
+              </p>
+            </div>
+            <div className="xl:hidden">
+              <CyberSheet>
+                <CyberSheetTrigger asChild>
+                  <CyberButton variant="outline" className="border-white/20 text-white hover:border-white/40 hover:bg-white/10 hover:text-white">
+                    <Filter aria-hidden="true" />
                     {text.filters}
-                  </CyberSheetTitle>
-                  <CyberSheetDescription>
-                    {dictionary.pages.catalog.subtitle}
-                  </CyberSheetDescription>
-                </CyberSheetHeader>
-                <div className="mt-5">{filterPanel}</div>
-              </CyberSheetContent>
-            </CyberSheet>
+                  </CyberButton>
+                </CyberSheetTrigger>
+                <CyberSheetContent side="left" className="w-[88vw] border-white/10 bg-zinc-950/95 p-5 sm:max-w-md">
+                  <CyberSheetHeader className="border-b border-white/10 pb-4">
+                    <CyberSheetTitle className="font-display text-2xl uppercase tracking-[0.05em] text-white">
+                      {text.filters}
+                    </CyberSheetTitle>
+                    <CyberSheetDescription>
+                      {dictionary.pages.catalog.subtitle}
+                    </CyberSheetDescription>
+                  </CyberSheetHeader>
+                  <div className="mt-5">{filterPanel}</div>
+                </CyberSheetContent>
+              </CyberSheet>
+            </div>
           </div>
-        </div>
 
-        <div className="grid items-start gap-6 2xl:grid-cols-[340px_minmax(0,1fr)]">
-          <aside className="hidden xl:block">
-            <CyberCard variant="glass" className="sticky top-32 overflow-hidden border-white/10 bg-zinc-950/70">
-              <CyberCardContent className="p-5">
-                {filterPanel}
-              </CyberCardContent>
-            </CyberCard>
-          </aside>
-
-          <div>
-            {products.length === 0 ? (
-              <CyberCard variant="glass" className="overflow-hidden border-white/10 bg-zinc-950/70">
-                <CyberCardContent className="flex flex-col items-center justify-center gap-5 p-10 text-center sm:p-14">
-                  <div className="grid size-20 place-items-center rounded-full border border-amber-200/20 bg-amber-200/[0.08] text-amber-100 shadow-[0_0_34px_rgba(251,191,36,0.12)]">
-                    <PackageCheck className="size-9" />
-                  </div>
-                  <div className="space-y-3">
-                    <CyberBadge variant="warning" glow>
-                      {text.featured}
-                    </CyberBadge>
-                    <h2 className="font-display text-4xl tracking-[0.04em] text-white">
-                      {text.emptyTitle}
-                    </h2>
-                    <p className="mx-auto max-w-2xl text-base leading-8 text-zinc-400">
-                      {text.emptySubtitle}
-                    </p>
-                  </div>
+          <div className="grid items-start gap-6 2xl:grid-cols-[340px_minmax(0,1fr)]">
+            <aside className="hidden xl:block">
+              <CyberCard variant="glass" className="sticky top-32 overflow-hidden border-white/10 bg-zinc-950/70">
+                <CyberCardContent className="p-5">
+                  {filterPanel}
                 </CyberCardContent>
               </CyberCard>
-            ) : paginatedProducts.length ? (
-              <div className="grid auto-rows-fr gap-5 sm:gap-6 md:grid-cols-2">
-                {paginatedProducts.map((product) => {
+            </aside>
+
+            <div>
+              {products.length === 0 ? (
+                <CyberCard variant="glass" className="overflow-hidden border-white/10 bg-zinc-950/70">
+                  <CyberCardContent className="flex flex-col items-center justify-center gap-5 p-10 text-center sm:p-14">
+                    <div className="grid size-20 place-items-center rounded-full border border-amber-200/20 bg-amber-200/[0.08] text-amber-100 shadow-[0_0_34px_rgba(251,191,36,0.12)]">
+                      <PackageCheck className="size-9" />
+                    </div>
+                    <div className="space-y-3">
+                      <CyberBadge variant="warning" glow>
+                        {text.featured}
+                      </CyberBadge>
+                      <h2 className="font-display text-4xl tracking-[0.04em] text-white">
+                        {text.emptyTitle}
+                      </h2>
+                      <p className="mx-auto max-w-2xl text-base leading-8 text-zinc-400">
+                        {text.emptySubtitle}
+                      </p>
+                    </div>
+                  </CyberCardContent>
+                </CyberCard>
+              ) : paginatedProducts.length ? (
+                <div className="grid auto-rows-fr gap-5 sm:gap-6 md:grid-cols-2">
+                  {paginatedProducts.map((product) => {
                   const badges = [];
                   const defaultColorId = product.color_options[0]?.id ?? null;
                   const cardAlreadyInCart = hasItem(product.id, defaultColorId);
@@ -1416,62 +1423,63 @@ export function CatalogPage({
                       badges={badges}
                     />
                   );
-                })}
-              </div>
-            ) : (
-              <CyberCard variant="glass" className="border-white/10 bg-zinc-950/70">
-                <CyberCardContent className="p-10 text-center text-lg text-zinc-400">
-                  {selectedCategories.length ? text.emptyFilteredByCategory : text.empty}
-                </CyberCardContent>
-              </CyberCard>
-            )}
-          </div>
-        </div>
-      </section>
-
-      {products.length ? (
-        <section className="mx-auto mt-8 mb-10 flex w-full max-w-[92rem] flex-col items-center gap-4 border-t border-white/10 pt-6 text-center">
-          <div className="font-tech text-sm uppercase tracking-[0.1em] text-zinc-500">
-            {text.page} {safePageIndex} / {totalPages}
-          </div>
-          <div className="flex flex-wrap justify-center gap-2">
-            <button
-              type="button"
-              onClick={() => setCatalogPage((current) => Math.max(1, current - 1))}
-              disabled={safePageIndex === 1}
-              className="grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-zinc-300 transition hover:border-amber-200/35 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
-              aria-label={text.previousPage}
-            >
-              <ChevronLeft className="size-4" aria-hidden="true" />
-            </button>
-            {visiblePageItems.map((item) => (
-              <button
-                key={item}
-                type="button"
-                onClick={() => setCatalogPage(item)}
-                className={cn(
-                  "grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-sm text-zinc-300 transition hover:border-amber-200/35 hover:text-white",
-                  safePageIndex === item && "border-amber-200/50 bg-amber-200/[0.10] text-amber-100",
-                )}
-                aria-current={safePageIndex === item ? "page" : undefined}
-              >
-                {item}
-              </button>
-            ))}
-            <button
-              type="button"
-              onClick={() => setCatalogPage((current) => Math.min(totalPages, current + 1))}
-              disabled={safePageIndex === totalPages}
-              className="grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-zinc-300 transition hover:border-amber-200/35 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
-              aria-label={text.nextPage}
-            >
-              <ChevronRight className="size-4" aria-hidden="true" />
-            </button>
+                  })}
+                </div>
+              ) : (
+                <CyberCard variant="glass" className="border-white/10 bg-zinc-950/70">
+                  <CyberCardContent className="p-10 text-center text-lg text-zinc-400">
+                    {selectedCategories.length ? text.emptyFilteredByCategory : text.empty}
+                  </CyberCardContent>
+                </CyberCard>
+              )}
+            </div>
           </div>
         </section>
-      ) : null}
 
-      <Footer locale={locale} dictionary={dictionary} />
+        {products.length ? (
+          <section className="mx-auto mt-8 mb-10 flex w-full max-w-[92rem] flex-col items-center gap-4 border-t border-white/10 pt-6 text-center">
+            <div className="font-tech text-sm uppercase tracking-[0.1em] text-zinc-500">
+              {text.page} {safePageIndex} / {totalPages}
+            </div>
+            <div className="flex flex-wrap justify-center gap-2">
+              <button
+                type="button"
+                onClick={() => setCatalogPage((current) => Math.max(1, current - 1))}
+                disabled={safePageIndex === 1}
+                className="grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-zinc-300 transition hover:border-amber-200/35 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
+                aria-label={text.previousPage}
+              >
+                <ChevronLeft className="size-4" aria-hidden="true" />
+              </button>
+              {visiblePageItems.map((item) => (
+                <button
+                  key={item}
+                  type="button"
+                  onClick={() => setCatalogPage(item)}
+                  className={cn(
+                    "grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-sm text-zinc-300 transition hover:border-amber-200/35 hover:text-white",
+                    safePageIndex === item && "border-amber-200/50 bg-amber-200/[0.10] text-amber-100",
+                  )}
+                  aria-current={safePageIndex === item ? "page" : undefined}
+                >
+                  {item}
+                </button>
+              ))}
+              <button
+                type="button"
+                onClick={() => setCatalogPage((current) => Math.min(totalPages, current + 1))}
+                disabled={safePageIndex === totalPages}
+                className="grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-zinc-300 transition hover:border-amber-200/35 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
+                aria-label={text.nextPage}
+              >
+                <ChevronRight className="size-4" aria-hidden="true" />
+              </button>
+            </div>
+          </section>
+        ) : null}
+
+        <Footer locale={locale} dictionary={dictionary} />
+      </div>
 
       {comparisonProducts.length ? (
         <div className="pointer-events-none fixed inset-x-0 bottom-4 z-40 px-4">
