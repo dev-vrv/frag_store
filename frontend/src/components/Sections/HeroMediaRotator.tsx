@@ -3,8 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 
 const HERO_ROTATION_MS = 6200;
-const HERO_TRANSITION_MS = 950;
-const HERO_OVERLAP_DELAY_MS = 110;
+const HERO_TRANSITION_MS = 1200;
 
 export interface HeroMediaRotatorProps {
   images: string[];
@@ -12,12 +11,14 @@ export interface HeroMediaRotatorProps {
 
 export function HeroMediaRotator({ images }: HeroMediaRotatorProps) {
   const heroImages = useMemo(() => images.filter(Boolean), [images]);
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [previousIndex, setPreviousIndex] = useState<number | null>(null);
-  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [incomingIndex, setIncomingIndex] = useState<number | null>(null);
+  const [isFading, setIsFading] = useState(false);
   const [reducedMotion, setReducedMotion] = useState(false);
-  const activeIndexRef = useRef(0);
-  const frameTimeoutRef = useRef<number | null>(null);
+  const currentIndexRef = useRef(0);
+  const rotationTimeoutRef = useRef<number | null>(null);
+  const fadeTimeoutRef = useRef<number | null>(null);
+  const rafRef = useRef<number | null>(null);
 
   useEffect(() => {
     if (typeof window === "undefined") {
@@ -38,13 +39,19 @@ export function HeroMediaRotator({ images }: HeroMediaRotatorProps) {
   }, []);
 
   useEffect(() => {
-    activeIndexRef.current = activeIndex;
-  }, [activeIndex]);
+    currentIndexRef.current = currentIndex;
+  }, [currentIndex]);
 
   useEffect(() => {
     return () => {
-      if (frameTimeoutRef.current !== null) {
-        window.clearTimeout(frameTimeoutRef.current);
+      if (rotationTimeoutRef.current !== null) {
+        window.clearTimeout(rotationTimeoutRef.current);
+      }
+      if (fadeTimeoutRef.current !== null) {
+        window.clearTimeout(fadeTimeoutRef.current);
+      }
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
       }
     };
   }, []);
@@ -54,40 +61,50 @@ export function HeroMediaRotator({ images }: HeroMediaRotatorProps) {
       return undefined;
     }
 
-    const clearFrameTimeout = () => {
-      if (frameTimeoutRef.current !== null) {
-        window.clearTimeout(frameTimeoutRef.current);
-        frameTimeoutRef.current = null;
+    const clearTimers = () => {
+      if (rotationTimeoutRef.current !== null) {
+        window.clearTimeout(rotationTimeoutRef.current);
+        rotationTimeoutRef.current = null;
+      }
+      if (fadeTimeoutRef.current !== null) {
+        window.clearTimeout(fadeTimeoutRef.current);
+        fadeTimeoutRef.current = null;
+      }
+      if (rafRef.current !== null) {
+        window.cancelAnimationFrame(rafRef.current);
+        rafRef.current = null;
       }
     };
 
-    const scheduleCycle = () => {
-      clearFrameTimeout();
+    const scheduleNext = () => {
+      clearTimers();
 
-      frameTimeoutRef.current = window.setTimeout(() => {
-        const nextIndex = (activeIndexRef.current + 1) % heroImages.length;
+      rotationTimeoutRef.current = window.setTimeout(() => {
+        const nextIndex = (currentIndexRef.current + 1) % heroImages.length;
 
-        setPreviousIndex(activeIndexRef.current);
-        setActiveIndex(nextIndex);
-        setIsTransitioning(false);
-        activeIndexRef.current = nextIndex;
+        setIncomingIndex(nextIndex);
+        setIsFading(false);
 
-        frameTimeoutRef.current = window.setTimeout(() => {
-          setIsTransitioning(true);
+        rafRef.current = window.requestAnimationFrame(() => {
+          rafRef.current = window.requestAnimationFrame(() => {
+            setIsFading(true);
+          });
+        });
 
-          frameTimeoutRef.current = window.setTimeout(() => {
-            setPreviousIndex(null);
-            setIsTransitioning(false);
-            scheduleCycle();
-          }, HERO_TRANSITION_MS);
-        }, HERO_OVERLAP_DELAY_MS);
+        fadeTimeoutRef.current = window.setTimeout(() => {
+          setCurrentIndex(nextIndex);
+          currentIndexRef.current = nextIndex;
+          setIncomingIndex(null);
+          setIsFading(false);
+          scheduleNext();
+        }, HERO_TRANSITION_MS);
       }, HERO_ROTATION_MS);
     };
 
-    scheduleCycle();
+    scheduleNext();
 
     return () => {
-      clearFrameTimeout();
+      clearTimers();
     };
   }, [heroImages.length, reducedMotion]);
 
@@ -100,9 +117,11 @@ export function HeroMediaRotator({ images }: HeroMediaRotatorProps) {
     );
   }
 
-  const displayActiveIndex = reducedMotion ? 0 : activeIndex % heroImages.length;
-  const displayPreviousIndex =
-    reducedMotion || previousIndex === null ? null : previousIndex % heroImages.length;
+  const visibleIndex = reducedMotion ? 0 : currentIndex % heroImages.length;
+  const nextIndex =
+    reducedMotion || heroImages.length <= 1 || incomingIndex === null
+      ? null
+      : incomingIndex % heroImages.length;
 
   return (
     <div
@@ -116,41 +135,37 @@ export function HeroMediaRotator({ images }: HeroMediaRotatorProps) {
       <div className="hero-media-glow hero-media-glow--cool" />
       <div className="hero-media-beam" />
 
-      {displayPreviousIndex !== null ? (
-        <div
-          className={
-            isTransitioning
-              ? "hero-media-layer hero-media-layer--outgoing"
-              : "hero-media-layer hero-media-layer--visible"
-          }
-        >
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={heroImages[displayPreviousIndex]}
-            alt=""
-            className="hero-media-image"
-            draggable={false}
-          />
-        </div>
-      ) : null}
+      {heroImages.map((imageSrc, index) => {
+        let layerClassName = "hero-media-layer hero-media-layer--hidden";
 
-      <div
-        className={
-          displayPreviousIndex !== null
-            ? isTransitioning
-              ? "hero-media-layer hero-media-layer--active"
-              : "hero-media-layer hero-media-layer--hidden"
-            : "hero-media-layer hero-media-layer--visible"
+        if (index === visibleIndex) {
+          layerClassName =
+            nextIndex !== null
+              ? isFading
+                ? "hero-media-layer hero-media-layer--fading-out"
+                : "hero-media-layer hero-media-layer--visible"
+              : "hero-media-layer hero-media-layer--visible";
         }
-      >
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={heroImages[displayActiveIndex]}
-          alt=""
-          className="hero-media-image"
-          draggable={false}
-        />
-      </div>
+
+        if (nextIndex !== null && index === nextIndex) {
+          layerClassName = isFading
+            ? "hero-media-layer hero-media-layer--fading-in"
+            : "hero-media-layer hero-media-layer--hidden";
+        }
+
+        return (
+          <div key={imageSrc} className={layerClassName}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={imageSrc}
+              alt=""
+              className="hero-media-image"
+              draggable={false}
+              loading="eager"
+            />
+          </div>
+        );
+      })}
     </div>
   );
 }
