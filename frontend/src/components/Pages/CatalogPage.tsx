@@ -56,6 +56,7 @@ interface CatalogPageProps {
   brands: ProductBrand[];
   initialCategory?: string[];
   initialBrand?: string;
+  initialQuickFilters?: Partial<Record<QuickFilterKey, boolean>>;
 }
 
 type SortKey = "popular" | "priceAsc" | "priceDesc" | "newest";
@@ -473,6 +474,7 @@ export function CatalogPage({
   brands,
   initialCategory = [],
   initialBrand = "all",
+  initialQuickFilters,
 }: CatalogPageProps) {
   const text = catalogText[locale];
   const { addItem, hasItem } = useCart();
@@ -495,7 +497,7 @@ export function CatalogPage({
   const [quickFilters, setQuickFilters] = useState<Record<QuickFilterKey, boolean>>({
     bestSeller: false,
     discount: false,
-    newArrival: false,
+    newArrival: initialQuickFilters?.newArrival ?? false,
     featured: false,
     inStock: false,
     favorites: false,

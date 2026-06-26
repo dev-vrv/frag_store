@@ -55,7 +55,7 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
   const { addItem } = useCart();
   const favoriteIds = useFavoriteIds();
   const catalogHref = localizePath("/catalog", locale);
-  const blogHref = localizePath("/blog", locale);
+  const newArrivalsHref = `${catalogHref}?newArrival=1`;
   const laneRef = useRef<HTMLDivElement | null>(null);
   const pointerIdRef = useRef<number | null>(null);
   const dragStartXRef = useRef(0);
@@ -233,7 +233,7 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
               </a>
             </CyberButton>
             <CyberButton asChild variant="ghost" className="w-full sm:w-auto">
-              <a href={blogHref}>{content.secondaryCta}</a>
+              <a href={newArrivalsHref}>{content.secondaryCta}</a>
             </CyberButton>
           </RevealOnScroll>
         </div>

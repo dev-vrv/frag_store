@@ -7,6 +7,12 @@ import { getProductBrands, getProductCategories, getProducts } from "@/lib/produ
 const dictionary = getDictionary(defaultLocale);
 const page = dictionary.pages.catalog;
 
+function parseInitialQuickFilters(params: Record<string, string | string[] | undefined>) {
+  return {
+    newArrival: params.newArrival === "1",
+  };
+}
+
 export const metadata: Metadata = page.metadata;
 
 export default async function CatalogPage({
@@ -23,6 +29,7 @@ export default async function CatalogPage({
           .filter(Boolean)
       : [];
   const initialBrand = typeof params.brand === "string" ? params.brand : "all";
+  const initialQuickFilters = parseInitialQuickFilters(params);
   const [products, categories, brands] = await Promise.all([
     getProducts(),
     getProductCategories(),
@@ -38,6 +45,7 @@ export default async function CatalogPage({
       brands={brands}
       initialCategory={initialCategory}
       initialBrand={initialBrand}
+      initialQuickFilters={initialQuickFilters}
     />
   );
 }

@@ -7,6 +7,12 @@ import {
 import { CatalogPage } from "@/components/Pages/CatalogPage";
 import { getProductBrands, getProductCategories, getProducts } from "@/lib/products";
 
+function parseInitialQuickFilters(params: Record<string, string | string[] | undefined>) {
+  return {
+    newArrival: params.newArrival === "1",
+  };
+}
+
 export const generateStaticParams = generateLocaleStaticParams;
 
 export function generateMetadata({ params }: LocalePageProps) {
@@ -29,6 +35,7 @@ export default async function LocalizedCatalogPage({
           .filter(Boolean)
       : [];
   const initialBrand = typeof query.brand === "string" ? query.brand : "all";
+  const initialQuickFilters = parseInitialQuickFilters(query);
   const [products, categories, brands] = await Promise.all([
     getProducts(),
     getProductCategories(),
@@ -44,6 +51,7 @@ export default async function LocalizedCatalogPage({
       brands={brands}
       initialCategory={initialCategory}
       initialBrand={initialBrand}
+      initialQuickFilters={initialQuickFilters}
     />
   );
 }
