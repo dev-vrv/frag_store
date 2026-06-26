@@ -195,6 +195,7 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
 
   return (
     <Section
+      id="featured"
       fullWidth
       className="relative isolate overflow-hidden bg-transparent text-zinc-50"
     >

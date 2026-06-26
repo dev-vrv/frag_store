@@ -88,7 +88,7 @@ export async function Hero({ locale, content }: HeroProps) {
 
         <RevealOnScroll
           as="a"
-          href="#loadout"
+          href="#featured"
           aria-label={content.scroll}
           delay={980}
           className="hero-scroll-link absolute bottom-6 left-1/2 hidden -translate-x-1/2 sm:flex"

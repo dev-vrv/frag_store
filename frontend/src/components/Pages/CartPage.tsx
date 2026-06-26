@@ -587,7 +587,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                 <div className="flex flex-wrap gap-2">
                   <Link
                     href={catalogHref}
-                    className="inline-flex h-8 items-center justify-center rounded-full border border-white/12 bg-white/[0.03] px-3 text-[10px] uppercase tracking-[0.14em] text-zinc-200 transition hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
+                    className="inline-flex h-8 items-center justify-center rounded-md border border-white/12 bg-white/[0.03] px-3 text-[10px] uppercase tracking-[0.14em] text-zinc-200 transition hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
                   >
                     {text.catalogCta}
                   </Link>
@@ -596,7 +596,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                       <CyberDialogTrigger asChild>
                         <button
                           type="button"
-                          className="inline-flex h-8 items-center justify-center gap-1.5 rounded-full border border-red-400/18 bg-red-500/[0.05] px-3 text-[10px] uppercase tracking-[0.14em] text-red-100 transition hover:border-red-300/28 hover:bg-red-500/[0.12]"
+                          className="inline-flex h-8 items-center justify-center gap-1.5 rounded-md border border-red-400/18 bg-red-500/[0.05] px-3 text-[10px] uppercase tracking-[0.14em] text-red-100 transition hover:border-red-300/28 hover:bg-red-500/[0.12]"
                         >
                           <Trash2 aria-hidden="true" />
                           {text.clear}
