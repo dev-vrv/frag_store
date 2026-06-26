@@ -234,6 +234,16 @@ html {
   -webkit-backface-visibility: hidden;
 }
 
+.hero-media-layer--visible .hero-media-image,
+.hero-media-layer--fading-in .hero-media-image {
+  animation: hero-media-image-drift 14s ease-in-out infinite;
+}
+
+.hero-media-layer--fading-out .hero-media-image {
+  animation: hero-media-image-drift 14s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
 .hero-media-layer--active {
   opacity: 0.46;
 }
@@ -1063,6 +1073,28 @@ html {
 
   100% {
     transform: translateZ(0) scale(1.09);
+  }
+}
+
+@keyframes hero-media-image-drift {
+  0% {
+    transform: translate3d(0, 0, 0) scale(1.06);
+  }
+
+  25% {
+    transform: translate3d(0, -0.15%, 0) scale(1.08);
+  }
+
+  50% {
+    transform: translate3d(0, -0.25%, 0) scale(1.1);
+  }
+
+  75% {
+    transform: translate3d(0, -0.1%, 0) scale(1.085);
+  }
+
+  100% {
+    transform: translate3d(0, 0, 0) scale(1.06);
   }
 }
 
