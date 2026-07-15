@@ -1,6 +1,7 @@
 import { ContactSection } from "@/components/Sections/ContactSection";
 import { FeaturedDrops } from "@/components/Sections/FeaturedDrops";
 import { Hero } from "@/components/Sections/Hero";
+import { MainCategories } from "@/components/Sections/MainCategories";
 import { ServiceProtocol } from "@/components/Sections/ServiceProtocol";
 import { GeometricBackdrop } from "@/components/Background/GeometricBackdrop";
 import { Footer } from "@/components/Footer/Footer";
@@ -31,6 +32,7 @@ export function Main({ locale, dictionary, bestSellerProducts, categories }: Mai
       <div className="relative z-10 w-full mx-auto">
         <Header locale={locale} dictionary={dictionary.header} />
         <Hero locale={locale} content={dictionary.hero} categories={categories} />
+        <MainCategories locale={locale} categories={categories} />
         <FeaturedDrops locale={locale} content={dictionary.featured} products={bestSellerProducts} />
         <ServiceProtocol content={dictionary.service} />
         <ContactSection locale={locale} />

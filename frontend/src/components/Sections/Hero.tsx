@@ -56,25 +56,23 @@ const heroImageByCategory: Record<
 export function Hero({ locale, content, categories }: HeroProps) {
   const slides = useMemo<HeroSlide[]>(() => {
     const prioritySlugs = ["keyboards", "mice", "headsets", "accessories"];
-    const mapped = prioritySlugs
-      .map((slug) => {
+    const mapped = prioritySlugs.flatMap((slug): HeroSlide[] => {
         const category = categories.find((item) => item.slug === slug);
         const visual = heroImageByCategory[slug];
 
         if (!category || !visual) {
-          return null;
+          return [];
         }
 
-        return {
+        return [{
           slug,
           title: getLocalizedCategoryName(category, locale),
           subtitle: getLocalizedCategoryDescription(category, locale),
           image: visual.image,
           accentClassName: visual.accentClassName,
           imagePositionClassName: visual.imagePositionClassName,
-        };
-      })
-      .filter((item): item is HeroSlide => Boolean(item));
+        }];
+      });
 
     return mapped.length ? mapped : [];
   }, [categories, locale]);
