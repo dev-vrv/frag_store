@@ -71,7 +71,7 @@ export function Footer({ locale, dictionary, className }: FooterProps) {
   return (
     <footer
       className={cn(
-        "relative mt-auto border-t border-red-500/15 bg-black/82 px-4 py-8 text-zinc-300 backdrop-blur-xl sm:px-6 sm:py-10 lg:px-8",
+        "relative mt-auto border-t border-red-500/15 bg-[#111118]/84 px-4 py-8 text-zinc-300 backdrop-blur-xl sm:px-6 sm:py-10 lg:px-8",
         className,
       )}
     >
@@ -85,9 +85,9 @@ export function Footer({ locale, dictionary, className }: FooterProps) {
           >
             <BrandLogo className="w-[8.6rem]" imageClassName="brightness-[1.08]" />
           </Link>
-          <p className="mx-auto max-w-sm text-sm leading-7 text-zinc-400 lg:mx-0">{text.tagline}</p>
+          <p className="font-tech type-body mx-auto max-w-sm text-zinc-300 lg:mx-0">{text.tagline}</p>
           <ContactSocialButtons locale={locale} className="justify-center lg:justify-start" />
-          <div className="flex flex-wrap justify-center gap-3 text-sm lg:justify-start">
+          <div className="flex flex-wrap justify-center gap-4 text-sm lg:justify-start">
             <span className="inline-flex items-center gap-2 border border-lime-300/20 bg-lime-300/5 px-3 py-2 text-lime-100">
               <ShieldCheck className="size-4" aria-hidden="true" />
               {text.status}
@@ -103,10 +103,10 @@ export function Footer({ locale, dictionary, className }: FooterProps) {
           <FooterLinkGroup title={text.catalog} links={storeLinks} locale={locale} />
           <FooterLinkGroup title={text.support} links={supportLinks} locale={locale} />
           <div className="space-y-3 sm:col-span-2 lg:col-span-1">
-            <h2 className="font-tech text-sm uppercase text-zinc-500">{text.account}</h2>
+            <h2 className="font-tech type-label text-zinc-500">{text.account}</h2>
             <Link
               href={localizePath("/auth", locale)}
-              className="block text-sm uppercase text-zinc-300 transition hover:text-red-100"
+              className="font-tech type-ui block text-zinc-200 transition hover:text-white"
             >
               {dictionary.header.auth}
             </Link>
@@ -114,7 +114,7 @@ export function Footer({ locale, dictionary, className }: FooterProps) {
         </section>
       </div>
 
-      <div className="mx-auto mt-8 flex max-w-7xl flex-col gap-2 border-t border-white/10 pt-5 text-center text-[11px] uppercase tracking-[0.12em] text-zinc-600 sm:flex-row sm:items-center sm:justify-between sm:text-left sm:text-xs">
+      <div className="font-tech type-caption mx-auto mt-8 flex max-w-7xl flex-col gap-2 border-t border-white/10 pt-5 text-center uppercase tracking-[0.12em] text-zinc-500 sm:flex-row sm:items-center sm:justify-between sm:text-left">
         <span>© 2026 Frag Store</span>
         <span>{text.rights}</span>
       </div>
@@ -133,13 +133,13 @@ function FooterLinkGroup({
 }) {
   return (
     <div className="space-y-3 text-center sm:text-left">
-      <h2 className="font-tech text-sm uppercase text-zinc-500">{title}</h2>
-      <nav className="space-y-2" aria-label={title}>
+      <h2 className="font-tech type-label text-zinc-500">{title}</h2>
+      <nav className="space-y-3" aria-label={title}>
         {links.map((link) => (
           <Link
             key={link.href}
             href={localizePath(link.href, locale)}
-            className="block text-sm uppercase text-zinc-300 transition hover:text-red-100"
+            className="font-tech type-ui block text-zinc-200 transition hover:text-white"
           >
             {link.label}
           </Link>

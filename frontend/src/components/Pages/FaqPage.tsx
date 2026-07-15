@@ -1,6 +1,6 @@
 import { HelpCircle } from "lucide-react";
 
-import { CyberBadge, CyberLaserText } from "@/components/cyber";
+import { CyberBadge } from "@/components/cyber";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
 import { ContactCyberBackground } from "@/components/Pages/ContactsPage/ContactCyberBackground";
@@ -296,13 +296,10 @@ export function FaqPage({ locale, dictionary }: FaqPageProps) {
         <CyberBadge variant="red" glow>
           {page.badge}
         </CyberBadge>
-        <CyberLaserText
-          as="h1"
-          text={page.title}
-          className="mt-7 block text-5xl text-red-100 sm:text-7xl"
-          speedMs={44}
-        />
-        <p className="mt-6 max-w-5xl text-xl leading-9 text-zinc-400">
+        <h1 className="font-display type-h1 mt-7 max-w-5xl text-red-100">
+          {page.title}
+        </h1>
+        <p className="font-tech type-body-lg mt-6 max-w-5xl text-zinc-400">
           {page.subtitle}
         </p>
       </section>

@@ -89,14 +89,14 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
             as="h2"
             text={content.title}
             delay={180}
-            className="font-display mt-6 text-[2rem] font-normal leading-[1.08] tracking-[0.02em] text-white sm:text-[2.6rem] lg:text-5xl"
+            className="font-display type-h2-display mt-6 text-white"
             config={{ duration: 0.32, delayStep: 16, distance: 24 }}
           />
           <AnimatedText
             as="p"
             text={content.subtitle}
             delay={340}
-            className="mt-5 max-w-2xl text-[0.95rem] leading-7 text-zinc-400 sm:text-base sm:leading-8 lg:text-lg"
+            className="font-tech type-body-lg mt-5 max-w-2xl text-zinc-400"
             config={{ duration: 0.24, delayStep: 7, distance: 16 }}
           />
         </div>
@@ -109,10 +109,10 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
               delay={500 + index * 90}
               className="rounded-md border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.025))] p-4 backdrop-blur-xl"
             >
-              <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">
+              <p className="font-tech type-caption uppercase tracking-[0.12em] text-zinc-500">
                 {label}
               </p>
-              <p className="mt-2 font-display text-[1.8rem] tracking-[0.04em] text-cyan-100">
+              <p className="font-tech type-price mt-2 text-cyan-100">
                 {value}
               </p>
               <div className="mt-4 h-px bg-gradient-to-r from-cyan-300/70 via-red-300/35 to-transparent" />
@@ -146,9 +146,21 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
                         </span>
                       </div>
 
-                      <div className="flex flex-1 items-center justify-end py-5 sm:py-6">
-                        <div className="grid size-12 place-items-center rounded-md border border-white/10 bg-black/35 text-white shadow-[0_0_38px_rgba(255,255,255,0.08)] sm:size-14">
-                          <Icon className="size-6 sm:size-7" />
+                      <div className="flex flex-1 items-center justify-end py-4 sm:py-5">
+                        <div className="relative">
+                          <div
+                            className={cn(
+                              "absolute inset-0 rounded-[1.75rem] blur-2xl transition-transform duration-500 group-hover:scale-110",
+                              theme.orb,
+                            )}
+                          />
+                          <div className="absolute inset-[12%] rounded-[1.35rem] border border-white/8" />
+                          <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-white/0 via-white/12 to-white/0" />
+                          <div className="absolute top-1/2 left-0 h-px w-full -translate-y-1/2 bg-gradient-to-r from-white/0 via-white/10 to-white/0" />
+                          <div className="relative grid size-24 place-items-center rounded-[1.75rem] border border-white/12 bg-[radial-gradient(circle_at_30%_28%,rgba(255,255,255,0.16),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02)),rgba(4,8,18,0.56)] text-white shadow-[0_0_48px_rgba(255,255,255,0.08)] backdrop-blur-sm transition-[transform,border-color,box-shadow] duration-500 group-hover:scale-[1.03] group-hover:border-white/18 group-hover:shadow-[0_0_64px_rgba(255,255,255,0.12)] sm:size-28">
+                            <div className="absolute inset-3 rounded-[1.2rem] border border-white/8" />
+                            <Icon className="relative z-10 size-11 sm:size-12" />
+                          </div>
                         </div>
                       </div>
 
@@ -225,12 +237,20 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
                   </div>
 
                   <div className="mt-8 flex items-center justify-center">
-                    <div className={cn("relative grid aspect-square w-full max-w-[16rem] place-items-center overflow-hidden rounded-md border border-white/10", activeTheme.surface)}>
+                    <div
+                      className={cn(
+                        "relative grid aspect-square w-full max-w-[16rem] place-items-center overflow-hidden rounded-[1.5rem] border border-white/10",
+                        activeTheme.surface,
+                      )}
+                    >
                       <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.07)_1px,transparent_1px)] bg-[size:22px_22px] opacity-40" />
                       <div className={cn("absolute -right-6 top-6 size-24 rounded-full blur-3xl", activeTheme.orb)} />
+                      <div className="absolute inset-[10%] rounded-[1.2rem] border border-white/8" />
+                      <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-white/0 via-white/12 to-white/0" />
+                      <div className="absolute top-1/2 left-0 h-px w-full -translate-y-1/2 bg-gradient-to-r from-white/0 via-white/10 to-white/0" />
                       {(() => {
                         const ActiveIcon = serviceIcons[activeCardIndex ?? 0] ?? ShieldCheck;
-                        return <ActiveIcon className="relative z-10 max-w-7xl mx-auto size-20 text-white" />;
+                        return <ActiveIcon className="relative z-10 max-w-7xl mx-auto size-24 text-white" />;
                       })()}
                     </div>
                   </div>

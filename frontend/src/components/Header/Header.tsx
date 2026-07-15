@@ -116,11 +116,11 @@ export function Header({ locale, dictionary }: HeaderProps) {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b border-red-500/15 bg-black/70 backdrop-blur-xl transition-transform duration-300",
+        "fixed inset-x-0 top-0 z-50 border-b border-red-500/15 bg-[#111118]/78 backdrop-blur-xl transition-transform duration-300",
         isHidden ? "-translate-y-full" : "translate-y-0",
       )}
     >
-      <div className="mx-auto flex min-h-20 w-full max-w-7xl items-center justify-between gap-3sm:gap-5 sm:px-4">
+      <div className="mx-auto flex min-h-20 w-full max-w-[90rem] items-center gap-3 px-4 sm:gap-5 sm:px-6 lg:px-8">
         <Link
           href={localizePath("/", locale)}
           className="shrink-0 px-1 py-2 sm:px-2"
@@ -134,14 +134,14 @@ export function Header({ locale, dictionary }: HeaderProps) {
         </Link>
 
         <Nav
-          className="hidden lg:flex"
+          className="hidden flex-1 justify-center lg:flex"
           items={dictionary.nav}
           info={dictionary.info}
           locale={locale}
           ariaLabel={dictionary.navAriaLabel}
         />
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="ml-auto hidden items-center gap-4 lg:flex">
           <LocaleSwitcher locale={locale} label="Сменить язык" />
           <HeaderIconLink
             href="/catalog"
@@ -168,8 +168,8 @@ export function Header({ locale, dictionary }: HeaderProps) {
             className={cn(
               "group relative inline-flex h-10 items-center gap-2 overflow-hidden border px-4 text-sm uppercase tracking-[0.1em] text-white transition-all duration-300 focus-visible:outline-none focus-visible:ring-2",
               authActive
-                ? "border-fuchsia-300/45 bg-[linear-gradient(135deg,rgba(34,211,238,0.16),rgba(217,70,239,0.18))] shadow-[0_0_28px_rgba(217,70,239,0.16)] focus-visible:ring-fuchsia-300/35"
-                : "border-white/14 bg-[linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] hover:border-fuchsia-300/35 hover:bg-[linear-gradient(135deg,rgba(34,211,238,0.12),rgba(217,70,239,0.14))] hover:shadow-[0_0_22px_rgba(217,70,239,0.12)] focus-visible:ring-fuchsia-300/30",
+                ? "font-tech border-fuchsia-300/45 bg-[linear-gradient(135deg,rgba(34,211,238,0.16),rgba(217,70,239,0.18))] tracking-[0.16em] shadow-[0_0_28px_rgba(217,70,239,0.16)] focus-visible:ring-fuchsia-300/35"
+                : "font-tech border-white/14 bg-[linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] tracking-[0.16em] hover:border-fuchsia-300/35 hover:bg-[linear-gradient(135deg,rgba(34,211,238,0.12),rgba(217,70,239,0.14))] hover:shadow-[0_0_22px_rgba(217,70,239,0.12)] focus-visible:ring-fuchsia-300/30",
             )}
           >
             <span className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-cyan-300/80 to-transparent opacity-70 transition-opacity group-hover:opacity-100" />

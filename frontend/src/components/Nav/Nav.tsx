@@ -21,13 +21,13 @@ export interface NavProps {
 }
 
 const navLinkClassName =
-  "cyber-cut-small font-tech border border-transparent px-3 py-2 text-sm font-semibold uppercase tracking-[0.08em] text-zinc-300 transition hover:border-red-400/30 hover:bg-red-500/10 hover:text-red-100 focus-visible:border-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/30";
+  "cyber-cut-small font-tech border border-transparent px-4 py-2.5 text-sm font-semibold tracking-[0.04em] text-zinc-200 transition hover:border-red-400/30 hover:bg-red-500/10 hover:text-white focus-visible:border-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/30";
 
 export function Nav({ className, items, info, locale, ariaLabel }: NavProps) {
   const pathname = stripLocaleFromPath(usePathname() || "/");
 
   return (
-    <nav className={cn("flex flex-wrap items-center gap-2", className)} aria-label={ariaLabel}>
+    <nav className={cn("flex flex-wrap items-center gap-3", className)} aria-label={ariaLabel}>
       {items.map((item) => (
         <Link
           key={item.href}
@@ -63,7 +63,7 @@ export function Nav({ className, items, info, locale, ariaLabel }: NavProps) {
                 href={localizePath(item.href, locale)}
                 aria-current={pathname === item.href ? "page" : undefined}
                 className={cn(
-                  "font-tech block border border-transparent px-3 py-2 text-sm font-semibold uppercase tracking-[0.08em] text-zinc-300 transition hover:border-red-400/30 hover:bg-red-500/10 hover:text-red-100 focus-visible:border-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/30",
+                  "font-tech block border border-transparent px-4 py-2.5 text-sm font-semibold tracking-[0.04em] text-zinc-200 transition hover:border-red-400/30 hover:bg-red-500/10 hover:text-white focus-visible:border-red-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/30",
                   pathname === item.href && "border-red-400/45 bg-red-500/14 text-red-100",
                 )}
               >

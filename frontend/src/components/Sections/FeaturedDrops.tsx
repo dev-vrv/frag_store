@@ -52,7 +52,7 @@ function ProductVisual({ product }: { product: Product }) {
 }
 
 export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps) {
-  const { addItem } = useCart();
+  const { addItem, hasItem } = useCart();
   const favoriteIds = useFavoriteIds();
   const catalogHref = localizePath("/catalog", locale);
   const newArrivalsHref = `${catalogHref}?newArrival=1`;
@@ -63,12 +63,17 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
   const lastPointerXRef = useRef(0);
   const animationFrameRef = useRef<number | null>(null);
   const isDraggingRef = useRef(false);
-  const isHoveredRef = useRef(false);
+  const isHoverPausedRef = useRef(false);
   const autoDirectionRef = useRef(1);
   const [isDragging, setIsDragging] = useState(false);
+  const [setRepeatFactor, setSetRepeatFactor] = useState(1);
+  const repeatedProducts = useMemo(
+    () => Array.from({ length: setRepeatFactor }, () => products).flat(),
+    [products, setRepeatFactor],
+  );
   const marqueeProducts = useMemo(
-    () => [...products, ...products, ...products],
-    [products],
+    () => [...repeatedProducts, ...repeatedProducts, ...repeatedProducts],
+    [repeatedProducts],
   );
   const favoriteIdSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
 
@@ -79,9 +84,46 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
       return;
     }
 
+    function ensureScrollableSetWidth() {
+      const singleSetWidth = lane.scrollWidth / 3;
+
+      if (!singleSetWidth) {
+        return;
+      }
+
+      const minimumSetWidth = lane.clientWidth + 64;
+
+      if (singleSetWidth > minimumSetWidth || setRepeatFactor >= 12) {
+        return;
+      }
+
+      const requiredFactor = Math.ceil(minimumSetWidth / singleSetWidth) * setRepeatFactor;
+      setSetRepeatFactor(Math.min(12, requiredFactor));
+    }
+
+    ensureScrollableSetWidth();
+
+    const resizeObserver = new ResizeObserver(() => {
+      ensureScrollableSetWidth();
+    });
+
+    resizeObserver.observe(lane);
+
+    return () => {
+      resizeObserver.disconnect();
+    };
+  }, [products, setRepeatFactor]);
+
+  useEffect(() => {
+    const lane = laneRef.current;
+
+    if (!lane || !repeatedProducts.length) {
+      return;
+    }
+
     const setWidth = lane.scrollWidth / 3;
 
-    if (!setWidth) {
+    if (!setWidth || lane.scrollWidth <= lane.clientWidth) {
       return;
     }
 
@@ -102,7 +144,7 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
     }
 
     function tick() {
-      if (!isDraggingRef.current && !isHoveredRef.current) {
+      if (!isDraggingRef.current && !isHoverPausedRef.current) {
         lane.scrollLeft += speed * autoDirectionRef.current;
         normalizeScroll();
       }
@@ -117,7 +159,7 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
         window.cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [products]);
+  }, [repeatedProducts]);
 
   function normalizeAfterDrag() {
     const lane = laneRef.current;
@@ -143,6 +185,12 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
     const lane = laneRef.current;
 
     if (!lane) {
+      return;
+    }
+
+    const target = event.target as HTMLElement | null;
+
+    if (target?.closest("a, button, input, select, textarea, [role='button']")) {
       return;
     }
 
@@ -213,14 +261,14 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
             as="h2"
             text={content.title}
             delay={180}
-            className="font-display mt-6 text-[2rem] font-normal leading-[1.08] tracking-[0.02em] text-white sm:text-[2.6rem] lg:text-5xl"
+            className="font-display type-h2-display mt-6 text-white"
             config={{ duration: 0.32, delayStep: 16, distance: 24 }}
           />
           <AnimatedText
             as="p"
             text={content.subtitle}
             delay={340}
-            className="mt-5 max-w-2xl text-[0.95rem] leading-7 text-zinc-400 sm:text-base sm:leading-8 lg:text-lg"
+            className="font-tech type-body-lg mt-5 max-w-2xl text-zinc-400"
             config={{ duration: 0.24, delayStep: 7, distance: 16 }}
           />
           <RevealOnScroll
@@ -244,22 +292,20 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
         <div
           className="featured-marquee-shell mt-8 sm:mt-10"
           data-dragging={isDragging}
-          onMouseEnter={() => {
-            isHoveredRef.current = true;
-          }}
-          onMouseLeave={() => {
-            isHoveredRef.current = false;
-          }}
         >
           <div className="featured-marquee-mask">
             <div
               ref={laneRef}
               className="featured-marquee-lane"
+              onPointerEnter={() => {
+                isHoverPausedRef.current = true;
+              }}
               onPointerDown={handlePointerDown}
               onPointerMove={handlePointerMove}
               onPointerUp={handlePointerUp}
               onPointerCancel={stopDragging}
               onPointerLeave={(event) => {
+                isHoverPausedRef.current = false;
                 if (pointerIdRef.current === event.pointerId) {
                   handlePointerUp(event);
                 }
@@ -268,8 +314,10 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
               <div className="featured-marquee-track">
                 {marqueeProducts.map((product, index) => {
                   const inPrimarySet =
-                    index >= products.length &&
-                    index < products.length * 2;
+                    index >= repeatedProducts.length &&
+                    index < repeatedProducts.length * 2;
+                  const defaultColorId = product.color_options[0]?.id ?? null;
+                  const cardAlreadyInCart = hasItem(product.id, defaultColorId);
 
                   const badges = [];
                   if (product.is_new_arrival) {
@@ -300,14 +348,19 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
                         oldPrice={formatProductOldPrice(product, locale)}
                         badges={badges}
                         detailsLabel={content.detailsCta}
-                        ctaLabel={content.productCta}
+                        ctaLabel={cardAlreadyInCart ? content.alreadyInCart : content.productCta}
                         detailsHref={`${catalogHref}?product=${product.slug}`}
-                        ctaHref={product.color_options.length ? `${catalogHref}?product=${product.slug}` : undefined}
-                        onCtaClick={product.color_options.length ? undefined : () => addItem(product.id, 1)}
-                        ctaDisabled={product.quantity_in_stock <= 0}
+                        onCtaClick={() => addItem(product.id, 1, defaultColorId)}
+                        ctaDisabled={product.quantity_in_stock <= 0 || cardAlreadyInCart}
+                        ctaClassName={
+                          cardAlreadyInCart
+                            ? "border-cyan-300/60 bg-[linear-gradient(135deg,rgba(34,211,238,0.18),rgba(34,211,238,0.06))] text-cyan-50 shadow-[0_0_28px_rgba(34,211,238,0.12)] hover:border-cyan-300/60 hover:bg-[linear-gradient(135deg,rgba(34,211,238,0.18),rgba(34,211,238,0.06))] hover:text-cyan-50 disabled:opacity-100"
+                            : undefined
+                        }
                         favoriteLabel={content.favoriteLabel}
                         favoriteActive={favoriteIdSet.has(product.id)}
                         onFavoriteClick={() => toggleFavorite(product.id)}
+                        stackActions
                       />
                     </div>
                   );

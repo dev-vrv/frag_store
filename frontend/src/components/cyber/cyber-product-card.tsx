@@ -7,7 +7,6 @@ import { usePathname } from "next/navigation";
 import { getLocaleFromPathname } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import { CyberBadge, type CyberBadgeProps } from "./cyber-badge";
-import { cyberButtonVariants } from "./cyber-button";
 import {
   CyberCard,
   CyberCardContent,
@@ -61,6 +60,7 @@ export interface CyberProductCardProps
   compareActive?: boolean;
   ctaHref?: string;
   ctaDisabled?: boolean;
+  ctaClassName?: string;
   detailsHref?: string;
   compareDisabled?: boolean;
   onCtaClick?: () => void;
@@ -71,6 +71,7 @@ export interface CyberProductCardProps
   radius?: "default" | "compact";
   tone?: "default" | "featured" | "catalog";
   liftOnHover?: boolean;
+  stackActions?: boolean;
 }
 
 const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>(
@@ -92,6 +93,7 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
       compareActive = false,
       ctaHref,
       ctaDisabled,
+      ctaClassName,
       detailsHref,
       compareDisabled = false,
       onCtaClick,
@@ -102,6 +104,7 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
       radius = "default",
       tone = "default",
       liftOnHover = true,
+      stackActions = false,
       ...props
     },
     ref,
@@ -228,11 +231,11 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
 
           <div className="flex flex-1 flex-col gap-2.5">
             <div className="flex flex-col gap-1.5">
-              <h3 className="min-h-[2.9rem] text-balance font-display text-[1.2rem] font-normal leading-[1.02] tracking-[0.035em] text-white sm:min-h-[3.2rem] sm:text-[1.45rem]">
+              <h3 className="font-tech type-h4 min-h-[2.9rem] text-balance tracking-[0.01em] text-white sm:min-h-[3.2rem]">
                 {title}
               </h3>
               {description ? (
-                <p className="line-clamp-3 min-h-[3rem] text-[13px] leading-5.5 text-zinc-400 sm:min-h-[3.2rem] sm:text-[14px] sm:leading-6">
+                <p className="font-tech type-body-sm line-clamp-3 min-h-[3rem] text-zinc-400 sm:min-h-[3.2rem]">
                   {description}
                 </p>
               ) : null}
@@ -256,12 +259,12 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
             >
               <div className="flex min-h-[3.2rem] items-end justify-between gap-4">
                 <div className="space-y-0.5">
-                  <div className="font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-600">
+                  <div className="font-tech type-caption uppercase tracking-[0.12em] text-zinc-500">
                     {labels.price}
                   </div>
                   <div
                     className={cn(
-                      "font-display text-[1.75rem] font-normal leading-none sm:text-[2rem]",
+                      "font-tech type-price",
                       isFeaturedTone || isCatalogTone ? "text-white" : "text-amber-100",
                     )}
                   >
@@ -270,31 +273,38 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
                 </div>
                 {oldPrice ? (
                   <div className="pb-0.5 text-right">
-                    <div className="font-tech text-[11px] uppercase tracking-[0.12em] text-zinc-600">
+                    <div className="font-tech type-caption uppercase tracking-[0.12em] text-zinc-500">
                       {labels.oldPrice}
                     </div>
-                    <div className="mt-1 font-tech text-xs text-zinc-500 line-through sm:text-sm">{oldPrice}</div>
+                    <div className="font-tech type-body-sm mt-1 text-zinc-500 line-through">{oldPrice}</div>
                   </div>
                 ) : null}
               </div>
             </div>
           </div>
         </CyberCardContent>
-        <CyberCardFooter className="mt-auto grid grid-cols-1 gap-2.5 border-t border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] px-3.5 pb-3.5 pt-3 sm:grid-cols-2 sm:px-4 sm:pb-4">
+        <CyberCardFooter
+          className={cn(
+            "mt-auto grid grid-cols-1 gap-2.5 border-t border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.03),rgba(255,255,255,0.015))] px-3.5 pb-3.5 pt-3 sm:px-4 sm:pb-4",
+            !stackActions && (isCatalogTone ? "2xl:grid-cols-2" : "sm:grid-cols-2"),
+          )}
+        >
           {detailsHref ? (
-            <a
-              href={detailsHref}
+            <CyberButton
+              asChild
               className={cn(
-                cyberButtonVariants({ variant: "ghost", size: "md" }),
                 isFeaturedTone
                   ? "h-11 w-full border-white/12 bg-white/[0.03] text-zinc-200 hover:border-white/20 hover:bg-white/[0.06] hover:text-white"
                   : "h-11 w-full border-white/14 bg-white/[0.02] text-zinc-200 hover:border-amber-200/35 hover:text-white",
               )}
+              variant="ghost"
             >
-              <span className="relative z-10 max-w-7xl mx-auto inline-flex items-center justify-center gap-2 px-4 py-1">
-                {detailsLabel ?? labels.details}
-              </span>
-            </a>
+              <a href={detailsHref}>
+                <span className="relative z-10 inline-flex items-center justify-center gap-2 px-4 py-1">
+                  {detailsLabel ?? labels.details}
+                </span>
+              </a>
+            </CyberButton>
           ) : (
             <CyberButton
               className={cn(
@@ -310,19 +320,22 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
             </CyberButton>
           )}
           {ctaHref ? (
-            <a
-              href={ctaHref}
+            <CyberButton
+              asChild
               className={cn(
-                cyberButtonVariants({ variant: "primary", size: "md" }),
                 isFeaturedTone
                   ? "h-11 w-full border-lime-300/70 bg-[linear-gradient(135deg,rgba(163,230,53,0.18),rgba(163,230,53,0.05))] text-lime-100 hover:border-lime-200/80 hover:bg-lime-300 hover:text-zinc-950"
                   : "h-11 w-full border-lime-300/75 bg-[linear-gradient(135deg,rgba(163,230,53,0.18),rgba(163,230,53,0.05))] text-lime-100 hover:bg-lime-300 hover:text-zinc-950",
+                ctaClassName,
               )}
+              variant="primary"
             >
-              <span className="relative z-10 max-w-7xl mx-auto inline-flex items-center justify-center gap-2 px-4 py-1">
-                {ctaLabel ?? labels.cta}
-              </span>
-            </a>
+              <a href={ctaHref}>
+                <span className="relative z-10 inline-flex items-center justify-center gap-2 px-4 py-1">
+                  {ctaLabel ?? labels.cta}
+                </span>
+              </a>
+            </CyberButton>
           ) : (
             <CyberButton
               className={cn(
@@ -330,6 +343,7 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
                 isFeaturedTone
                   ? "border-lime-300/70 bg-[linear-gradient(135deg,rgba(163,230,53,0.18),rgba(163,230,53,0.05))] text-lime-100 hover:border-lime-200/80 hover:bg-lime-300 hover:text-zinc-950"
                   : "border-lime-300/75 bg-[linear-gradient(135deg,rgba(163,230,53,0.18),rgba(163,230,53,0.05))] text-lime-100 hover:bg-lime-300 hover:text-zinc-950",
+                ctaClassName,
               )}
               variant="primary"
               onClick={onCtaClick}

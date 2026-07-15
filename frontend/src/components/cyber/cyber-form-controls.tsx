@@ -109,7 +109,7 @@ const CyberNativeSelect = React.forwardRef<HTMLDivElement, CyberNativeSelectProp
         {label ? (
           <label
             htmlFor={selectId}
-            className="font-tech block text-sm font-semibold uppercase tracking-[0.1em] text-zinc-300"
+            className="font-tech type-label block text-zinc-300"
           >
             {label}
           </label>
@@ -129,7 +129,7 @@ const CyberNativeSelect = React.forwardRef<HTMLDivElement, CyberNativeSelectProp
               }
             }}
             className={cn(
-              "cyber-cut-small font-tech flex h-13 w-full cursor-pointer items-center justify-between rounded-sm border border-lime-300/35 bg-black/45 px-4 pr-10 text-left text-sm uppercase tracking-[0.1em] text-lime-100 outline-none shadow-[inset_0_0_18px_rgba(190,242,100,0.05)] transition hover:bg-lime-300/8 focus-visible:border-lime-300/80 focus-visible:ring-2 focus-visible:ring-lime-300/25 disabled:cursor-not-allowed disabled:opacity-50",
+              "cyber-cut-small font-tech flex h-13 w-full cursor-pointer items-center justify-between rounded-sm border border-lime-300/35 bg-black/45 px-4 pr-10 text-left text-base font-medium tracking-[0.02em] text-lime-100 outline-none shadow-[inset_0_0_18px_rgba(190,242,100,0.05)] transition hover:bg-lime-300/8 focus-visible:border-lime-300/80 focus-visible:ring-2 focus-visible:ring-lime-300/25 disabled:cursor-not-allowed disabled:opacity-50",
               className,
             )}
           >
@@ -141,7 +141,7 @@ const CyberNativeSelect = React.forwardRef<HTMLDivElement, CyberNativeSelectProp
               id={listboxId}
               role="listbox"
               aria-required={required || undefined}
-              className="cyber-cut-surface font-tech absolute left-0 top-[calc(100%+0.5rem)] z-40 max-h-72 w-full overflow-y-auto rounded-sm border border-lime-300/30 bg-zinc-950/95 p-2 text-sm uppercase tracking-[0.08em] shadow-[0_0_36px_rgba(190,242,100,0.16)]"
+              className="cyber-cut-surface font-tech absolute left-0 top-[calc(100%+0.5rem)] z-40 max-h-72 w-full overflow-y-auto rounded-sm border border-lime-300/30 bg-zinc-950/95 p-2 text-sm font-medium tracking-[0.02em] shadow-[0_0_36px_rgba(190,242,100,0.16)]"
             >
               {options.map((option) => {
                 const selected = option.value === selectedValue;
@@ -170,7 +170,7 @@ const CyberNativeSelect = React.forwardRef<HTMLDivElement, CyberNativeSelectProp
           ) : null}
           {name ? <input type="hidden" name={name} value={selectedValue} required={required} /> : null}
         </div>
-        {helperText ? <p className="font-tech text-sm text-zinc-500">{helperText}</p> : null}
+        {helperText ? <p className="font-tech type-body-sm text-zinc-500">{helperText}</p> : null}
       </div>
     );
   },
@@ -225,14 +225,14 @@ function CyberDropdown({ label, items, className }: CyberDropdownProps) {
         onClick={() => setOpen((current) => !current)}
         aria-haspopup="menu"
         aria-expanded={open}
-        className="cyber-cut-button font-display flex h-13 w-full list-none items-center justify-between border-2 border-lime-300/65 bg-zinc-950/30 px-7 text-sm font-normal uppercase tracking-[0.08em] text-lime-100 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)] outline-none transition hover:bg-lime-300/10"
+        className="cyber-cut-button font-tech flex h-13 w-full list-none items-center justify-between border-2 border-lime-300/65 bg-zinc-950/30 px-7 text-sm font-semibold tracking-[0.04em] text-lime-100 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)] outline-none transition hover:bg-lime-300/10"
       >
         {label}
         <ChevronDown className={cn("size-4 transition", open && "rotate-180")} />
       </button>
       {open ? (
         <div
-          className="cyber-cut-surface font-tech absolute left-0 top-[calc(100%+0.5rem)] z-40 w-72 border border-lime-300/30 bg-zinc-950/95 p-2 text-sm uppercase tracking-[0.08em] shadow-[0_0_36px_rgba(190,242,100,0.16)]"
+          className="cyber-cut-surface font-tech absolute left-0 top-[calc(100%+0.5rem)] z-40 w-72 border border-lime-300/30 bg-zinc-950/95 p-2 text-sm font-medium tracking-[0.02em] shadow-[0_0_36px_rgba(190,242,100,0.16)]"
           role="menu"
         >
           {items.map((item, index) => (

@@ -1,13 +1,40 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-exo);
-  --font-mono: var(--font-jetbrains-mono);
-  --font-display: var(--font-exo);
+  --font-sans: var(--font-family-base);
+  --font-mono: var(--font-family-mono);
+  --font-display: var(--font-family-display);
 }
 
 :root {
   color-scheme: dark;
+  --font-family-base: "PT Root UI", Inter, Arial, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-family-display: "Furore", "PT Root UI", Arial, sans-serif;
+  --font-family-mono: "JetBrains Mono", "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace;
+
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-md: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+
+  --font-size-heading-6: 1rem;
+  --font-size-heading-5: 1.125rem;
+  --font-size-heading-4: 1.375rem;
+  --font-size-heading-3: clamp(1.5rem, 1.25rem + 1vw, 2rem);
+  --font-size-heading-2: clamp(1.75rem, 1.35rem + 1.8vw, 2.75rem);
+  --font-size-heading-1: clamp(2rem, 1.35rem + 3vw, 4rem);
+  --font-size-display: clamp(2.5rem, 1.4rem + 5vw, 5.5rem);
+
+  --line-height-tight: 1;
+  --line-height-heading: 1.1;
+  --line-height-body: 1.6;
+  --line-height-relaxed: 1.7;
+
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.04em;
+  --heading-padding-y: 0.28em;
 }
 
 html,
@@ -16,17 +43,48 @@ body {
 }
 
 html {
-  font-size: 17px;
+  font-size: 16px;
+  font-family: var(--font-family-base);
 }
 
 body {
   margin: 0;
-  background: #050507;
+  background: #0d0d11;
   color: #f4f4f5;
-  font-family: var(--font-exo), system-ui, sans-serif;
-  font-size: 1rem;
-  line-height: 1.6;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-body);
+  font-weight: 400;
+  letter-spacing: var(--letter-spacing-normal);
   text-rendering: geometricPrecision;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body,
+button,
+input,
+select,
+textarea,
+table,
+th,
+td {
+  font-family: var(--font-family-base);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+  font-weight: 600;
+  padding-block: var(--heading-padding-y);
+}
+
+p {
+  margin: 0;
 }
 
 .site-global-backdrop {
@@ -120,11 +178,112 @@ select:disabled {
 }
 
 .font-display {
-  font-family: var(--font-exo), system-ui, sans-serif;
+  font-family: var(--font-family-display);
+  letter-spacing: var(--letter-spacing-tight);
+  padding-block: var(--heading-padding-y);
 }
 
 .font-tech {
-  font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
+  font-family: var(--font-family-base);
+}
+
+.font-ui {
+  font-family: var(--font-family-base);
+}
+
+.type-display {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-display);
+  line-height: 0.96;
+  letter-spacing: var(--letter-spacing-tight);
+  padding-block: var(--heading-padding-y);
+}
+
+.type-h1 {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-heading-1);
+  line-height: 1;
+  letter-spacing: var(--letter-spacing-tight);
+  padding-block: var(--heading-padding-y);
+}
+
+.type-h2-display {
+  font-family: var(--font-family-display);
+  font-size: var(--font-size-heading-2);
+  line-height: 1.08;
+  letter-spacing: -0.015em;
+  padding-block: var(--heading-padding-y);
+}
+
+.type-h2 {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-heading-2);
+  line-height: 1.14;
+  font-weight: 700;
+  padding-block: var(--heading-padding-y);
+}
+
+.type-h3 {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-heading-3);
+  line-height: 1.2;
+  font-weight: 700;
+  padding-block: var(--heading-padding-y);
+}
+
+.type-h4 {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-heading-4);
+  line-height: 1.25;
+  font-weight: 600;
+  padding-block: var(--heading-padding-y);
+}
+
+.type-body-lg {
+  font-size: var(--font-size-lg);
+  line-height: 1.58;
+}
+
+.type-body {
+  font-size: var(--font-size-md);
+  line-height: var(--line-height-body);
+}
+
+.type-body-sm {
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+}
+
+.type-caption {
+  font-size: var(--font-size-xs);
+  line-height: 1.4;
+}
+
+.type-label {
+  font-size: var(--font-size-sm);
+  line-height: 1.35;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+}
+
+.type-ui {
+  font-size: var(--font-size-sm);
+  line-height: 1.35;
+  font-weight: 500;
+}
+
+.type-price {
+  font-family: var(--font-family-base);
+  font-size: clamp(1.5rem, 1.3rem + 0.8vw, 2rem);
+  line-height: 1;
+  font-weight: 700;
+}
+
+.type-price-lg {
+  font-family: var(--font-family-base);
+  font-size: clamp(1.8rem, 1.45rem + 1.25vw, 2.6rem);
+  line-height: 1;
+  font-weight: 700;
 }
 
 .section {
@@ -161,8 +320,8 @@ html {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding-top: clamp(6rem, 11vw, 8.5rem);
-  padding-bottom: clamp(3.5rem, 7vw, 6rem);
+  padding-top: clamp(5rem, 9vw, 7rem);
+  padding-bottom: clamp(2.5rem, 5vw, 4.25rem);
 }
 
 .home-shared-backdrop {
@@ -181,11 +340,11 @@ html {
 
 .home-shared-backdrop__base {
   background:
-    radial-gradient(92% 58% at -16% 10%, rgba(255, 23, 68, 0.09), transparent 66%),
-    radial-gradient(86% 52% at 114% 22%, rgba(34, 211, 238, 0.075), transparent 68%),
-    radial-gradient(78% 42% at 50% 112%, rgba(168, 85, 247, 0.035), transparent 72%),
-    linear-gradient(116deg, rgba(255, 23, 68, 0.025) 0%, transparent 34%, transparent 68%, rgba(34, 211, 238, 0.025) 100%),
-    linear-gradient(180deg, #010102 0%, #010101 22%, #000 56%, #000 100%);
+    radial-gradient(92% 58% at -16% 10%, rgba(255, 23, 68, 0.12), transparent 66%),
+    radial-gradient(86% 52% at 114% 22%, rgba(34, 211, 238, 0.1), transparent 68%),
+    radial-gradient(78% 42% at 50% 112%, rgba(250, 204, 21, 0.05), transparent 72%),
+    linear-gradient(116deg, rgba(255, 23, 68, 0.04) 0%, transparent 34%, transparent 68%, rgba(34, 211, 238, 0.04) 100%),
+    linear-gradient(180deg, #14141a 0%, #111117 22%, #0c0c12 56%, #09090e 100%);
 }
 
 .home-shared-backdrop__grid {

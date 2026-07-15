@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Cpu, Gamepad2, Headphones, ShieldCheck, Sparkles, Wrench } from "lucide-react";
 
 import { ContactSocialButtons } from "@/components/Contacts/ContactSocialButtons";
-import { CyberBadge, CyberLaserText } from "@/components/cyber";
+import { CyberBadge } from "@/components/cyber";
 import { CyberButton } from "@/components/cyber";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
@@ -148,13 +148,10 @@ export function AboutPage({ locale, dictionary }: AboutPageProps) {
           <CyberBadge variant="red" glow>
             {page.badge}
           </CyberBadge>
-          <CyberLaserText
-            as="h1"
-            text={page.title}
-            className="mt-7 block text-5xl text-red-100 sm:text-7xl"
-            speedMs={44}
-          />
-          <div className="mt-6 max-w-3xl space-y-4 text-xl leading-9 text-zinc-400">
+          <h1 className="font-display type-h1 mt-7 max-w-3xl text-red-100">
+            {page.title}
+          </h1>
+          <div className="font-tech type-body-lg mt-6 max-w-3xl space-y-4 text-zinc-400">
             {content.intro.map((paragraph) => (
               <p key={paragraph}>{paragraph}</p>
             ))}

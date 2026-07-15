@@ -1,4 +1,4 @@
-import { CyberBadge, CyberCard, CyberCardContent, CyberLaserText } from "@/components/cyber";
+import { CyberBadge, CyberCard, CyberCardContent } from "@/components/cyber";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
 import { ContactCyberBackground } from "@/components/Pages/ContactsPage/ContactCyberBackground";
@@ -44,13 +44,10 @@ export function PlaceholderPage({
             <CyberBadge variant="red" glow>
               {badge}
             </CyberBadge>
-            <CyberLaserText
-              as="h1"
-              text={title}
-              className="mt-7 block text-5xl text-red-100 sm:text-7xl"
-              speedMs={44}
-            />
-            <p className="mt-6 max-w-2xl text-xl leading-9 text-zinc-400">{subtitle}</p>
+            <h1 className="font-display type-h1 mt-7 max-w-2xl text-red-100">
+              {title}
+            </h1>
+            <p className="font-tech type-body-lg mt-6 max-w-2xl text-zinc-400">{subtitle}</p>
           </CyberCardContent>
         </CyberCard>
       </section>

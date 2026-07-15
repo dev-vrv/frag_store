@@ -7,7 +7,6 @@ import {
   CyberButton,
   CyberCard,
   CyberCardContent,
-  CyberLaserText,
 } from "@/components/cyber";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
@@ -52,12 +51,9 @@ export async function BlogDetailPage({ locale, dictionary, slug }: BlogDetailPag
           <CyberBadge variant="red" glow>
             {dictionary.pages.blog.badge}
           </CyberBadge>
-          <CyberLaserText
-            as="h1"
-            text={content.title}
-            className="mt-7 block text-4xl text-red-100 sm:text-6xl"
-            speedMs={34}
-          />
+          <h1 className="font-display type-h1 mt-7 text-red-100">
+            {content.title}
+          </h1>
         </div>
 
         <CyberCard variant="glass" className="mt-10 overflow-hidden">

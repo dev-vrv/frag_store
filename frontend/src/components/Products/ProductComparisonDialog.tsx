@@ -265,14 +265,14 @@ export function ProductComparisonDialog({
         <CyberDialogHeader className="shrink-0 border-b border-white/10 px-5 pb-5 pt-5 sm:px-7">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div className="space-y-3">
-              <CyberDialogDescription className="font-tech text-[11px] uppercase tracking-[0.16em] text-cyan-200/70">
+              <CyberDialogDescription className="font-tech type-label text-cyan-200/70">
                 {labels.badge}
               </CyberDialogDescription>
               <div className="space-y-2">
-                <CyberDialogTitle className="pr-10 font-display text-2xl uppercase tracking-[0.04em] text-white sm:text-3xl">
+                <CyberDialogTitle className="font-display type-h2 pr-10 text-white">
                   {labels.title}
                 </CyberDialogTitle>
-                <p className="max-w-3xl text-sm leading-6 text-zinc-300 sm:text-[15px] sm:leading-7">
+                <p className="font-tech type-body-sm max-w-3xl text-zinc-300">
                   {labels.subtitle}
                 </p>
               </div>
@@ -314,7 +314,7 @@ export function ProductComparisonDialog({
                 className="gap-3"
               >
                 <section className="space-y-3">
-                  <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">
+                  <p className="font-tech type-label text-zinc-500">
                     {labels.sectionsLabel}
                   </p>
                   <CyberTabsList className="w-full gap-2 overflow-x-auto p-1.5">
@@ -322,10 +322,10 @@ export function ProductComparisonDialog({
                       <CyberTabsTrigger
                         key={group.slug}
                         value={group.slug}
-                        className="min-h-11 min-w-fit px-4 py-2 text-left text-xs tracking-[0.12em]"
+                        className="min-h-11 min-w-fit px-4 py-2 text-left text-[0.92rem] tracking-[0.03em]"
                       >
                         <span>{group.label}</span>
-                        <span className="font-tech text-[10px] text-zinc-500">
+                        <span className="font-tech type-caption text-zinc-500">
                           {group.products.length}
                         </span>
                       </CyberTabsTrigger>
@@ -371,27 +371,27 @@ export function ProductComparisonDialog({
 
                         <div className="flex flex-1 flex-col gap-4 p-4">
                           <div className="space-y-2">
-                            <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-cyan-200/70">
+                            <p className="font-tech type-label text-cyan-200/70">
                               {activeGroup.label}
                             </p>
-                            <h3 className="font-display text-2xl leading-tight text-white">
+                            <h3 className="font-tech type-h3 text-white">
                               {getLocalizedProductName(product, locale)}
                             </h3>
-                            <p className="text-sm leading-6 text-zinc-400">{product.short_description}</p>
+                            <p className="font-tech type-body-sm text-zinc-400">{product.short_description}</p>
                           </div>
 
                           <div className="space-y-1">
-                            <div className="font-display text-3xl text-lime-100">
+                            <div className="font-tech type-price-lg text-lime-100">
                               {formatProductPrice(product, locale)}
                             </div>
-                            <div className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">
+                            <div className="font-tech type-body-sm text-zinc-500">
                               {product.quantity_in_stock > 0 ? labels.inStock : labels.outOfStock}
                             </div>
                           </div>
 
                           {product.technical_highlights.length ? (
                             <div className="space-y-2">
-                              <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">
+                              <p className="font-tech type-label text-zinc-500">
                                 {labels.highlightsLabel}
                               </p>
                               <div className="flex flex-wrap gap-2">
@@ -425,10 +425,10 @@ export function ProductComparisonDialog({
                 <section className="overflow-hidden rounded-md border border-white/10 bg-black/25">
                   <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
                     <div>
-                      <p className="font-display text-xl uppercase tracking-[0.05em] text-white">
+                      <p className="font-tech type-h4 text-white">
                         {labels.specsLabel}
                       </p>
-                      <p className="mt-1 text-sm text-zinc-400">
+                      <p className="font-tech type-body-sm mt-1 text-zinc-400">
                         {activeProducts.length > 1 ? labels.pickMore : labels.emptyValue}
                       </p>
                     </div>
@@ -438,13 +438,13 @@ export function ProductComparisonDialog({
                     <table className="min-w-[64rem] table-fixed border-collapse">
                       <thead>
                         <tr className="border-b border-white/10">
-                          <th className="sticky left-0 z-20 w-56 bg-zinc-950/95 px-4 py-4 text-left font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">
+                          <th className="font-tech type-label sticky left-0 z-20 w-56 bg-zinc-950/95 px-4 py-4 text-left text-zinc-500">
                             {labels.parameterLabel}
                           </th>
                           {activeProducts.map((product) => (
                             <th
                               key={product.id}
-                              className="min-w-64 border-l border-white/10 bg-zinc-950/75 px-4 py-4 text-left font-tech text-[11px] uppercase tracking-[0.14em] text-cyan-100/80"
+                              className="font-tech type-ui min-w-64 border-l border-white/10 bg-zinc-950/75 px-4 py-4 text-left text-cyan-100/90"
                             >
                               {getLocalizedProductName(product, locale)}
                             </th>
@@ -456,7 +456,7 @@ export function ProductComparisonDialog({
                           <tr key={row.key} className="border-b border-white/6 align-top">
                             <th
                               className={cn(
-                                "sticky left-0 z-10 bg-zinc-950/92 px-4 py-4 text-left font-tech text-[11px] uppercase tracking-[0.12em]",
+                                "font-tech type-ui sticky left-0 z-10 bg-zinc-950/92 px-4 py-4 text-left",
                                 row.different ? "text-cyan-100" : "text-zinc-500",
                               )}
                             >
@@ -469,7 +469,7 @@ export function ProductComparisonDialog({
                               <td
                                 key={`${row.key}-${activeProducts[index]?.id ?? index}`}
                                 className={cn(
-                                  "border-l border-white/6 px-4 py-4 text-sm leading-6 text-zinc-200",
+                                  "border-l border-white/6 px-4 py-4 text-[0.95rem] leading-6 text-zinc-200",
                                   row.different && "bg-cyan-300/[0.04] text-white",
                                 )}
                               >

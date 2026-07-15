@@ -40,6 +40,7 @@ import { type AuthUser } from "@/lib/auth";
 import {
   fetchCartSummary,
   formatCartMoney,
+  normalizeCartItems,
   submitCartCheckout,
   type CartCheckoutResponse,
   type CartSummary,
@@ -314,7 +315,7 @@ function createInitialFormState(user: AuthUser | null): CartFormState {
 
 export function CartPage({ locale, dictionary, user }: CartPageProps) {
   const text = cartText[locale];
-  const { items, hydrated, setQuantity, setItemColor, removeItem, clearCart } = useCart();
+  const { items, hydrated, replaceItems, setQuantity, setItemColor, removeItem, clearCart } = useCart();
   const router = useRouter();
   const [promoCode, setPromoCode] = useState("");
   const [appliedPromoCode, setAppliedPromoCode] = useState("");
@@ -362,6 +363,18 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
           return;
         }
 
+        const normalizedSummaryItems = normalizeCartItems(
+          nextSummary.items.map((item) => ({
+            productId: item.product_id,
+            quantity: item.quantity,
+            selectedColorId: item.selected_color_id,
+          })),
+        );
+
+        if (JSON.stringify(normalizedSummaryItems) !== JSON.stringify(items)) {
+          replaceItems(normalizedSummaryItems);
+        }
+
         setSummary(nextSummary);
         setSummaryError("");
       })
@@ -377,7 +390,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
     return () => {
       active = false;
     };
-  }, [hydrated, items, appliedPromoCode]);
+  }, [hydrated, items, appliedPromoCode, replaceItems]);
 
   useEffect(() => {
     if (!previewProductSlug) {

@@ -26,7 +26,7 @@ const CyberInput = React.forwardRef<HTMLInputElement, CyberInputProps>(
         {label ? (
           <label
             htmlFor={inputId}
-            className="font-tech block text-sm font-semibold uppercase tracking-[0.1em] text-zinc-300"
+            className="font-tech type-label block text-zinc-300"
           >
             {label}
           </label>
@@ -42,7 +42,7 @@ const CyberInput = React.forwardRef<HTMLInputElement, CyberInputProps>(
             id={inputId}
             aria-invalid={invalid || undefined}
             className={cn(
-              "cyber-cut-small font-tech h-13 rounded-sm border-lime-300/30 bg-black/40 text-base shadow-[inset_0_0_0_1px_rgba(190,242,100,0.04),inset_0_0_18px_rgba(190,242,100,0.05)] placeholder:text-zinc-600 focus-visible:border-lime-300/80 focus-visible:ring-lime-300/25",
+              "cyber-cut-small font-tech h-13 rounded-sm border-lime-300/30 bg-black/40 text-base font-normal shadow-[inset_0_0_0_1px_rgba(190,242,100,0.04),inset_0_0_18px_rgba(190,242,100,0.05)] placeholder:text-zinc-500 focus-visible:border-lime-300/80 focus-visible:ring-lime-300/25",
               icon && "pl-10",
               invalid &&
                 "border-red-400/60 focus-visible:border-red-300 focus-visible:ring-red-400/20",
@@ -52,9 +52,9 @@ const CyberInput = React.forwardRef<HTMLInputElement, CyberInputProps>(
           />
         </div>
         {errorText ? (
-          <p className="font-tech text-sm text-red-300">{errorText}</p>
+          <p className="font-tech type-body-sm text-red-300">{errorText}</p>
         ) : helperText ? (
-          <p className="font-tech text-sm text-zinc-500">{helperText}</p>
+          <p className="font-tech type-body-sm text-zinc-500">{helperText}</p>
         ) : null}
       </div>
     );
@@ -83,7 +83,7 @@ const CyberTextarea = React.forwardRef<HTMLTextAreaElement, CyberTextareaProps>(
         {label ? (
           <label
             htmlFor={textareaId}
-            className="font-tech block text-sm font-semibold uppercase tracking-[0.1em] text-zinc-300"
+            className="font-tech type-label block text-zinc-300"
           >
             {label}
           </label>
@@ -93,7 +93,7 @@ const CyberTextarea = React.forwardRef<HTMLTextAreaElement, CyberTextareaProps>(
           id={textareaId}
           aria-invalid={invalid || undefined}
           className={cn(
-            "cyber-cut-surface font-tech min-h-36 resize-y rounded-sm border-lime-300/30 bg-black/40 text-base shadow-[inset_0_0_0_1px_rgba(190,242,100,0.04),inset_0_0_18px_rgba(190,242,100,0.05)] placeholder:text-zinc-600 focus-visible:border-lime-300/80 focus-visible:ring-lime-300/25",
+            "cyber-cut-surface font-tech min-h-36 resize-y rounded-sm border-lime-300/30 bg-black/40 text-base font-normal shadow-[inset_0_0_0_1px_rgba(190,242,100,0.04),inset_0_0_18px_rgba(190,242,100,0.05)] placeholder:text-zinc-500 focus-visible:border-lime-300/80 focus-visible:ring-lime-300/25",
             invalid &&
               "border-red-400/60 focus-visible:border-red-300 focus-visible:ring-red-400/20",
             className,
@@ -101,9 +101,9 @@ const CyberTextarea = React.forwardRef<HTMLTextAreaElement, CyberTextareaProps>(
           {...props}
         />
         {errorText ? (
-          <p className="font-tech text-sm text-red-300">{errorText}</p>
+          <p className="font-tech type-body-sm text-red-300">{errorText}</p>
         ) : helperText ? (
-          <p className="font-tech text-sm text-zinc-500">{helperText}</p>
+          <p className="font-tech type-body-sm text-zinc-500">{helperText}</p>
         ) : null}
       </div>
     );

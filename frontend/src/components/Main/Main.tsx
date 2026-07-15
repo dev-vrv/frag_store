@@ -1,7 +1,6 @@
 import { ContactSection } from "@/components/Sections/ContactSection";
 import { FeaturedDrops } from "@/components/Sections/FeaturedDrops";
 import { Hero } from "@/components/Sections/Hero";
-import { LoadoutZones } from "@/components/Sections/LoadoutZones";
 import { ServiceProtocol } from "@/components/Sections/ServiceProtocol";
 import { GeometricBackdrop } from "@/components/Background/GeometricBackdrop";
 import { Footer } from "@/components/Footer/Footer";
@@ -18,7 +17,7 @@ export interface MainProps {
 
 export function Main({ locale, dictionary, bestSellerProducts, categories }: MainProps) {
   return (
-    <main className="page-shell relative isolate w-full overflow-x-hidden bg-black">
+    <main className="page-shell relative isolate w-full overflow-x-hidden bg-[#0d0d11]">
       <div aria-hidden="true" className="home-shared-backdrop">
         <div className="home-shared-backdrop__base" />
         <div className="cyber-grid home-shared-backdrop__grid" />
@@ -31,9 +30,8 @@ export function Main({ locale, dictionary, bestSellerProducts, categories }: Mai
       />
       <div className="relative z-10 w-full mx-auto">
         <Header locale={locale} dictionary={dictionary.header} />
-        <Hero locale={locale} content={dictionary.hero} />
+        <Hero locale={locale} content={dictionary.hero} categories={categories} />
         <FeaturedDrops locale={locale} content={dictionary.featured} products={bestSellerProducts} />
-        <LoadoutZones locale={locale} content={dictionary.loadout} categories={categories} />
         <ServiceProtocol content={dictionary.service} />
         <ContactSection locale={locale} />
         <Footer locale={locale} dictionary={dictionary} />

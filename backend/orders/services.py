@@ -24,11 +24,13 @@ def _get_product_map(items_data, *, for_update=False):
     return {product.id: product for product in queryset}
 
 
-def _build_order_items(items_data, *, for_update=False):
+def _build_order_items(items_data, *, for_update=False, ignore_missing=False):
     product_map = _get_product_map(items_data, for_update=for_update)
     missing_ids = [item['product_id'] for item in items_data if item['product_id'] not in product_map]
     if missing_ids:
-        raise serializers.ValidationError({'items': f'Products not found or inactive: {missing_ids}'})
+        if not ignore_missing:
+            raise serializers.ValidationError({'items': f'Products not found or inactive: {missing_ids}'})
+        items_data = [item for item in items_data if item['product_id'] in product_map]
 
     subtotal = Decimal('0.00')
     product_discount_total = Decimal('0.00')
@@ -62,18 +64,17 @@ def _build_order_items(items_data, *, for_update=False):
 
         if active_color_options:
             if not selected_color_id:
-                raise serializers.ValidationError({
-                    'items': f'Color selection is required for product "{product.name}".'
-                })
+                selected_color = active_color_options[0]
+                selected_color_id = selected_color.id
 
-            selected_color = next(
-                (color for color in active_color_options if color.id == selected_color_id),
-                None,
-            )
+            if selected_color is None:
+                selected_color = next(
+                    (color for color in active_color_options if color.id == selected_color_id),
+                    None,
+                )
             if not selected_color:
-                raise serializers.ValidationError({
-                    'items': f'Invalid color selected for product "{product.name}".'
-                })
+                selected_color = active_color_options[0]
+                selected_color_id = selected_color.id
 
         order_items.append(
             {
@@ -119,7 +120,7 @@ def _resolve_promo(promo_code_value, subtotal, *, for_update=False):
 
 
 def build_order_preview(items_data, promo_code_value=''):
-    prepared = _build_order_items(items_data)
+    prepared = _build_order_items(items_data, ignore_missing=True)
     promo, promo_discount_total = _resolve_promo(promo_code_value, prepared['subtotal'])
     discount_total = prepared['product_discount_total'] + promo_discount_total
     total = prepared['subtotal'] - promo_discount_total

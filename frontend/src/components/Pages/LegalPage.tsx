@@ -1,6 +1,6 @@
 import { FileText } from "lucide-react";
 
-import { CyberBadge, CyberLaserText } from "@/components/cyber";
+import { CyberBadge } from "@/components/cyber";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
 import { ContactCyberBackground } from "@/components/Pages/ContactsPage/ContactCyberBackground";
@@ -173,13 +173,10 @@ export function LegalPage({ locale, dictionary, page }: LegalPageProps) {
         <CyberBadge variant="red" glow>
           {pageDictionary.badge}
         </CyberBadge>
-        <CyberLaserText
-          as="h1"
-          text={pageDictionary.title}
-          className="mt-7 block text-4xl text-red-100 sm:text-6xl"
-          speedMs={34}
-        />
-        <p className="mt-6 max-w-5xl text-xl leading-9 text-zinc-400">
+        <h1 className="font-display type-h1 mt-7 max-w-5xl text-red-100">
+          {pageDictionary.title}
+        </h1>
+        <p className="font-tech type-body-lg mt-6 max-w-5xl text-zinc-400">
           {pageDictionary.subtitle}
         </p>
       </section>

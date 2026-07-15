@@ -33,14 +33,14 @@ export function ContactSection({ locale }: ContactSectionProps) {
             as="h2"
             text={content.home.title}
             delay={180}
-            className="font-display mt-6 text-[2rem] font-normal leading-[1.08] tracking-[0.02em] text-white sm:text-[2.6rem] lg:text-5xl"
+            className="font-display type-h2-display mt-6 text-white"
             config={{ duration: 0.32, delayStep: 16, distance: 24 }}
           />
           <AnimatedText
             as="p"
             text={content.home.subtitle}
             delay={340}
-            className="mt-5 max-w-2xl text-[0.95rem] leading-7 text-zinc-400 sm:text-base sm:leading-8 lg:text-lg"
+            className="font-tech type-body-lg mt-5 max-w-2xl text-zinc-400"
             config={{ duration: 0.24, delayStep: 7, distance: 16 }}
           />
         </div>

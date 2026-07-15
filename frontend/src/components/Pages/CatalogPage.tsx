@@ -102,8 +102,8 @@ interface QuickFilterOption {
   label: string;
 }
 
-const pageSize = 6;
 const paginationWindowSize = 10;
+type GridColumns = 1 | 2 | 3;
 
 function parseInitialCategories(value?: string[]) {
   if (!value?.length) {
@@ -140,6 +140,9 @@ const catalogText: Record<
     previousPage: string;
     nextPage: string;
     quickFilters: string;
+    categoryShowcase: string;
+    categoryShowcaseLead: string;
+    gridDensity: string;
     favoritesOnly: string;
     detailsLead: string;
     hoverSpecs: string;
@@ -221,7 +224,7 @@ const catalogText: Record<
     reset: "Сбросить",
     addToCart: "В корзину",
     addedToCart: "Добавлено в корзину",
-    alreadyInCart: "Уже в корзине",
+    alreadyInCart: "В корзине",
     details: "Подробнее",
     favorite: "В избранное",
     page: "Страница",
@@ -230,6 +233,9 @@ const catalogText: Record<
     previousPage: "Предыдущая страница",
     nextPage: "Следующая страница",
     quickFilters: "Быстрые фильтры",
+    categoryShowcase: "Категории",
+    categoryShowcaseLead: "Сначала выберите нужную категорию, затем откроется каталог по этому направлению.",
+    gridDensity: "Сетка товаров",
     favoritesOnly: "Избранное",
     detailsLead: "Полные характеристики и описание",
     hoverSpecs: "Ключевые параметры",
@@ -317,7 +323,7 @@ const catalogText: Record<
     reset: "Reset",
     addToCart: "Add to cart",
     addedToCart: "Added to cart",
-    alreadyInCart: "Already in cart",
+    alreadyInCart: "In cart",
     details: "Details",
     favorite: "Add to favorites",
     page: "Page",
@@ -326,6 +332,9 @@ const catalogText: Record<
     previousPage: "Previous page",
     nextPage: "Next page",
     quickFilters: "Quick filters",
+    categoryShowcase: "Categories",
+    categoryShowcaseLead: "Start from a category, then open the product grid already focused on that section.",
+    gridDensity: "Product grid",
     favoritesOnly: "Favorites",
     detailsLead: "Full description and product details",
     hoverSpecs: "Key specs",
@@ -413,7 +422,7 @@ const catalogText: Record<
     reset: "Тазалоо",
     addToCart: "Себетке",
     addedToCart: "Себетке кошулду",
-    alreadyInCart: "Себетте бар",
+    alreadyInCart: "Себетте",
     details: "Кененирээк",
     favorite: "Тандалгандарга",
     page: "Барак",
@@ -422,6 +431,9 @@ const catalogText: Record<
     previousPage: "Мурунку барак",
     nextPage: "Кийинки барак",
     quickFilters: "Тез фильтрлер",
+    categoryShowcase: "Категориялар",
+    categoryShowcaseLead: "Адегенде категорияны тандаңыз, андан кийин каталог ошол бөлүк боюнча ачылат.",
+    gridDensity: "Товар тору",
     favoritesOnly: "Тандалгандар",
     detailsLead: "Толук сүрөттөмө жана товар маалыматы",
     hoverSpecs: "Негизги мүнөздөмөлөр",
@@ -677,6 +689,7 @@ export function CatalogPage({
   const [isComparisonDialogOpen, setIsComparisonDialogOpen] = useState(false);
   const [isComparisonTrayCollapsed, setIsComparisonTrayCollapsed] = useState(false);
   const [activeComparisonCategorySlug, setActiveComparisonCategorySlug] = useState<string | null>(null);
+  const [gridColumns, setGridColumns] = useState<GridColumns>(3);
   const [quickFilters, setQuickFilters] = useState<Record<QuickFilterKey, boolean>>({
     bestSeller: false,
     discount: false,
@@ -778,6 +791,7 @@ export function CatalogPage({
   );
 
   const selectedCategorySet = useMemo(() => new Set(selectedCategories), [selectedCategories]);
+  const itemsPerPage = gridColumns * 2;
 
   const filteredProducts = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
@@ -823,7 +837,7 @@ export function CatalogPage({
     });
   }, [activeQuickFilters, brand, favoriteIdSet, products, query, selectedCategorySet, sort]);
 
-  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / pageSize));
+  const totalPages = Math.max(1, Math.ceil(filteredProducts.length / itemsPerPage));
   const safePageIndex = Math.min(pageIndex, totalPages);
   const paginationWindowStart =
     Math.floor((safePageIndex - 1) / paginationWindowSize) * paginationWindowSize + 1;
@@ -833,8 +847,8 @@ export function CatalogPage({
     (_, index) => paginationWindowStart + index,
   );
   const paginatedProducts = filteredProducts.slice(
-    (safePageIndex - 1) * pageSize,
-    safePageIndex * pageSize,
+    (safePageIndex - 1) * itemsPerPage,
+    safePageIndex * itemsPerPage,
   );
 
   const activeQuickFilterCount = Object.values(activeQuickFilters).filter(Boolean).length;
@@ -871,6 +885,13 @@ export function CatalogPage({
     };
   }, []);
 
+  function replaceSearchParams(mutator: (params: URLSearchParams) => void) {
+    const params = new URLSearchParams(searchParams.toString());
+    mutator(params);
+    const nextQuery = params.toString();
+    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
+  }
+
   function updateProductQuery(productSlug: string | null) {
     if (productSlug) {
       const product = products.find((item) => item.slug === productSlug) ?? null;
@@ -881,16 +902,13 @@ export function CatalogPage({
       setSelectedMediaIndex(0);
     }
 
-    const params = new URLSearchParams(searchParams.toString());
-
-    if (productSlug) {
-      params.set("product", productSlug);
-    } else {
-      params.delete("product");
-    }
-
-    const nextQuery = params.toString();
-    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
+    replaceSearchParams((params) => {
+      if (productSlug) {
+        params.set("product", productSlug);
+      } else {
+        params.delete("product");
+      }
+    });
   }
 
   function triggerAddToCartFeedback(cartItemKey: string) {
@@ -1022,16 +1040,13 @@ export function CatalogPage({
 
   function toggleQuickFilter(key: QuickFilterKey) {
     if (key === "favorites") {
-      const params = new URLSearchParams(searchParams.toString());
-
-      if (favoritesFromQuery) {
-        params.delete("favorites");
-      } else {
-        params.set("favorites", "1");
-      }
-
-      const nextQuery = params.toString();
-      router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
+      replaceSearchParams((params) => {
+        if (favoritesFromQuery) {
+          params.delete("favorites");
+        } else {
+          params.set("favorites", "1");
+        }
+      });
       setPageIndex(1);
       return;
     }
@@ -1046,16 +1061,27 @@ export function CatalogPage({
   function toggleCategory(value: string) {
     if (value === "all") {
       setSelectedCategories([]);
+      replaceSearchParams((params) => {
+        params.delete("category");
+      });
       setPageIndex(1);
       return;
     }
 
     setSelectedCategories((current) => {
-      if (current.includes(value)) {
-        return current.filter((item) => item !== value);
-      }
+      const nextCategories = current.includes(value)
+        ? current.filter((item) => item !== value)
+        : [...current, value];
 
-      return [...current, value];
+      replaceSearchParams((params) => {
+        if (nextCategories.length) {
+          params.set("category", nextCategories.join(","));
+        } else {
+          params.delete("category");
+        }
+      });
+
+      return nextCategories;
     });
     setPageIndex(1);
   }
@@ -1097,10 +1123,10 @@ export function CatalogPage({
       inStock: false,
       favorites: false,
     });
-    const params = new URLSearchParams(searchParams.toString());
-    params.delete("favorites");
-    const nextQuery = params.toString();
-    router.replace(nextQuery ? `${pathname}?${nextQuery}` : pathname, { scroll: false });
+    replaceSearchParams((params) => {
+      params.delete("favorites");
+      params.delete("category");
+    });
     setPageIndex(1);
   }
 
@@ -1143,7 +1169,7 @@ export function CatalogPage({
       </div>
 
       <div className="space-y-3 border-t border-white/10 pt-4">
-        <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">
+        <p className="font-tech text-[0.92rem] font-semibold uppercase tracking-[0.12em] text-zinc-500">
           {text.filters}
         </p>
         <div className="grid grid-cols-2 gap-2">
@@ -1154,7 +1180,7 @@ export function CatalogPage({
               onClick={() => toggleCategory(item.value)}
               aria-pressed={item.value === "all" ? selectedCategories.length === 0 : selectedCategorySet.has(item.value)}
               className={cn(
-                "font-tech inline-flex min-h-[3rem] items-center justify-start gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-left text-[11px] uppercase leading-[1.15] tracking-[0.06em] text-zinc-300 transition duration-300 hover:border-red-300/28 hover:bg-white/[0.07] hover:text-white [&_svg]:size-3.5 [&_svg]:shrink-0",
+                "font-tech inline-flex min-h-[3rem] items-center justify-start gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-left text-[0.92rem] leading-[1.25] tracking-[0.01em] text-zinc-200 transition duration-300 hover:border-red-300/28 hover:bg-white/[0.07] hover:text-white [&_svg]:size-3.5 [&_svg]:shrink-0",
                 item.value === "all" && "col-span-2 justify-center",
                 ((item.value === "all" && selectedCategories.length === 0) ||
                   selectedCategorySet.has(item.value)) &&
@@ -1169,7 +1195,7 @@ export function CatalogPage({
       </div>
 
       <div className="space-y-3 border-t border-white/10 pt-4">
-        <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">
+        <p className="font-tech text-[0.92rem] font-semibold uppercase tracking-[0.12em] text-zinc-500">
           {text.quickFilters}
         </p>
         <div className="grid grid-cols-2 gap-2">
@@ -1198,7 +1224,7 @@ export function CatalogPage({
                 </span>
                 <span
                   className={cn(
-                    "font-tech text-[11px] uppercase leading-[1.15] tracking-[0.06em] text-zinc-300 transition duration-300",
+                    "font-tech text-[0.92rem] leading-[1.25] tracking-[0.01em] text-zinc-200 transition duration-300",
                     isActive && "text-cyan-50",
                   )}
                 >
@@ -1210,31 +1236,57 @@ export function CatalogPage({
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-2.5 border-t border-white/10 pt-4">
+      <div className="space-y-3 border-t border-white/10 pt-4">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="font-tech text-[0.92rem] font-semibold uppercase tracking-[0.12em] text-zinc-500">
+            {text.gridDensity}
+          </p>
+          <div className="flex items-center gap-2">
+            {[1, 2, 3].map((value) => (
+              <button
+                key={value}
+                type="button"
+                onClick={() => setGridColumns(value as GridColumns)}
+                className={cn(
+                  "min-w-10 border px-3 py-2 text-sm font-semibold text-zinc-300 transition",
+                  gridColumns === value
+                    ? "border-cyan-300/34 bg-cyan-300/12 text-white"
+                    : "border-white/10 bg-white/[0.03] hover:border-white/20 hover:text-white",
+                )}
+                aria-pressed={gridColumns === value}
+              >
+                {value}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-2.5">
         <div className="flex min-h-[84px] flex-col justify-between border border-white/10 bg-white/[0.03] px-2.5 py-2">
-          <p className="font-tech text-[8px] uppercase leading-4 tracking-[0.14em] text-zinc-500">
+          <p className="font-tech type-caption uppercase leading-4 tracking-[0.12em] text-zinc-500">
             {text.results}
           </p>
-          <p className="mt-2 font-display text-lg leading-none text-white">
+          <p className="font-tech type-h4 mt-2 text-white">
             {filteredProducts.length}
           </p>
         </div>
         <div className="flex min-h-[84px] flex-col justify-between border border-white/10 bg-white/[0.03] px-2.5 py-2">
-          <p className="font-tech text-[8px] uppercase leading-4 tracking-[0.14em] text-zinc-500">
+          <p className="font-tech type-caption uppercase leading-4 tracking-[0.12em] text-zinc-500">
             {text.filters}
           </p>
-          <p className="mt-2 font-display text-lg leading-none text-red-100">
+          <p className="font-tech type-h4 mt-2 text-red-100">
             {activeQuickFilterCount + selectedCategories.length + Number(brand !== "all")}
           </p>
         </div>
         <div className="flex min-h-[84px] flex-col justify-between border border-white/10 bg-white/[0.03] px-2.5 py-2">
-          <p className="font-tech text-[8px] uppercase leading-4 tracking-[0.14em] text-zinc-500">
+          <p className="font-tech type-caption uppercase leading-4 tracking-[0.12em] text-zinc-500">
             {text.page}
           </p>
-          <p className="mt-2 font-display text-lg leading-none text-white">
+          <p className="font-tech type-h4 mt-2 text-white">
             {safePageIndex}/{totalPages}
           </p>
         </div>
+      </div>
       </div>
 
       {hasActiveFilters ? (
@@ -1248,7 +1300,7 @@ export function CatalogPage({
   );
 
   return (
-    <main className="page-shell relative overflow-x-clip bg-[linear-gradient(180deg,#080708_0%,#090708_24%,#060506_54%,#020203_100%)] px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative overflow-x-clip bg-[linear-gradient(180deg,#121218_0%,#101016_24%,#0b0b12_54%,#09090f_100%)] px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
       <div aria-hidden="true" className="home-shared-backdrop">
         <div className="home-shared-backdrop__base opacity-[0.95]" />
         <div className="cyber-grid home-shared-backdrop__grid opacity-[0.08]" />
@@ -1455,17 +1507,24 @@ export function CatalogPage({
                       <CyberBadge variant="warning" glow>
                         {text.featured}
                       </CyberBadge>
-                      <h2 className="font-display text-4xl tracking-[0.04em] text-white">
+                      <h2 className="font-display type-h2-display text-white">
                         {text.emptyTitle}
                       </h2>
-                      <p className="mx-auto max-w-2xl text-base leading-8 text-zinc-400">
+                      <p className="font-tech type-body mx-auto max-w-2xl text-zinc-400">
                         {text.emptySubtitle}
                       </p>
                     </div>
                   </CyberCardContent>
                 </CyberCard>
               ) : paginatedProducts.length ? (
-                <div className="grid auto-rows-fr gap-5 sm:gap-6 md:grid-cols-2">
+                <div
+                  className={cn(
+                    "grid auto-rows-fr gap-4 sm:gap-5",
+                    gridColumns === 1 && "grid-cols-1",
+                    gridColumns === 2 && "md:grid-cols-2",
+                    gridColumns === 3 && "md:grid-cols-2 xl:grid-cols-3",
+                  )}
+                >
                   {paginatedProducts.map((product) => {
                   const badges = [];
                   const defaultColorId = product.color_options[0]?.id ?? null;
@@ -1483,7 +1542,7 @@ export function CatalogPage({
                   return (
                     <CyberProductCard
                       key={product.id}
-                      className="translate-y-0 transition-transform duration-500 hover:-translate-y-1.5"
+                      className="!min-h-[30rem] translate-y-0 transition-transform duration-500 hover:-translate-y-1"
                       tone="catalog"
                       image={<ProductVisual product={product} />}
                       hoverPanel={<ProductHoverSpecs product={product} title={text.hoverSpecs} />}
@@ -1508,7 +1567,13 @@ export function CatalogPage({
                       onDetailsClick={() => updateProductQuery(product.slug)}
                       onCtaClick={() => handleCatalogCardAddToCart(product)}
                       ctaDisabled={product.quantity_in_stock <= 0 || cardAlreadyInCart}
+                      ctaClassName={
+                        cardAlreadyInCart
+                          ? "border-cyan-300/60 bg-[linear-gradient(135deg,rgba(34,211,238,0.18),rgba(34,211,238,0.06))] text-cyan-50 shadow-[0_0_28px_rgba(34,211,238,0.12)] hover:border-cyan-300/60 hover:bg-[linear-gradient(135deg,rgba(34,211,238,0.18),rgba(34,211,238,0.06))] hover:text-cyan-50 disabled:opacity-100"
+                          : undefined
+                      }
                       badges={badges}
+                      stackActions={gridColumns >= 2}
                     />
                   );
                   })}

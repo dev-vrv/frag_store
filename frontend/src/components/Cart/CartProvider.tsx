@@ -84,6 +84,7 @@ interface CartContextValue {
   itemsCount: number;
   quantityTotal: number;
   hydrated: boolean;
+  replaceItems: (items: CartItemInput[]) => void;
   addItem: (productId: number, quantity?: number, selectedColorId?: number | null) => void;
   setQuantity: (productId: number, quantity: number, selectedColorId?: number | null) => void;
   setItemColor: (
@@ -113,6 +114,10 @@ export function CartProvider({ children }: { children: ReactNode }) {
       hydrated: true,
       itemsCount: items.length,
       quantityTotal: items.reduce((total, item) => total + item.quantity, 0),
+      replaceItems(nextItems) {
+        writeCartStorage(normalizeCartItems(nextItems));
+        emitCartChange();
+      },
       addItem(productId, quantity = 1, selectedColorId = null) {
         updateItems((current) => [...current, { productId, quantity, selectedColorId }]);
       },

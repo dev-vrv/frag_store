@@ -60,7 +60,7 @@ const CyberCardTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <CardTitle
     ref={ref}
-    className={cn("font-display text-xl font-normal tracking-[0.04em]", className)}
+    className={cn("font-tech type-h4 tracking-[0.01em]", className)}
     {...props}
   />
 ));

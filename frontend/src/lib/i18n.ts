@@ -210,6 +210,7 @@ export interface Dictionary {
     secondaryCta: string;
     priceLabel: string;
     productCta: string;
+    alreadyInCart: string;
     detailsCta: string;
     favoriteLabel: string;
     loadingTitle: string;
@@ -522,7 +523,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       primaryCta: "Смотреть все товары",
       secondaryCta: "Смотреть новинки",
       priceLabel: "Цена",
-      productCta: "Открыть",
+      productCta: "В корзину",
+      alreadyInCart: "В корзине",
       detailsCta: "Подробнее",
       favoriteLabel: "В избранное",
       loadingTitle: "Витрина наполняется",
@@ -962,7 +964,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       primaryCta: "Browse all products",
       secondaryCta: "See new arrivals",
       priceLabel: "Drop Price",
-      productCta: "Open",
+      productCta: "Add to cart",
+      alreadyInCart: "In cart",
       detailsCta: "Details",
       favoriteLabel: "Add to favorites",
       loadingTitle: "Showcase is loading",
@@ -1402,7 +1405,8 @@ const dictionaries: Record<Locale, Dictionary> = {
       primaryCta: "Бардык товарларды көрүү",
       secondaryCta: "Жаңы товарларды көрүү",
       priceLabel: "Баасы",
-      productCta: "Ачуу",
+      productCta: "Себетке",
+      alreadyInCart: "Себетте",
       detailsCta: "Кененирээк",
       favoriteLabel: "Тандалгандарга",
       loadingTitle: "Витрина толукталып жатат",

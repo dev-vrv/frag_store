@@ -303,10 +303,10 @@ export function ProductDetailsDialog({
     <CyberDialog open={open} onOpenChange={onOpenChange}>
       <CyberDialogContent className="flex h-[94svh] max-h-[94svh] flex-col overflow-hidden border-white/12 bg-[radial-gradient(circle_at_top_left,rgba(255,23,68,0.12),transparent_22%),radial-gradient(circle_at_top_right,rgba(251,191,36,0.05),transparent_18%),linear-gradient(180deg,rgba(10,8,10,0.985),rgba(4,4,6,0.995))] p-0 sm:max-w-6xl 2xl:max-w-[90rem]">
         <CyberDialogHeader className="shrink-0 border-b border-white/10 px-6 pb-5 pt-6 sm:px-8">
-          <CyberDialogDescription className="font-tech text-[11px] uppercase tracking-[0.16em] text-cyan-200/70">
+          <CyberDialogDescription className="font-tech type-label text-cyan-200/70">
             {labels.detailsLead}
           </CyberDialogDescription>
-          <CyberDialogTitle className="pr-10 font-display text-2xl uppercase tracking-[0.04em] text-white sm:text-3xl">
+          <CyberDialogTitle className="font-display type-h2 pr-10 text-white">
             {title}
           </CyberDialogTitle>
         </CyberDialogHeader>
@@ -350,11 +350,11 @@ export function ProductDetailsDialog({
                     ) : null}
 
                     <div className="space-y-3">
-                      <div className="font-display text-3xl text-lime-100 sm:text-4xl">
+                      <div className="font-tech type-price-lg text-lime-100">
                         {formatProductPrice(product, locale)}
                       </div>
                       {product.old_price ? (
-                        <div className="font-tech text-base text-zinc-500 line-through">
+                        <div className="font-tech type-body text-zinc-500 line-through">
                           {formatProductOldPrice(product, locale)}
                         </div>
                       ) : null}
@@ -362,28 +362,28 @@ export function ProductDetailsDialog({
 
                     <div className="grid gap-3 sm:grid-cols-2">
                       <div className="border border-white/10 bg-white/[0.03] px-4 py-3">
-                        <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">{labels.brandLabel}</p>
-                        <p className="mt-2 text-base text-zinc-100">{product.brand.name}</p>
+                        <p className="font-tech type-caption uppercase tracking-[0.12em] text-zinc-500">{labels.brandLabel}</p>
+                        <p className="font-tech type-body mt-2 text-zinc-100">{product.brand.name}</p>
                       </div>
                       <div className="border border-white/10 bg-white/[0.03] px-4 py-3">
-                        <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">{labels.categoryLabel}</p>
-                        <p className="mt-2 text-base text-zinc-100">{getLocalizedCategoryName(product.category, locale)}</p>
+                        <p className="font-tech type-caption uppercase tracking-[0.12em] text-zinc-500">{labels.categoryLabel}</p>
+                        <p className="font-tech type-body mt-2 text-zinc-100">{getLocalizedCategoryName(product.category, locale)}</p>
                       </div>
                       <div className="border border-white/10 bg-white/[0.03] px-4 py-3">
-                        <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">{labels.sku}</p>
-                        <p className="mt-2 text-base text-zinc-100">{product.sku}</p>
+                        <p className="font-tech type-caption uppercase tracking-[0.12em] text-zinc-500">{labels.sku}</p>
+                        <p className="font-tech type-body mt-2 text-zinc-100">{product.sku}</p>
                       </div>
                       <div className="border border-white/10 bg-white/[0.03] px-4 py-3">
-                        <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">{labels.availabilityLabel}</p>
-                        <p className="mt-2 text-base text-zinc-100">
+                        <p className="font-tech type-caption uppercase tracking-[0.12em] text-zinc-500">{labels.availabilityLabel}</p>
+                        <p className="font-tech type-body mt-2 text-zinc-100">
                           {product.quantity_in_stock > 0 ? labels.inStock : labels.outOfStock}
                         </p>
                       </div>
                     </div>
 
                     <div className="space-y-3">
-                      <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">{labels.detailsLead}</p>
-                      <p className="text-base leading-8 text-zinc-300">
+                      <p className="font-tech type-caption uppercase tracking-[0.12em] text-zinc-500">{labels.detailsLead}</p>
+                      <p className="font-tech type-body text-zinc-300">
                         {product.description?.trim() || product.short_description}
                       </p>
                     </div>
@@ -397,12 +397,12 @@ export function ProductDetailsDialog({
 
                     {technicalSpecs.length ? (
                       <div className="space-y-3">
-                        <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">{labels.specsLabel}</p>
+                        <p className="font-tech type-caption uppercase tracking-[0.12em] text-zinc-500">{labels.specsLabel}</p>
                         <div className="grid gap-3 sm:grid-cols-2">
                           {technicalSpecs.map((spec) => (
                             <div key={spec.key} className="border border-white/10 bg-white/[0.03] px-4 py-3">
-                              <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">{spec.label}</p>
-                              <p className="mt-2 text-base text-zinc-100">{spec.value}</p>
+                              <p className="font-tech type-caption uppercase tracking-[0.12em] text-zinc-500">{spec.label}</p>
+                              <p className="font-tech type-body mt-2 text-zinc-100">{spec.value}</p>
                             </div>
                           ))}
                         </div>
@@ -411,13 +411,13 @@ export function ProductDetailsDialog({
 
                     {product.features?.length ? (
                       <div className="space-y-3">
-                        <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">{labels.highlightsLabel}</p>
+                        <p className="font-tech type-caption uppercase tracking-[0.12em] text-zinc-500">{labels.highlightsLabel}</p>
                         <div className="grid gap-3">
                           {product.features.map((feature) => (
                             <div key={feature.id} className="border border-white/10 bg-white/[0.03] px-4 py-3">
-                              <p className="text-base text-zinc-100">{feature.title}</p>
+                              <p className="font-tech type-body text-zinc-100">{feature.title}</p>
                               {feature.description ? (
-                                <p className="mt-2 text-sm leading-6 text-zinc-400">{feature.description}</p>
+                                <p className="font-tech type-body-sm mt-2 text-zinc-400">{feature.description}</p>
                               ) : null}
                             </div>
                           ))}

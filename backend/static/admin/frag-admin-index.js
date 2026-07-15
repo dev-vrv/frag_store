@@ -1,6 +1,28 @@
 (function () {
+  const themeStorageKey = "frag-admin-theme";
+  const themeToggle = document.querySelector("[data-theme-toggle]");
+  const themeToggleLabel = document.querySelector("[data-theme-toggle-label]");
   const storageKey = "frag-admin-open-sections";
   const sections = Array.from(document.querySelectorAll("[data-admin-app]"));
+
+  function applyTheme(theme) {
+    document.documentElement.dataset.theme = theme;
+
+    if (themeToggleLabel) {
+      themeToggleLabel.textContent = theme === "light" ? "Темная тема" : "Светлая тема";
+    }
+  }
+
+  if (themeToggle) {
+    const initialTheme = window.localStorage.getItem(themeStorageKey) === "light" ? "light" : "dark";
+    applyTheme(initialTheme);
+
+    themeToggle.addEventListener("click", () => {
+      const nextTheme = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+      window.localStorage.setItem(themeStorageKey, nextTheme);
+      applyTheme(nextTheme);
+    });
+  }
 
   if (!sections.length) {
     return;
