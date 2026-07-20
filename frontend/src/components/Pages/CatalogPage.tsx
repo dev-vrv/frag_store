@@ -125,6 +125,7 @@ const catalogText: Record<
     allBrands: string;
     allCategories: string;
     sortOptions: Record<SortKey, string>;
+    resultsTitle: string;
     results: string;
     empty: string;
     emptyFilteredByCategory: string;
@@ -220,6 +221,7 @@ const catalogText: Record<
       priceDesc: "Цена: выше",
       newest: "Новинки",
     },
+    resultsTitle: "Результаты",
     results: "товаров найдено",
     empty: "По выбранным фильтрам товары не найдены.",
     emptyFilteredByCategory: "По выбранным фильтрам товары не найдены.",
@@ -321,6 +323,7 @@ const catalogText: Record<
       priceDesc: "Price: high",
       newest: "New arrivals",
     },
+    resultsTitle: "Results",
     results: "products found",
     empty: "No products found for the selected filters.",
     emptyFilteredByCategory: "No products found for the selected filters.",
@@ -422,6 +425,7 @@ const catalogText: Record<
       priceDesc: "Баасы: жогору",
       newest: "Жаңы товарлар",
     },
+    resultsTitle: "Жыйынтыктар",
     results: "товар табылды",
     empty: "Тандалган фильтрлер боюнча товар табылган жок.",
     emptyFilteredByCategory: "Тандалган фильтрлер боюнча товар табылган жок.",
@@ -1180,25 +1184,31 @@ export function CatalogPage({
 
   const filterPanel = (
     <div className="space-y-6">
-      <dl className="space-y-2 border-l-2 border-cyan-300/30 pl-3 font-tech text-sm">
-        <div className="flex items-baseline justify-between gap-4">
-          <dt className="text-zinc-400">{text.results}:</dt>
-          <dd className="font-bold text-white">{filteredProducts.length}</dd>
-        </div>
-        <div className="flex items-baseline justify-between gap-4">
-          <dt className="text-zinc-400">{text.filters}:</dt>
-          <dd className="font-bold text-red-100">
-            {activeQuickFilterCount + selectedCategories.length + Number(brand !== "all")}
-          </dd>
-        </div>
-        <div className="flex items-baseline justify-between gap-4">
-          <dt className="text-zinc-400">{text.page}:</dt>
-          <dd className="font-bold text-white">{safePageIndex}/{totalPages}</dd>
-        </div>
-      </dl>
+      <div className="space-y-3">
+        <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-zinc-400">
+          {text.resultsTitle}
+        </p>
+        <dl className="space-y-1.5 border-l-2 border-cyan-300/30 pl-3 font-tech text-[0.82rem] leading-5">
+          <div className="flex items-baseline justify-between gap-4">
+            <dt className="text-zinc-400">{text.results}:</dt>
+            <dd className="text-sm font-bold text-white">{filteredProducts.length}</dd>
+          </div>
+          <div className="flex items-baseline justify-between gap-4">
+            <dt className="text-zinc-400">{text.filters}:</dt>
+            <dd className="text-sm font-bold text-red-100">
+              {activeQuickFilterCount + selectedCategories.length + Number(brand !== "all")}
+            </dd>
+          </div>
+          <div className="flex items-baseline justify-between gap-4">
+            <dt className="text-zinc-400">{text.page}:</dt>
+            <dd className="text-sm font-bold text-white">{safePageIndex}/{totalPages}</dd>
+          </div>
+        </dl>
+      </div>
 
-      <div className="space-y-4">
+      <div className="space-y-4 [&_label]:text-[0.78rem]">
         <CyberInput
+          className="text-sm placeholder:text-sm"
           label={text.search}
           placeholder={text.searchPlaceholder}
           icon={<Search aria-hidden="true" />}
@@ -1209,6 +1219,7 @@ export function CatalogPage({
           }}
         />
         <CyberNativeSelect
+          className="text-sm"
           label={text.brand}
           value={brand}
           onValueChange={(value) => {
@@ -1218,6 +1229,7 @@ export function CatalogPage({
           options={brandOptions}
         />
         <CyberNativeSelect
+          className="text-sm"
           label={text.sort}
           value={sort}
           onValueChange={(value) => {
@@ -1234,7 +1246,7 @@ export function CatalogPage({
       </div>
 
       <div className="space-y-3 border-t border-white/10 pt-4">
-        <p className="font-tech text-[0.92rem] font-semibold uppercase tracking-[0.12em] text-zinc-500">
+        <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-zinc-500">
           {text.filters}
         </p>
         <div className="grid grid-cols-2 gap-2">
@@ -1245,7 +1257,7 @@ export function CatalogPage({
               onClick={() => toggleCategory(item.value)}
               aria-pressed={item.value === "all" ? selectedCategories.length === 0 : selectedCategorySet.has(item.value)}
               className={cn(
-                "font-tech inline-flex min-h-[3rem] items-center justify-start gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-left text-[0.92rem] leading-[1.25] tracking-[0.01em] text-zinc-200 transition duration-300 hover:border-red-300/28 hover:bg-white/[0.07] hover:text-white [&_svg]:size-3.5 [&_svg]:shrink-0",
+                "font-tech inline-flex min-h-[3rem] items-center justify-start gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-left text-[0.82rem] leading-[1.3] tracking-[0.01em] text-zinc-200 transition duration-300 hover:border-red-300/28 hover:bg-white/[0.07] hover:text-white [&_svg]:size-3.5 [&_svg]:shrink-0",
                 item.value === "all" && "col-span-2 justify-center",
                 ((item.value === "all" && selectedCategories.length === 0) ||
                   selectedCategorySet.has(item.value)) &&
@@ -1260,12 +1272,12 @@ export function CatalogPage({
       </div>
 
       <div className="space-y-3 border-t border-white/10 pt-4">
-        <p className="font-tech text-[0.92rem] font-semibold uppercase tracking-[0.12em] text-zinc-500">
+        <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-zinc-500">
           {text.quickFilters}
         </p>
         <div className="grid grid-cols-2 gap-2">
-            {text.quickFilterOptions.map((option) => {
-              const isActive = activeQuickFilters[option.key];
+          {text.quickFilterOptions.map((option) => {
+            const isActive = activeQuickFilters[option.key];
 
             return (
               <button
@@ -1289,7 +1301,7 @@ export function CatalogPage({
                 </span>
                 <span
                   className={cn(
-                    "font-tech text-[0.92rem] leading-[1.25] tracking-[0.01em] text-zinc-200 transition duration-300",
+                    "font-tech text-[0.82rem] leading-[1.3] tracking-[0.01em] text-zinc-200 transition duration-300",
                     isActive && "text-cyan-50",
                   )}
                 >
@@ -1303,7 +1315,7 @@ export function CatalogPage({
 
       <div className="space-y-3 border-t border-white/10 pt-4">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="font-tech text-[0.92rem] font-semibold uppercase tracking-[0.12em] text-zinc-500">
+          <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-zinc-500">
             {text.gridDensity}
           </p>
           <div className="flex items-center gap-2">
@@ -1313,7 +1325,7 @@ export function CatalogPage({
                 type="button"
                 onClick={() => setGridColumns(value as GridColumns)}
                 className={cn(
-                  "min-w-10 border px-3 py-2 text-sm font-semibold text-zinc-300 transition",
+                  "min-w-10 border px-3 py-2 text-[0.82rem] font-semibold text-zinc-300 transition",
                   value === 2 && "hidden sm:block",
                   value === 3 && "hidden lg:block",
                   value === 4 && "hidden xl:block",
