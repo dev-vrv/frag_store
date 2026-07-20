@@ -3,16 +3,19 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
-  Check,
+  BadgePercent,
   ChevronDown,
   ChevronUp,
   ChevronLeft,
   ChevronRight,
   Filter,
+  Heart,
   PackageCheck,
   Scale,
   Search,
   Sparkles,
+  Star,
+  Trophy,
   X,
 } from "lucide-react";
 
@@ -103,6 +106,15 @@ interface QuickFilterOption {
   key: QuickFilterKey;
   label: string;
 }
+
+const quickFilterIconByKey = {
+  bestSeller: Trophy,
+  discount: BadgePercent,
+  newArrival: Sparkles,
+  featured: Star,
+  inStock: PackageCheck,
+  favorites: Heart,
+} as const;
 
 const paginationWindowSize = 10;
 type GridColumns = 1 | 2 | 3 | 4;
@@ -1184,7 +1196,7 @@ export function CatalogPage({
 
   const filterPanel = (
     <div className="space-y-6">
-      <div className="space-y-3">
+      <div className="space-y-4">
         <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-zinc-400">
           {text.resultsTitle}
         </p>
@@ -1245,7 +1257,7 @@ export function CatalogPage({
         />
       </div>
 
-      <div className="space-y-3 border-t border-white/10 pt-4">
+      <div className="space-y-4 border-t border-white/10 pt-4">
         <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-zinc-500">
           {text.filters}
         </p>
@@ -1271,13 +1283,14 @@ export function CatalogPage({
         </div>
       </div>
 
-      <div className="space-y-3 border-t border-white/10 pt-4">
+      <div className="space-y-4 border-t border-white/10 pt-4">
         <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-zinc-500">
           {text.quickFilters}
         </p>
         <div className="grid grid-cols-2 gap-2">
           {text.quickFilterOptions.map((option) => {
             const isActive = activeQuickFilters[option.key];
+            const Icon = quickFilterIconByKey[option.key];
 
             return (
               <button
@@ -1286,59 +1299,43 @@ export function CatalogPage({
                 onClick={() => toggleQuickFilter(option.key)}
                 aria-pressed={isActive}
                 className={cn(
-                  "group flex min-h-[3rem] items-center justify-center gap-2 rounded-md border border-white/10 bg-white/[0.03] px-3 py-2 text-center transition duration-300 hover:border-cyan-200/30 hover:bg-white/[0.06]",
+                  "font-tech inline-flex min-h-[3rem] items-center justify-start gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-left text-[0.82rem] leading-[1.3] tracking-[0.01em] text-zinc-200 transition duration-300 hover:border-cyan-200/30 hover:bg-white/[0.07] hover:text-white [&_svg]:size-3.5 [&_svg]:shrink-0",
                   isActive &&
-                    "border-cyan-300/40 bg-cyan-300/[0.10] shadow-[0_10px_28px_rgba(34,211,238,0.08)]",
+                    "border-cyan-300/40 bg-cyan-300/[0.10] text-cyan-50 shadow-[0_10px_28px_rgba(34,211,238,0.08)]",
                 )}
               >
-                <span
-                  className={cn(
-                    "grid size-4 shrink-0 place-items-center rounded border border-white/14 bg-black/35 text-transparent transition duration-300",
-                    isActive && "border-cyan-300/55 bg-cyan-300/18 text-cyan-100",
-                  )}
-                >
-                  <Check className="size-3" aria-hidden="true" />
-                </span>
-                <span
-                  className={cn(
-                    "font-tech text-[0.82rem] leading-[1.3] tracking-[0.01em] text-zinc-200 transition duration-300",
-                    isActive && "text-cyan-50",
-                  )}
-                >
-                  {option.label}
-                </span>
+                <Icon aria-hidden="true" />
+                {option.label}
               </button>
             );
           })}
         </div>
       </div>
 
-      <div className="space-y-3 border-t border-white/10 pt-4">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-zinc-500">
-            {text.gridDensity}
-          </p>
-          <div className="flex items-center gap-2">
-            {[1, 2, 3, 4].map((value) => (
-              <button
-                key={value}
-                type="button"
-                onClick={() => setGridColumns(value as GridColumns)}
-                className={cn(
-                  "min-w-10 border px-3 py-2 text-[0.82rem] font-semibold text-zinc-300 transition",
-                  value === 2 && "hidden sm:block",
-                  value === 3 && "hidden lg:block",
-                  value === 4 && "hidden xl:block",
-                  gridColumns === value
-                    ? "border-cyan-300/34 bg-cyan-300/12 text-white"
-                    : "border-white/10 bg-white/[0.03] hover:border-white/20 hover:text-white",
-                )}
-                aria-pressed={gridColumns === value}
-              >
-                {value}
-              </button>
-            ))}
-          </div>
+      <div className="space-y-4 border-t border-white/10 pt-4">
+        <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-zinc-500">
+          {text.gridDensity}
+        </p>
+        <div className="flex items-center gap-2">
+          {[1, 2, 3, 4].map((value) => (
+            <button
+              key={value}
+              type="button"
+              onClick={() => setGridColumns(value as GridColumns)}
+              className={cn(
+                "min-w-10 border px-3 py-2 text-[0.82rem] font-semibold text-zinc-300 transition",
+                value === 2 && "hidden sm:block",
+                value === 3 && "hidden lg:block",
+                value === 4 && "hidden xl:block",
+                gridColumns === value
+                  ? "border-cyan-300/34 bg-cyan-300/12 text-white"
+                  : "border-white/10 bg-white/[0.03] hover:border-white/20 hover:text-white",
+              )}
+              aria-pressed={gridColumns === value}
+            >
+              {value}
+            </button>
+          ))}
         </div>
       </div>
 
