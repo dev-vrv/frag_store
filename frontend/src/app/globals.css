@@ -554,10 +554,18 @@ html {
   border-color: rgba(255, 255, 255, 0.34);
 }
 
+.back-to-top,
+.ai-assistant-entry {
+  padding: 0;
+  overflow: visible;
+  line-height: 1;
+  isolation: isolate;
+}
+
 .back-to-top {
   position: fixed;
-  left: clamp(1rem, 3vw, 2rem);
-  bottom: clamp(1rem, 3vw, 2rem);
+  left: clamp(1.5rem, 3vw, 2rem);
+  bottom: clamp(1.5rem, 3vw, 2rem);
   z-index: 50;
   display: grid;
   place-items: center;
@@ -620,6 +628,13 @@ html {
     drop-shadow(0 0 16px rgba(255, 255, 255, 0.1));
 }
 
+.back-to-top__icon svg,
+.ai-assistant-entry__icon svg {
+  display: block;
+  flex-shrink: 0;
+  overflow: visible;
+}
+
 .back-to-top:hover .back-to-top__icon,
 .back-to-top:focus-visible .back-to-top__icon {
   animation-duration: 1.8s;
@@ -651,8 +666,8 @@ html {
 
 .ai-assistant-entry {
   position: fixed;
-  right: clamp(1rem, 3vw, 2rem);
-  bottom: clamp(1rem, 3vw, 2rem);
+  right: clamp(1.5rem, 3vw, 2rem);
+  bottom: clamp(1.5rem, 3vw, 2rem);
   z-index: 50;
   display: grid;
   place-items: center;
