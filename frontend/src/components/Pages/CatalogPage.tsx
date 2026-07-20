@@ -50,7 +50,7 @@ import {
   writeComparisonGroups,
 } from "@/lib/comparison";
 import { reconcileFavoriteIds, toggleFavorite, useFavoriteIds } from "@/lib/favorites";
-import { type Dictionary, type Locale } from "@/lib/i18n";
+import { type Dictionary, type Locale, localizePath } from "@/lib/i18n";
 import {
   formatProductOldPrice,
   formatProductPrice,
@@ -60,7 +60,9 @@ import {
   type Product,
   type ProductCategory,
   type ProductMedia,
+  type ProductTechnicalHighlight,
 } from "@/lib/products";
+import { subscribeToProductStock } from "@/lib/notifications";
 import { cn } from "@/lib/utils";
 
 interface CatalogPageProps {
@@ -103,7 +105,7 @@ interface QuickFilterOption {
 }
 
 const paginationWindowSize = 10;
-type GridColumns = 1 | 2 | 3;
+type GridColumns = 1 | 2 | 3 | 4;
 
 function parseInitialCategories(value?: string[]) {
   if (!value?.length) {
@@ -157,6 +159,8 @@ const catalogText: Record<
     availabilityLabel: string;
     inStock: string;
     outOfStock: string;
+    notifyStock: string;
+    stockSubscribed: string;
     quickFilterOptions: QuickFilterOption[];
     badgeNew: string;
     badgeHit: string;
@@ -250,6 +254,8 @@ const catalogText: Record<
     availabilityLabel: "Наличие",
     inStock: "В наличии",
     outOfStock: "Нет в наличии",
+    notifyStock: "Сообщить о поступлении",
+    stockSubscribed: "Уведомим о поступлении",
     quickFilterOptions: [
       { key: "bestSeller", label: "Лидеры продаж" },
       { key: "discount", label: "Со скидкой" },
@@ -349,6 +355,8 @@ const catalogText: Record<
     availabilityLabel: "Availability",
     inStock: "In stock",
     outOfStock: "Out of stock",
+    notifyStock: "Notify when available",
+    stockSubscribed: "Notification enabled",
     quickFilterOptions: [
       { key: "bestSeller", label: "Best sellers" },
       { key: "discount", label: "On sale" },
@@ -448,6 +456,8 @@ const catalogText: Record<
     availabilityLabel: "Жеткиликтүүлүк",
     inStock: "Бар",
     outOfStock: "Жок",
+    notifyStock: "Келгенде билдирүү",
+    stockSubscribed: "Келгенде билдиребиз",
     quickFilterOptions: [
       { key: "bestSeller", label: "Сатуу лидерлери" },
       { key: "discount", label: "Арзандатуу менен" },
@@ -589,7 +599,7 @@ function ProductVisual({ product }: { product: Product }) {
       return (
         <video
           src={source}
-          className="h-full w-full object-cover"
+          className="h-full w-full scale-[1.1] object-contain"
           muted
           autoPlay
           loop
@@ -604,7 +614,7 @@ function ProductVisual({ product }: { product: Product }) {
       <img
         src={source}
         alt={media.alt_text || product.name}
-        className="h-full w-full object-cover"
+        className="h-full w-full scale-[1.1] object-contain"
       />
     );
   }
@@ -636,16 +646,16 @@ function ProductHoverSpecs({
       <p className="font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-500">
         {title}
       </p>
-      <div className="grid grid-cols-2 gap-2 xl:grid-cols-3">
-        {items.slice(0, 6).map((item) => (
+      <div className="grid grid-cols-2 gap-2">
+        {items.slice(0, 4).map((item) => (
           <div
             key={`${item.label}-${item.value}`}
             className="min-w-0 rounded-md border border-white/10 bg-white/[0.045] px-2.5 py-2"
           >
-            <p className="truncate font-tech text-[9px] uppercase tracking-[0.14em] text-zinc-500">
+            <p className="line-clamp-2 font-tech text-[9px] uppercase leading-4 tracking-[0.1em] text-zinc-500">
               {item.label}
             </p>
-            <p className="mt-1 truncate text-[12px] font-medium leading-5 text-white">
+            <p className="mt-1 line-clamp-2 text-[12px] font-semibold leading-4 text-white">
               {item.value}
             </p>
           </div>
@@ -686,10 +696,12 @@ export function CatalogPage({
   const [selectedMediaIndex, setSelectedMediaIndex] = useState(0);
   const [lastAddedCartItemKey, setLastAddedCartItemKey] = useState<string | null>(null);
   const [compareFeedback, setCompareFeedback] = useState<string | null>(null);
+  const [stockSubscriptionIds, setStockSubscriptionIds] = useState<Set<number>>(() => new Set());
+  const [stockSubscriptionError, setStockSubscriptionError] = useState<string | null>(null);
   const [isComparisonDialogOpen, setIsComparisonDialogOpen] = useState(false);
   const [isComparisonTrayCollapsed, setIsComparisonTrayCollapsed] = useState(false);
   const [activeComparisonCategorySlug, setActiveComparisonCategorySlug] = useState<string | null>(null);
-  const [gridColumns, setGridColumns] = useState<GridColumns>(3);
+  const [gridColumns, setGridColumns] = useState<GridColumns>(4);
   const [quickFilters, setQuickFilters] = useState<Record<QuickFilterKey, boolean>>({
     bestSeller: false,
     discount: false,
@@ -699,6 +711,26 @@ export function CatalogPage({
     favorites: false,
   });
   const favoriteIdSet = useMemo(() => new Set(favoriteIds), [favoriteIds]);
+
+  useEffect(() => {
+    function clampGridColumnsToViewport() {
+      const maximumColumns: GridColumns = window.innerWidth >= 1280
+        ? 4
+        : window.innerWidth >= 1024
+          ? 3
+          : window.innerWidth >= 640
+            ? 2
+            : 1;
+
+      setGridColumns((current) => Math.min(current, maximumColumns) as GridColumns);
+    }
+
+    clampGridColumnsToViewport();
+    window.addEventListener("resize", clampGridColumnsToViewport);
+
+    return () => window.removeEventListener("resize", clampGridColumnsToViewport);
+  }, []);
+
   const comparisonCategoryGroups = useMemo<ProductComparisonCategoryGroup[]>(
     () =>
       Object.entries(comparisonGroups)
@@ -937,8 +969,19 @@ export function CatalogPage({
     }, 2400);
   }
 
-  function handleCatalogCardAddToCart(product: Product) {
+  async function handleCatalogCardAddToCart(product: Product) {
     if (product.quantity_in_stock <= 0) {
+      try {
+        setStockSubscriptionError(null);
+        await subscribeToProductStock(product.slug, locale);
+        setStockSubscriptionIds((current) => new Set(current).add(product.id));
+      } catch (error) {
+        if ((error as Error & { status?: number }).status === 401) {
+          router.push(`${localizePath("/auth", locale)}?next=${encodeURIComponent(pathname)}`);
+        } else {
+          setStockSubscriptionError((error as Error).message);
+        }
+      }
       return;
     }
 
@@ -952,7 +995,12 @@ export function CatalogPage({
     triggerAddToCartFeedback(`${product.id}:${defaultColorId ?? "none"}`);
   }
 
-  function handleSelectedProductAddToCart() {
+  async function handleSelectedProductAddToCart() {
+    if (selectedProduct?.quantity_in_stock === 0) {
+      await handleCatalogCardAddToCart(selectedProduct);
+      return;
+    }
+
     if (
       !selectedProduct ||
       selectedProduct.quantity_in_stock <= 0 ||
@@ -1132,6 +1180,23 @@ export function CatalogPage({
 
   const filterPanel = (
     <div className="space-y-6">
+      <dl className="space-y-2 border-l-2 border-cyan-300/30 pl-3 font-tech text-sm">
+        <div className="flex items-baseline justify-between gap-4">
+          <dt className="text-zinc-400">{text.results}:</dt>
+          <dd className="font-bold text-white">{filteredProducts.length}</dd>
+        </div>
+        <div className="flex items-baseline justify-between gap-4">
+          <dt className="text-zinc-400">{text.filters}:</dt>
+          <dd className="font-bold text-red-100">
+            {activeQuickFilterCount + selectedCategories.length + Number(brand !== "all")}
+          </dd>
+        </div>
+        <div className="flex items-baseline justify-between gap-4">
+          <dt className="text-zinc-400">{text.page}:</dt>
+          <dd className="font-bold text-white">{safePageIndex}/{totalPages}</dd>
+        </div>
+      </dl>
+
       <div className="space-y-4">
         <CyberInput
           label={text.search}
@@ -1209,7 +1274,7 @@ export function CatalogPage({
                 onClick={() => toggleQuickFilter(option.key)}
                 aria-pressed={isActive}
                 className={cn(
-                  "group flex min-h-[3rem] items-center gap-2 rounded-md border border-white/10 bg-white/[0.03] px-3 py-2 text-left transition duration-300 hover:border-cyan-200/30 hover:bg-white/[0.06]",
+                  "group flex min-h-[3rem] items-center justify-center gap-2 rounded-md border border-white/10 bg-white/[0.03] px-3 py-2 text-center transition duration-300 hover:border-cyan-200/30 hover:bg-white/[0.06]",
                   isActive &&
                     "border-cyan-300/40 bg-cyan-300/[0.10] shadow-[0_10px_28px_rgba(34,211,238,0.08)]",
                 )}
@@ -1242,13 +1307,16 @@ export function CatalogPage({
             {text.gridDensity}
           </p>
           <div className="flex items-center gap-2">
-            {[1, 2, 3].map((value) => (
+            {[1, 2, 3, 4].map((value) => (
               <button
                 key={value}
                 type="button"
                 onClick={() => setGridColumns(value as GridColumns)}
                 className={cn(
                   "min-w-10 border px-3 py-2 text-sm font-semibold text-zinc-300 transition",
+                  value === 2 && "hidden sm:block",
+                  value === 3 && "hidden lg:block",
+                  value === 4 && "hidden xl:block",
                   gridColumns === value
                     ? "border-cyan-300/34 bg-cyan-300/12 text-white"
                     : "border-white/10 bg-white/[0.03] hover:border-white/20 hover:text-white",
@@ -1260,33 +1328,6 @@ export function CatalogPage({
             ))}
           </div>
         </div>
-
-        <div className="grid grid-cols-3 gap-2.5">
-        <div className="flex min-h-[84px] flex-col justify-between border border-white/10 bg-white/[0.03] px-2.5 py-2">
-          <p className="font-tech type-caption uppercase leading-4 tracking-[0.12em] text-zinc-500">
-            {text.results}
-          </p>
-          <p className="font-tech type-h4 mt-2 text-white">
-            {filteredProducts.length}
-          </p>
-        </div>
-        <div className="flex min-h-[84px] flex-col justify-between border border-white/10 bg-white/[0.03] px-2.5 py-2">
-          <p className="font-tech type-caption uppercase leading-4 tracking-[0.12em] text-zinc-500">
-            {text.filters}
-          </p>
-          <p className="font-tech type-h4 mt-2 text-red-100">
-            {activeQuickFilterCount + selectedCategories.length + Number(brand !== "all")}
-          </p>
-        </div>
-        <div className="flex min-h-[84px] flex-col justify-between border border-white/10 bg-white/[0.03] px-2.5 py-2">
-          <p className="font-tech type-caption uppercase leading-4 tracking-[0.12em] text-zinc-500">
-            {text.page}
-          </p>
-          <p className="font-tech type-h4 mt-2 text-white">
-            {safePageIndex}/{totalPages}
-          </p>
-        </div>
-      </div>
       </div>
 
       {hasActiveFilters ? (
@@ -1451,7 +1492,7 @@ export function CatalogPage({
       `}</style>
 
       <div className="relative z-10">
-        <section ref={catalogSectionRef} className="mx-auto w-full max-w-7xl py-8">
+        <section ref={catalogSectionRef} className="mx-auto w-full max-w-[100rem] py-8">
           <div className="mb-6 flex flex-col gap-4 border-b border-white/10 pb-5 sm:mb-7 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <CyberBadge variant="warning" glow>
@@ -1487,7 +1528,7 @@ export function CatalogPage({
             </div>
           </div>
 
-          <div className="grid items-start gap-6 2xl:grid-cols-[340px_minmax(0,1fr)]">
+          <div className="grid items-start gap-6 xl:grid-cols-[300px_minmax(0,1fr)] 2xl:grid-cols-[320px_minmax(0,1fr)]">
             <aside className="hidden xl:block">
               <CyberCard variant="glass" className="sticky top-32 overflow-hidden border-white/10 bg-zinc-950/70">
                 <CyberCardContent className="p-5">
@@ -1521,8 +1562,9 @@ export function CatalogPage({
                   className={cn(
                     "grid auto-rows-fr gap-4 sm:gap-5",
                     gridColumns === 1 && "grid-cols-1",
-                    gridColumns === 2 && "md:grid-cols-2",
-                    gridColumns === 3 && "md:grid-cols-2 xl:grid-cols-3",
+                    gridColumns === 2 && "sm:grid-cols-2",
+                    gridColumns === 3 && "sm:grid-cols-2 lg:grid-cols-3",
+                    gridColumns === 4 && "sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4",
                   )}
                 >
                   {paginatedProducts.map((product) => {
@@ -1552,7 +1594,9 @@ export function CatalogPage({
                       oldPrice={formatProductOldPrice(product, locale)}
                       ctaLabel={
                         product.quantity_in_stock <= 0
-                          ? text.outOfStock
+                          ? stockSubscriptionIds.has(product.id)
+                            ? text.stockSubscribed
+                            : text.notifyStock
                           : cardAlreadyInCart
                             ? text.alreadyInCart
                             : text.addToCart
@@ -1566,7 +1610,7 @@ export function CatalogPage({
                       onCompareClick={() => handleComparisonToggle(product)}
                       onDetailsClick={() => updateProductQuery(product.slug)}
                       onCtaClick={() => handleCatalogCardAddToCart(product)}
-                      ctaDisabled={product.quantity_in_stock <= 0 || cardAlreadyInCart}
+                      ctaDisabled={stockSubscriptionIds.has(product.id) || cardAlreadyInCart}
                       ctaClassName={
                         cardAlreadyInCart
                           ? "border-cyan-300/60 bg-[linear-gradient(135deg,rgba(34,211,238,0.18),rgba(34,211,238,0.06))] text-cyan-50 shadow-[0_0_28px_rgba(34,211,238,0.12)] hover:border-cyan-300/60 hover:bg-[linear-gradient(135deg,rgba(34,211,238,0.18),rgba(34,211,238,0.06))] hover:text-cyan-50 disabled:opacity-100"
@@ -1631,7 +1675,11 @@ export function CatalogPage({
           </section>
         ) : null}
 
-        <Footer locale={locale} dictionary={dictionary} />
+        <Footer
+          locale={locale}
+          dictionary={dictionary}
+          className="-mx-4 sm:-mx-6 lg:-mx-8"
+        />
       </div>
 
       {comparisonCategoryGroups.length ? (
@@ -1771,7 +1819,9 @@ export function CatalogPage({
         actionLabel={
           selectedProduct
             ? selectedProduct.quantity_in_stock <= 0
-              ? text.outOfStock
+              ? stockSubscriptionIds.has(selectedProduct.id)
+                ? text.stockSubscribed
+                : text.notifyStock
               : selectedProductAlreadyInCart
                 ? text.alreadyInCart
                 : selectedProductJustAdded
@@ -1781,7 +1831,7 @@ export function CatalogPage({
         }
         actionDisabled={
           !selectedProduct ||
-          selectedProduct.quantity_in_stock <= 0 ||
+          (selectedProduct.quantity_in_stock <= 0 && stockSubscriptionIds.has(selectedProduct.id)) ||
           (selectedProduct.color_options.length > 0 && !resolvedSelectedProductColorId) ||
           selectedProductAlreadyInCart
         }
@@ -1798,6 +1848,12 @@ export function CatalogPage({
         favoriteActive={selectedProduct ? favoriteIdSet.has(selectedProduct.id) : false}
         onToggleFavorite={selectedProduct ? () => toggleFavorite(selectedProduct.id) : undefined}
       />
+
+      {stockSubscriptionError ? (
+        <div className="fixed bottom-5 left-1/2 z-50 max-w-[calc(100vw-2rem)] -translate-x-1/2 rounded-md border border-red-300/30 bg-zinc-950/95 px-4 py-3 text-center text-sm text-red-100 shadow-[0_0_30px_rgba(255,23,68,0.18)]">
+          {stockSubscriptionError}
+        </div>
+      ) : null}
 
       <ProductComparisonDialog
         open={isComparisonDialogOpen}

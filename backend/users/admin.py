@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
-from .models import ContactMessage, User
+from .models import ContactMessage, Notification, User
 
 
 @admin.register(User)
@@ -69,3 +69,12 @@ class ContactMessageAdmin(admin.ModelAdmin):
     list_filter = ('locale', 'status', 'created_at')
     search_fields = ('name', 'email', 'phone', 'message')
     readonly_fields = ('created_at', 'updated_at')
+
+
+@admin.register(Notification)
+class NotificationAdmin(admin.ModelAdmin):
+    list_display = ('title', 'user', 'notification_type', 'status', 'created_at', 'read_at')
+    list_filter = ('notification_type', 'status', 'created_at')
+    search_fields = ('title', 'text', 'user__email')
+    readonly_fields = ('created_at', 'updated_at', 'read_at')
+    autocomplete_fields = ('user',)

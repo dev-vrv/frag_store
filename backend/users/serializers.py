@@ -7,7 +7,7 @@ from rest_framework_simplejwt.tokens import RefreshToken
 
 from orders.serializers import OrderSerializer
 
-from .models import ContactMessage, User
+from .models import ContactMessage, Notification, User
 from .services import send_email_verification_code
 
 
@@ -43,6 +43,13 @@ class ProfileSerializer(UserSerializer):
 
     class Meta(UserSerializer.Meta):
         fields = UserSerializer.Meta.fields + ('orders',)
+        read_only_fields = fields
+
+
+class NotificationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Notification
+        fields = ('id', 'title', 'text', 'notification_type', 'status', 'link', 'image_url', 'metadata', 'read_at', 'created_at')
         read_only_fields = fields
 
 

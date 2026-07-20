@@ -76,7 +76,7 @@ export function Footer({ locale, dictionary, className }: FooterProps) {
       )}
     >
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-red-400/70 to-transparent" />
-      <div className="mx-auto grid max-w-7xl gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1.85fr)]">
+      <div className="mx-auto grid w-full max-w-[90rem] gap-8 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1.85fr)]">
         <section className="space-y-5 text-center lg:text-left">
           <Link
             href={localizePath("/", locale)}

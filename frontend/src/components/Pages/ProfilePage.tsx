@@ -11,6 +11,7 @@ import { ProfileDetailsForm } from "@/components/Pages/ProfileDetailsForm";
 import { ProfileOrdersPanel } from "@/components/Pages/ProfileOrdersPanel";
 import { ProfileLogoutButton } from "@/components/Pages/ProfileLogoutButton";
 import { ProfileTabs } from "@/components/Pages/ProfileTabs";
+import { ProfileNotificationsPanel } from "@/components/Pages/ProfileNotificationsPanel";
 import { type AuthUser } from "@/lib/auth";
 import { localizePath, type Dictionary, type Locale } from "@/lib/i18n";
 
@@ -111,6 +112,7 @@ export function ProfilePage({ locale, dictionary, user }: ProfilePageProps) {
             <ProfileTabs
               detailsLabel={profile.badge}
               ordersLabel={profile.ordersBadge}
+              notificationsLabel={locale === "en" ? "Notifications" : locale === "kg" ? "Билдирүүлөр" : "Уведомления"}
               activeOrdersCount={activeOrdersCount}
               detailsContent={<ProfileDetailsForm dictionary={profile} user={user} />}
               ordersContent={(
@@ -121,6 +123,7 @@ export function ProfilePage({ locale, dictionary, user }: ProfilePageProps) {
                   catalogHref={catalogHref}
                 />
               )}
+              notificationsContent={<ProfileNotificationsPanel locale={locale} />}
             />
           </div>
         </div>

@@ -3,12 +3,13 @@
 import Link from "next/link";
 import { Heart, ShoppingCart } from "lucide-react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { type ReactNode, useEffect, useRef, useState } from "react";
+import { Suspense, type ReactNode, useEffect, useRef, useState } from "react";
 import { FaUserAstronaut } from "react-icons/fa";
 
 import { BrandLogo } from "@/components/Brand/BrandLogo";
 import { LocaleSwitcher } from "@/components/Header/LocaleSwitcher";
 import { MobileHeaderMenu } from "@/components/Header/MobileHeaderMenu";
+import { NotificationHeaderButton } from "@/components/Notifications/NotificationHeaderButton";
 import { Nav } from "@/components/Nav/Nav";
 import { useCart } from "@/components/Cart/CartProvider";
 import { AUTH_STATE_CHANGE_EVENT, getAuthSessionState } from "@/lib/auth";
@@ -21,7 +22,15 @@ export interface HeaderProps {
   dictionary: Dictionary["header"];
 }
 
-export function Header({ locale, dictionary }: HeaderProps) {
+export function Header(props: HeaderProps) {
+  return (
+    <Suspense fallback={<div className="fixed inset-x-0 top-0 z-50 h-20 border-b border-red-500/15 bg-[#111118]/78 backdrop-blur-xl" />}>
+      <HeaderContent {...props} />
+    </Suspense>
+  );
+}
+
+function HeaderContent({ locale, dictionary }: HeaderProps) {
   const pathname = stripLocaleFromPath(usePathname() || "/");
   const searchParams = useSearchParams();
   const { quantityTotal } = useCart();
@@ -143,6 +152,7 @@ export function Header({ locale, dictionary }: HeaderProps) {
 
         <div className="ml-auto hidden items-center gap-4 lg:flex">
           <LocaleSwitcher locale={locale} label="Сменить язык" />
+          {isAuthenticated ? <NotificationHeaderButton locale={locale} /> : null}
           <HeaderIconLink
             href="/catalog"
             locale={locale}
@@ -178,6 +188,7 @@ export function Header({ locale, dictionary }: HeaderProps) {
           </Link>
         </div>
         <div className="flex shrink-0 items-center gap-2 lg:hidden">
+          {isAuthenticated ? <NotificationHeaderButton locale={locale} /> : null}
           <LocaleSwitcher locale={locale} label="Сменить язык" className="shrink-0" />
           <MobileHeaderMenu
             locale={locale}

@@ -8,6 +8,7 @@ from .models import (
     ProductFeature,
     ProductMedia,
     ProductSpecification,
+    ProductStockSubscription,
     ProductTechnicalDetails,
 )
 
@@ -219,3 +220,19 @@ class ProductDetailSerializer(ProductListSerializer):
             'created_at',
             'updated_at',
         )
+
+
+class ProductStockSubscriptionSerializer(serializers.ModelSerializer):
+    locale = serializers.ChoiceField(choices=('ru', 'en', 'kg'), default='ru')
+
+    class Meta:
+        model = ProductStockSubscription
+        fields = ('id', 'locale', 'status', 'created_at')
+        read_only_fields = ('id', 'status', 'created_at')
+
+    def create(self, validated_data):
+        subscription, _ = ProductStockSubscription.objects.update_or_create(
+            product=self.context['product'], user=self.context['request'].user,
+            defaults={'locale': validated_data['locale'], 'status': ProductStockSubscription.Status.ACTIVE, 'notified_at': None},
+        )
+        return subscription

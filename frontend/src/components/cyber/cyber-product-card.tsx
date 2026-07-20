@@ -231,11 +231,11 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
 
           <div className="flex flex-1 flex-col gap-2.5">
             <div className="flex flex-col gap-1.5">
-              <h3 className="font-tech type-h4 min-h-[2.9rem] text-balance tracking-[0.01em] text-white sm:min-h-[3.2rem]">
+              <h3 className="font-tech min-h-[2.6rem] text-balance text-center text-base font-bold leading-5 tracking-[0.01em] text-white">
                 {title}
               </h3>
               {description ? (
-                <p className="font-tech type-body-sm line-clamp-3 min-h-[3rem] text-zinc-400 sm:min-h-[3.2rem]">
+                <p className="font-tech line-clamp-2 min-h-10 text-center text-xs leading-5 text-zinc-400">
                   {description}
                 </p>
               ) : null}

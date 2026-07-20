@@ -1,15 +1,18 @@
+from django.utils import timezone
 from rest_framework import mixins, status, viewsets
+from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import ContactMessage
+from .models import ContactMessage, Notification
 from .serializers import (
     AuthResponseSerializer,
     ContactMessageSerializer,
     EmailVerificationConfirmSerializer,
     EmailVerificationRequestSerializer,
     LoginSerializer,
+    NotificationSerializer,
     ProfileSerializer,
     ProfileUpdateSerializer,
     RegisterSerializer,
@@ -73,3 +76,27 @@ class ContactMessageViewSet(mixins.CreateModelMixin, viewsets.GenericViewSet):
     queryset = ContactMessage.objects.all()
     serializer_class = ContactMessageSerializer
     permission_classes = (AllowAny,)
+
+
+class NotificationViewSet(mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+    serializer_class = NotificationSerializer
+    permission_classes = (IsAuthenticated,)
+
+    def get_queryset(self):
+        return Notification.objects.filter(user=self.request.user).order_by('-created_at')
+
+    @action(detail=False, methods=('get',), url_path='unread-count')
+    def unread_count(self, request):
+        return Response({'count': self.get_queryset().filter(status=Notification.Status.UNREAD).count()})
+
+    @action(detail=True, methods=('post',), url_path='mark-read')
+    def mark_read(self, request, pk=None):
+        notification = self.get_object()
+        notification.mark_as_read()
+        return Response(self.get_serializer(notification).data)
+
+    @action(detail=False, methods=('post',), url_path='mark-all-read')
+    def mark_all_read(self, request):
+        now = timezone.now()
+        updated = self.get_queryset().filter(status=Notification.Status.UNREAD).update(status=Notification.Status.READ, read_at=now, updated_at=now)
+        return Response({'updated': updated})

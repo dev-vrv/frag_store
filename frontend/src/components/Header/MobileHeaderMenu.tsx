@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Heart, Menu, ShoppingCart } from "lucide-react";
+import { Bell, Heart, Menu, ShoppingCart } from "lucide-react";
 import { FaUserAstronaut } from "react-icons/fa";
 
 import { BrandLogo } from "@/components/Brand/BrandLogo";
@@ -33,7 +33,8 @@ export function MobileHeaderMenu({
 }: MobileHeaderMenuProps) {
   const primaryLinks = dictionary.nav;
   const infoLinks = dictionary.info.items;
-  const actionLinks = [
+  const actionLinks: Array<{ href: string; label: string; icon: React.ReactNode; query?: Record<string, string>; badge?: number }> = [
+    ...(isAuthenticated ? [{ href: "/profile", label: locale === "en" ? "Notifications" : locale === "kg" ? "Билдирүүлөр" : "Уведомления", icon: <Bell aria-hidden="true" />, query: { tab: "notifications" } }] : []),
     {
       href: "/catalog",
       label: dictionary.favorites,

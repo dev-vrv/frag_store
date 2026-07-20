@@ -7,11 +7,13 @@ from .views import (
     EmailVerificationConfirmAPIView,
     EmailVerificationRequestAPIView,
     LoginAPIView,
+    NotificationViewSet,
     RegisterAPIView,
 )
 
 router = DefaultRouter()
 router.register('contact-messages', ContactMessageViewSet, basename='contact-message')
+router.register('notifications', NotificationViewSet, basename='notification')
 
 urlpatterns = [
     path('auth/register/', RegisterAPIView.as_view(), name='user-register'),

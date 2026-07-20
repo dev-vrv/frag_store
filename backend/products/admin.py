@@ -8,8 +8,18 @@ from .models import (
     ProductFeature,
     ProductMedia,
     ProductSpecification,
+    ProductStockSubscription,
     ProductTechnicalDetails,
 )
+
+
+@admin.register(ProductStockSubscription)
+class ProductStockSubscriptionAdmin(admin.ModelAdmin):
+    list_display = ('product', 'user', 'locale', 'status', 'created_at', 'notified_at')
+    list_filter = ('status', 'locale', 'created_at')
+    search_fields = ('product__name', 'product__sku', 'user__email')
+    readonly_fields = ('created_at', 'updated_at', 'notified_at')
+    autocomplete_fields = ('product', 'user')
 
 
 class ProductMediaInline(admin.TabularInline):

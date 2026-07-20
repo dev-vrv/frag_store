@@ -71,6 +71,46 @@ class User(AbstractBaseUser, PermissionsMixin):
         return ' '.join(part for part in [self.first_name, self.last_name] if part).strip()
 
 
+class Notification(models.Model):
+    class Type(models.TextChoices):
+        STOCK = 'stock', _('Поступление товара')
+        ORDER = 'order', _('Заказ')
+        PROMOTION = 'promotion', _('Акция')
+        SYSTEM = 'system', _('Системное')
+
+    class Status(models.TextChoices):
+        UNREAD = 'unread', _('Не просмотрено')
+        READ = 'read', _('Просмотрено')
+        ARCHIVED = 'archived', _('В архиве')
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications', verbose_name=_('пользователь'))
+    title = models.CharField(_('заголовок'), max_length=180)
+    text = models.TextField(_('текст'))
+    notification_type = models.CharField(_('тип'), max_length=20, choices=Type.choices, default=Type.SYSTEM)
+    status = models.CharField(_('статус'), max_length=16, choices=Status.choices, default=Status.UNREAD)
+    link = models.CharField(_('ссылка'), max_length=500, blank=True)
+    image_url = models.CharField(_('изображение'), max_length=500, blank=True)
+    metadata = models.JSONField(_('дополнительные данные'), default=dict, blank=True)
+    read_at = models.DateTimeField(_('просмотрено'), blank=True, null=True)
+    created_at = models.DateTimeField(_('создано'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('обновлено'), auto_now=True)
+
+    class Meta:
+        ordering = ('-created_at',)
+        verbose_name = _('уведомление')
+        verbose_name_plural = _('уведомления')
+        indexes = [models.Index(fields=('user', 'status', '-created_at'))]
+
+    def __str__(self):
+        return f'{self.user.email}: {self.title}'
+
+    def mark_as_read(self):
+        if self.status == self.Status.UNREAD:
+            self.status = self.Status.READ
+            self.read_at = timezone.now()
+            self.save(update_fields=('status', 'read_at', 'updated_at'))
+
+
 class ContactMessage(models.Model):
     class Locale(models.TextChoices):
         RU = 'ru', _('Русский')

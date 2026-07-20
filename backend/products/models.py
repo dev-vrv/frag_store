@@ -1,5 +1,6 @@
 from decimal import Decimal
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.text import slugify
@@ -24,9 +25,15 @@ class Brand(models.Model):
         return self.name
 
     def save(self, *args, **kwargs):
+        previous_quantity = None
+        if self.pk:
+            previous_quantity = Product.objects.filter(pk=self.pk).values_list('quantity_in_stock', flat=True).first()
         if not self.slug:
             self.slug = self._generate_unique_slug(self.name, Brand)
         super().save(*args, **kwargs)
+        if previous_quantity is not None and previous_quantity <= 0 < self.quantity_in_stock:
+            from .services import create_stock_arrival_notifications
+            create_stock_arrival_notifications(self.pk)
 
     @staticmethod
     def _generate_unique_slug(value, model_class):
@@ -170,10 +177,23 @@ class Product(models.Model):
             })
 
     def save(self, *args, **kwargs):
+        previous_quantity = None
+        if self.pk:
+            previous_quantity = (
+                Product.objects.filter(pk=self.pk)
+                .values_list('quantity_in_stock', flat=True)
+                .first()
+            )
+
         if not self.slug:
             self.slug = Brand._generate_unique_slug(self.name, Product)
         self.full_clean()
         super().save(*args, **kwargs)
+
+        if previous_quantity is not None and previous_quantity <= 0 < self.quantity_in_stock:
+            from .services import create_stock_arrival_notifications
+
+            create_stock_arrival_notifications(self.pk)
 
     @property
     def active_color_options(self):
@@ -185,6 +205,30 @@ class Product(models.Model):
         if not details:
             return []
         return details.get_highlights()
+
+
+class ProductStockSubscription(models.Model):
+    class Status(models.TextChoices):
+        ACTIVE = 'active', _('Активна')
+        NOTIFIED = 'notified', _('Уведомлен')
+        CANCELLED = 'cancelled', _('Отменена')
+
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='stock_subscriptions', verbose_name=_('товар'))
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='stock_subscriptions', verbose_name=_('пользователь'))
+    locale = models.CharField(_('язык'), max_length=2, default='ru')
+    status = models.CharField(_('статус'), max_length=16, choices=Status.choices, default=Status.ACTIVE)
+    notified_at = models.DateTimeField(_('уведомлен'), blank=True, null=True)
+    created_at = models.DateTimeField(_('создано'), auto_now_add=True)
+    updated_at = models.DateTimeField(_('обновлено'), auto_now=True)
+
+    class Meta:
+        ordering = ('-created_at',)
+        verbose_name = _('подписка на поступление')
+        verbose_name_plural = _('подписки на поступление')
+        constraints = [models.UniqueConstraint(fields=('product', 'user'), name='unique_product_stock_subscription')]
+
+    def __str__(self):
+        return f'{self.user.email}: {self.product.name}'
 
 
 class ProductMedia(models.Model):

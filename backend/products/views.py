@@ -1,6 +1,8 @@
 from django.db.models import Count, Q
-from rest_framework import mixins, viewsets
-from rest_framework.permissions import AllowAny
+from rest_framework import mixins, status, viewsets
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
 
 from .models import Brand, Product, ProductCategory
 from .serializers import (
@@ -8,6 +10,7 @@ from .serializers import (
     ProductCategorySerializer,
     ProductDetailSerializer,
     ProductListSerializer,
+    ProductStockSubscriptionSerializer,
 )
 
 
@@ -84,3 +87,13 @@ class ProductViewSet(viewsets.ReadOnlyModelViewSet):
         if self.action == 'retrieve':
             return ProductDetailSerializer
         return ProductListSerializer
+
+    @action(detail=True, methods=('post',), permission_classes=(IsAuthenticated,), url_path='stock-subscription')
+    def stock_subscription(self, request, slug=None):
+        product = self.get_object()
+        if product.quantity_in_stock > 0:
+            return Response({'detail': 'Product is already in stock.'}, status=status.HTTP_400_BAD_REQUEST)
+        serializer = ProductStockSubscriptionSerializer(data=request.data, context={'request': request, 'product': product})
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)

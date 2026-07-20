@@ -84,14 +84,16 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
       return;
     }
 
+    const activeLane = lane;
+
     function ensureScrollableSetWidth() {
-      const singleSetWidth = lane.scrollWidth / 3;
+      const singleSetWidth = activeLane.scrollWidth / 3;
 
       if (!singleSetWidth) {
         return;
       }
 
-      const minimumSetWidth = lane.clientWidth + 64;
+      const minimumSetWidth = activeLane.clientWidth + 64;
 
       if (singleSetWidth > minimumSetWidth || setRepeatFactor >= 12) {
         return;
@@ -107,7 +109,7 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
       ensureScrollableSetWidth();
     });
 
-    resizeObserver.observe(lane);
+    resizeObserver.observe(activeLane);
 
     return () => {
       resizeObserver.disconnect();
@@ -121,31 +123,33 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
       return;
     }
 
-    const setWidth = lane.scrollWidth / 3;
+    const activeLane = lane;
 
-    if (!setWidth || lane.scrollWidth <= lane.clientWidth) {
+    const setWidth = activeLane.scrollWidth / 3;
+
+    if (!setWidth || activeLane.scrollWidth <= activeLane.clientWidth) {
       return;
     }
 
-    lane.scrollLeft = setWidth;
+    activeLane.scrollLeft = setWidth;
 
     const speed = 0.45;
 
     function normalizeScroll() {
-      if (!lane || !setWidth) {
+      if (!setWidth) {
         return;
       }
 
-      if (lane.scrollLeft <= 0) {
-        lane.scrollLeft += setWidth;
-      } else if (lane.scrollLeft >= setWidth * 2) {
-        lane.scrollLeft -= setWidth;
+      if (activeLane.scrollLeft <= 0) {
+        activeLane.scrollLeft += setWidth;
+      } else if (activeLane.scrollLeft >= setWidth * 2) {
+        activeLane.scrollLeft -= setWidth;
       }
     }
 
     function tick() {
       if (!isDraggingRef.current && !isHoverPausedRef.current) {
-        lane.scrollLeft += speed * autoDirectionRef.current;
+        activeLane.scrollLeft += speed * autoDirectionRef.current;
         normalizeScroll();
       }
 
