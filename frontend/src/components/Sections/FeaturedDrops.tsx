@@ -6,20 +6,15 @@ import {
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
 
-import { CyberBadge, CyberButton, CyberCard, CyberCardContent, CyberProductCard } from "@/components/cyber";
+import { CyberBadge, CyberButton, CyberCard, CyberCardContent } from "@/components/cyber";
 import { useCart } from "@/components/Cart/CartProvider";
-import { ProductTypeIcon } from "@/components/Products/ProductTypeIcon";
+import { CatalogProductCard } from "@/components/Products/CatalogProductCard";
 import { Section } from "@/components/Sections/Section";
 import RevealOnScroll from "@/components/ui/RevealOnScroll";
 import AnimatedText from "@/components/ui/animatedText";
 import { toggleFavorite, useFavoriteIds } from "@/lib/favorites";
 import { type Dictionary, type Locale, localizePath } from "@/lib/i18n";
-import {
-  formatProductOldPrice,
-  formatProductPrice,
-  getLocalizedProductName,
-  type Product,
-} from "@/lib/products";
+import { type Product } from "@/lib/products";
 
 export interface FeaturedDropsProps {
   locale: Locale;
@@ -27,29 +22,11 @@ export interface FeaturedDropsProps {
   products: Product[];
 }
 
-function ProductVisual({ product }: { product: Product }) {
-  if (product.primary_media?.file) {
-    return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        src={product.primary_media.file}
-        alt={product.primary_media.alt_text || product.name}
-        className="h-full w-full object-cover"
-      />
-    );
-  }
-
-  return (
-    <div className="flex h-full items-center justify-center">
-      <div className="grid size-24 place-items-center border border-red-300/25 bg-black/45 text-red-100 shadow-[0_0_46px_rgba(255,23,68,0.18)] sm:size-28">
-        <ProductTypeIcon
-          deviceType={product.category.device_type}
-          className="size-10 sm:size-12"
-        />
-      </div>
-    </div>
-  );
-}
+const hoverSpecsLabelByLocale: Record<Locale, string> = {
+  ru: "Основные характеристики",
+  en: "Key specifications",
+  kg: "Негизги мүнөздөмөлөр",
+};
 
 export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps) {
   const { addItem, hasItem } = useCart();
@@ -323,45 +300,27 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
                   const defaultColorId = product.color_options[0]?.id ?? null;
                   const cardAlreadyInCart = hasItem(product.id, defaultColorId);
 
-                  const badges = [];
-                  if (product.is_new_arrival) {
-                    badges.push({ label: content.badgeNew, variant: "cyan" as const });
-                  }
-                  if (product.is_best_seller) {
-                    badges.push({ label: content.badgeHit, variant: "red" as const });
-                  }
-                  if (product.has_discount) {
-                    badges.push({ label: `-${product.discount_percent}%`, variant: "warning" as const });
-                  }
-
                   return (
                     <div
                       key={`${product.slug}-${index}`}
                       className="featured-marquee-slide"
                       aria-hidden={!inPrimarySet}
                     >
-                      <CyberProductCard
-                        radius="compact"
-                        tone="featured"
-                        liftOnHover
-                        className="min-h-[26.5rem] hover:-translate-y-0.5 hover:shadow-[0_20px_42px_rgba(0,0,0,0.36)]"
-                        image={<ProductVisual product={product} />}
-                        title={getLocalizedProductName(product, locale)}
-                        description={product.short_description}
-                        price={formatProductPrice(product, locale)}
-                        oldPrice={formatProductOldPrice(product, locale)}
-                        badges={badges}
-                        detailsLabel={content.detailsCta}
-                        ctaLabel={cardAlreadyInCart ? content.alreadyInCart : content.productCta}
+                      <CatalogProductCard
+                        product={product}
+                        locale={locale}
+                        labels={{
+                          badgeNew: content.badgeNew,
+                          badgeHit: content.badgeHit,
+                          cta: cardAlreadyInCart ? content.alreadyInCart : content.productCta,
+                          details: content.detailsCta,
+                          favorite: content.favoriteLabel,
+                          hoverSpecs: hoverSpecsLabelByLocale[locale],
+                        }}
+                        alreadyInCart={cardAlreadyInCart}
                         detailsHref={`${catalogHref}?product=${product.slug}`}
                         onCtaClick={() => addItem(product.id, 1, defaultColorId)}
                         ctaDisabled={product.quantity_in_stock <= 0 || cardAlreadyInCart}
-                        ctaClassName={
-                          cardAlreadyInCart
-                            ? "border-cyan-300/60 bg-[linear-gradient(135deg,rgba(34,211,238,0.18),rgba(34,211,238,0.06))] text-cyan-50 shadow-[0_0_28px_rgba(34,211,238,0.12)] hover:border-cyan-300/60 hover:bg-[linear-gradient(135deg,rgba(34,211,238,0.18),rgba(34,211,238,0.06))] hover:text-cyan-50 disabled:opacity-100"
-                            : undefined
-                        }
-                        favoriteLabel={content.favoriteLabel}
                         favoriteActive={favoriteIdSet.has(product.id)}
                         onFavoriteClick={() => toggleFavorite(product.id)}
                         stackActions

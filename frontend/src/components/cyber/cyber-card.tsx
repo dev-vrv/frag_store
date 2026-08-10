@@ -12,7 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 
 const cyberCardVariants = cva(
-  "group relative overflow-hidden rounded-md border text-zinc-50 transition-all duration-300 before:pointer-events-none before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(248,113,113,0.08),transparent_35%,rgba(217,70,239,0.08))] before:opacity-70 after:pointer-events-none after:absolute after:inset-x-6 after:top-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-red-200/70 after:to-transparent",
+  "group relative overflow-hidden rounded-none border text-zinc-50 transition-all duration-300 before:pointer-events-none before:absolute before:inset-0 before:bg-[linear-gradient(135deg,rgba(248,113,113,0.08),transparent_35%,rgba(217,70,239,0.08))] before:opacity-70 after:pointer-events-none after:absolute after:inset-x-6 after:top-0 after:h-px after:bg-gradient-to-r after:from-transparent after:via-red-200/70 after:to-transparent",
   {
     variants: {
       variant: {

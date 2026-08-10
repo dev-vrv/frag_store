@@ -1,5 +1,12 @@
 "use client";
-import { ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+  ChevronDown,
+  Headphones,
+  Keyboard,
+  MousePointer2,
+  PackageOpen,
+  type LucideIcon,
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { CyberBadge, CyberButton } from "@/components/cyber";
@@ -23,31 +30,41 @@ interface HeroSlide {
   title: string;
   subtitle: string;
   image: string;
+  icon: LucideIcon;
   accentClassName: string;
   imagePositionClassName?: string;
 }
 
 const heroImageByCategory: Record<
   string,
-  { image: string; accentClassName: string; imagePositionClassName?: string }
+  {
+    image: string;
+    icon: LucideIcon;
+    accentClassName: string;
+    imagePositionClassName?: string;
+  }
 > = {
   keyboards: {
     image: "/images/hero/keybord.webp?v=20260715-1057",
+    icon: Keyboard,
     accentClassName: "from-fuchsia-400/70 via-cyan-300/35 to-transparent",
     imagePositionClassName: "object-center",
   },
   mice: {
     image: "/images/hero/mouse.webp?v=20260715-1050",
+    icon: MousePointer2,
     accentClassName: "from-cyan-300/75 via-sky-300/38 to-transparent",
     imagePositionClassName: "object-center",
   },
   headsets: {
     image: "/images/hero/headset.jpg?v=20260715-1050",
+    icon: Headphones,
     accentClassName: "from-red-400/72 via-cyan-300/34 to-transparent",
     imagePositionClassName: "object-center",
   },
   accessories: {
     image: "/images/hero/chaer.jpg?v=20260715-1050",
+    icon: PackageOpen,
     accentClassName: "from-lime-300/70 via-cyan-300/34 to-transparent",
     imagePositionClassName: "object-center",
   },
@@ -57,22 +74,25 @@ export function Hero({ locale, content, categories }: HeroProps) {
   const slides = useMemo<HeroSlide[]>(() => {
     const prioritySlugs = ["keyboards", "mice", "headsets", "accessories"];
     const mapped = prioritySlugs.flatMap((slug): HeroSlide[] => {
-        const category = categories.find((item) => item.slug === slug);
-        const visual = heroImageByCategory[slug];
+      const category = categories.find((item) => item.slug === slug);
+      const visual = heroImageByCategory[slug];
 
-        if (!category || !visual) {
-          return [];
-        }
+      if (!category || !visual) {
+        return [];
+      }
 
-        return [{
+      return [
+        {
           slug,
           title: getLocalizedCategoryName(category, locale),
           subtitle: getLocalizedCategoryDescription(category, locale),
           image: visual.image,
+          icon: visual.icon,
           accentClassName: visual.accentClassName,
           imagePositionClassName: visual.imagePositionClassName,
-        }];
-      });
+        },
+      ];
+    });
 
     return mapped.length ? mapped : [];
   }, [categories, locale]);
@@ -115,6 +135,26 @@ export function Hero({ locale, content, categories }: HeroProps) {
             transform: scale(1.05) translate3d(-12px, 14px, 0);
           }
         }
+
+        @keyframes hero-tab-progress {
+          from {
+            width: 0%;
+          }
+          to {
+            width: 100%;
+          }
+        }
+
+        .hero-category-tab__progress {
+          animation: hero-tab-progress 4.6s linear forwards;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+          .hero-category-tab__progress {
+            width: 100%;
+            animation: none;
+          }
+        }
       `}</style>
       <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgba(8,10,18,0.12)_0%,rgba(8,10,18,0.08)_100%)]" />
       <div className="absolute inset-0 -z-10 overflow-hidden">
@@ -150,7 +190,7 @@ export function Hero({ locale, content, categories }: HeroProps) {
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/85 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
 
-      <div className="mx-auto grid w-full max-w-[90rem] items-end gap-6 lg:grid-cols-[minmax(0,1.05fr)_20rem] lg:gap-8">
+      <div className="mx-auto grid w-full max-w-[90rem] items-end gap-6 lg:grid-cols-[minmax(0,1.05fr)_22rem] lg:gap-8">
         <div className="flex min-h-[22rem] max-w-3xl flex-col justify-end sm:min-h-[24rem] lg:min-h-[27rem]">
           <CyberBadge variant="cyan" glow>
             {content.eyebrow}
@@ -177,48 +217,88 @@ export function Hero({ locale, content, categories }: HeroProps) {
           </div>
         </div>
 
-        <div className="justify-self-end self-end rounded-md border border-white/12 bg-[#0f121a]/58 p-3.5 backdrop-blur-md lg:w-[20rem]">
-          <div className="flex items-center justify-between gap-3">
-            <span className="font-tech type-ui uppercase tracking-[0.12em] text-zinc-200">
-              {resolvedActiveIndex + 1}/{slides.length}
-            </span>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                onClick={() => setActiveIndex((current) => (current - 1 + slides.length) % slides.length)}
-                className="grid size-11 place-items-center border border-white/12 bg-white/5 text-zinc-100 transition hover:border-cyan-300/34 hover:bg-white/10"
-                aria-label="Previous hero slide"
-              >
-                <ChevronLeft className="size-4" aria-hidden="true" />
-              </button>
-              <button
-                type="button"
-                onClick={() => setActiveIndex((current) => (current + 1) % slides.length)}
-                className="grid size-11 place-items-center border border-white/12 bg-white/5 text-zinc-100 transition hover:border-cyan-300/34 hover:bg-white/10"
-                aria-label="Next hero slide"
-              >
-                <ChevronRight className="size-4" aria-hidden="true" />
-              </button>
+        <div className="relative self-end justify-self-stretch overflow-hidden border border-white/12 bg-[#080b12]/72 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.34)] backdrop-blur-xl lg:w-[22rem] lg:justify-self-end">
+          <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/70 to-transparent" />
+          <div className="flex items-end justify-between gap-4 px-3 pb-3 pt-2">
+            <div className="min-w-0">
+              <p className="font-tech text-[0.65rem] uppercase tracking-[0.2em] text-cyan-200/80">
+                {content.panelEyebrow}
+              </p>
+              <p className="mt-1 truncate font-display text-lg uppercase tracking-[0.06em] text-white">
+                {content.panelTitle}
+              </p>
             </div>
+            <span className="font-tech shrink-0 text-xs tracking-[0.16em] text-zinc-400">
+              {String(resolvedActiveIndex + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}
+            </span>
           </div>
 
-          <div className="mt-3 flex min-h-[6.5rem] flex-wrap content-start gap-2">
-            {slides.map((slide, index) => (
-              <button
-                key={slide.slug}
-                type="button"
-                onClick={() => setActiveIndex(index)}
-                className={cn(
-                  "font-tech type-caption rounded-full border px-3 py-1.5 uppercase tracking-[0.12em] transition",
-                  index === resolvedActiveIndex
-                    ? "border-cyan-300/40 bg-cyan-300/12 text-white"
-                    : "border-white/12 bg-white/[0.04] text-zinc-300 hover:border-white/22 hover:text-white",
-                )}
-              >
-                {slide.title}
-              </button>
-            ))}
-          </div>
+          <nav
+            aria-label={content.panelTitle}
+            className="grid grid-cols-2 gap-1 lg:grid-cols-1"
+          >
+            {slides.map((slide, index) => {
+              const Icon = slide.icon;
+              const isActive = index === resolvedActiveIndex;
+
+              return (
+                <button
+                  key={slide.slug}
+                  type="button"
+                  onClick={() => setActiveIndex(index)}
+                  aria-pressed={isActive}
+                  className={cn(
+                    "group relative flex min-h-[4.25rem] items-center gap-3 overflow-hidden border px-3 py-2.5 text-left outline-none transition duration-300 focus-visible:ring-2 focus-visible:ring-cyan-200/50 focus-visible:ring-inset",
+                    isActive
+                      ? "border-cyan-200/34 bg-[linear-gradient(100deg,rgba(34,211,238,0.17),rgba(255,255,255,0.055)_55%,rgba(255,255,255,0.025))] shadow-[inset_3px_0_0_rgba(103,232,249,0.9),0_10px_30px_rgba(8,145,178,0.08)]"
+                      : "border-transparent bg-white/[0.025] hover:border-white/12 hover:bg-white/[0.065]",
+                  )}
+                >
+                  <span
+                    className={cn(
+                      "grid size-9 shrink-0 place-items-center border transition duration-300",
+                      isActive
+                        ? "border-cyan-200/36 bg-cyan-200/10 text-cyan-100 shadow-[0_0_20px_rgba(34,211,238,0.14)]"
+                        : "border-white/10 bg-black/20 text-zinc-400 group-hover:border-white/20 group-hover:text-zinc-100",
+                    )}
+                  >
+                    <Icon className="size-4" aria-hidden="true" />
+                  </span>
+
+                  <span className="min-w-0 flex-1">
+                    <span className="font-tech block text-[0.62rem] tracking-[0.18em] text-zinc-500">
+                      {String(index + 1).padStart(2, "0")}
+                    </span>
+                    <span
+                      className={cn(
+                        "font-display mt-0.5 block text-[0.78rem] uppercase leading-4 tracking-[0.05em] transition sm:text-sm",
+                        isActive ? "text-white" : "text-zinc-300 group-hover:text-white",
+                      )}
+                    >
+                      {slide.title}
+                    </span>
+                  </span>
+
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      "hidden size-1.5 shrink-0 rounded-full transition sm:block",
+                      isActive
+                        ? "bg-cyan-200 shadow-[0_0_12px_rgba(103,232,249,0.9)]"
+                        : "bg-zinc-700 group-hover:bg-zinc-500",
+                    )}
+                  />
+
+                  {isActive ? (
+                    <span
+                      aria-hidden="true"
+                      className="hero-category-tab__progress absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-cyan-300 via-white to-cyan-300 shadow-[0_0_12px_rgba(103,232,249,0.72)]"
+                    />
+                  ) : null}
+                </button>
+              );
+            })}
+          </nav>
         </div>
       </div>
 

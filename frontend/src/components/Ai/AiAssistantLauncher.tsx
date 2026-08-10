@@ -153,13 +153,16 @@ export default function AiAssistantLauncher() {
         type="button"
         aria-label={text.trigger}
         onClick={() => setOpen(true)}
-        className="ai-assistant-entry"
+        className="floating-control ai-assistant-entry cyber-cut-small"
       >
-        <span className="ai-assistant-entry__pulse ai-assistant-entry__pulse--outer" />
-        <span className="ai-assistant-entry__pulse ai-assistant-entry__pulse--inner" />
-        <span className="ai-assistant-entry__icon" aria-hidden="true">
+        <span className="floating-control__icon ai-assistant-entry__icon" aria-hidden="true">
           <Bot className="size-4" strokeWidth={2.2} />
         </span>
+        <span className="floating-control__copy">
+          <span className="floating-control__eyebrow">02 // ONLINE</span>
+          <span className="floating-control__label">{text.title}</span>
+        </span>
+        <span className="floating-control__status ai-assistant-entry__status" aria-hidden="true" />
       </button>
 
       <CyberDialog open={open} onOpenChange={setOpen}>

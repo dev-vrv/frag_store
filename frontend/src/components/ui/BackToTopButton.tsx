@@ -39,13 +39,18 @@ export default function BackToTopButton() {
       type="button"
       aria-label={backToTopLabels[locale]}
       onClick={scrollToTop}
-      className={["back-to-top", isVisible ? "is-visible" : ""].filter(Boolean).join(" ")}
+      className={["floating-control back-to-top cyber-cut-small", isVisible ? "is-visible" : ""]
+        .filter(Boolean)
+        .join(" ")}
     >
-      <span className="back-to-top__pulse back-to-top__pulse--outer" />
-      <span className="back-to-top__pulse back-to-top__pulse--inner" />
-      <span className="back-to-top__icon" aria-hidden="true">
+      <span className="floating-control__icon back-to-top__icon" aria-hidden="true">
         <ChevronUp className="size-4" strokeWidth={2.35} />
       </span>
+      <span className="floating-control__copy">
+        <span className="floating-control__eyebrow">01 // NAV</span>
+        <span className="floating-control__label">{backToTopLabels[locale]}</span>
+      </span>
+      <span className="floating-control__status" aria-hidden="true" />
     </button>
   );
 }

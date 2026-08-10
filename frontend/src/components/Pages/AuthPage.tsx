@@ -222,7 +222,7 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
         <CyberCard
           variant="glass"
           className={cn(
-            "rounded-md p-2 transition-all duration-700 lg:flex lg:min-h-screen lg:items-center",
+            "rounded-none p-2 transition-all duration-700 lg:flex lg:min-h-screen lg:items-center",
             mode === "login"
               ? "border-red-500/20 bg-black/38 shadow-[0_0_44px_rgba(255,23,68,0.12)]"
               : "border-fuchsia-400/25 bg-black/42 shadow-[0_0_54px_rgba(217,70,239,0.16)]",

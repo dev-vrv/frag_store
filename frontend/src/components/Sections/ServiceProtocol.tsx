@@ -107,7 +107,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
               key={label}
               as="div"
               delay={500 + index * 90}
-              className="rounded-md border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.025))] p-4 backdrop-blur-xl"
+              className="rounded-none border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.025))] p-4 backdrop-blur-xl"
             >
               <p className="font-tech type-caption uppercase tracking-[0.12em] text-zinc-500">
                 {label}
@@ -130,7 +130,7 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
                 <button
                   type="button"
                   onClick={() => setActiveCardIndex(index)}
-                  className="group flex h-full w-full flex-col overflow-hidden rounded-md border border-white/10 bg-zinc-950/60 text-left shadow-[0_18px_48px_rgba(0,0,0,0.24)] transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-1.5 hover:border-cyan-300/28 hover:shadow-[0_22px_60px_rgba(34,211,238,0.10)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/35"
+                  className="group flex h-full w-full flex-col overflow-hidden rounded-none border border-white/10 bg-zinc-950/60 text-left shadow-[0_18px_48px_rgba(0,0,0,0.24)] transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-1.5 hover:border-cyan-300/28 hover:shadow-[0_22px_60px_rgba(34,211,238,0.10)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/35"
                   aria-label={`${card.title}. ${content.modalCta}`}
                 >
                   <div className={cn("relative aspect-[4/3] overflow-hidden border-b border-white/10", theme.surface)}>
