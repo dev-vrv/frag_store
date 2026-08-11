@@ -228,7 +228,7 @@ function ProductPreview({ product }: { product: Product }) {
 
   return (
     <div className="flex h-full items-center justify-center">
-      <div className="grid size-20 place-items-center rounded-md border border-white/12 bg-black/35 text-cyan-100">
+      <div className="comparison-surface grid size-20 place-items-center rounded-md border">
         <PackageCheck className="size-8" aria-hidden="true" />
       </div>
     </div>
@@ -261,25 +261,25 @@ export function ProductComparisonDialog({
 
   return (
     <CyberDialog open={open} onOpenChange={onOpenChange}>
-      <CyberDialogContent className="flex h-[94svh] max-h-[94svh] w-[calc(100vw-1rem)] max-w-[96rem] flex-col overflow-hidden border-white/12 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.14),transparent_24%),radial-gradient(circle_at_top_right,rgba(255,23,68,0.10),transparent_20%),linear-gradient(180deg,rgba(8,9,12,0.99),rgba(3,4,6,1))] p-0">
-        <CyberDialogHeader className="shrink-0 border-b border-white/10 px-5 pb-5 pt-5 sm:px-7">
+      <CyberDialogContent className="comparison-ui comparison-panel flex h-[94svh] max-h-[94svh] w-[calc(100vw-1rem)] max-w-[96rem] flex-col overflow-hidden p-0 before:hidden">
+        <CyberDialogHeader className="comparison-divider shrink-0 border-b px-5 pb-5 pt-5 sm:px-7">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-start lg:justify-between">
             <div className="space-y-3">
-              <CyberDialogDescription className="font-tech type-label text-cyan-200/70">
+              <CyberDialogDescription className="comparison-muted font-tech type-label">
                 {labels.badge}
               </CyberDialogDescription>
               <div className="space-y-2">
-                <CyberDialogTitle className="font-display type-h2 pr-10 text-white">
+                <CyberDialogTitle className="comparison-heading font-display type-h2 pr-10">
                   {labels.title}
                 </CyberDialogTitle>
-                <p className="font-tech type-body-sm max-w-3xl text-zinc-300">
+                <p className="comparison-muted font-tech type-body-sm max-w-3xl">
                   {labels.subtitle}
                 </p>
               </div>
             </div>
 
             <div className="flex flex-wrap items-center gap-2 pr-10 lg:justify-end lg:pr-14">
-              <CyberBadge variant="cyan" glow className="min-h-10 px-4">
+              <CyberBadge variant="neutral" className="comparison-badge min-h-10 px-4">
                 <Scale className="mr-2 size-4" aria-hidden="true" />
                 {totalComparedProducts} {labels.productsSelected}
               </CyberBadge>
@@ -287,6 +287,7 @@ export function ProductComparisonDialog({
                 variant={showDifferencesOnly ? "secondary" : "ghost"}
                 size="sm"
                 onClick={() => setShowDifferencesOnly((current) => !current)}
+                className={cn("comparison-button", showDifferencesOnly && "comparison-button-primary")}
               >
                 {labels.differencesOnly}
               </CyberButton>
@@ -295,10 +296,17 @@ export function ProductComparisonDialog({
                 size="sm"
                 onClick={() => activeGroup && onClearCategory(activeGroup.slug)}
                 disabled={!activeGroup}
+                className="comparison-button"
               >
                 {labels.clear}
               </CyberButton>
-              <CyberButton variant="ghost" size="sm" onClick={onClearAll} disabled={!groups.length}>
+              <CyberButton
+                variant="ghost"
+                size="sm"
+                onClick={onClearAll}
+                disabled={!groups.length}
+                className="comparison-button"
+              >
                 {labels.clearAll}
               </CyberButton>
             </div>
@@ -314,18 +322,18 @@ export function ProductComparisonDialog({
                 className="gap-3"
               >
                 <section className="space-y-3">
-                  <p className="font-tech type-label text-zinc-500">
+                  <p className="comparison-muted font-tech type-label">
                     {labels.sectionsLabel}
                   </p>
-                  <CyberTabsList className="w-full gap-2 overflow-x-auto p-1.5">
+                  <CyberTabsList className="comparison-tabs-list w-full gap-2 overflow-x-auto p-1.5">
                     {groups.map((group) => (
                       <CyberTabsTrigger
                         key={group.slug}
                         value={group.slug}
-                        className="min-h-11 min-w-fit px-4 py-2 text-left text-[0.92rem] tracking-[0.03em]"
+                        className="comparison-tabs-trigger min-h-11 min-w-fit px-4 py-2 text-left text-[0.92rem] tracking-[0.03em]"
                       >
                         <span>{group.label}</span>
-                        <span className="font-tech type-caption text-zinc-500">
+                        <span className="font-tech type-caption opacity-65">
                           {group.products.length}
                         </span>
                       </CyberTabsTrigger>
@@ -353,17 +361,16 @@ export function ProductComparisonDialog({
                       <section
                         key={product.id}
                         className={cn(
-                          "flex h-full flex-col overflow-hidden rounded-md border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))]",
+                          "comparison-surface flex h-full flex-col overflow-hidden rounded-md border",
                           hasCompactPreview && "w-full max-w-[28rem] shrink-0 self-start",
                         )}
                       >
                         <div
                           className={cn(
-                            "relative overflow-hidden border-b border-white/10 bg-[radial-gradient(circle_at_24%_18%,rgba(34,211,238,0.12),transparent_28%),radial-gradient(circle_at_80%_14%,rgba(255,23,68,0.1),transparent_24%),linear-gradient(145deg,rgba(10,11,15,0.995),rgba(5,6,8,1))] p-4",
+                            "comparison-divider relative overflow-hidden border-b bg-[var(--comparison-bg)] p-4",
                             hasCompactPreview ? "aspect-[1.45/0.62]" : "aspect-[1.1/0.82]",
                           )}
                         >
-                          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:24px_24px] opacity-25" />
                           <div className={cn("relative z-10 h-full", hasCompactPreview && "max-w-[15.5rem]")}>
                             <ProductPreview product={product} />
                           </div>
@@ -371,32 +378,36 @@ export function ProductComparisonDialog({
 
                         <div className="flex flex-1 flex-col gap-4 p-4">
                           <div className="space-y-2">
-                            <p className="font-tech type-label text-cyan-200/70">
+                            <p className="comparison-muted font-tech type-label">
                               {activeGroup.label}
                             </p>
-                            <h3 className="font-tech type-h3 text-white">
+                            <h3 className="comparison-heading font-tech type-h3">
                               {getLocalizedProductName(product, locale)}
                             </h3>
-                            <p className="font-tech type-body-sm text-zinc-400">{product.short_description}</p>
+                            <p className="comparison-muted font-tech type-body-sm">{product.short_description}</p>
                           </div>
 
                           <div className="space-y-1">
-                            <div className="font-tech type-price-lg text-lime-100">
+                            <div className="comparison-heading font-tech type-price-lg">
                               {formatProductPrice(product, locale)}
                             </div>
-                            <div className="font-tech type-body-sm text-zinc-500">
+                            <div className="comparison-muted font-tech type-body-sm">
                               {product.quantity_in_stock > 0 ? labels.inStock : labels.outOfStock}
                             </div>
                           </div>
 
                           {product.technical_highlights.length ? (
                             <div className="space-y-2">
-                              <p className="font-tech type-label text-zinc-500">
+                              <p className="comparison-muted font-tech type-label">
                                 {labels.highlightsLabel}
                               </p>
                               <div className="flex flex-wrap gap-2">
                                 {product.technical_highlights.slice(0, 4).map((item) => (
-                                  <CyberBadge key={`${product.id}-${item.label}-${item.value}`} variant="warning">
+                                  <CyberBadge
+                                    key={`${product.id}-${item.label}-${item.value}`}
+                                    variant="neutral"
+                                    className="comparison-badge"
+                                  >
                                     {item.label}: {item.value}
                                   </CyberBadge>
                                 ))}
@@ -405,12 +416,17 @@ export function ProductComparisonDialog({
                           ) : null}
 
                           <div className="mt-auto grid gap-2 sm:grid-cols-2">
-                            <CyberButton variant="ghost" onClick={() => onOpenProduct(product)}>
+                            <CyberButton
+                              variant="ghost"
+                              onClick={() => onOpenProduct(product)}
+                              className="comparison-button comparison-button-primary"
+                            >
                               {labels.openProduct}
                             </CyberButton>
                             <CyberButton
                               variant="outline"
                               onClick={() => onRemoveProduct(activeGroup.slug, product.id)}
+                              className="comparison-button"
                             >
                               <X className="size-4" aria-hidden="true" />
                               {labels.removeProduct}
@@ -422,13 +438,13 @@ export function ProductComparisonDialog({
                   </div>
                 </div>
 
-                <section className="overflow-hidden rounded-md border border-white/10 bg-black/25">
-                  <div className="flex items-center justify-between border-b border-white/10 px-4 py-4">
+                <section className="comparison-surface overflow-hidden rounded-md border">
+                  <div className="comparison-divider flex items-center justify-between border-b px-4 py-4">
                     <div>
-                      <p className="font-tech type-h4 text-white">
+                      <p className="comparison-heading font-tech type-h4">
                         {labels.specsLabel}
                       </p>
-                      <p className="font-tech type-body-sm mt-1 text-zinc-400">
+                      <p className="comparison-muted font-tech type-body-sm mt-1">
                         {activeProducts.length > 1 ? labels.pickMore : labels.emptyValue}
                       </p>
                     </div>
@@ -437,14 +453,14 @@ export function ProductComparisonDialog({
                   <div className="overflow-x-auto">
                     <table className="min-w-[64rem] table-fixed border-collapse">
                       <thead>
-                        <tr className="border-b border-white/10">
-                          <th className="font-tech type-label sticky left-0 z-20 w-56 bg-zinc-950/95 px-4 py-4 text-left text-zinc-500">
+                        <tr className="comparison-divider border-b">
+                          <th className="comparison-muted comparison-table-sticky font-tech type-label sticky left-0 z-20 w-56 px-4 py-4 text-left">
                             {labels.parameterLabel}
                           </th>
                           {activeProducts.map((product) => (
                             <th
                               key={product.id}
-                              className="font-tech type-ui min-w-64 border-l border-white/10 bg-zinc-950/75 px-4 py-4 text-left text-cyan-100/90"
+                              className="comparison-divider comparison-heading comparison-table-sticky font-tech type-ui min-w-64 border-l px-4 py-4 text-left"
                             >
                               {getLocalizedProductName(product, locale)}
                             </th>
@@ -453,11 +469,11 @@ export function ProductComparisonDialog({
                       </thead>
                       <tbody>
                         {visibleRows.map((row) => (
-                          <tr key={row.key} className="border-b border-white/6 align-top">
+                          <tr key={row.key} className="comparison-divider border-b align-top">
                             <th
                               className={cn(
-                                "font-tech type-ui sticky left-0 z-10 bg-zinc-950/92 px-4 py-4 text-left",
-                                row.different ? "text-cyan-100" : "text-zinc-500",
+                                "comparison-table-sticky font-tech type-ui sticky left-0 z-10 px-4 py-4 text-left",
+                                row.different ? "comparison-heading" : "comparison-muted",
                               )}
                             >
                               <span className="inline-flex items-center gap-2">
@@ -469,8 +485,8 @@ export function ProductComparisonDialog({
                               <td
                                 key={`${row.key}-${activeProducts[index]?.id ?? index}`}
                                 className={cn(
-                                  "border-l border-white/6 px-4 py-4 text-[0.95rem] leading-6 text-zinc-200",
-                                  row.different && "bg-cyan-300/[0.04] text-white",
+                                  "comparison-divider border-l px-4 py-4 text-[0.95rem] leading-6",
+                                  row.different && "comparison-difference",
                                 )}
                               >
                                 {value || labels.emptyValue}
@@ -487,9 +503,13 @@ export function ProductComparisonDialog({
           </div>
         </div>
 
-        <div className="shrink-0 border-t border-white/10 bg-[linear-gradient(180deg,rgba(9,10,12,0.84),rgba(4,4,6,0.96))] px-5 py-4 sm:px-7">
+        <div className="comparison-divider shrink-0 border-t bg-[var(--comparison-bg)] px-5 py-4 sm:px-7">
           <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
-            <CyberButton variant="ghost" onClick={() => onOpenChange(false)}>
+            <CyberButton
+              variant="ghost"
+              onClick={() => onOpenChange(false)}
+              className="comparison-button"
+            >
               {labels.close}
             </CyberButton>
           </div>

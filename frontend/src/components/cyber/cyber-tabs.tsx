@@ -21,7 +21,7 @@ function CyberTabsList({
   return (
     <TabsList
       className={cn(
-        "h-auto flex-wrap justify-start rounded-md border border-red-300/15 bg-black/45 p-1 shadow-[inset_0_0_22px_rgba(248,113,113,0.05)] backdrop-blur-xl",
+        "h-auto flex-wrap justify-start rounded-md border border-red-300/15 bg-surface/45 p-1 shadow-[inset_0_0_22px_rgba(248,113,113,0.05)] backdrop-blur-xl",
         className,
       )}
       {...props}

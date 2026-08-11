@@ -8,7 +8,7 @@ import {
   HiMiniRectangleGroup,
   HiOutlineSquares2X2,
 } from "react-icons/hi2";
-import { LuCable, LuGamepad2, LuKeyboard } from "react-icons/lu";
+import { LuArmchair, LuCable, LuGamepad2, LuKeyboard } from "react-icons/lu";
 
 export interface ProductTypeIconProps {
   className?: string;
@@ -27,6 +27,9 @@ export function ProductTypeIcon({ className, deviceType }: ProductTypeIconProps)
   }
   if (deviceType === "monitor") {
     return <FiMonitor aria-hidden="true" className={className} />;
+  }
+  if (deviceType === "chair") {
+    return <LuArmchair aria-hidden="true" className={className} />;
   }
   if (deviceType === "component") {
     return <FiCpu aria-hidden="true" className={className} />;

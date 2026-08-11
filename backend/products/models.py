@@ -56,6 +56,7 @@ class ProductCategory(models.Model):
         MOUSEPAD = 'mousepad', _('Коврик')
         CONTROLLER = 'controller', _('Контроллер')
         MONITOR = 'monitor', _('Монитор')
+        CHAIR = 'chair', _('Игровое кресло')
         COMPONENT = 'component', _('Компонент')
         ACCESSORY = 'accessory', _('Аксессуар')
         OTHER = 'other', _('Другое')

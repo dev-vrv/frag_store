@@ -3,15 +3,18 @@
 import Link from "next/link";
 import { Heart, ShoppingCart } from "lucide-react";
 import { usePathname, useSearchParams } from "next/navigation";
-import { Suspense, type ReactNode, useEffect, useRef, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { FaUserAstronaut } from "react-icons/fa";
 
 import { BrandLogo } from "@/components/Brand/BrandLogo";
+import { CyberButton } from "@/components/cyber/cyber-button";
+import { HeaderActionLink } from "@/components/Header/HeaderActionLink";
 import { LocaleSwitcher } from "@/components/Header/LocaleSwitcher";
 import { MobileHeaderMenu } from "@/components/Header/MobileHeaderMenu";
 import { NotificationHeaderButton } from "@/components/Notifications/NotificationHeaderButton";
 import { Nav } from "@/components/Nav/Nav";
 import { useCart } from "@/components/Cart/CartProvider";
+import { ThemeToggle } from "@/components/Theme/ThemeToggle";
 import { AUTH_STATE_CHANGE_EVENT, getAuthSessionState } from "@/lib/auth";
 import { useFavoriteIds } from "@/lib/favorites";
 import { type Dictionary, type Locale, localizePath, stripLocaleFromPath } from "@/lib/i18n";
@@ -24,7 +27,7 @@ export interface HeaderProps {
 
 export function Header(props: HeaderProps) {
   return (
-    <Suspense fallback={<div className="fixed inset-x-0 top-0 z-50 h-20 border-b border-red-500/15 bg-[#111118]/78 backdrop-blur-xl" />}>
+    <Suspense fallback={<div className="fixed inset-x-0 top-0 z-50 h-20 border-b border-red-500/15 bg-zinc-950/80 backdrop-blur-xl" />}>
       <HeaderContent {...props} />
     </Suspense>
   );
@@ -125,7 +128,7 @@ function HeaderContent({ locale, dictionary }: HeaderProps) {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b border-red-500/15 bg-[#111118]/78 backdrop-blur-xl transition-transform duration-300",
+        "fixed inset-x-0 top-0 z-50 border-b border-red-500/15 bg-zinc-950/80 backdrop-blur-xl transition-transform duration-300",
         isHidden ? "-translate-y-full" : "translate-y-0",
       )}
     >
@@ -151,9 +154,10 @@ function HeaderContent({ locale, dictionary }: HeaderProps) {
         />
 
         <div className="ml-auto hidden items-center gap-4 lg:flex">
+          <ThemeToggle locale={locale} />
           <LocaleSwitcher locale={locale} label="Сменить язык" />
           {isAuthenticated ? <NotificationHeaderButton locale={locale} /> : null}
-          <HeaderIconLink
+          <HeaderActionLink
             href="/catalog"
             locale={locale}
             label={dictionary.favorites}
@@ -162,8 +166,8 @@ function HeaderContent({ locale, dictionary }: HeaderProps) {
             query={{ favorites: "1" }}
           >
             <Heart aria-hidden="true" />
-          </HeaderIconLink>
-          <HeaderIconLink
+          </HeaderActionLink>
+          <HeaderActionLink
             href="/cart"
             locale={locale}
             label={dictionary.cart}
@@ -172,23 +176,29 @@ function HeaderContent({ locale, dictionary }: HeaderProps) {
             highlighted={cartIndicatorPulse}
           >
             <ShoppingCart aria-hidden="true" />
-          </HeaderIconLink>
-          <Link
-            href={authHref}
+          </HeaderActionLink>
+          <CyberButton
+            asChild
+            variant="danger"
+            size="sm"
             className={cn(
-              "group relative inline-flex h-10 items-center gap-2 overflow-hidden border px-4 text-sm uppercase tracking-[0.1em] text-white transition-all duration-300 focus-visible:outline-none focus-visible:ring-2",
-              authActive
-                ? "font-tech border-fuchsia-300/45 bg-[linear-gradient(135deg,rgba(34,211,238,0.16),rgba(217,70,239,0.18))] tracking-[0.16em] shadow-[0_0_28px_rgba(217,70,239,0.16)] focus-visible:ring-fuchsia-300/35"
-                : "font-tech border-white/14 bg-[linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] tracking-[0.16em] hover:border-fuchsia-300/35 hover:bg-[linear-gradient(135deg,rgba(34,211,238,0.12),rgba(217,70,239,0.14))] hover:shadow-[0_0_22px_rgba(217,70,239,0.12)] focus-visible:ring-fuchsia-300/30",
+              "h-10 border-red-400/55 bg-zinc-950/70 px-4 text-xs uppercase tracking-[0.14em] text-zinc-100 shadow-[0_0_18px_rgba(127,29,29,0.14)] backdrop-blur-md hover:border-red-300/75 hover:bg-red-950/75 hover:text-on-accent hover:shadow-[0_0_24px_rgba(185,28,28,0.22)]",
+              authActive &&
+                "border-red-300/75 bg-red-950/75 text-white shadow-[0_0_22px_rgba(185,28,28,0.20)]",
             )}
           >
-            <span className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-cyan-300/80 to-transparent opacity-70 transition-opacity group-hover:opacity-100" />
-            <FaUserAstronaut aria-hidden="true" className="text-cyan-200" />
-            <span>{authLabel}</span>
-          </Link>
+            <Link href={authHref} aria-current={authActive ? "page" : undefined}>
+              <FaUserAstronaut
+                aria-hidden="true"
+                className="relative z-10 text-red-300 transition-colors duration-300 group-hover:text-on-accent"
+              />
+              <span className="relative z-10">{authLabel}</span>
+            </Link>
+          </CyberButton>
         </div>
         <div className="flex shrink-0 items-center gap-2 lg:hidden">
           {isAuthenticated ? <NotificationHeaderButton locale={locale} /> : null}
+          <ThemeToggle locale={locale} />
           <LocaleSwitcher locale={locale} label="Сменить язык" className="shrink-0" />
           <MobileHeaderMenu
             locale={locale}
@@ -200,60 +210,5 @@ function HeaderContent({ locale, dictionary }: HeaderProps) {
         </div>
       </div>
     </header>
-  );
-}
-
-function HeaderIconLink({
-  href,
-  locale,
-  label,
-  active,
-  badge,
-  query,
-  highlighted = false,
-  children,
-}: {
-  href: string;
-  locale: Locale;
-  label: string;
-  active: boolean;
-  badge?: number;
-  query?: Record<string, string>;
-  highlighted?: boolean;
-  children: ReactNode;
-}) {
-  const localizedHref = localizePath(href, locale);
-  const resolvedHref =
-    query && Object.keys(query).length
-      ? `${localizedHref}?${new URLSearchParams(query).toString()}`
-      : localizedHref;
-
-  return (
-    <Link
-      href={resolvedHref}
-      aria-label={label}
-      aria-current={active ? "page" : undefined}
-      className={cn(
-        "relative grid size-10 place-items-center border border-white/15 bg-white/[0.04] text-zinc-300 transition hover:border-red-400/45 hover:bg-red-500/10 hover:text-red-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/30 [&_svg]:size-4",
-        active &&
-          "border-red-400/55 bg-red-500/14 text-red-100 shadow-[0_0_18px_rgba(255,23,68,0.18)]",
-        highlighted &&
-          "border-lime-300/65 bg-lime-300/14 text-lime-100 shadow-[0_0_28px_rgba(190,242,100,0.28)]",
-      )}
-    >
-      {children}
-      {badge ? (
-        <span
-          className={cn(
-            "absolute -right-1.5 -top-1.5 grid min-w-5 place-items-center rounded-full border border-lime-300/35 bg-lime-300/90 px-1 text-[10px] font-bold leading-5 text-black shadow-[0_0_18px_rgba(190,242,100,0.3)]",
-            highlighted && "animate-bounce",
-          )}
-        >
-          <span key={badge} className={cn("transition duration-300", highlighted && "scale-110")}>
-            {badge > 99 ? "99+" : badge}
-          </span>
-        </span>
-      ) : null}
-    </Link>
   );
 }

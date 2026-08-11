@@ -34,9 +34,9 @@ export async function BlogPage({ locale, dictionary }: BlogPageProps) {
   const posts = await getBlogPosts();
 
   return (
-    <main className="page-shell relative overflow-hidden bg-black px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative overflow-hidden bg-surface px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
-      <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_20%_18%,rgba(255,23,68,0.2),transparent_30%),radial-gradient(circle_at_80%_16%,rgba(34,211,238,0.12),transparent_28%),linear-gradient(180deg,#050507,#000)]" />
+      <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_20%_18%,rgba(255,23,68,0.2),transparent_30%),radial-gradient(circle_at_80%_16%,rgba(34,211,238,0.12),transparent_28%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),1),rgba(var(--theme-surface-rgb),1))]" />
       <div className="cyber-grid absolute inset-0 -z-10 opacity-60" />
 
       <section className="mx-auto w-full max-w-7xl">
@@ -65,7 +65,7 @@ export async function BlogPage({ locale, dictionary }: BlogPageProps) {
                     sizes="(min-width: 1280px) 33vw, (min-width: 768px) 50vw, 100vw"
                     className="h-full w-full object-cover transition duration-500 group-hover:scale-105"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/55 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-surface/55 to-transparent" />
                 </div>
                 <CyberCardContent className="flex flex-1 flex-col p-6">
                   <h2 className="font-display text-2xl font-normal leading-tight text-red-100">

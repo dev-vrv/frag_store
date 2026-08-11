@@ -1,6 +1,13 @@
 "use client";
 
-import { Mail, MapPin, Phone, Timer } from "lucide-react";
+import {
+  ArrowUpRight,
+  Mail,
+  MapPin,
+  Phone,
+  RadioTower,
+  Timer,
+} from "lucide-react";
 
 import { ContactSocialButtons } from "@/components/Contacts/ContactSocialButtons";
 import { useContactInfo } from "@/components/Contacts/ContactProvider";
@@ -29,104 +36,171 @@ function getExtraContacts(extraContacts: Record<string, string> | null | undefin
   return Object.entries(extraContacts).filter(([, value]) => Boolean(value));
 }
 
+const socialKeys = [
+  "whatsapp",
+  "telegram",
+  "instagram",
+  "facebook",
+  "youtube",
+  "tiktok",
+  "x",
+] as const;
+
 export function ContactInfoCard({
   locale,
   dictionary,
   className,
-  contentClassName = "space-y-5 p-4 sm:p-5 lg:p-6",
+  contentClassName = "flex h-full flex-col p-4 sm:p-6 lg:p-7",
 }: ContactInfoCardProps) {
   const contactInfo = useContactInfo(locale);
   const extraContacts = getExtraContacts(contactInfo?.extra_contacts);
+  const hasSocialLinks = socialKeys.some((key) => Boolean(contactInfo?.[key]));
+  const phoneHref = contactInfo?.phone ? getPhoneHref(contactInfo.phone) : undefined;
 
   return (
     <ContactPanel className={className} contentClassName={contentClassName}>
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
-        <h2 className="font-display text-[1.7rem] uppercase text-red-100 sm:text-3xl">
-          {dictionary.title}
-        </h2>
-        {contactInfo?.working_hours ? (
-          <div className="flex items-center gap-2 rounded-md border border-fuchsia-300/20 bg-white/[0.04] px-3 py-2 text-xs text-zinc-300 sm:text-sm">
-            <Timer className="size-4 text-fuchsia-200" aria-hidden="true" />
-            <span>{contactInfo.working_hours}</span>
-          </div>
-        ) : null}
+      <div className="contact-tone-divider border-b pb-5 sm:pb-6">
+        <div className="flex items-center justify-between gap-4">
+          <p className="contact-label-cyan flex items-center gap-2 font-tech text-[10px] uppercase tracking-[0.18em]">
+            <span className="h-px w-7 bg-[var(--contact-label-cyan)]" aria-hidden="true" />
+            {dictionary.eyebrow}
+          </p>
+          <span className="contact-label-green inline-flex items-center gap-2 font-tech text-[9px] uppercase tracking-[0.16em]">
+            <span
+              className="size-1.5 bg-[var(--contact-label-green)] motion-safe:animate-pulse"
+              aria-hidden="true"
+            />
+            {dictionary.statusLabel}
+          </span>
+        </div>
+        <div className="mt-3 flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <h2 className="contact-tone-heading font-display text-[1.7rem] uppercase leading-tight tracking-[0.025em] sm:text-3xl">
+            {dictionary.title}
+          </h2>
+          {contactInfo?.working_hours ? (
+            <div className="contact-tone-surface flex w-fit items-center gap-2 border px-3 py-2 font-tech text-[10px] uppercase tracking-[0.1em]">
+              <Timer className="size-3.5" aria-hidden="true" />
+              <span>{contactInfo.working_hours}</span>
+            </div>
+          ) : null}
+        </div>
       </div>
 
       {contactInfo ? (
-        <div className="grid gap-3 sm:grid-cols-2">
+        <div className="mt-5 grid gap-3 sm:mt-6 sm:grid-cols-2">
           {contactInfo.phone ? (
             <a
-              className="flex min-h-14 items-center gap-3 rounded-md border border-lime-300/20 bg-black/30 p-3 text-sm text-zinc-200 transition hover:border-lime-300/55 sm:min-h-16 sm:text-base"
-              href={getPhoneHref(contactInfo.phone)}
+              className="contact-tone-surface contact-interactive-surface group relative flex min-h-20 items-center gap-3 overflow-hidden border p-3.5 transition-[border-color,background-color,transform,box-shadow] duration-300 hover:-translate-y-0.5 motion-reduce:hover:transform-none"
+              href={phoneHref}
             >
-              <Phone className="size-5 text-lime-200" aria-hidden="true" />
-              <span className="min-w-0 break-words">
-                {contactInfo.phone || dictionary.fallbackPhone}
+              <span className="contact-tone-icon grid size-10 shrink-0 place-items-center border">
+                <Phone className="size-4.5" aria-hidden="true" />
               </span>
+              <span className="min-w-0">
+                <span className="contact-tone-muted block font-tech text-[9px] uppercase tracking-[0.16em]">
+                  {dictionary.phoneLabel}
+                </span>
+                <span className="contact-tone-heading mt-1 block break-words text-sm sm:text-base">
+                  {contactInfo.phone || dictionary.fallbackPhone}
+                </span>
+              </span>
+              <ArrowUpRight className="contact-tone-muted absolute right-3 top-3 size-3.5 transition" aria-hidden="true" />
             </a>
           ) : null}
           {contactInfo.email ? (
             <a
-              className="flex min-h-14 items-center gap-3 rounded-md border border-cyan-300/20 bg-black/30 p-3 text-sm text-zinc-200 transition hover:border-cyan-300/55 sm:min-h-16 sm:text-base"
+              className="contact-tone-surface contact-interactive-surface group relative flex min-h-20 items-center gap-3 overflow-hidden border p-3.5 transition-[border-color,background-color,transform,box-shadow] duration-300 hover:-translate-y-0.5 motion-reduce:hover:transform-none"
               href={`mailto:${contactInfo.email}`}
             >
-              <Mail className="size-5 text-cyan-200" aria-hidden="true" />
-              <span className="min-w-0 break-words">
-                {contactInfo.email || dictionary.fallbackEmail}
+              <span className="contact-tone-icon grid size-10 shrink-0 place-items-center border">
+                <Mail className="size-4.5" aria-hidden="true" />
               </span>
+              <span className="min-w-0">
+                <span className="contact-tone-muted block font-tech text-[9px] uppercase tracking-[0.16em]">
+                  {dictionary.emailLabel}
+                </span>
+                <span className="contact-tone-heading mt-1 block break-all text-sm sm:text-base">
+                  {contactInfo.email || dictionary.fallbackEmail}
+                </span>
+              </span>
+              <ArrowUpRight className="contact-tone-muted absolute right-3 top-3 size-3.5 transition" aria-hidden="true" />
             </a>
           ) : null}
           {contactInfo.address ? (
-            <div className="flex min-h-14 items-center gap-3 rounded-md border border-red-300/20 bg-black/30 p-3 text-sm text-zinc-200 sm:col-span-2 sm:min-h-16 sm:text-base">
-              <MapPin className="size-5 text-red-200" aria-hidden="true" />
-              <span className="min-w-0 break-words">{contactInfo.address}</span>
+            <div className="contact-tone-surface flex min-h-20 items-center gap-3 border p-3.5 sm:col-span-2">
+              <span className="contact-tone-icon grid size-10 shrink-0 place-items-center border">
+                <MapPin className="size-4.5" aria-hidden="true" />
+              </span>
+              <span className="min-w-0">
+                <span className="contact-tone-muted block font-tech text-[9px] uppercase tracking-[0.16em]">
+                  {dictionary.addressLabel}
+                </span>
+                <span className="contact-tone-heading mt-1 block break-words text-sm leading-6 sm:text-base">
+                  {contactInfo.address}
+                </span>
+              </span>
             </div>
           ) : null}
         </div>
       ) : (
-        <p className="text-zinc-400">{dictionary.empty}</p>
+        <div className="contact-tone-surface relative mt-5 overflow-hidden border p-4 sm:mt-6 sm:p-5">
+          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(rgba(var(--theme-contrast-rgb),0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--theme-contrast-rgb),0.025)_1px,transparent_1px)] bg-[size:20px_20px]" />
+          <div className="relative flex items-start gap-4">
+            <span className="contact-tone-icon grid size-11 shrink-0 place-items-center border">
+              <RadioTower className="size-5" aria-hidden="true" />
+            </span>
+            <div>
+              <p className="contact-tone-heading font-tech text-[10px] uppercase tracking-[0.14em]">
+                {dictionary.emptyTitle}
+              </p>
+              <p className="contact-tone-muted mt-2 text-sm leading-6">{dictionary.empty}</p>
+            </div>
+          </div>
+        </div>
       )}
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_auto]">
-        <div className="space-y-3">
-          <h3 className="font-tech text-sm uppercase text-zinc-400">
+      <div className="contact-tone-divider mt-6 border-t pt-5 sm:mt-7 sm:pt-6">
+        <div>
+          <h3 className="contact-tone-muted font-tech text-[10px] uppercase tracking-[0.18em]">
             {dictionary.helpTitle}
           </h3>
-          <ul className="grid gap-2 lg:grid-cols-2">
-            {dictionary.helpItems.map((item) => (
+          <ul className="mt-3 grid gap-2 sm:grid-cols-2">
+            {dictionary.helpItems.map((item, index) => (
               <li
                 key={item}
-                className="rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-sm text-zinc-300"
+                className="contact-tone-surface group grid min-h-15 grid-cols-[2rem_1fr] items-center gap-3 border px-3 py-2.5 text-sm leading-5 transition-colors"
               >
-                {item}
+                <span className="contact-tone-muted font-tech text-[9px] tracking-[0.16em]" aria-hidden="true">
+                  0{index + 1}
+                </span>
+                <span>{item}</span>
               </li>
             ))}
           </ul>
         </div>
 
-        <div className="space-y-3 lg:min-w-52">
-          <h3 className="font-tech text-sm uppercase text-zinc-400">
-            {dictionary.directTitle}
-          </h3>
-          <ContactSocialButtons
-            locale={locale}
-            linkClassName="hover:border-lime-300/60 hover:text-lime-200"
-          />
-        </div>
+        {hasSocialLinks ? (
+          <div className="contact-tone-divider mt-5 flex flex-col gap-3 border-t pt-5 sm:flex-row sm:items-center sm:justify-between">
+            <h3 className="contact-tone-muted font-tech text-[10px] uppercase tracking-[0.18em]">
+              {dictionary.directTitle}
+            </h3>
+            <ContactSocialButtons locale={locale} tone="contact" />
+          </div>
+        ) : null}
       </div>
 
       {extraContacts.length ? (
-        <div className="space-y-3">
-          <h3 className="font-tech text-sm uppercase text-zinc-400">
+        <div className="contact-tone-divider mt-6 border-t pt-5">
+          <h3 className="contact-tone-muted font-tech text-[10px] uppercase tracking-[0.18em]">
             {dictionary.extraTitle}
           </h3>
-          <dl className="grid gap-3 sm:grid-cols-2">
+          <dl className="mt-3 grid gap-3 sm:grid-cols-2">
             {extraContacts.map(([label, value]) => (
-              <div key={label} className="rounded-md border border-white/10 bg-white/5 p-4">
-                <dt className="font-tech text-xs uppercase text-zinc-500">
+              <div key={label} className="contact-tone-surface border p-4">
+                <dt className="contact-tone-muted font-tech text-[9px] uppercase tracking-[0.16em]">
                   {label}
                 </dt>
-                <dd className="mt-1 text-zinc-200">{value}</dd>
+                <dd className="contact-tone-heading mt-2 break-words text-sm">{value}</dd>
               </div>
             ))}
           </dl>

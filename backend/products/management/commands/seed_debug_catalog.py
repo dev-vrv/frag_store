@@ -95,12 +95,24 @@ CATEGORY_SEEDS: tuple[CategorySeed, ...] = (
         price_range=(14500, 38000),
     ),
     CategorySeed(
+        slug="gaming-chairs",
+        name="Игровые кресла",
+        description="Эргономичные кресла с регулируемой посадкой для долгих игровых сессий.",
+        device_type=ProductCategory.DeviceType.CHAIR,
+        sort_order=60,
+        keywords=("Ergo", "Throne", "Racer", "Comfort", "Elite"),
+        colors=("Black", "White", "Crimson", "Graphite"),
+        features=("Adjustable lumbar support", "4D armrests", "Recline mechanism"),
+        specs=(("Upholstery", "Fabric", ""), ("Max load", "150", "kg"), ("Recline", "165", "degrees")),
+        price_range=(12500, 42000),
+    ),
+    CategorySeed(
         slug="accessories",
         name="Аксессуары",
-        description="Хабы, держатели, стойки и полезные элементы для аккуратного setup.",
+        description="Веб-камеры, хабы, держатели, стойки и полезные элементы для аккуратного setup.",
         device_type=ProductCategory.DeviceType.ACCESSORY,
-        sort_order=60,
-        keywords=("Dock", "Hub", "Stand", "Arm", "Wire"),
+        sort_order=70,
+        keywords=("Dock", "Hub", "Stand", "Arm", "Webcam", "Wire"),
         colors=("Black", "White", "Silver"),
         features=("Desk-ready", "Cable routing", "Compact build"),
         specs=(("Material", "Aluminum", ""), ("Ports", "4", ""), ("Mount", "Desk", "")),
@@ -202,12 +214,13 @@ class Command(BaseCommand):
     ) -> list[Product]:
         products: list[Product] = []
         seed_map = {seed.slug: seed for seed in CATEGORY_SEEDS}
-        per_category = PRODUCT_TARGET // len(CATEGORY_SEEDS)
+        per_category, remainder = divmod(PRODUCT_TARGET, len(CATEGORY_SEEDS))
 
         for category_index, seed in enumerate(CATEGORY_SEEDS):
             category = categories[seed.slug]
-            for index in range(per_category):
-                global_index = category_index * per_category + index + 1
+            category_product_count = per_category + int(category_index < remainder)
+            for index in range(category_product_count):
+                global_index = len(products) + 1
                 brand = brands[(global_index + category_index) % len(brands)]
                 keyword = seed.keywords[index % len(seed.keywords)]
                 color = seed.colors[index % len(seed.colors)]
@@ -426,6 +439,7 @@ class Command(BaseCommand):
             ProductCategory.DeviceType.HEADSET: ('Over-ear closed-back', 'Over-ear wireless', 'Lightweight frame'),
             ProductCategory.DeviceType.MOUSEPAD: ('Desk mat', 'Extended', 'Tournament pad'),
             ProductCategory.DeviceType.MONITOR: ('Flat panel', '27-inch', 'Esports display'),
+            ProductCategory.DeviceType.CHAIR: ('High-back chair', 'Ergonomic chair', 'Racing chair'),
             ProductCategory.DeviceType.ACCESSORY: ('Desk accessory', 'Compact hub', 'Clamp mount'),
         }
         return rng.choice(mapping.get(device_type, ('Universal',)))
@@ -437,6 +451,7 @@ class Command(BaseCommand):
             ProductCategory.DeviceType.HEADSET: ('2.4G + Bluetooth', 'USB + 3.5 mm', 'USB-C wireless'),
             ProductCategory.DeviceType.MOUSEPAD: ('Passive',),
             ProductCategory.DeviceType.MONITOR: ('DisplayPort 1.4 + HDMI 2.1', 'DisplayPort + HDMI'),
+            ProductCategory.DeviceType.CHAIR: ('Not applicable',),
             ProductCategory.DeviceType.ACCESSORY: ('USB-C', 'USB-A / USB-C', '3.5 mm'),
         }
         return rng.choice(mapping.get(device_type, ('Universal',)))
@@ -473,6 +488,8 @@ class Command(BaseCommand):
             return rng.randint(320, 780)
         if slug == "monitors":
             return rng.randint(3800, 6900)
+        if slug == "gaming-chairs":
+            return rng.randint(15000, 26000)
         if slug == "accessories":
             return rng.randint(90, 620)
         return None

@@ -20,11 +20,11 @@ const cyberCardVariants = cva(
         glowing:
           "border-red-300/30 bg-zinc-950/85 shadow-[0_0_36px_rgba(248,113,113,0.14)] hover:shadow-[0_0_46px_rgba(248,113,113,0.22)]",
         bordered:
-          "border-violet-300/30 bg-zinc-950/80 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03)]",
+          "border-violet-300/30 bg-zinc-950/80 shadow-[inset_0_0_0_1px_rgba(var(--theme-contrast-rgb),0.03)]",
         glass:
           "border-white/12 bg-white/[0.065] shadow-2xl shadow-black/30 backdrop-blur-xl",
         product:
-          "border-red-300/16 bg-[radial-gradient(circle_at_top_left,rgba(255,94,77,0.16),transparent_28%),radial-gradient(circle_at_top_right,rgba(251,146,60,0.12),transparent_24%),linear-gradient(180deg,rgba(18,9,11,0.98),rgba(8,5,6,0.99))] shadow-2xl shadow-black/40 hover:shadow-[0_0_44px_rgba(255,94,77,0.14)]",
+          "border-red-300/16 bg-surface shadow-2xl shadow-black/40 before:bg-none before:opacity-0 after:bg-none after:opacity-0 hover:shadow-[0_0_44px_rgba(255,94,77,0.14)]",
       },
       hover: {
         true: "hover:-translate-y-1",

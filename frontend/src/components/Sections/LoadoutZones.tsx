@@ -103,7 +103,7 @@ const loadoutDetails: Record<
         "Гарнитура отвечает не только за звук, но и за позиционирование шагов, чистоту связи и комфорт в долгих сессиях. Для соревновательной игры важны сцена, микрофон и точная передача верхних и средних частот.",
       accent: "text-red-100",
       shell:
-        "border-red-300/24 bg-[radial-gradient(circle_at_16%_18%,rgba(255,23,68,0.18),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(34,211,238,0.12),transparent_24%),linear-gradient(180deg,rgba(10,8,12,0.98),rgba(5,5,8,0.98))]",
+        "border-red-300/24 bg-[radial-gradient(circle_at_16%_18%,rgba(255,23,68,0.18),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(34,211,238,0.12),transparent_24%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.98),rgba(var(--theme-surface-rgb),0.98))]",
       glow: "bg-[linear-gradient(135deg,rgba(255,23,68,0.12),transparent_42%,rgba(34,211,238,0.08))]",
       statTone: "text-red-100",
       statSurface: "border-red-300/24 bg-red-500/10",
@@ -132,7 +132,7 @@ const loadoutDetails: Record<
         "Современные клавиатуры важны не только по ощущениям, но и по скорости срабатывания, типу свитчей и гибкости кастомизации. Хорошая board влияет на темп игры и уверенность в каждом нажатии.",
       accent: "text-fuchsia-100",
       shell:
-        "border-fuchsia-300/24 bg-[radial-gradient(circle_at_14%_20%,rgba(217,70,239,0.16),transparent_30%),radial-gradient(circle_at_84%_14%,rgba(96,165,250,0.10),transparent_22%),linear-gradient(180deg,rgba(10,7,14,0.98),rgba(5,5,8,0.98))]",
+        "border-fuchsia-300/24 bg-[radial-gradient(circle_at_14%_20%,rgba(217,70,239,0.16),transparent_30%),radial-gradient(circle_at_84%_14%,rgba(96,165,250,0.10),transparent_22%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.98),rgba(var(--theme-surface-rgb),0.98))]",
       glow: "bg-[linear-gradient(135deg,rgba(217,70,239,0.12),transparent_42%,rgba(96,165,250,0.08))]",
       statTone: "text-fuchsia-100",
       statSurface: "border-fuchsia-300/24 bg-fuchsia-500/10",
@@ -161,7 +161,7 @@ const loadoutDetails: Record<
         "Для мыши критичны форма, вес, сенсор и стабильность клика. Под разные хваты и жанры подбираются разные корпуса, чтобы контроль и скорость реально ощущались в матче.",
       accent: "text-cyan-100",
       shell:
-        "border-cyan-300/24 bg-[radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.16),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(14,165,233,0.12),transparent_22%),linear-gradient(180deg,rgba(5,10,16,0.98),rgba(3,6,10,0.98))]",
+        "border-cyan-300/24 bg-[radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.16),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(14,165,233,0.12),transparent_22%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.98),rgba(var(--theme-surface-rgb),0.98))]",
       glow: "bg-[linear-gradient(135deg,rgba(34,211,238,0.12),transparent_42%,rgba(96,165,250,0.08))]",
       statTone: "text-cyan-100",
       statSurface: "border-cyan-300/24 bg-cyan-500/10",
@@ -190,7 +190,7 @@ const loadoutDetails: Record<
         "Аксессуары собирают стол в единый рабочий контур: коврики, хабы, стойки и кабель-менеджмент влияют на удобство, чистоту сетапа и стабильность повседневного использования.",
       accent: "text-lime-100",
       shell:
-        "border-lime-300/24 bg-[radial-gradient(circle_at_18%_18%,rgba(163,230,53,0.14),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(34,211,238,0.10),transparent_22%),linear-gradient(180deg,rgba(8,12,8,0.98),rgba(4,7,6,0.98))]",
+        "border-lime-300/24 bg-[radial-gradient(circle_at_18%_18%,rgba(163,230,53,0.14),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(34,211,238,0.10),transparent_22%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.98),rgba(var(--theme-surface-rgb),0.98))]",
       glow: "bg-[linear-gradient(135deg,rgba(163,230,53,0.12),transparent_42%,rgba(34,211,238,0.08))]",
       statTone: "text-lime-100",
       statSurface: "border-lime-300/24 bg-lime-500/10",
@@ -221,7 +221,7 @@ const loadoutDetails: Record<
         "A headset shapes positional awareness, call clarity, and long-session comfort. Competitive play depends on staging, mic quality, and consistent reproduction across highs and mids.",
       accent: "text-red-100",
       shell:
-        "border-red-300/24 bg-[radial-gradient(circle_at_16%_18%,rgba(255,23,68,0.18),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(34,211,238,0.12),transparent_24%),linear-gradient(180deg,rgba(10,8,12,0.98),rgba(5,5,8,0.98))]",
+        "border-red-300/24 bg-[radial-gradient(circle_at_16%_18%,rgba(255,23,68,0.18),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(34,211,238,0.12),transparent_24%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.98),rgba(var(--theme-surface-rgb),0.98))]",
       glow: "bg-[linear-gradient(135deg,rgba(255,23,68,0.12),transparent_42%,rgba(34,211,238,0.08))]",
       statTone: "text-red-100",
       statSurface: "border-red-300/24 bg-red-500/10",
@@ -250,7 +250,7 @@ const loadoutDetails: Record<
         "Modern keyboards matter for more than feel. Switch behavior, actuation speed, and customization depth directly affect pace, consistency, and confidence in game.",
       accent: "text-fuchsia-100",
       shell:
-        "border-fuchsia-300/24 bg-[radial-gradient(circle_at_14%_20%,rgba(217,70,239,0.16),transparent_30%),radial-gradient(circle_at_84%_14%,rgba(96,165,250,0.10),transparent_22%),linear-gradient(180deg,rgba(10,7,14,0.98),rgba(5,5,8,0.98))]",
+        "border-fuchsia-300/24 bg-[radial-gradient(circle_at_14%_20%,rgba(217,70,239,0.16),transparent_30%),radial-gradient(circle_at_84%_14%,rgba(96,165,250,0.10),transparent_22%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.98),rgba(var(--theme-surface-rgb),0.98))]",
       glow: "bg-[linear-gradient(135deg,rgba(217,70,239,0.12),transparent_42%,rgba(96,165,250,0.08))]",
       statTone: "text-fuchsia-100",
       statSurface: "border-fuchsia-300/24 bg-fuchsia-500/10",
@@ -279,7 +279,7 @@ const loadoutDetails: Record<
         "For a mouse, shape, weight, sensor quality, and click stability are decisive. Different grips and genres need different shells to maximize control and speed.",
       accent: "text-cyan-100",
       shell:
-        "border-cyan-300/24 bg-[radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.16),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(14,165,233,0.12),transparent_22%),linear-gradient(180deg,rgba(5,10,16,0.98),rgba(3,6,10,0.98))]",
+        "border-cyan-300/24 bg-[radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.16),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(14,165,233,0.12),transparent_22%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.98),rgba(var(--theme-surface-rgb),0.98))]",
       glow: "bg-[linear-gradient(135deg,rgba(34,211,238,0.12),transparent_42%,rgba(96,165,250,0.08))]",
       statTone: "text-cyan-100",
       statSurface: "border-cyan-300/24 bg-cyan-500/10",
@@ -308,7 +308,7 @@ const loadoutDetails: Record<
         "Accessories turn a desk into a coherent work and play environment. Pads, hubs, stands, and cable routing affect comfort, cleanliness, and daily reliability.",
       accent: "text-lime-100",
       shell:
-        "border-lime-300/24 bg-[radial-gradient(circle_at_18%_18%,rgba(163,230,53,0.14),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(34,211,238,0.10),transparent_22%),linear-gradient(180deg,rgba(8,12,8,0.98),rgba(4,7,6,0.98))]",
+        "border-lime-300/24 bg-[radial-gradient(circle_at_18%_18%,rgba(163,230,53,0.14),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(34,211,238,0.10),transparent_22%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.98),rgba(var(--theme-surface-rgb),0.98))]",
       glow: "bg-[linear-gradient(135deg,rgba(163,230,53,0.12),transparent_42%,rgba(34,211,238,0.08))]",
       statTone: "text-lime-100",
       statSurface: "border-lime-300/24 bg-lime-500/10",
@@ -339,7 +339,7 @@ const loadoutDetails: Record<
         "Гарнитура үндөн тышкары позицияны угууга, таза байланышка жана узак сессиядагы комфортко таасир берет. Сахнасы, микрофону жана деталдары маанилүү.",
       accent: "text-red-100",
       shell:
-        "border-red-300/24 bg-[radial-gradient(circle_at_16%_18%,rgba(255,23,68,0.18),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(34,211,238,0.12),transparent_24%),linear-gradient(180deg,rgba(10,8,12,0.98),rgba(5,5,8,0.98))]",
+        "border-red-300/24 bg-[radial-gradient(circle_at_16%_18%,rgba(255,23,68,0.18),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(34,211,238,0.12),transparent_24%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.98),rgba(var(--theme-surface-rgb),0.98))]",
       glow: "bg-[linear-gradient(135deg,rgba(255,23,68,0.12),transparent_42%,rgba(34,211,238,0.08))]",
       statTone: "text-red-100",
       statSurface: "border-red-300/24 bg-red-500/10",
@@ -368,7 +368,7 @@ const loadoutDetails: Record<
         "Клавиатура сезим гана эмес, басуу ылдамдыгы, свитч мүнөзү жана настройка мүмкүнчүлүгү менен да маанилүү. Бул оюн темпине түз таасир этет.",
       accent: "text-fuchsia-100",
       shell:
-        "border-fuchsia-300/24 bg-[radial-gradient(circle_at_14%_20%,rgba(217,70,239,0.16),transparent_30%),radial-gradient(circle_at_84%_14%,rgba(96,165,250,0.10),transparent_22%),linear-gradient(180deg,rgba(10,7,14,0.98),rgba(5,5,8,0.98))]",
+        "border-fuchsia-300/24 bg-[radial-gradient(circle_at_14%_20%,rgba(217,70,239,0.16),transparent_30%),radial-gradient(circle_at_84%_14%,rgba(96,165,250,0.10),transparent_22%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.98),rgba(var(--theme-surface-rgb),0.98))]",
       glow: "bg-[linear-gradient(135deg,rgba(217,70,239,0.12),transparent_42%,rgba(96,165,250,0.08))]",
       statTone: "text-fuchsia-100",
       statSurface: "border-fuchsia-300/24 bg-fuchsia-500/10",
@@ -397,7 +397,7 @@ const loadoutDetails: Record<
         "Чычкан үчүн форма, салмак, сенсор жана клик туруктуулугу чечүүчү мааниге ээ. Ар башка жанр жана хват үчүн өзүнүн мыкты формасы бар.",
       accent: "text-cyan-100",
       shell:
-        "border-cyan-300/24 bg-[radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.16),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(14,165,233,0.12),transparent_22%),linear-gradient(180deg,rgba(5,10,16,0.98),rgba(3,6,10,0.98))]",
+        "border-cyan-300/24 bg-[radial-gradient(circle_at_18%_18%,rgba(34,211,238,0.16),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(14,165,233,0.12),transparent_22%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.98),rgba(var(--theme-surface-rgb),0.98))]",
       glow: "bg-[linear-gradient(135deg,rgba(34,211,238,0.12),transparent_42%,rgba(96,165,250,0.08))]",
       statTone: "text-cyan-100",
       statSurface: "border-cyan-300/24 bg-cyan-500/10",
@@ -426,7 +426,7 @@ const loadoutDetails: Record<
         "Аксессуарлар столду бирдиктүү аймакка айландырат: коврик, хаб, кармагыч жана кабель-менеджмент комфортту жана тартипти жакшыртат.",
       accent: "text-lime-100",
       shell:
-        "border-lime-300/24 bg-[radial-gradient(circle_at_18%_18%,rgba(163,230,53,0.14),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(34,211,238,0.10),transparent_22%),linear-gradient(180deg,rgba(8,12,8,0.98),rgba(4,7,6,0.98))]",
+        "border-lime-300/24 bg-[radial-gradient(circle_at_18%_18%,rgba(163,230,53,0.14),transparent_28%),radial-gradient(circle_at_82%_14%,rgba(34,211,238,0.10),transparent_22%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.98),rgba(var(--theme-surface-rgb),0.98))]",
       glow: "bg-[linear-gradient(135deg,rgba(163,230,53,0.12),transparent_42%,rgba(34,211,238,0.08))]",
       statTone: "text-lime-100",
       statSurface: "border-lime-300/24 bg-lime-500/10",
@@ -529,7 +529,7 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
       fullWidth
       className="relative isolate overflow-hidden bg-transparent text-zinc-50"
     >
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(84%_48%_at_-10%_22%,rgba(255,23,68,0.08),transparent_62%),radial-gradient(90%_52%_at_110%_18%,rgba(34,211,238,0.08),transparent_62%),radial-gradient(68%_38%_at_48%_110%,rgba(217,70,239,0.04),transparent_64%),linear-gradient(180deg,rgba(1,1,3,0.02)_0%,rgba(2,2,4,0.15)_20%,rgba(2,2,4,0.15)_80%,rgba(1,1,3,0.03)_100%)]" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(84%_48%_at_-10%_22%,rgba(255,23,68,0.08),transparent_62%),radial-gradient(90%_52%_at_110%_18%,rgba(34,211,238,0.08),transparent_62%),radial-gradient(68%_38%_at_48%_110%,rgba(217,70,239,0.04),transparent_64%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.02)_0%,rgba(var(--theme-surface-rgb),0.15)_20%,rgba(var(--theme-surface-rgb),0.15)_80%,rgba(var(--theme-surface-rgb),0.03)_100%)]" />
       <style jsx>{`
         @keyframes loadout-modal-enter {
           from {
@@ -585,10 +585,10 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
                 delay={620 + index * 120}
                 className="group/loadout-card relative z-0 h-full transition-[z-index] duration-0 hover:z-10 focus-within:z-10"
               >
-                <div className="relative isolate h-full translate-y-0 overflow-hidden rounded-none border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.025))] p-5 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02),0_24px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl transition-[transform,border-color,box-shadow,background-color] duration-500 ease-out will-change-transform transform-gpu group-hover/loadout-card:-translate-y-[3px] group-hover/loadout-card:border-white/14 group-hover/loadout-card:shadow-[inset_0_0_0_1px_rgba(255,255,255,0.03),0_30px_70px_rgba(0,0,0,0.28)] sm:p-6">
+                <div className="relative isolate h-full translate-y-0 overflow-hidden rounded-none border border-white/10 bg-[linear-gradient(180deg,rgba(var(--theme-contrast-rgb),0.06),rgba(var(--theme-contrast-rgb),0.025))] p-5 shadow-[inset_0_0_0_1px_rgba(var(--theme-contrast-rgb),0.02),0_24px_60px_rgba(0,0,0,0.18)] backdrop-blur-xl transition-[transform,border-color,box-shadow,background-color] duration-500 ease-out will-change-transform transform-gpu group-hover/loadout-card:-translate-y-[3px] group-hover/loadout-card:border-white/14 group-hover/loadout-card:shadow-[inset_0_0_0_1px_rgba(var(--theme-contrast-rgb),0.03),0_30px_70px_rgba(0,0,0,0.28)] sm:p-6">
                   <div className={cn("pointer-events-none absolute inset-0 bg-gradient-to-br opacity-90 transition-opacity duration-500 ease-out group-hover/loadout-card:opacity-100", theme.glow)} />
-                  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(6,6,10,0.08),rgba(6,6,10,0.42)_54%,rgba(6,6,10,0.82))]" />
-                  <div className="pointer-events-none absolute inset-0 opacity-45 [background-image:linear-gradient(rgba(255,255,255,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:24px_24px] transition-opacity duration-500 ease-out group-hover/loadout-card:opacity-70" />
+                  <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.08),rgba(var(--theme-surface-rgb),0.42)_54%,rgba(var(--theme-surface-rgb),0.82))]" />
+                  <div className="pointer-events-none absolute inset-0 opacity-45 [background-image:linear-gradient(rgba(var(--theme-contrast-rgb),0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--theme-contrast-rgb),0.04)_1px,transparent_1px)] [background-size:24px_24px] transition-opacity duration-500 ease-out group-hover/loadout-card:opacity-70" />
                   <div className={cn("pointer-events-none absolute -right-10 top-6 h-32 w-32 translate-x-0 scale-100 rounded-full blur-3xl transition-transform duration-500 ease-out will-change-transform group-hover/loadout-card:translate-x-1 group-hover/loadout-card:scale-105", theme.orb)} />
                   <div className="pointer-events-none absolute -left-6 bottom-10 h-20 w-20 scale-100 rounded-full bg-white/8 opacity-40 blur-2xl transition-transform duration-500 ease-out will-change-transform group-hover/loadout-card:scale-105" />
                   <div className={cn("pointer-events-none absolute inset-x-6 top-0 h-px opacity-70 bg-gradient-to-r from-transparent to-transparent transition-opacity duration-400 ease-out group-hover/loadout-card:opacity-100", theme.line)} />
@@ -599,7 +599,7 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
                     <div className="flex items-center justify-between gap-4">
                       <div className="relative">
                         <div className={cn("pointer-events-none absolute inset-0 rounded-md blur-xl transition-transform duration-500 ease-out group-hover/loadout-card:scale-105", theme.pulse)} />
-                        <div className={cn("relative flex size-12 items-center justify-center rounded-md border bg-black/45 shadow-[0_0_24px_rgba(0,0,0,0.2)] transition-[transform,border-color,box-shadow,background-color] duration-500 ease-out group-hover/loadout-card:scale-[1.02] group-hover/loadout-card:bg-black/52 sm:size-14 sm:rounded-md", theme.ring)}>
+                        <div className={cn("relative flex size-12 items-center justify-center rounded-md border bg-surface/45 shadow-[0_0_24px_rgba(0,0,0,0.2)] transition-[transform,border-color,box-shadow,background-color] duration-500 ease-out group-hover/loadout-card:scale-[1.02] group-hover/loadout-card:bg-surface/52 sm:size-14 sm:rounded-md", theme.ring)}>
                           <Icon className="size-6 transition-transform duration-500 ease-out group-hover/loadout-card:-translate-y-px group-hover/loadout-card:scale-105" />
                         </div>
                       </div>
@@ -635,13 +635,13 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
                       <button
                         type="button"
                         onClick={() => setActiveSlug(categorySlug)}
-                        className="font-tech inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-cyan-300/22 bg-cyan-300/[0.07] px-4 text-[11px] uppercase tracking-[0.16em] text-cyan-100 transition-[transform,border-color,background-color,color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-cyan-200/40 hover:bg-cyan-300/[0.12] hover:text-white hover:shadow-[0_10px_24px_rgba(34,211,238,0.16)]"
+                        className="font-tech inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-cyan-300/22 bg-cyan-300/[0.07] px-4 text-[11px] uppercase tracking-[0.16em] text-cyan-100 transition-[transform,border-color,background-color,color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-cyan-200/40 hover:bg-cyan-300/[0.12] hover:text-white hover:shadow-[0_10px_24px_rgba(34,211,238,0.16)]"
                       >
                         {details.button}
                       </button>
                       <a
                         href={categoryHref}
-                        className="group/loadout-link font-tech inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-white/14 bg-white/[0.05] px-4 text-[11px] uppercase tracking-[0.16em] text-red-100 transition-[transform,border-color,background-color,color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-0.5 hover:border-white/24 hover:bg-white/[0.08] hover:text-white hover:shadow-[0_10px_24px_rgba(255,255,255,0.08)]"
+                        className="group/loadout-link font-tech inline-flex min-h-10 items-center justify-center gap-2 rounded-full border border-white/14 bg-white/[0.05] px-4 text-[11px] uppercase tracking-[0.16em] text-red-100 transition-[transform,border-color,background-color,color,box-shadow] duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:border-white/24 hover:bg-white/[0.08] hover:text-white hover:shadow-[0_10px_24px_rgba(var(--theme-contrast-rgb),0.08)]"
                         aria-label={`${card.title}: ${content.categoryAriaLabel}`}
                       >
                         {content.categoryCta}
@@ -664,7 +664,7 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
           {activeDetails ? (
             <div className="relative">
               <div className={cn("absolute inset-0 opacity-90", activeDetails.glow)} />
-              <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] bg-[size:26px_26px] opacity-20" />
+              <div className="absolute inset-0 bg-[linear-gradient(rgba(var(--theme-contrast-rgb),0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--theme-contrast-rgb),0.04)_1px,transparent_1px)] bg-[size:26px_26px] opacity-20" />
 
               <div
                 key={activeSlug}
@@ -715,7 +715,7 @@ export function LoadoutZones({ locale, content, categories }: LoadoutZonesProps)
                 </div>
 
                 <div className="grid gap-4 lg:grid-cols-[1.2fr_0.8fr]">
-                  <div className="rounded-md border border-white/10 bg-black/25 p-5 backdrop-blur">
+                  <div className="rounded-md border border-white/10 bg-surface/25 p-5 backdrop-blur">
                     <p className={cn("font-tech text-[11px] uppercase tracking-[0.18em]", activeDetails.accent)}>
                       {activeDetails.technologiesLabel}
                     </p>

@@ -18,7 +18,7 @@ export interface MainProps {
 
 export function Main({ locale, dictionary, bestSellerProducts, categories }: MainProps) {
   return (
-    <main className="page-shell relative isolate w-full overflow-x-hidden bg-[#0d0d11]">
+    <main className="page-shell relative isolate w-full overflow-x-hidden bg-[rgba(var(--theme-surface-rgb),1)]">
       <div aria-hidden="true" className="home-shared-backdrop">
         <div className="home-shared-backdrop__base" />
         <div className="cyber-grid home-shared-backdrop__grid" />

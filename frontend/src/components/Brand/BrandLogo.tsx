@@ -16,7 +16,7 @@ export function BrandLogo({
   priority = false,
 }: BrandLogoProps) {
   return (
-    <span className={cn("relative block h-auto w-full", className)}>
+    <span className={cn("brand-logo relative block h-auto w-full", className)}>
       <Image
         src="/images/logo/logo.webp"
         alt={alt}

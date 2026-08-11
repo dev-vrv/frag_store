@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 
 import AiAssistantLauncher from "@/components/Ai/AiAssistantLauncher";
 import { CyberLoader } from "@/components/Loaders/CyberLoader";
@@ -6,6 +7,7 @@ import { CartProvider } from "@/components/Cart/CartProvider";
 import { ContactProvider } from "@/components/Contacts/ContactProvider";
 import BackToTopButton from "@/components/ui/BackToTopButton";
 import { getContactInfos } from "@/lib/contacts";
+import { THEME_BOOTSTRAP_SCRIPT } from "@/lib/theme";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -25,8 +27,19 @@ export default async function RootLayout({
   const contacts = await getContactInfos();
 
   return (
-    <html lang="ru" className="h-full">
+    <html
+      lang="ru"
+      className="h-full"
+      data-theme="dark"
+      data-theme-preference="system"
+      suppressHydrationWarning
+    >
       <body className="relative min-h-full antialiased">
+        <Script
+          id="frag-store-theme"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }}
+        />
         <div className="site-global-backdrop" aria-hidden="true">
           <div className="site-global-backdrop__base" />
           <div className="site-global-backdrop__grid cyber-grid" />

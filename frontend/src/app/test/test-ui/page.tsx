@@ -53,7 +53,7 @@ export default function TestUiPage() {
   const dictionary = getDictionary(defaultLocale);
 
   return (
-    <main className="min-h-screen overflow-hidden bg-black text-zinc-50">
+    <main className="min-h-screen overflow-hidden bg-surface text-zinc-50">
       <Header locale={defaultLocale} dictionary={dictionary.header} />
       <CyberHero
         eyebrow="Debug UI Lab"
@@ -326,7 +326,7 @@ export default function TestUiPage() {
                     ["Refresh", "240 Hz"],
                     ["Signal", "99.98%"],
                   ].map(([label, value]) => (
-                    <div key={label} className="rounded-md border border-white/10 bg-black/35 p-4">
+                    <div key={label} className="rounded-md border border-white/10 bg-surface/35 p-4">
                       <div className="font-mono text-xs uppercase tracking-[0.16em] text-zinc-500">
                         {label}
                       </div>

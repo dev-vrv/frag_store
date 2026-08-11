@@ -288,7 +288,7 @@ export function FaqPage({ locale, dictionary }: FaqPageProps) {
   const page = dictionary.pages.faq;
 
   return (
-    <main className="page-shell relative isolate overflow-hidden bg-black px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative isolate overflow-hidden bg-surface px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
       <ContactCyberBackground />
 
@@ -320,7 +320,7 @@ export function FaqPage({ locale, dictionary }: FaqPageProps) {
                 {section.items.map((item) => (
                   <details
                     key={item.question}
-                    className="group border border-white/10 bg-black/28 p-4 open:border-red-400/30 open:bg-red-500/[0.055]"
+                    className="group border border-white/10 bg-surface/28 p-4 open:border-red-400/30 open:bg-red-500/[0.055]"
                   >
                     <summary className="font-tech flex cursor-pointer list-none items-start justify-between gap-4 text-sm font-semibold uppercase tracking-[0.06em] text-zinc-200 [&::-webkit-details-marker]:hidden">
                       <span>{item.question}</span>

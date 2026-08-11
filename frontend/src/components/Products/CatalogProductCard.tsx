@@ -37,7 +37,7 @@ interface CatalogProductCardProps {
 }
 
 const alreadyInCartClassName =
-  "border-cyan-300/60 bg-[linear-gradient(135deg,rgba(34,211,238,0.18),rgba(34,211,238,0.06))] text-cyan-50 shadow-[0_0_28px_rgba(34,211,238,0.12)] hover:border-cyan-300/60 hover:bg-[linear-gradient(135deg,rgba(34,211,238,0.18),rgba(34,211,238,0.06))] hover:text-cyan-50 disabled:opacity-100";
+  "border-lime-300/45 bg-lime-300/12 text-lime-100 shadow-[0_0_20px_rgba(190,242,100,0.12)] hover:border-lime-300/45 hover:bg-lime-300/12 hover:text-lime-100 hover:shadow-[0_0_20px_rgba(190,242,100,0.12)] disabled:opacity-100";
 
 function getProductMediaSource(media: ProductMedia | null | undefined) {
   return media?.file || media?.external_url || null;
@@ -140,7 +140,7 @@ function ProductVisual({ product }: { product: Product }) {
 
   return (
     <div className="flex h-full items-center justify-center">
-      <div className="grid size-28 place-items-center border border-red-300/25 bg-black/45 text-red-100 shadow-[0_0_46px_rgba(255,23,68,0.18)]">
+      <div className="grid size-28 place-items-center border border-white/14 bg-surface text-zinc-500 shadow-none">
         <ProductTypeIcon deviceType={product.category.device_type} className="size-5" />
       </div>
     </div>

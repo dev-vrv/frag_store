@@ -85,7 +85,7 @@ const sheetActions: Array<[LucideIcon, string]> = [
 
 export default function CyberDemoPage() {
   return (
-    <main className="min-h-screen overflow-hidden bg-black text-zinc-50">
+    <main className="min-h-screen overflow-hidden bg-surface text-zinc-50">
       <CyberHero
         eyebrow="Zone 51 Hardware Drop"
         title="Premium gear for"
@@ -188,7 +188,7 @@ export default function CyberDemoPage() {
                       ["Refresh", "240 Hz"],
                       ["Sync", "99.98%"],
                     ].map(([label, value]) => (
-                      <div key={label} className="rounded-md border border-white/10 bg-black/35 p-4">
+                      <div key={label} className="rounded-md border border-white/10 bg-surface/35 p-4">
                         <div className="font-mono text-xs uppercase tracking-[0.16em] text-zinc-500">
                           {label}
                         </div>
@@ -258,7 +258,7 @@ export default function CyberDemoPage() {
         </div>
       </CyberSection>
 
-      <section className="relative bg-black px-4 py-16 sm:px-6 lg:px-8">
+      <section className="relative bg-surface px-4 py-16 sm:px-6 lg:px-8">
         <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(217,70,239,0.12),transparent_28%),radial-gradient(circle_at_80%_70%,rgba(248,113,113,0.12),transparent_30%)]" />
         <div className="relative mx-auto grid max-w-7xl gap-6 lg:grid-cols-2">
           <CyberCard variant="glass" hover>
@@ -281,7 +281,7 @@ export default function CyberDemoPage() {
                       Confirm the loadout profile before sending it to the assembly queue.
                     </CyberDialogDescription>
                   </CyberDialogHeader>
-                  <div className="rounded-md border border-white/10 bg-black/35 p-4">
+                  <div className="rounded-md border border-white/10 bg-surface/35 p-4">
                     <div className="flex items-center gap-3">
                       <Layers3 className="size-5 text-red-200" />
                       <div>

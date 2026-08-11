@@ -5,6 +5,7 @@ import { Bell, Heart, Menu, ShoppingCart } from "lucide-react";
 import { FaUserAstronaut } from "react-icons/fa";
 
 import { BrandLogo } from "@/components/Brand/BrandLogo";
+import { CyberButton } from "@/components/cyber/cyber-button";
 import {
   Sheet,
   SheetClose,
@@ -57,15 +58,15 @@ export function MobileHeaderMenu({
       <SheetTrigger asChild>
         <button
           type="button"
-          className="grid size-10 place-items-center border border-red-400/35 bg-red-500/10 text-red-100 transition hover:border-red-300/65 hover:bg-red-500/18 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-300/30"
+          className="group relative grid size-10 place-items-center overflow-hidden border border-red-300/45 bg-red-500/10 text-red-100 outline-none [clip-path:polygon(0_0,calc(100%-7px)_0,100%_7px,100%_100%,7px_100%,0_calc(100%-7px))] transition-[transform,background-color,border-color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] before:pointer-events-none before:absolute before:inset-0 before:bg-[linear-gradient(110deg,transparent_20%,rgba(var(--theme-contrast-rgb),0.12)_50%,transparent_80%)] before:opacity-0 before:transition-opacity before:duration-200 after:pointer-events-none after:absolute after:inset-x-2 after:bottom-0 after:h-px after:origin-center after:scale-x-0 after:bg-red-200 after:transition-transform after:duration-200 after:ease-out hover:border-red-200/70 hover:bg-red-500/18 hover:shadow-[0_0_26px_rgba(255,23,68,0.2)] hover:before:opacity-100 hover:after:scale-x-100 active:translate-y-0 active:scale-[0.98] focus-visible:ring-2 focus-visible:ring-red-300/35 motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:before:transition-none motion-reduce:after:transition-none"
           aria-label={dictionary.navAriaLabel}
         >
-          <Menu className="size-5" aria-hidden="true" />
+          <Menu className="relative z-10 size-5" aria-hidden="true" />
         </button>
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="w-[86vw] border-red-500/25 bg-black/92 p-0 shadow-[0_0_44px_rgba(255,23,68,0.18)] backdrop-blur-xl"
+        className="w-[86vw] border-red-500/25 bg-surface/92 p-0 shadow-[0_0_44px_rgba(255,23,68,0.18)] backdrop-blur-xl"
       >
         <div className="flex min-h-full flex-col">
           <SheetHeader className="border-b border-white/10 p-5">
@@ -103,19 +104,24 @@ export function MobileHeaderMenu({
 
           <div className="mt-auto border-t border-white/10 p-5">
             <SheetClose asChild>
-              <Link
-                href={authHref}
+              <CyberButton
+                asChild
+                variant="danger"
+                size="md"
                 className={cn(
-                  "group relative flex min-h-12 items-center justify-center gap-3 overflow-hidden border px-4 text-sm font-semibold uppercase tracking-[0.1em] text-white transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-fuchsia-300/30",
-                  authActive
-                    ? "border-fuchsia-300/45 bg-[linear-gradient(135deg,rgba(34,211,238,0.16),rgba(217,70,239,0.18))] shadow-[0_0_28px_rgba(217,70,239,0.14)]"
-                    : "border-white/12 bg-[linear-gradient(135deg,rgba(255,255,255,0.05),rgba(255,255,255,0.02))] hover:border-fuchsia-300/35 hover:bg-[linear-gradient(135deg,rgba(34,211,238,0.12),rgba(217,70,239,0.14))]",
+                  "w-full border-red-400/55 bg-zinc-950/70 text-sm uppercase tracking-[0.12em] text-zinc-100 shadow-[0_0_18px_rgba(127,29,29,0.14)] backdrop-blur-md hover:border-red-300/75 hover:bg-red-950/75 hover:text-on-accent hover:shadow-[0_0_24px_rgba(185,28,28,0.22)]",
+                  authActive &&
+                    "border-red-300/75 bg-red-950/75 text-white shadow-[0_0_22px_rgba(185,28,28,0.20)]",
                 )}
               >
-                <span className="absolute inset-y-0 left-0 w-px bg-gradient-to-b from-transparent via-cyan-300/80 to-transparent opacity-80 transition-opacity group-hover:opacity-100" />
-                <FaUserAstronaut aria-hidden="true" />
-                <span>{authLabel}</span>
-              </Link>
+                <Link href={authHref} aria-current={authActive ? "page" : undefined}>
+                  <FaUserAstronaut
+                    aria-hidden="true"
+                    className="relative z-10 text-red-300 transition-colors duration-300 group-hover:text-on-accent"
+                  />
+                  <span className="relative z-10">{authLabel}</span>
+                </Link>
+              </CyberButton>
             </SheetClose>
           </div>
         </div>
@@ -153,14 +159,15 @@ function MobileMenuLink({
         href={resolvedHref}
         aria-current={active ? "page" : undefined}
         className={cn(
-          "font-tech relative flex min-h-12 items-center gap-3 border border-white/10 bg-white/[0.035] px-4 text-sm font-semibold uppercase tracking-[0.08em] text-zinc-300 transition hover:border-red-400/35 hover:bg-red-500/10 hover:text-red-100 [&_svg]:size-4",
-          active && "border-red-400/55 bg-red-500/14 text-red-100",
+          "font-tech group relative flex min-h-12 items-center gap-3 overflow-hidden border border-white/10 bg-white/[0.035] px-4 text-sm font-semibold uppercase tracking-[0.08em] text-zinc-300 outline-none [clip-path:polygon(0_0,calc(100%-8px)_0,100%_8px,100%_100%,8px_100%,0_calc(100%-8px))] transition-[clip-path,transform,background-color,border-color,color,box-shadow] duration-300 before:pointer-events-none before:absolute before:inset-y-0 before:-left-1/3 before:w-1/4 before:-translate-x-full before:-skew-x-12 before:bg-gradient-to-r before:from-transparent before:via-white/20 before:to-transparent before:opacity-0 before:transition-[transform,opacity] before:duration-500 after:pointer-events-none after:absolute after:inset-y-2 after:left-0 after:w-px after:origin-center after:scale-y-0 after:bg-red-200 after:transition-transform after:duration-300 hover:border-red-300/45 hover:bg-red-500/10 hover:text-red-100 hover:shadow-[0_0_22px_rgba(255,23,68,0.1)] hover:before:translate-x-[650%] hover:before:opacity-100 hover:after:scale-y-100 focus-visible:ring-2 focus-visible:ring-red-300/30 motion-reduce:transition-none motion-reduce:hover:transform-none [&_svg]:relative [&_svg]:z-10 [&_svg]:size-4",
+          active &&
+            "border-red-300/60 bg-red-500/14 text-red-100 shadow-[inset_3px_0_0_rgba(248,113,113,0.8),0_0_22px_rgba(255,23,68,0.14)]",
         )}
       >
         {icon}
-        <span>{label}</span>
+        <span className="relative z-10">{label}</span>
         {badge ? (
-          <span className="ml-auto grid min-w-5 place-items-center rounded-full border border-lime-300/35 bg-lime-300/90 px-1 text-[10px] font-bold leading-5 text-black shadow-[0_0_18px_rgba(190,242,100,0.3)]">
+          <span className="ml-auto grid min-w-5 place-items-center rounded-full border border-lime-300/35 bg-lime-300/90 px-1 text-[10px] font-bold leading-5 text-on-lime shadow-[0_0_18px_rgba(190,242,100,0.3)]">
             {badge > 99 ? "99+" : badge}
           </span>
         ) : null}

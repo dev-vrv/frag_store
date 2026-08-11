@@ -294,18 +294,18 @@ const defaultCategoryTranslations: Record<
       description: "Стрим жана байланыш үчүн USB жана XLR микрофондору.",
     },
   },
-  webcams: {
+  "gaming-chairs": {
     ru: {
-      name: "Веб-камеры",
-      description: "Камеры для стрима, созвонов и creator-сетапов.",
+      name: "Игровые кресла",
+      description: "Эргономичные кресла с регулируемой поддержкой для долгих игровых сессий.",
     },
     en: {
-      name: "Webcams",
-      description: "Streaming webcams for calls, broadcasts, and creator setups.",
+      name: "Gaming Chairs",
+      description: "Ergonomic gaming chairs with adjustable support for long sessions.",
     },
     kg: {
-      name: "Веб-камералар",
-      description: "Стрим, чалуу жана creator-сетап үчүн веб-камералар.",
+      name: "Оюн креслолору",
+      description: "Узак оюн сессиялары үчүн жөнгө салынуучу таянычы бар эргономикалык креслолор.",
     },
   },
   speakers: {
@@ -325,15 +325,15 @@ const defaultCategoryTranslations: Record<
   accessories: {
     ru: {
       name: "Аксессуары",
-      description: "Хабы, стойки, кабели и полезные desk-аксессуары для сетапа.",
+      description: "Веб-камеры, хабы, стойки, кабели и полезные desk-аксессуары для сетапа.",
     },
     en: {
       name: "Gaming Accessories",
-      description: "Hubs, stands, cables, and useful desk accessories for setups.",
+      description: "Webcams, hubs, stands, cables, and useful desk accessories for setups.",
     },
     kg: {
       name: "Оюн аксессуарлары",
-      description: "Хабдар, кармагычтар, кабелдер жана сетап үчүн аксессуарлар.",
+      description: "Веб-камералар, хабдар, кармагычтар, кабелдер жана сетап үчүн аксессуарлар.",
     },
   },
 };

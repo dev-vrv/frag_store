@@ -36,7 +36,6 @@ import {
   CyberTabsList,
   CyberTabsTrigger,
 } from "@/components/cyber";
-import { GeometricBackdrop } from "@/components/Background/GeometricBackdrop";
 import { useCart } from "@/components/Cart/CartProvider";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
@@ -114,6 +113,12 @@ const quickFilterIconByKey = {
 
 const paginationWindowSize = 10;
 type GridColumns = 1 | 2 | 3 | 4;
+
+const catalogFilterButtonClassName =
+  "font-tech group relative inline-flex min-h-[3rem] items-center overflow-hidden rounded-none border border-white/10 bg-zinc-950/55 text-zinc-200 outline-none [clip-path:polygon(0_0,calc(100%-8px)_0,100%_8px,100%_100%,8px_100%,0_calc(100%-8px))] transition-[transform,border-color,background-color,color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] after:pointer-events-none after:absolute after:inset-x-3 after:bottom-0 after:h-px after:origin-center after:scale-x-0 after:bg-red-200/85 after:transition-transform after:duration-200 after:ease-out hover:border-red-300/45 hover:bg-red-500/[0.08] hover:text-white hover:shadow-[0_0_22px_rgba(255,23,68,0.1)] hover:after:scale-x-100 active:translate-y-0 active:scale-[0.98] focus-visible:border-red-200/75 focus-visible:ring-2 focus-visible:ring-red-300/25 motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:after:transition-none [&_svg]:relative [&_svg]:z-10";
+
+const catalogFilterActiveClassName =
+  "border-red-300/55 bg-red-500/14 text-white shadow-[inset_2px_0_0_rgba(248,113,113,0.8),0_0_24px_rgba(255,23,68,0.12)] after:scale-x-100";
 
 function parseInitialCategories(value?: string[]) {
   if (!value?.length) {
@@ -1044,10 +1049,10 @@ export function CatalogPage({
   const filterPanel = (
     <div className="space-y-6">
       <div className="space-y-4">
-        <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-zinc-400">
+        <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-red-100/80">
           {text.resultsTitle}
         </p>
-        <dl className="space-y-1.5 border-l-2 border-cyan-300/30 pl-3 font-tech text-[0.82rem] leading-5">
+        <dl className="space-y-1.5 border border-red-300/20 bg-red-500/[0.04] px-3 py-3 font-tech text-[0.82rem] leading-5 [clip-path:polygon(0_0,calc(100%-8px)_0,100%_8px,100%_100%,8px_100%,0_calc(100%-8px))]">
           <div className="flex items-baseline justify-between gap-4">
             <dt className="text-zinc-400">{text.results}:</dt>
             <dd className="text-sm font-bold text-white">{filteredProducts.length}</dd>
@@ -1065,12 +1070,13 @@ export function CatalogPage({
         </dl>
       </div>
 
-      <div className="space-y-4 [&_label]:text-[0.78rem]">
+      <div className="space-y-4 [&_label]:text-[0.78rem] [&_label]:uppercase [&_label]:tracking-[0.1em] [&_label]:text-red-100/80">
         <CyberInput
           className="text-sm placeholder:text-sm"
           label={text.search}
           placeholder={text.searchPlaceholder}
           icon={<Search aria-hidden="true" />}
+          tone="red"
           value={query}
           onChange={(event) => {
             setQuery(event.target.value);
@@ -1078,8 +1084,9 @@ export function CatalogPage({
           }}
         />
         <CyberNativeSelect
-          className="text-sm"
+          className="text-sm before:hidden"
           label={text.brand}
+          tone="red"
           value={brand}
           onValueChange={(value) => {
             setBrand(value);
@@ -1088,8 +1095,9 @@ export function CatalogPage({
           options={brandOptions}
         />
         <CyberNativeSelect
-          className="text-sm"
+          className="text-sm before:hidden"
           label={text.sort}
+          tone="red"
           value={sort}
           onValueChange={(value) => {
             setSort(value as SortKey);
@@ -1104,8 +1112,8 @@ export function CatalogPage({
         />
       </div>
 
-      <div className="space-y-4 border-t border-white/10 pt-4">
-        <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-zinc-500">
+      <div className="space-y-4 border-t border-red-300/15 pt-4">
+        <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-red-100/70">
           {text.filters}
         </p>
         <div className="grid grid-cols-2 gap-2">
@@ -1116,22 +1124,23 @@ export function CatalogPage({
               onClick={() => toggleCategory(item.value)}
               aria-pressed={item.value === "all" ? selectedCategories.length === 0 : selectedCategorySet.has(item.value)}
               className={cn(
-                "font-tech inline-flex min-h-[3rem] items-center justify-start gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-left text-[0.82rem] leading-[1.3] tracking-[0.01em] text-zinc-200 transition duration-300 hover:border-red-300/28 hover:bg-white/[0.07] hover:text-white [&_svg]:size-3.5 [&_svg]:shrink-0",
+                catalogFilterButtonClassName,
+                "justify-start gap-2 px-3 py-2 text-left text-[0.82rem] leading-[1.3] tracking-[0.01em] [&_svg]:size-3.5 [&_svg]:shrink-0",
                 item.value === "all" && "col-span-2 justify-center",
                 ((item.value === "all" && selectedCategories.length === 0) ||
                   selectedCategorySet.has(item.value)) &&
-                  "border-red-300/32 bg-red-500/[0.08] text-red-50 shadow-[0_12px_30px_rgba(255,23,68,0.08)]",
+                  catalogFilterActiveClassName,
               )}
             >
               {item.icon}
-              {item.label}
+              <span className="relative z-10">{item.label}</span>
             </button>
           ))}
         </div>
       </div>
 
-      <div className="space-y-4 border-t border-white/10 pt-4">
-        <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-zinc-500">
+      <div className="space-y-4 border-t border-red-300/15 pt-4">
+        <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-red-100/70">
           {text.quickFilters}
         </p>
         <div className="grid grid-cols-2 gap-2">
@@ -1146,21 +1155,21 @@ export function CatalogPage({
                 onClick={() => toggleQuickFilter(option.key)}
                 aria-pressed={isActive}
                 className={cn(
-                  "font-tech inline-flex min-h-[3rem] items-center justify-start gap-2 rounded-md border border-white/10 bg-white/[0.035] px-3 py-2 text-left text-[0.82rem] leading-[1.3] tracking-[0.01em] text-zinc-200 transition duration-300 hover:border-cyan-200/30 hover:bg-white/[0.07] hover:text-white [&_svg]:size-3.5 [&_svg]:shrink-0",
-                  isActive &&
-                    "border-cyan-300/40 bg-cyan-300/[0.10] text-cyan-50 shadow-[0_10px_28px_rgba(34,211,238,0.08)]",
+                  catalogFilterButtonClassName,
+                  "justify-start gap-2 px-3 py-2 text-left text-[0.82rem] leading-[1.3] tracking-[0.01em] [&_svg]:size-3.5 [&_svg]:shrink-0",
+                  isActive && catalogFilterActiveClassName,
                 )}
               >
                 <Icon aria-hidden="true" />
-                {option.label}
+                <span className="relative z-10">{option.label}</span>
               </button>
             );
           })}
         </div>
       </div>
 
-      <div className="space-y-4 border-t border-white/10 pt-4">
-        <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-zinc-500">
+      <div className="space-y-4 border-t border-red-300/15 pt-4">
+        <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-red-100/70">
           {text.gridDensity}
         </p>
         <div className="flex items-center gap-2">
@@ -1170,25 +1179,32 @@ export function CatalogPage({
               type="button"
               onClick={() => setGridColumns(value as GridColumns)}
               className={cn(
-                "min-w-10 border px-3 py-2 text-[0.82rem] font-semibold text-zinc-300 transition",
-                value === 2 && "hidden sm:block",
-                value === 3 && "hidden lg:block",
-                value === 4 && "hidden xl:block",
+                catalogFilterButtonClassName,
+                "min-w-10 flex-1 justify-center px-3 py-2 text-[0.82rem] font-semibold",
+                value === 2 && "hidden sm:inline-flex",
+                value === 3 && "hidden lg:inline-flex",
+                value === 4 && "hidden xl:inline-flex",
                 gridColumns === value
-                  ? "border-cyan-300/34 bg-cyan-300/12 text-white"
-                  : "border-white/10 bg-white/[0.03] hover:border-white/20 hover:text-white",
+                  ? catalogFilterActiveClassName
+                  : "border-white/10 bg-zinc-950/55",
               )}
               aria-pressed={gridColumns === value}
             >
-              {value}
+              <span className="relative z-10">{value}</span>
             </button>
           ))}
         </div>
       </div>
 
       {hasActiveFilters ? (
-        <div className="border-t border-white/10 pt-4">
-          <CyberButton type="button" variant="outline" size="sm" onClick={resetFilters}>
+        <div className="border-t border-red-300/15 pt-4">
+          <CyberButton
+            type="button"
+            variant="danger"
+            size="sm"
+            className="w-full border-red-300/45 bg-red-500/[0.08] text-red-100 before:hidden hover:bg-red-500/20 hover:text-white"
+            onClick={resetFilters}
+          >
             {text.reset}
           </CyberButton>
         </div>
@@ -1197,156 +1213,8 @@ export function CatalogPage({
   );
 
   return (
-    <main className="page-shell relative overflow-x-clip bg-[linear-gradient(180deg,#121218_0%,#101016_24%,#0b0b12_54%,#09090f_100%)] px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
-      <div aria-hidden="true" className="home-shared-backdrop">
-        <div className="home-shared-backdrop__base opacity-[0.95]" />
-        <div className="cyber-grid home-shared-backdrop__grid opacity-[0.08]" />
-      </div>
+    <main className="page-shell relative overflow-x-clip bg-surface px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
-      <div className="absolute inset-0 -z-40 bg-[radial-gradient(circle_at_12%_18%,rgba(255,23,68,0.28),transparent_24%),radial-gradient(circle_at_86%_14%,rgba(34,211,238,0.12),transparent_22%),radial-gradient(circle_at_82%_24%,rgba(168,85,247,0.16),transparent_28%),radial-gradient(circle_at_50%_84%,rgba(251,191,36,0.08),transparent_30%),linear-gradient(128deg,rgba(255,23,68,0.06)_0%,transparent_34%,transparent_70%,rgba(34,211,238,0.05)_100%),linear-gradient(180deg,#0d0708_0%,#0a0708_28%,#060405_56%,#020203_100%)]" />
-      <GeometricBackdrop
-        className="absolute inset-0 -z-30"
-        variant="catalog"
-        gridOpacityClassName="opacity-[0.46]"
-        scanlineOpacityClassName="opacity-[0.22]"
-      />
-      <div className="pointer-events-none absolute inset-0 -z-30 overflow-hidden">
-        <div className="absolute -left-[10%] top-[2%] h-[24rem] w-[24rem] animate-[catalogAurora_22s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgba(255,23,68,0.28),rgba(255,23,68,0.12)_42%,transparent_74%)] blur-3xl sm:h-[30rem] sm:w-[30rem]" />
-        <div className="absolute right-[-8%] top-[8%] h-[24rem] w-[24rem] animate-[catalogAurora_28s_ease-in-out_infinite_reverse] rounded-full bg-[radial-gradient(circle,rgba(168,85,247,0.18),rgba(168,85,247,0.08)_40%,transparent_74%)] blur-3xl sm:h-[32rem] sm:w-[32rem]" />
-        <div className="absolute left-[18%] bottom-[8%] h-[18rem] w-[36rem] animate-[catalogPulse_20s_ease-in-out_infinite] rounded-full bg-[radial-gradient(circle,rgba(251,191,36,0.1),transparent_64%)] blur-3xl" />
-        <div className="absolute left-1/2 top-[14%] h-[34rem] w-[34rem] -translate-x-1/2 animate-[catalogHalo_26s_linear_infinite] rounded-full border border-red-200/10 opacity-40" />
-        <div className="absolute left-1/2 top-[14%] h-[25rem] w-[25rem] -translate-x-1/2 animate-[catalogHaloReverse_18s_linear_infinite] rounded-full border border-fuchsia-300/10 opacity-28" />
-        <div className="absolute left-[14%] top-[52%] h-52 w-52 animate-[catalogPolygon_20s_linear_infinite] border border-red-200/12 opacity-48 [clip-path:polygon(50%_0%,100%_38%,82%_100%,18%_100%,0%_38%)]" />
-        <div className="absolute right-[18%] top-[18%] h-44 w-44 animate-[catalogPolygon_26s_linear_infinite_reverse] border border-fuchsia-300/10 opacity-36 [clip-path:polygon(12%_12%,88%_0%,100%_76%,40%_100%,0%_64%)]" />
-        <div className="absolute left-[38%] top-[18%] h-40 w-40 animate-[catalogDiamond_22s_linear_infinite] border border-amber-200/10 opacity-30 [clip-path:polygon(50%_0%,100%_50%,50%_100%,0%_50%)]" />
-        <div className="absolute right-[22%] bottom-[14%] h-36 w-36 animate-[catalogDiamond_18s_linear_infinite_reverse] border border-red-100/8 opacity-26 [clip-path:polygon(50%_0%,100%_50%,50%_100%,0%_50%)]" />
-        <div className="absolute left-[-8%] top-[24%] h-32 w-[36rem] animate-[catalogBeam_18s_ease-in-out_infinite] rotate-[-12deg] bg-[linear-gradient(90deg,transparent,rgba(255,23,68,0.12),transparent)] blur-2xl" />
-        <div className="absolute right-[-10%] top-[52%] h-28 w-[30rem] animate-[catalogBeam_24s_ease-in-out_infinite_reverse] rotate-[18deg] bg-[linear-gradient(90deg,transparent,rgba(168,85,247,0.1),transparent)] blur-2xl" />
-        <div className="absolute inset-x-0 top-[22%] h-px animate-[catalogScanline_9s_linear_infinite] bg-[linear-gradient(90deg,transparent,rgba(255,131,131,0.22),transparent)] opacity-55" />
-        <div className="absolute inset-x-0 top-[58%] h-px animate-[catalogScanline_13s_linear_infinite_reverse] bg-[linear-gradient(90deg,transparent,rgba(217,70,239,0.18),transparent)] opacity-42" />
-      </div>
-      <div className="pointer-events-none absolute inset-0 -z-10 animate-[catalogGridDrift_36s_linear_infinite] bg-[linear-gradient(rgba(255,110,110,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.045)_1px,transparent_1px)] bg-[size:68px_68px] opacity-[0.24] [mask-image:linear-gradient(180deg,rgba(0,0,0,0.94),rgba(0,0,0,0.58)_58%,transparent)]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(255,23,68,0.06),transparent_18%,transparent_82%,rgba(168,85,247,0.05))]" />
-      <div className="pointer-events-none absolute inset-x-0 top-[18%] -z-10 h-px bg-[linear-gradient(90deg,transparent,rgba(34,211,238,0.52),transparent)] shadow-[0_0_18px_rgba(34,211,238,0.18)]" />
-      <div className="pointer-events-none absolute inset-x-0 top-[64%] -z-10 h-px bg-[linear-gradient(90deg,transparent,rgba(255,23,68,0.44),transparent)] shadow-[0_0_18px_rgba(255,23,68,0.16)]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.16] [background-image:radial-gradient(circle_at_center,rgba(251,191,36,0.12)_1px,transparent_1px)] [background-size:30px_30px] [mask-image:linear-gradient(180deg,transparent,rgba(0,0,0,0.88)_16%,rgba(0,0,0,0.88)_84%,transparent)]" />
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[conic-gradient(from_180deg_at_50%_50%,rgba(255,23,68,0.045),transparent_18%,rgba(168,85,247,0.04)_40%,transparent_58%,rgba(251,191,36,0.03)_82%,transparent)] opacity-42" />
-      <style jsx>{`
-        @keyframes catalogAurora {
-          0%,
-          100% {
-            transform: translate3d(0, 0, 0) scale(1);
-          }
-          50% {
-            transform: translate3d(32px, -18px, 0) scale(1.12);
-          }
-        }
-
-        @keyframes catalogPulse {
-          0%,
-          100% {
-            transform: scale(0.94);
-            opacity: 0.42;
-          }
-          50% {
-            transform: scale(1.08);
-            opacity: 0.78;
-          }
-        }
-
-        @keyframes catalogHalo {
-          from {
-            transform: translateX(-50%) rotate(0deg);
-          }
-          to {
-            transform: translateX(-50%) rotate(360deg);
-          }
-        }
-
-        @keyframes catalogHaloReverse {
-          from {
-            transform: translateX(-50%) rotate(360deg);
-          }
-          to {
-            transform: translateX(-50%) rotate(0deg);
-          }
-        }
-
-        @keyframes catalogBeam {
-          0%,
-          100% {
-            transform: translateX(0) rotate(-12deg);
-            opacity: 0.3;
-          }
-          50% {
-            transform: translateX(48px) rotate(-9deg);
-            opacity: 0.75;
-          }
-        }
-
-        @keyframes catalogGridDrift {
-          from {
-            transform: translate3d(0, 0, 0);
-          }
-          to {
-            transform: translate3d(24px, 18px, 0);
-          }
-        }
-
-        @keyframes catalogFloatShape {
-          0%,
-          100% {
-            transform: translate3d(0, 0, 0) rotate(45deg);
-          }
-          50% {
-            transform: translate3d(18px, 22px, 0) rotate(60deg);
-          }
-        }
-
-        @keyframes catalogFloatShapeAlt {
-          0%,
-          100% {
-            transform: translate3d(0, 0, 0) rotate(12deg);
-          }
-          50% {
-            transform: translate3d(-20px, 16px, 0) rotate(24deg);
-          }
-        }
-
-        @keyframes catalogPolygon {
-          from {
-            transform: rotate(0deg) scale(1);
-          }
-          50% {
-            transform: rotate(180deg) scale(1.08);
-          }
-          to {
-            transform: rotate(360deg) scale(1);
-          }
-        }
-
-        @keyframes catalogDiamond {
-          0% {
-            transform: rotate(0deg) scale(1) translate3d(0, 0, 0);
-          }
-          50% {
-            transform: rotate(180deg) scale(1.08) translate3d(0, 18px, 0);
-          }
-          100% {
-            transform: rotate(360deg) scale(1) translate3d(0, 0, 0);
-          }
-        }
-
-        @keyframes catalogScanline {
-          from {
-            transform: translateY(-18vh);
-          }
-          to {
-            transform: translateY(52vh);
-          }
-        }
-      `}</style>
-
       <div className="relative z-10">
         <section ref={catalogSectionRef} className="mx-auto w-full max-w-[100rem] py-8">
           <div className="mb-6 flex flex-col gap-4 border-b border-white/10 pb-5 sm:mb-7 sm:flex-row sm:items-end sm:justify-between">
@@ -1364,13 +1232,16 @@ export function CatalogPage({
             <div className="xl:hidden">
               <CyberSheet>
                 <CyberSheetTrigger asChild>
-                  <CyberButton variant="outline" className="border-white/20 text-white hover:border-white/40 hover:bg-white/10 hover:text-white">
+                  <CyberButton
+                    variant="danger"
+                    className="border-red-300/45 bg-zinc-950/65 text-zinc-100 before:hidden hover:border-red-200/70 hover:bg-red-500/16 hover:text-white"
+                  >
                     <Filter aria-hidden="true" />
                     {text.filters}
                   </CyberButton>
                 </CyberSheetTrigger>
-                <CyberSheetContent side="left" className="w-[88vw] border-white/10 bg-zinc-950/95 p-5 sm:max-w-md">
-                  <CyberSheetHeader className="border-b border-white/10 pb-4">
+                <CyberSheetContent side="left" className="w-[88vw] border-red-300/20 bg-zinc-950/95 p-5 sm:max-w-md">
+                  <CyberSheetHeader className="border-b border-red-300/15 pb-4">
                     <CyberSheetTitle className="font-display text-2xl uppercase tracking-[0.05em] text-white">
                       {text.filters}
                     </CyberSheetTitle>
@@ -1386,7 +1257,10 @@ export function CatalogPage({
 
           <div className="grid items-start gap-6 xl:grid-cols-[300px_minmax(0,1fr)] 2xl:grid-cols-[320px_minmax(0,1fr)]">
             <aside className="hidden xl:block">
-              <CyberCard variant="glass" className="sticky top-32 overflow-hidden border-white/10 bg-zinc-950/70">
+              <CyberCard
+                variant="glass"
+                className="sticky top-32 overflow-hidden border-red-300/18 bg-zinc-950/70 shadow-[0_0_42px_rgba(255,23,68,0.08)] before:bg-none before:opacity-0 after:bg-none after:opacity-0"
+              >
                 <CyberCardContent className="p-5">
                   {filterPanel}
                 </CyberCardContent>
@@ -1482,7 +1356,7 @@ export function CatalogPage({
                 type="button"
                 onClick={() => setCatalogPage((current) => Math.max(1, current - 1))}
                 disabled={safePageIndex === 1}
-                className="grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-zinc-300 transition hover:border-amber-200/35 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
+                className="grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-zinc-300 transition hover:border-cyan-300/35 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
                 aria-label={text.previousPage}
               >
                 <ChevronLeft className="size-4" aria-hidden="true" />
@@ -1493,8 +1367,8 @@ export function CatalogPage({
                   type="button"
                   onClick={() => setCatalogPage(item)}
                   className={cn(
-                    "grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-sm text-zinc-300 transition hover:border-amber-200/35 hover:text-white",
-                    safePageIndex === item && "border-amber-200/50 bg-amber-200/[0.10] text-amber-100",
+                    "grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-sm text-zinc-300 transition hover:border-cyan-300/35 hover:text-white",
+                    safePageIndex === item && "border-cyan-300/50 bg-cyan-300/[0.10] text-cyan-100",
                   )}
                   aria-current={safePageIndex === item ? "page" : undefined}
                 >
@@ -1505,7 +1379,7 @@ export function CatalogPage({
                 type="button"
                 onClick={() => setCatalogPage((current) => Math.min(totalPages, current + 1))}
                 disabled={safePageIndex === totalPages}
-                className="grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-zinc-300 transition hover:border-amber-200/35 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
+                className="grid size-10 place-items-center border border-white/10 bg-white/[0.035] text-zinc-300 transition hover:border-cyan-300/35 hover:text-white disabled:cursor-not-allowed disabled:opacity-35"
                 aria-label={text.nextPage}
               >
                 <ChevronRight className="size-4" aria-hidden="true" />
@@ -1522,32 +1396,35 @@ export function CatalogPage({
       </div>
 
       {comparisonCategoryGroups.length ? (
-        <div className="pointer-events-none fixed inset-x-0 bottom-4 z-40 px-4">
+        <div className="comparison-ui pointer-events-none fixed inset-x-0 bottom-4 z-40 px-4">
           <div className="mx-auto w-full max-w-4xl">
             {compareFeedback ? (
-              <div className="pointer-events-auto mx-auto mb-3 w-fit rounded-md border border-cyan-300/24 bg-zinc-950/88 px-4 py-2 text-sm text-cyan-50 shadow-[0_0_28px_rgba(34,211,238,0.12)] backdrop-blur-xl">
+              <div className="comparison-panel pointer-events-auto mx-auto mb-3 w-fit rounded-md border px-4 py-2 text-sm backdrop-blur-xl">
                 {compareFeedback}
               </div>
             ) : null}
-            <CyberCard variant="glass" className="pointer-events-auto overflow-hidden border-cyan-300/18 bg-zinc-950/88 shadow-[0_18px_60px_rgba(0,0,0,0.45)] backdrop-blur-2xl">
+            <CyberCard
+              variant="glass"
+              className="comparison-panel pointer-events-auto overflow-hidden backdrop-blur-2xl before:hidden after:hidden"
+            >
               <CyberCardContent className="p-3 sm:p-4">
                 <div className="space-y-3">
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0 space-y-2">
                       <div className="flex flex-wrap items-center gap-2">
-                        <CyberBadge variant="cyan" glow className="min-h-8 px-3 text-[10px]">
+                        <CyberBadge variant="neutral" className="comparison-badge min-h-8 px-3 text-[10px]">
                           <Scale className="mr-1.5 size-3.5" aria-hidden="true" />
                           {text.compareTrayTitle}
                         </CyberBadge>
-                        <span className="font-tech text-[10px] uppercase tracking-[0.14em] text-zinc-500">
+                        <span className="comparison-heading font-tech text-[10px] uppercase tracking-[0.14em]">
                           {flattenedComparisonIds.length}
                         </span>
-                        <span className="font-tech text-[10px] uppercase tracking-[0.14em] text-zinc-600">
+                        <span className="comparison-muted font-tech text-[10px] uppercase tracking-[0.14em]">
                           {text.compareTrayLimit}
                         </span>
                       </div>
                       {!isComparisonTrayCollapsed ? (
-                        <p className="text-xs leading-5 text-zinc-300 sm:text-sm">
+                        <p className="comparison-muted text-xs leading-5 sm:text-sm">
                           {activeComparisonProducts.length >= 2 ? text.compareTrayReady : text.compareTrayHint}
                         </p>
                       ) : null}
@@ -1556,7 +1433,7 @@ export function CatalogPage({
                     <button
                       type="button"
                       onClick={() => setIsComparisonTrayCollapsed((current) => !current)}
-                      className="inline-flex min-h-9 shrink-0 items-center gap-2 rounded-md border border-white/10 bg-white/[0.04] px-3 py-2 text-xs uppercase tracking-[0.12em] text-zinc-200 transition hover:border-cyan-300/24 hover:bg-white/[0.08]"
+                      className="comparison-surface comparison-surface-interactive inline-flex min-h-9 shrink-0 items-center gap-2 rounded-md border px-3 py-2 text-xs uppercase tracking-[0.12em] transition"
                       aria-expanded={!isComparisonTrayCollapsed}
                       aria-label={isComparisonTrayCollapsed ? text.compareTrayExpand : text.compareTrayCollapse}
                     >
@@ -1570,7 +1447,7 @@ export function CatalogPage({
                   </div>
 
                   {!isComparisonTrayCollapsed ? (
-                    <div className="flex flex-col gap-3 border-t border-white/8 pt-3">
+                    <div className="comparison-divider flex flex-col gap-3 border-t pt-3">
                       {comparisonCategoryGroups.length > 1 ? (
                         <CyberTabs
                           value={resolvedActiveComparisonCategorySlug ?? undefined}
@@ -1578,18 +1455,18 @@ export function CatalogPage({
                           className="gap-2"
                         >
                           <div className="space-y-2">
-                            <p className="font-tech text-[10px] uppercase tracking-[0.14em] text-zinc-500">
+                            <p className="comparison-muted font-tech text-[10px] uppercase tracking-[0.14em]">
                               {text.compareTraySections}
                             </p>
-                            <CyberTabsList className="w-full gap-1.5 overflow-x-auto p-1">
+                            <CyberTabsList className="comparison-tabs-list w-full gap-1.5 overflow-x-auto p-1">
                               {comparisonCategoryGroups.map((group) => (
                                 <CyberTabsTrigger
                                   key={group.slug}
                                   value={group.slug}
-                                  className="min-h-9 min-w-fit px-3 py-2 text-[11px] tracking-[0.12em]"
+                                  className="comparison-tabs-trigger min-h-9 min-w-fit px-3 py-2 text-[11px] tracking-[0.12em]"
                                 >
                                   <span>{group.label}</span>
-                                  <span className="font-tech text-[10px] text-zinc-500">
+                                  <span className="font-tech text-[10px] opacity-65">
                                     {group.products.length}
                                   </span>
                                 </CyberTabsTrigger>
@@ -1605,10 +1482,10 @@ export function CatalogPage({
                             key={product.id}
                             type="button"
                             onClick={() => handleComparisonToggle(product)}
-                            className="inline-flex min-h-8 max-w-full items-center gap-2 rounded-md border border-white/10 bg-white/[0.04] px-2.5 py-1.5 text-left text-xs text-zinc-200 transition hover:border-cyan-300/32 hover:bg-white/[0.07]"
+                            className="comparison-surface comparison-surface-interactive inline-flex min-h-8 max-w-full items-center gap-2 rounded-md border px-2.5 py-1.5 text-left text-xs transition"
                           >
                             <span className="max-w-[12rem] truncate">{getLocalizedProductName(product, locale)}</span>
-                            <X className="size-3 text-zinc-500" aria-hidden="true" />
+                            <X className="comparison-muted size-3" aria-hidden="true" />
                           </button>
                         ))}
                       </div>
@@ -1619,11 +1496,17 @@ export function CatalogPage({
                             variant="ghost"
                             size="sm"
                             onClick={() => clearComparisonCategory(activeComparisonGroup.slug)}
+                            className="comparison-button"
                           >
                             {text.compareTrayClear}
                           </CyberButton>
                         ) : null}
-                        <CyberButton variant="ghost" size="sm" onClick={clearComparison}>
+                        <CyberButton
+                          variant="ghost"
+                          size="sm"
+                          onClick={clearComparison}
+                          className="comparison-button"
+                        >
                           {text.compareTrayClearAll}
                         </CyberButton>
                         <CyberButton
@@ -1631,6 +1514,7 @@ export function CatalogPage({
                           size="sm"
                           onClick={() => setIsComparisonDialogOpen(true)}
                           disabled={activeComparisonProducts.length < 2}
+                          className="comparison-button comparison-button-primary"
                         >
                           <Scale className="size-4" aria-hidden="true" />
                           {text.compareTrayOpen}

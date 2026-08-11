@@ -25,7 +25,7 @@ export function PlaceholderPage({
   return (
     <main
       className={cn(
-        "page-shell relative overflow-hidden bg-black px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8",
+        "page-shell relative overflow-hidden bg-surface px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8",
         animatedBackground && "isolate",
       )}
     >
@@ -34,7 +34,7 @@ export function PlaceholderPage({
         <ContactCyberBackground />
       ) : (
         <>
-          <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_20%_18%,rgba(255,23,68,0.2),transparent_30%),radial-gradient(circle_at_80%_16%,rgba(217,70,239,0.12),transparent_28%),linear-gradient(180deg,#050507,#000)]" />
+          <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_20%_18%,rgba(255,23,68,0.2),transparent_30%),radial-gradient(circle_at_80%_16%,rgba(217,70,239,0.12),transparent_28%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),1),rgba(var(--theme-surface-rgb),1))]" />
           <div className="cyber-grid absolute inset-0 -z-10 opacity-60" />
         </>
       )}

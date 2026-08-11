@@ -57,13 +57,13 @@ export function ProfileNotificationsPanel({ locale }: { locale: Locale }) {
       ) : items.length ? (
         <div className="mt-5 grid gap-5 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]">
           <div className="grid content-start gap-2">
-            {items.map((item) => <button key={item.id} type="button" onClick={() => selectNotification(item)} className={cn("flex items-center gap-3 rounded-md border p-3 text-left transition", selectedId === item.id ? "border-cyan-300/40 bg-cyan-300/10" : "border-white/10 bg-black/25 hover:border-white/20")}>
+            {items.map((item) => <button key={item.id} type="button" onClick={() => selectNotification(item)} className={cn("flex items-center gap-3 rounded-md border p-3 text-left transition", selectedId === item.id ? "border-cyan-300/40 bg-cyan-300/10" : "border-white/10 bg-surface/25 hover:border-white/20")}>
               <span className={cn("grid size-10 shrink-0 place-items-center rounded-full", item.status === "unread" ? "bg-red-500/15 text-red-100" : "bg-white/[0.04] text-zinc-400")}><PackageCheck className="size-4" /></span>
               <span className="min-w-0 flex-1"><span className="block truncate font-semibold text-white">{item.title}</span><span className="mt-1 block text-xs text-zinc-500">{new Intl.DateTimeFormat(locale, { dateStyle: "medium", timeStyle: "short" }).format(new Date(item.created_at))}</span></span>
               {item.status === "unread" ? <span className="size-2 rounded-full bg-red-400" /> : null}<ChevronRight className="size-4 text-zinc-500" />
             </button>)}
           </div>
-          <div className="min-h-64 rounded-md border border-white/10 bg-black/25 p-5 sm:p-6">
+          <div className="min-h-64 rounded-md border border-white/10 bg-surface/25 p-5 sm:p-6">
             {selected ? <div>
               {selected.image_url ? (
                 // eslint-disable-next-line @next/next/no-img-element

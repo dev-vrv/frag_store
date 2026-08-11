@@ -53,7 +53,7 @@ export function ProfilePage({ locale, dictionary, user }: ProfilePageProps) {
         : "Выключена";
 
   return (
-    <main className="page-shell relative isolate overflow-hidden bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.06),transparent_22%),linear-gradient(180deg,#060606_0%,#0b0b0c_38%,#050505_100%)] px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative isolate overflow-hidden bg-[radial-gradient(circle_at_top,rgba(var(--theme-contrast-rgb),0.06),transparent_22%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),1)_0%,rgba(var(--theme-surface-rgb),1)_38%,rgba(var(--theme-surface-rgb),1)_100%)] px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
       <ContactCyberBackground />
       <section className="relative z-10 w-full max-w-7xl mx-auto pb-16">

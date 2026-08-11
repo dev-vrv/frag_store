@@ -1,12 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useRef, useState } from "react";
 import { ArrowLeft, ArrowRight, BadgeCheck, ShieldCheck, Truck, Waves, X } from "lucide-react";
 
 import {
   CyberBadge,
-  CyberButton,
   CyberDialog,
+  CyberDialogClose,
   CyberDialogContent,
   CyberDialogDescription,
   CyberDialogHeader,
@@ -19,41 +19,14 @@ import { type Dictionary } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 const serviceIcons = [BadgeCheck, Waves, Truck];
-const serviceThemes = [
-  {
-    badge: "text-cyan-100 border-cyan-300/20 bg-cyan-300/10",
-    accent: "text-cyan-100",
-    stat: "text-cyan-100",
-    surface:
-      "bg-[radial-gradient(circle_at_22%_18%,rgba(34,211,238,0.22),transparent_28%),radial-gradient(circle_at_80%_14%,rgba(244,63,94,0.14),transparent_24%),linear-gradient(145deg,rgba(8,15,28,0.94),rgba(3,6,14,0.98))]",
-    shell:
-      "border-cyan-300/20 bg-[radial-gradient(circle_at_18%_12%,rgba(34,211,238,0.14),transparent_28%),radial-gradient(circle_at_78%_14%,rgba(244,63,94,0.10),transparent_22%),linear-gradient(180deg,rgba(7,11,22,0.98),rgba(4,6,14,0.98))]",
-    line: "from-cyan-300/80 via-red-300/35 to-transparent",
-    orb: "bg-cyan-300/16",
-  },
-  {
-    badge: "text-fuchsia-100 border-fuchsia-300/20 bg-fuchsia-300/10",
-    accent: "text-fuchsia-100",
-    stat: "text-fuchsia-100",
-    surface:
-      "bg-[radial-gradient(circle_at_20%_18%,rgba(217,70,239,0.20),transparent_30%),radial-gradient(circle_at_80%_14%,rgba(34,211,238,0.12),transparent_22%),linear-gradient(145deg,rgba(16,10,28,0.95),rgba(6,7,17,0.98))]",
-    shell:
-      "border-fuchsia-300/20 bg-[radial-gradient(circle_at_16%_12%,rgba(217,70,239,0.13),transparent_28%),radial-gradient(circle_at_82%_16%,rgba(34,211,238,0.08),transparent_22%),linear-gradient(180deg,rgba(12,8,20,0.98),rgba(5,6,14,0.98))]",
-    line: "from-fuchsia-300/80 via-cyan-300/35 to-transparent",
-    orb: "bg-fuchsia-300/16",
-  },
-  {
-    badge: "text-amber-100 border-amber-200/20 bg-amber-200/10",
-    accent: "text-amber-100",
-    stat: "text-amber-100",
-    surface:
-      "bg-[radial-gradient(circle_at_22%_18%,rgba(251,191,36,0.18),transparent_28%),radial-gradient(circle_at_80%_14%,rgba(244,63,94,0.14),transparent_24%),linear-gradient(145deg,rgba(22,12,12,0.95),rgba(9,7,16,0.98))]",
-    shell:
-      "border-amber-200/20 bg-[radial-gradient(circle_at_18%_12%,rgba(251,191,36,0.12),transparent_28%),radial-gradient(circle_at_80%_14%,rgba(244,63,94,0.10),transparent_22%),linear-gradient(180deg,rgba(18,11,12,0.98),rgba(7,6,14,0.98))]",
-    line: "from-amber-200/80 via-red-300/35 to-transparent",
-    orb: "bg-amber-200/14",
-  },
-] as const;
+const serviceTheme = {
+  badge: "border-cyan-300/20 bg-cyan-300/[0.07] text-cyan-100",
+  stat: "text-cyan-100",
+  surface:
+    "bg-[radial-gradient(circle_at_82%_18%,rgba(34,211,238,0.12),transparent_30%),linear-gradient(145deg,rgba(var(--theme-surface-rgb),0.94),rgba(var(--theme-surface-rgb),0.99))]",
+  shell:
+    "border-cyan-300/20 bg-[radial-gradient(circle_at_16%_10%,rgba(34,211,238,0.09),transparent_28%),radial-gradient(circle_at_84%_12%,rgba(244,63,94,0.055),transparent_22%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.98),rgba(var(--theme-surface-rgb),0.99))]",
+} as const;
 
 export interface ServiceProtocolProps {
   content: Dictionary["service"];
@@ -61,21 +34,31 @@ export interface ServiceProtocolProps {
 
 export function ServiceProtocol({ content }: ServiceProtocolProps) {
   const [activeCardIndex, setActiveCardIndex] = useState<number | null>(null);
+  const dialogContentRef = useRef<HTMLDivElement>(null);
+  const dialogTitleRef = useRef<HTMLHeadingElement>(null);
   const activeCard = activeCardIndex === null ? null : content.cards[activeCardIndex];
   const previousIndex =
     activeCardIndex === null ? null : (activeCardIndex - 1 + content.cards.length) % content.cards.length;
   const nextIndex = activeCardIndex === null ? null : (activeCardIndex + 1) % content.cards.length;
-  const activeTheme = useMemo(
-    () => (activeCardIndex === null ? serviceThemes[0] : serviceThemes[activeCardIndex] ?? serviceThemes[0]),
-    [activeCardIndex],
-  );
+  const activePosition = activeCardIndex ?? 0;
+  const ActiveIcon = serviceIcons[activePosition] ?? ShieldCheck;
+
+  const showCard = (index: number) => {
+    setActiveCardIndex(index);
+    window.requestAnimationFrame(() => {
+      dialogContentRef.current?.scrollTo({ top: 0, behavior: "auto" });
+      dialogTitleRef.current?.focus({ preventScroll: true });
+    });
+  };
 
   return (
     <Section
       fullWidth
       className="relative isolate overflow-hidden bg-transparent text-zinc-50"
     >
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(92%_52%_at_-14%_24%,rgba(34,211,238,0.1),transparent_64%),radial-gradient(88%_48%_at_112%_22%,rgba(255,23,68,0.08),transparent_62%),radial-gradient(72%_38%_at_50%_112%,rgba(249,115,22,0.04),transparent_66%),linear-gradient(180deg,rgba(1,1,3,0.04)_0%,rgba(2,2,4,0.18)_24%,rgba(2,2,4,0.18)_78%,rgba(1,1,3,0.04)_100%)]" />
+      <div className="absolute inset-0 -z-20 bg-[radial-gradient(86%_48%_at_-12%_22%,rgba(34,211,238,0.075),transparent_66%),radial-gradient(78%_44%_at_110%_18%,rgba(244,63,94,0.05),transparent_64%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.03)_0%,rgba(var(--theme-surface-rgb),0.17)_24%,rgba(var(--theme-surface-rgb),0.17)_78%,rgba(var(--theme-surface-rgb),0.03)_100%)]" />
+      <div className="service-protocol__grid pointer-events-none absolute inset-0 -z-10 opacity-45" />
+      <div className="service-protocol__scan pointer-events-none absolute inset-0 -z-10 opacity-30" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/75 to-transparent" />
 
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 sm:gap-10">
@@ -107,15 +90,25 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
               key={label}
               as="div"
               delay={500 + index * 90}
-              className="rounded-none border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.05),rgba(255,255,255,0.025))] p-4 backdrop-blur-xl"
+              className="service-protocol__metric group relative overflow-hidden border border-white/10 bg-[linear-gradient(180deg,rgba(var(--theme-contrast-rgb),0.05),rgba(var(--theme-contrast-rgb),0.02))] p-4 backdrop-blur-xl transition-colors duration-300 hover:border-cyan-300/20"
             >
-              <p className="font-tech type-caption uppercase tracking-[0.12em] text-zinc-500">
-                {label}
-              </p>
-              <p className="font-tech type-price mt-2 text-cyan-100">
-                {value}
-              </p>
-              <div className="mt-4 h-px bg-gradient-to-r from-cyan-300/70 via-red-300/35 to-transparent" />
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="font-tech type-caption uppercase tracking-[0.12em] text-zinc-500">
+                    {label}
+                  </p>
+                  <p className="font-tech type-price mt-2 text-cyan-100">
+                    {value}
+                  </p>
+                </div>
+                <span className="font-tech text-[10px] tracking-[0.16em] text-zinc-600" aria-hidden="true">
+                  0{index + 1}
+                </span>
+              </div>
+              <div className="mt-4 flex items-center" aria-hidden="true">
+                <span className="size-1.5 bg-red-300/80" />
+                <span className="h-px flex-1 bg-gradient-to-r from-red-300/55 via-cyan-300/55 to-transparent" />
+              </div>
             </RevealOnScroll>
           ))}
         </div>
@@ -123,43 +116,39 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
         <div className="grid gap-5 lg:grid-cols-3">
           {content.cards.map((card, index) => {
             const Icon = serviceIcons[index] ?? ShieldCheck;
-            const theme = serviceThemes[index] ?? serviceThemes[0];
 
             return (
               <RevealOnScroll key={card.title} as="article" delay={620 + index * 120} className="h-full">
                 <button
                   type="button"
                   onClick={() => setActiveCardIndex(index)}
-                  className="group flex h-full w-full flex-col overflow-hidden rounded-none border border-white/10 bg-zinc-950/60 text-left shadow-[0_18px_48px_rgba(0,0,0,0.24)] transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-1.5 hover:border-cyan-300/28 hover:shadow-[0_22px_60px_rgba(34,211,238,0.10)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-300/35"
+                  className="service-protocol__card group flex h-full w-full flex-col overflow-hidden border border-white/10 bg-[rgba(var(--theme-surface-rgb),0.76)] text-left shadow-[0_18px_48px_rgba(0,0,0,0.22)] transition-[transform,border-color,box-shadow] duration-500 ease-out hover:-translate-y-1 hover:border-cyan-300/28 hover:shadow-[0_22px_60px_rgba(0,0,0,0.28)] focus-visible:border-cyan-300/45 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-300/35 motion-reduce:hover:transform-none"
                   aria-label={`${card.title}. ${content.modalCta}`}
                 >
-                  <div className={cn("relative aspect-[4/3] overflow-hidden border-b border-white/10", theme.surface)}>
-                    <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.07)_1px,transparent_1px)] bg-[size:22px_22px] opacity-40" />
-                    <div className={cn("absolute -right-8 top-6 size-28 rounded-full blur-3xl transition-transform duration-500 group-hover:scale-110", theme.orb)} />
-                    <div className="relative z-10 max-w-7xl mx-auto flex h-full flex-col p-5 sm:p-6">
+                  <div className={cn("relative aspect-[4/3] overflow-hidden border-b border-white/10", serviceTheme.surface)}>
+                    <div className="absolute inset-0 bg-[linear-gradient(rgba(34,211,238,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.055)_1px,transparent_1px)] bg-[size:24px_24px] opacity-35" />
+                    <div className="service-protocol__card-scan absolute inset-x-0 top-0 z-20 h-14 -translate-y-full bg-gradient-to-b from-transparent via-cyan-200/[0.07] to-transparent" />
+                    <div className="absolute -right-8 top-6 size-28 rounded-full bg-cyan-300/[0.10] blur-3xl transition-transform duration-500 group-hover:scale-110" />
+                    <div className="relative z-10 mx-auto flex h-full w-full max-w-7xl flex-col p-5 sm:p-6">
                       <div className="flex items-start justify-between gap-3">
-                        <span className={cn("inline-flex max-w-[calc(100%-5rem)] items-center border px-3 py-1.5 font-tech text-[11px] uppercase tracking-[0.16em]", theme.badge)}>
+                        <span className={cn("inline-flex max-w-[calc(100%-5rem)] items-center border px-3 py-1.5 font-tech text-[11px] uppercase tracking-[0.16em]", serviceTheme.badge)}>
                           {card.signal}
                         </span>
-                        <span className="shrink-0 border border-white/12 bg-black/45 px-3 py-1.5 font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-300">
-                          FRAG STORE
+                        <span className="flex shrink-0 items-center gap-2 border border-white/10 bg-surface/45 px-3 py-1.5 font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-400">
+                          <span className="service-protocol__status size-1.5 bg-red-300" aria-hidden="true" />
+                          SYS.0{index + 1}
                         </span>
                       </div>
 
-                      <div className="flex flex-1 items-center justify-end py-4 sm:py-5">
-                        <div className="relative">
-                          <div
-                            className={cn(
-                              "absolute inset-0 rounded-[1.75rem] blur-2xl transition-transform duration-500 group-hover:scale-110",
-                              theme.orb,
-                            )}
-                          />
-                          <div className="absolute inset-[12%] rounded-[1.35rem] border border-white/8" />
-                          <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-white/0 via-white/12 to-white/0" />
-                          <div className="absolute top-1/2 left-0 h-px w-full -translate-y-1/2 bg-gradient-to-r from-white/0 via-white/10 to-white/0" />
-                          <div className="relative grid size-24 place-items-center rounded-[1.75rem] border border-white/12 bg-[radial-gradient(circle_at_30%_28%,rgba(255,255,255,0.16),transparent_34%),linear-gradient(180deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02)),rgba(4,8,18,0.56)] text-white shadow-[0_0_48px_rgba(255,255,255,0.08)] backdrop-blur-sm transition-[transform,border-color,box-shadow] duration-500 group-hover:scale-[1.03] group-hover:border-white/18 group-hover:shadow-[0_0_64px_rgba(255,255,255,0.12)] sm:size-28">
-                            <div className="absolute inset-3 rounded-[1.2rem] border border-white/8" />
-                            <Icon className="relative z-10 size-11 sm:size-12" />
+                      <div className="flex flex-1 items-center justify-center py-5 sm:py-6">
+                        <div className="service-protocol__icon relative grid size-28 place-items-center sm:size-32">
+                          <div className="service-protocol__icon-ring absolute inset-1 border border-dashed border-cyan-300/20" />
+                          <div className="absolute inset-4 border border-white/8" />
+                          <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-cyan-300/15 to-transparent" />
+                          <div className="absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-gradient-to-r from-transparent via-cyan-300/15 to-transparent" />
+                          <div className="relative grid size-20 place-items-center border border-cyan-300/20 bg-[radial-gradient(circle_at_32%_26%,rgba(34,211,238,0.12),transparent_42%),rgba(var(--theme-surface-rgb),0.62)] text-cyan-100 shadow-[0_0_42px_rgba(34,211,238,0.08)] backdrop-blur-sm transition-[transform,border-color,box-shadow] duration-500 group-hover:border-cyan-300/35 group-hover:shadow-[0_0_52px_rgba(34,211,238,0.13)] sm:size-22">
+                            <span className="absolute left-1.5 top-1.5 size-1 bg-red-300/90" aria-hidden="true" />
+                            <Icon className="relative z-10 size-9 sm:size-10" />
                           </div>
                         </div>
                       </div>
@@ -168,7 +157,10 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
                         <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-400">
                           {content.modalHint}
                         </p>
-                        <div className={cn("mt-3 h-px w-28 bg-gradient-to-r", theme.line)} />
+                        <div className="mt-3 flex items-center" aria-hidden="true">
+                          <span className="h-px w-14 bg-red-300/55" />
+                          <span className="h-px w-20 bg-gradient-to-r from-cyan-300/65 to-transparent" />
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -188,11 +180,11 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
                         <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">
                           {content.metrics[index]?.[0] ?? "FRAG STORE"}
                         </p>
-                        <p className={cn("mt-2 font-display text-[1.55rem] tracking-[0.04em]", theme.stat)}>
+                        <p className={cn("mt-2 font-display text-[1.55rem] tracking-[0.04em]", serviceTheme.stat)}>
                           {content.metrics[index]?.[1] ?? "100%"}
                         </p>
                       </div>
-                      <span className="inline-flex items-center gap-2 font-tech text-[11px] uppercase tracking-[0.16em] text-cyan-100">
+                      <span className="service-protocol__cta inline-flex items-center gap-2 font-tech text-[11px] uppercase tracking-[0.16em] text-cyan-100">
                         {content.modalCta}
                         <ArrowRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
                       </span>
@@ -207,135 +199,209 @@ export function ServiceProtocol({ content }: ServiceProtocolProps) {
 
       <CyberDialog open={activeCardIndex !== null} onOpenChange={(open) => !open && setActiveCardIndex(null)}>
         <CyberDialogContent
+          ref={dialogContentRef}
           showCloseButton={false}
-          className="block h-[88svh] overflow-y-auto overscroll-y-contain p-0 touch-pan-y sm:max-w-5xl"
+          className="service-protocol__dialog-content block h-[90svh] w-[calc(100vw-1.5rem)] max-w-[calc(100vw-1.5rem)] overflow-y-auto overscroll-y-contain rounded-none border-cyan-300/20 bg-transparent p-0 shadow-[0_32px_110px_rgba(0,0,0,0.58),0_0_70px_rgba(34,211,238,0.07)] touch-pan-y before:hidden sm:w-[calc(100%-2rem)] sm:max-w-5xl"
         >
           {activeCard ? (
-            <div className={cn("relative min-h-full", activeTheme.shell)}>
-              <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.07)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.06)_1px,transparent_1px)] bg-[size:24px_24px] opacity-30" />
-              <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/75 to-transparent" />
+            <div
+              className={cn("service-protocol__dialog-shell relative min-h-full overflow-hidden", serviceTheme.shell)}
+            >
+              <div className="service-protocol__dialog-grid pointer-events-none absolute inset-0 opacity-55" />
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-red-300/65 via-cyan-300/75 to-transparent" />
+              <div className="pointer-events-none absolute bottom-0 left-0 h-px w-32 bg-gradient-to-r from-cyan-300/70 to-transparent" />
 
-              <div className="relative z-10 max-w-7xl mx-auto min-h-full lg:grid lg:grid-cols-[0.92fr_1.08fr]">
-                <div className="border-b border-white/10 p-6 sm:p-8 lg:border-b-0 lg:border-r">
+              <div className="relative z-10 mx-auto min-h-full max-w-7xl lg:grid lg:grid-cols-[0.88fr_1.12fr]">
+                <div className="relative flex flex-col border-b border-white/10 p-5 sm:p-7 lg:border-r lg:border-b-0">
                   <div className="flex items-start justify-between gap-4">
-                    <div className="flex flex-wrap items-center gap-3">
-                      <span className={cn("inline-flex items-center border px-3 py-1.5 font-tech text-[11px] uppercase tracking-[0.16em]", activeTheme.badge)}>
+                    <div className="flex min-w-0 flex-wrap items-center gap-2.5">
+                      <span className={cn("inline-flex items-center border px-3 py-1.5 font-tech text-[11px] uppercase tracking-[0.16em]", serviceTheme.badge)}>
                         {activeCard.signal}
                       </span>
-                      <span className="inline-flex items-center border border-white/12 bg-white/[0.04] px-3 py-1.5 font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-300">
-                        FRAG STORE
+                      <span className="hidden items-center gap-2 border border-white/10 bg-white/[0.025] px-3 py-1.5 font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-400 sm:inline-flex">
+                        <span className="service-protocol__status size-1.5 bg-red-300" aria-hidden="true" />
+                        SYS.0{activePosition + 1}
                       </span>
                     </div>
-                    <button
-                      type="button"
-                      onClick={() => setActiveCardIndex(null)}
-                      aria-label={content.modalClose}
-                      className="grid size-10 place-items-center rounded-full border border-white/12 bg-black/30 text-zinc-300 transition-colors hover:border-white/22 hover:bg-white/[0.08] hover:text-white"
-                    >
-                      <X className="size-4" />
-                    </button>
+                    <CyberDialogClose asChild>
+                      <button
+                        type="button"
+                        aria-label={content.modalClose}
+                        className="service-protocol__dialog-button group grid size-10 shrink-0 place-items-center border border-white/12 bg-surface/35 text-zinc-400 transition-[border-color,background-color,color,transform] duration-300 hover:border-red-300/30 hover:bg-red-300/[0.06] hover:text-red-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-300/35 active:scale-[0.97]"
+                      >
+                        <X className="size-4 transition-transform duration-300 group-hover:rotate-90 motion-reduce:transition-none" />
+                      </button>
+                    </CyberDialogClose>
                   </div>
 
-                  <div className="mt-8 flex items-center justify-center">
+                  <div className="mt-7 flex items-center justify-center">
                     <div
                       className={cn(
-                        "relative grid aspect-square w-full max-w-[16rem] place-items-center overflow-hidden rounded-[1.5rem] border border-white/10",
-                        activeTheme.surface,
+                        "service-protocol__dialog-visual relative grid aspect-square w-full max-w-[16rem] place-items-center overflow-hidden border border-white/10",
+                        serviceTheme.surface,
                       )}
                     >
-                      <div className="absolute inset-0 bg-[linear-gradient(rgba(148,163,184,0.08)_1px,transparent_1px),linear-gradient(90deg,rgba(148,163,184,0.07)_1px,transparent_1px)] bg-[size:22px_22px] opacity-40" />
-                      <div className={cn("absolute -right-6 top-6 size-24 rounded-full blur-3xl", activeTheme.orb)} />
-                      <div className="absolute inset-[10%] rounded-[1.2rem] border border-white/8" />
-                      <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-white/0 via-white/12 to-white/0" />
-                      <div className="absolute top-1/2 left-0 h-px w-full -translate-y-1/2 bg-gradient-to-r from-white/0 via-white/10 to-white/0" />
-                      {(() => {
-                        const ActiveIcon = serviceIcons[activeCardIndex ?? 0] ?? ShieldCheck;
-                        return <ActiveIcon className="relative z-10 max-w-7xl mx-auto size-24 text-white" />;
-                      })()}
+                      <div className="absolute inset-0 bg-[linear-gradient(rgba(34,211,238,0.06)_1px,transparent_1px),linear-gradient(90deg,rgba(34,211,238,0.055)_1px,transparent_1px)] bg-[size:24px_24px] opacity-40" />
+                      <div className="absolute -right-8 top-5 size-28 rounded-full bg-cyan-300/[0.09] blur-3xl" />
+                      <span className="absolute top-3 left-3 size-1.5 bg-red-300/85" aria-hidden="true" />
+                      <span className="absolute top-3 right-3 font-tech text-[9px] uppercase tracking-[0.18em] text-zinc-600" aria-hidden="true">
+                        FRAG//SERVICE
+                      </span>
+                      <div key={activePosition} className="service-protocol__dialog-icon relative z-10 grid size-36 place-items-center sm:size-40">
+                        <div className="service-protocol__icon-ring absolute inset-0 border border-dashed border-cyan-300/22" />
+                        <div className="absolute inset-5 border border-white/8" />
+                        <div className="absolute left-1/2 top-0 h-full w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-cyan-300/18 to-transparent" />
+                        <div className="absolute left-0 top-1/2 h-px w-full -translate-y-1/2 bg-gradient-to-r from-transparent via-cyan-300/18 to-transparent" />
+                        <div className="relative grid size-24 place-items-center border border-cyan-300/24 bg-[radial-gradient(circle_at_32%_26%,rgba(34,211,238,0.14),transparent_42%),rgba(var(--theme-surface-rgb),0.72)] text-cyan-100 shadow-[0_0_58px_rgba(34,211,238,0.11)] backdrop-blur-sm sm:size-28">
+                          <span className="absolute top-2 left-2 size-1 bg-red-300" aria-hidden="true" />
+                          <ActiveIcon className="relative z-10 size-13 sm:size-15" />
+                        </div>
+                      </div>
+                      <div className="absolute inset-x-4 bottom-3 flex items-center" aria-hidden="true">
+                        <span className="h-px w-10 bg-red-300/55" />
+                        <span className="h-px flex-1 bg-gradient-to-r from-cyan-300/55 to-transparent" />
+                      </div>
                     </div>
                   </div>
 
-                  <div className="mt-8">
-                    <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">
-                      {content.modalHint}
-                    </p>
-                    <h3 className="mt-3 font-display text-[2rem] leading-none tracking-[0.04em] text-white sm:text-[2.4rem]">
+                  <div key={`summary-${activePosition}`} className="service-protocol__dialog-summary mt-7">
+                    <div className="flex items-center justify-between gap-4">
+                      <p className="font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-500">
+                        {content.modalHint}
+                      </p>
+                      <span className="font-tech text-[10px] tracking-[0.16em] text-zinc-600" aria-hidden="true">
+                        0{activePosition + 1} / 0{content.cards.length}
+                      </span>
+                    </div>
+                    <h3 className="mt-3 font-display text-[1.8rem] leading-none tracking-[0.04em] text-white sm:text-[2.2rem]">
                       {activeCard.title}
                     </h3>
-                    <p className="mt-4 text-sm leading-7 text-zinc-300 sm:text-base">
+                    <p className="mt-4 max-w-full break-words text-sm leading-7 text-zinc-400">
                       {activeCard.description}
                     </p>
                   </div>
 
-                  <div className="mt-8 grid gap-3 md:grid-cols-3 lg:grid-cols-1">
-                    {content.metrics.map(([label, value]) => (
-                      <div key={label} className="border border-white/10 bg-black/20 px-4 py-3 backdrop-blur-sm">
-                        <p className="font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-500">
-                          {label}
-                        </p>
-                        <p className={cn("mt-2 font-display text-xl", activeTheme.stat)}>{value}</p>
+                  <div className="mt-7 grid gap-2 md:grid-cols-3 lg:mt-auto lg:grid-cols-1 lg:pt-7">
+                    {content.metrics.map(([label, value], metricIndex) => (
+                      <div
+                        key={label}
+                        className={cn(
+                          "service-protocol__dialog-metric flex items-center justify-between gap-4 border px-4 py-3 backdrop-blur-sm transition-colors duration-300",
+                          metricIndex === activePosition
+                            ? "border-cyan-300/22 bg-cyan-300/[0.055]"
+                            : "border-white/8 bg-surface/18",
+                        )}
+                      >
+                        <div className="min-w-0">
+                          <p className="truncate font-tech text-[9px] uppercase tracking-[0.15em] text-zinc-500">
+                            {label}
+                          </p>
+                          <p className={cn("mt-1.5 font-display text-lg", metricIndex === activePosition ? serviceTheme.stat : "text-zinc-300")}>
+                            {value}
+                          </p>
+                        </div>
+                        <span className={cn("size-1.5 shrink-0", metricIndex === activePosition ? "bg-red-300" : "bg-zinc-700")} aria-hidden="true" />
                       </div>
                     ))}
                   </div>
                 </div>
 
-                <div className="p-6 sm:p-8">
-                  <CyberDialogHeader className="text-left">
-                    <CyberDialogDescription className="font-tech text-[11px] uppercase tracking-[0.16em] text-cyan-200/70">
-                      {content.modalHint}
-                    </CyberDialogDescription>
-                    <CyberDialogTitle className="font-display text-2xl tracking-[0.04em] text-white sm:text-[2rem]">
-                      {activeCard.detailsTitle}
-                    </CyberDialogTitle>
-                  </CyberDialogHeader>
+                <div className="flex min-h-full flex-col p-5 sm:p-7 lg:p-8">
+                  <div key={`copy-${activePosition}`} className="service-protocol__dialog-copy-transition">
+                    <CyberDialogHeader className="text-left">
+                      <CyberDialogDescription className="flex items-center gap-3 font-tech text-[10px] uppercase tracking-[0.16em] text-cyan-200/70">
+                        <span className="h-px w-8 bg-red-300/60" aria-hidden="true" />
+                        {content.modalHint}
+                        <span aria-hidden="true">· 0{activePosition + 1}</span>
+                      </CyberDialogDescription>
+                      <CyberDialogTitle
+                        ref={dialogTitleRef}
+                        tabIndex={-1}
+                        className="max-w-2xl text-balance font-display text-[1.7rem] leading-[1.08] tracking-[0.035em] text-white outline-none sm:text-[2.15rem]"
+                      >
+                        {activeCard.detailsTitle}
+                      </CyberDialogTitle>
+                    </CyberDialogHeader>
 
-                  <p className="mt-6 max-w-2xl text-[0.98rem] leading-8 text-zinc-300 sm:text-base">
-                    {activeCard.detailsDescription}
-                  </p>
-
-                  <div className="mt-8">
-                    <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">
-                      {content.modalListLabel}
+                    <p className="mt-6 max-w-2xl text-[0.95rem] leading-8 text-zinc-300 sm:text-base">
+                      {activeCard.detailsDescription}
                     </p>
-                    <div className="mt-4 grid gap-3">
-                      {activeCard.highlights.map((highlight) => (
-                        <div
-                          key={highlight}
-                          className="rounded-md border border-white/10 bg-white/[0.04] px-4 py-4 text-sm leading-7 text-zinc-300"
-                        >
-                          {highlight}
-                        </div>
-                      ))}
+
+                    <div className="mt-7">
+                      <p className="font-tech text-[11px] uppercase tracking-[0.16em] text-zinc-500">
+                        {content.modalListLabel}
+                      </p>
+                      <div className="mt-4 grid gap-2.5">
+                        {activeCard.highlights.map((highlight, highlightIndex) => (
+                          <div
+                            key={highlight}
+                            className="service-protocol__dialog-highlight grid grid-cols-[2rem_1fr] gap-3 border border-white/9 bg-white/[0.025] p-4 text-sm leading-7 text-zinc-300 transition-colors duration-300 hover:border-cyan-300/18 hover:bg-cyan-300/[0.035]"
+                          >
+                            <span className="font-tech text-[10px] tracking-[0.16em] text-cyan-200/75" aria-hidden="true">
+                              0{highlightIndex + 1}
+                            </span>
+                            <span>{highlight}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="service-protocol__dialog-note mt-7 grid grid-cols-[auto_1fr] gap-4 border border-cyan-300/14 bg-cyan-300/[0.035] p-4 sm:p-5">
+                      <div className="grid size-10 place-items-center border border-cyan-300/20 bg-surface/40 text-cyan-100">
+                        <ShieldCheck className="size-5" aria-hidden="true" />
+                      </div>
+                      <div>
+                        <p className="font-tech text-[9px] uppercase tracking-[0.16em] text-zinc-500">FRAG STORE // NOTE</p>
+                        <p className="mt-2 text-sm leading-7 text-zinc-400">{activeCard.note}</p>
+                      </div>
                     </div>
                   </div>
 
-                  <div className="mt-8 rounded-md border border-white/10 bg-black/20 p-5">
-                    <p className="text-sm leading-7 text-zinc-400">{activeCard.note}</p>
-                  </div>
-
-                  <div className="mt-8 flex justify-start">
-                    <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                      <div className="flex gap-3">
+                  <div className="mt-auto pt-7">
+                    <div className="border-t border-white/10 pt-5">
+                      <div className="grid grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2">
                         <button
                           type="button"
-                          onClick={() => previousIndex !== null && setActiveCardIndex(previousIndex)}
+                          onClick={() => previousIndex !== null && showCard(previousIndex)}
                           aria-label={content.modalPrev}
-                          className="inline-flex size-11 items-center justify-center rounded-full border border-white/12 bg-white/[0.04] text-zinc-200 transition-colors hover:border-white/22 hover:bg-white/[0.08] hover:text-white"
+                          className="service-protocol__dialog-button group inline-flex h-12 min-w-0 items-center justify-start gap-2.5 border border-white/10 bg-white/[0.025] px-3 text-zinc-300 transition-[border-color,background-color,color,transform] duration-300 hover:-translate-x-0.5 hover:border-cyan-300/20 hover:bg-cyan-300/[0.045] hover:text-cyan-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-300/35 active:scale-[0.985] motion-reduce:hover:transform-none sm:px-4"
                         >
-                          <ArrowLeft className="size-4" />
+                          <ArrowLeft className="size-4 shrink-0 transition-transform duration-300 group-hover:-translate-x-0.5 motion-reduce:transition-none" />
+                          <span className="hidden truncate font-tech text-[10px] uppercase tracking-[0.13em] sm:inline">
+                            {content.modalPrev}
+                          </span>
                         </button>
+                        <span
+                          className="inline-flex h-12 min-w-20 items-center justify-center border border-white/8 bg-surface/30 px-3 font-tech text-[10px] tracking-[0.16em] text-zinc-500"
+                          aria-live="polite"
+                          aria-atomic="true"
+                        >
+                          <span className="text-cyan-100">0{activePosition + 1}</span>
+                          <span className="mx-2 text-zinc-700">/</span>
+                          0{content.cards.length}
+                        </span>
                         <button
                           type="button"
-                          onClick={() => nextIndex !== null && setActiveCardIndex(nextIndex)}
+                          onClick={() => nextIndex !== null && showCard(nextIndex)}
                           aria-label={content.modalNext}
-                          className="inline-flex size-11 items-center justify-center rounded-full border border-cyan-300/18 bg-cyan-300/[0.06] text-cyan-100 transition-colors hover:border-cyan-300/32 hover:bg-cyan-300/[0.12] hover:text-white"
+                          className="service-protocol__dialog-button group inline-flex h-12 min-w-0 items-center justify-end gap-2.5 border border-cyan-300/20 bg-cyan-300/[0.055] px-3 text-cyan-100 transition-[border-color,background-color,color,transform,box-shadow] duration-300 hover:translate-x-0.5 hover:border-cyan-300/35 hover:bg-cyan-300/[0.09] hover:shadow-[0_0_28px_rgba(34,211,238,0.08)] hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-cyan-300/40 active:scale-[0.985] motion-reduce:hover:transform-none sm:px-4"
                         >
-                          <ArrowRight className="size-4" />
+                          <span className="hidden truncate font-tech text-[10px] uppercase tracking-[0.13em] sm:inline">
+                            {content.modalNext}
+                          </span>
+                          <ArrowRight className="size-4 shrink-0 transition-transform duration-300 group-hover:translate-x-0.5 motion-reduce:transition-none" />
                         </button>
                       </div>
-                      <CyberButton variant="ghost" onClick={() => setActiveCardIndex(null)}>
-                        {content.modalClose}
-                      </CyberButton>
+                      <CyberDialogClose asChild>
+                        <button
+                          type="button"
+                          className="service-protocol__dialog-button mt-2.5 inline-flex h-11 w-full items-center justify-center gap-2.5 border border-white/9 bg-white/[0.02] px-4 font-tech text-[10px] uppercase tracking-[0.14em] text-zinc-500 transition-[border-color,background-color,color] duration-300 hover:border-red-300/22 hover:bg-red-300/[0.04] hover:text-zinc-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-red-300/30"
+                        >
+                          <span className="size-1.5 bg-red-300/80" aria-hidden="true" />
+                          {content.modalClose}
+                          <X className="size-3.5" aria-hidden="true" />
+                        </button>
+                      </CyberDialogClose>
                     </div>
                   </div>
                 </div>

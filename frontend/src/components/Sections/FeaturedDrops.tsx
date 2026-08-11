@@ -228,7 +228,7 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
       fullWidth
       className="relative isolate overflow-hidden bg-transparent text-zinc-50"
     >
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(88%_52%_at_-12%_28%,rgba(34,211,238,0.1),transparent_62%),radial-gradient(92%_54%_at_114%_72%,rgba(255,23,68,0.1),transparent_64%),linear-gradient(126deg,rgba(34,211,238,0.04)_0%,transparent_38%,transparent_64%,rgba(255,23,68,0.04)_100%),linear-gradient(180deg,rgba(1,1,3,0.04)_0%,rgba(2,2,4,0.18)_22%,rgba(2,2,4,0.18)_78%,rgba(1,1,3,0.04)_100%)]" />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(88%_52%_at_-12%_28%,rgba(34,211,238,0.1),transparent_62%),radial-gradient(92%_54%_at_114%_72%,rgba(255,23,68,0.1),transparent_64%),linear-gradient(126deg,rgba(34,211,238,0.04)_0%,transparent_38%,transparent_64%,rgba(255,23,68,0.04)_100%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.04)_0%,rgba(var(--theme-surface-rgb),0.18)_22%,rgba(var(--theme-surface-rgb),0.18)_78%,rgba(var(--theme-surface-rgb),0.04)_100%)]" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/75 to-transparent" />
 
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-8 sm:gap-10">
@@ -334,7 +334,7 @@ export function FeaturedDrops({ locale, content, products }: FeaturedDropsProps)
         </div>
       ) : (
         <div className="mx-auto mt-8 w-full max-w-7xl sm:mt-10">
-          <CyberCard variant="glass" className="overflow-hidden border-cyan-300/15 bg-black/35">
+          <CyberCard variant="glass" className="overflow-hidden border-cyan-300/15 bg-surface/35">
             <CyberCardContent className="flex flex-col items-center justify-center gap-5 p-8 text-center sm:p-10">
               <div className="grid size-18 place-items-center rounded-full border border-cyan-300/20 bg-cyan-300/8 text-cyan-100 shadow-[0_0_34px_rgba(34,211,238,0.14)]">
                 <PackageCheck className="size-8" />

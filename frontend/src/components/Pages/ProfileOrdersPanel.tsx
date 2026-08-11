@@ -222,7 +222,7 @@ export function ProfileOrdersPanel({
                       {order.items.map((item) => (
                         <div
                           key={item.id}
-                          className="grid gap-3 rounded-md border border-white/8 bg-black/25 px-4 py-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
+                          className="grid gap-3 rounded-md border border-white/8 bg-surface/25 px-4 py-3 sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center"
                         >
                           <div className="min-w-0">
                             <p className="break-words text-sm uppercase tracking-[0.08em] text-zinc-100">

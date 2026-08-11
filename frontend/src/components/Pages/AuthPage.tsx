@@ -119,20 +119,20 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
   return (
     <main
       className={cn(
-        "relative isolate min-h-screen overflow-hidden bg-black text-zinc-50 transition-colors duration-700",
+        "relative isolate min-h-screen overflow-hidden bg-surface text-zinc-50 transition-colors duration-700",
         mode === "login" ? "selection:bg-red-400/30" : "selection:bg-fuchsia-400/30",
       )}
     >
       <div className="absolute inset-0 -z-30">
         <div
           className={cn(
-            "absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(255,23,68,0.3),transparent_31%),radial-gradient(circle_at_78%_18%,rgba(127,29,29,0.42),transparent_30%),radial-gradient(circle_at_58%_78%,rgba(217,70,239,0.08),transparent_24%),linear-gradient(180deg,#050507_0%,#120507_48%,#000_100%)] transition-opacity duration-700",
+            "absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(255,23,68,0.3),transparent_31%),radial-gradient(circle_at_78%_18%,rgba(127,29,29,0.42),transparent_30%),radial-gradient(circle_at_58%_78%,rgba(217,70,239,0.08),transparent_24%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),1)_0%,rgba(var(--theme-surface-rgb),1)_48%,rgba(var(--theme-surface-rgb),1)_100%)] transition-opacity duration-700",
             mode === "login" ? "opacity-100" : "opacity-0",
           )}
         />
         <div
           className={cn(
-            "absolute inset-0 bg-[radial-gradient(circle_at_16%_22%,rgba(34,211,238,0.18),transparent_28%),radial-gradient(circle_at_82%_16%,rgba(217,70,239,0.34),transparent_32%),radial-gradient(circle_at_62%_78%,rgba(59,130,246,0.14),transparent_24%),linear-gradient(180deg,#040509_0%,#16051a_52%,#020204_100%)] transition-opacity duration-700",
+            "absolute inset-0 bg-[radial-gradient(circle_at_16%_22%,rgba(34,211,238,0.18),transparent_28%),radial-gradient(circle_at_82%_16%,rgba(217,70,239,0.34),transparent_32%),radial-gradient(circle_at_62%_78%,rgba(59,130,246,0.14),transparent_24%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),1)_0%,rgba(var(--theme-surface-rgb),1)_52%,rgba(var(--theme-surface-rgb),1)_100%)] transition-opacity duration-700",
             mode === "register" ? "opacity-100" : "opacity-0",
           )}
         />
@@ -224,8 +224,8 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
           className={cn(
             "rounded-none p-2 transition-all duration-700 lg:flex lg:min-h-screen lg:items-center",
             mode === "login"
-              ? "border-red-500/20 bg-black/38 shadow-[0_0_44px_rgba(255,23,68,0.12)]"
-              : "border-fuchsia-400/25 bg-black/42 shadow-[0_0_54px_rgba(217,70,239,0.16)]",
+              ? "border-red-500/20 bg-surface/38 shadow-[0_0_44px_rgba(255,23,68,0.12)]"
+              : "border-fuchsia-400/25 bg-surface/42 shadow-[0_0_54px_rgba(217,70,239,0.16)]",
           )}
         >
           <CyberCardContent className="w-full p-5 sm:p-7 lg:px-10">
@@ -260,8 +260,8 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
                 className={cn(
                   "grid w-full grid-cols-2 rounded-md transition-all duration-700",
                   mode === "login"
-                    ? "border-red-300/15 bg-black/45 shadow-[inset_0_0_22px_rgba(248,113,113,0.05)]"
-                    : "border-fuchsia-300/20 bg-black/50 shadow-[inset_0_0_26px_rgba(217,70,239,0.09)]",
+                    ? "border-red-300/15 bg-surface/45 shadow-[inset_0_0_22px_rgba(248,113,113,0.05)]"
+                    : "border-fuchsia-300/20 bg-surface/50 shadow-[inset_0_0_26px_rgba(217,70,239,0.09)]",
                 )}
               >
                 <CyberTabsTrigger

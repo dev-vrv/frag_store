@@ -166,19 +166,19 @@ export default function AiAssistantLauncher() {
       </button>
 
       <CyberDialog open={open} onOpenChange={setOpen}>
-        <CyberDialogContent className="flex h-[min(88vh,860px)] max-h-[88vh] w-[calc(100%-1rem)] max-w-6xl flex-col gap-0 overflow-hidden border-cyan-300/18 bg-[radial-gradient(circle_at_top_left,rgba(34,211,238,0.07),transparent_22%),radial-gradient(circle_at_top_right,rgba(163,230,53,0.03),transparent_16%),linear-gradient(180deg,rgba(5,7,9,0.99),rgba(3,4,6,1))] p-0 shadow-[0_0_54px_rgba(34,211,238,0.10)] before:bg-[linear-gradient(135deg,rgba(34,211,238,0.04),transparent_45%,rgba(163,230,53,0.03))]">
-          <CyberDialogHeader className="shrink-0 border-b border-cyan-300/10 px-5 py-4 text-left sm:px-6">
+        <CyberDialogContent className="assistant-ui assistant-panel flex h-[min(88vh,860px)] max-h-[88vh] w-[calc(100%-1rem)] max-w-6xl flex-col gap-0 overflow-hidden p-0 before:hidden">
+          <CyberDialogHeader className="assistant-divider shrink-0 border-b px-5 py-4 text-left sm:px-6">
             <div className="flex flex-col gap-4">
               <div>
-                <CyberDialogTitle className="font-display text-2xl uppercase tracking-[0.08em] text-cyan-50 sm:text-3xl">
+                <CyberDialogTitle className="assistant-heading font-display text-2xl uppercase tracking-[0.08em] sm:text-3xl">
                   {text.title}
                 </CyberDialogTitle>
-                <CyberDialogDescription className="mt-2 max-w-3xl text-sm leading-6 text-zinc-300">
+                <CyberDialogDescription className="assistant-muted mt-2 max-w-3xl text-sm leading-6">
                   {text.description}
                 </CyberDialogDescription>
               </div>
-              <div className="rounded-sm border border-cyan-300/10 bg-white/[0.02] p-3">
-                <p className="font-tech block text-sm font-semibold uppercase tracking-[0.1em] text-zinc-300">
+              <div className="assistant-surface rounded-sm border p-3">
+                <p className="assistant-heading font-tech block text-sm font-semibold uppercase tracking-[0.1em]">
                   {text.typeLabel}
                 </p>
                 <div role="radiogroup" aria-label={text.typeLabel} className="mt-3 flex flex-wrap gap-2">
@@ -191,12 +191,9 @@ export default function AiAssistantLauncher() {
                         type="button"
                         role="radio"
                         aria-checked={isActive}
+                        data-active={isActive}
                         onClick={() => setRequestType(option.value as AssistanceType)}
-                        className={`inline-flex min-h-10 items-center rounded-sm border px-3 py-2 text-left font-tech text-[11px] uppercase tracking-[0.1em] transition ${
-                          isActive
-                            ? "border-cyan-300/24 bg-cyan-300/[0.05] text-cyan-50 shadow-[0_0_16px_rgba(34,211,238,0.04)]"
-                            : "border-white/10 bg-white/[0.02] text-zinc-300 hover:border-cyan-300/16 hover:bg-white/[0.04] hover:text-white"
-                        }`}
+                        className="assistant-type-option inline-flex min-h-10 items-center rounded-sm border px-3 py-2 text-left font-tech text-[11px] uppercase tracking-[0.1em] transition"
                       >
                         {option.label}
                       </button>
@@ -208,7 +205,7 @@ export default function AiAssistantLauncher() {
           </CyberDialogHeader>
 
           <div className="min-h-0 flex flex-1">
-            <section className="flex min-h-0 flex-1 flex-col bg-[linear-gradient(180deg,rgba(8,10,12,0.98),rgba(4,5,7,1))]">
+            <section className="flex min-h-0 flex-1 flex-col bg-[var(--assistant-bg)]">
               <div className="min-h-0 flex-1 overflow-y-auto px-4 py-4 sm:px-6">
                 {messages.length ? (
                   <div className="space-y-4">
@@ -218,21 +215,18 @@ export default function AiAssistantLauncher() {
                         className={`flex ${entry.role === "user" ? "justify-end" : "justify-start"}`}
                       >
                         <div
-                          className={`max-w-[min(100%,42rem)] rounded-md border px-4 py-3 text-sm leading-6 shadow-[0_12px_32px_rgba(0,0,0,0.16)] ${
-                            entry.role === "user"
-                              ? "border-cyan-300/24 bg-cyan-300/[0.05] text-cyan-50 shadow-[0_14px_36px_rgba(34,211,238,0.06)]"
-                              : "border-emerald-300/12 bg-white/[0.03] text-zinc-100 shadow-[0_14px_36px_rgba(16,185,129,0.04)]"
-                          }`}
+                          data-role={entry.role}
+                          className="assistant-message max-w-[min(100%,42rem)] rounded-md border px-4 py-3 text-sm leading-6"
                         >
-                          <div className="mb-2 flex items-center gap-2 font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-400">
+                          <div className="assistant-message-meta assistant-muted mb-2 flex items-center gap-2 font-tech text-[10px] uppercase tracking-[0.16em]">
                             {entry.role === "user" ? (
                               <>
-                                <MessageSquareText className="size-3.5 text-cyan-200" />
+                                <MessageSquareText className="size-3.5" />
                                 {text.types[entry.requestType]}
                               </>
                             ) : (
                               <>
-                                <Bot className="size-3.5 text-emerald-200" />
+                                <Bot className="size-3.5" />
                                 {text.title}
                               </>
                             )}
@@ -246,25 +240,26 @@ export default function AiAssistantLauncher() {
                 ) : (
                   <div className="grid h-full place-items-center">
                     <div className="max-w-lg text-center">
-                      <div className="mx-auto grid size-16 place-items-center rounded-full border border-cyan-300/14 bg-white/[0.03] text-cyan-100 shadow-[0_0_24px_rgba(34,211,238,0.06)]">
+                      <div className="assistant-surface mx-auto grid size-16 place-items-center rounded-full border shadow-[0_6px_18px_rgba(0,0,0,0.08)]">
                         <Bot className="size-7" />
                       </div>
-                      <p className="mt-5 font-display text-2xl uppercase tracking-[0.08em] text-cyan-50">
+                      <p className="assistant-heading mt-5 font-display text-2xl uppercase tracking-[0.08em]">
                         {text.emptyTitle}
                       </p>
-                      <p className="mt-3 text-sm leading-7 text-zinc-400">{text.emptyText}</p>
+                      <p className="assistant-muted mt-3 text-sm leading-7">{text.emptyText}</p>
                     </div>
                   </div>
                 )}
               </div>
 
-              <div className="shrink-0 border-t border-cyan-300/8 bg-black/28 px-4 py-4 sm:px-6">
+              <div className="assistant-divider shrink-0 border-t bg-[var(--assistant-bg)] px-4 py-4 sm:px-6">
                 <div className="flex flex-col gap-3">
                   <CyberTextarea
                     label={text.inputLabel}
+                    labelClassName="assistant-heading"
                     value={message}
                     placeholder={text.inputPlaceholder}
-                    className="min-h-28 border-cyan-300/18 bg-white/[0.02] focus-visible:border-cyan-300/55 focus-visible:ring-cyan-300/14"
+                    className="assistant-field min-h-28"
                     onChange={(event) => setMessage(event.target.value)}
                     onKeyDown={(event) => {
                       if (event.key === "Enter" && !event.shiftKey) {
@@ -277,7 +272,7 @@ export default function AiAssistantLauncher() {
                     <CyberButton
                       type="button"
                       variant="secondary"
-                      className="border-cyan-300/42 bg-cyan-400/[0.08] text-cyan-50 shadow-[0_0_20px_rgba(34,211,238,0.10)] hover:bg-cyan-300/[0.14]"
+                      className="assistant-action"
                       onClick={() => void handleSend()}
                       disabled={!message.trim() || isSending}
                     >

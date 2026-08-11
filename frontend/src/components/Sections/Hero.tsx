@@ -1,10 +1,10 @@
 "use client";
 import {
+  Armchair,
   ChevronDown,
   Headphones,
   Keyboard,
   MousePointer2,
-  PackageOpen,
   type LucideIcon,
 } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
@@ -62,9 +62,9 @@ const heroImageByCategory: Record<
     accentClassName: "from-red-400/72 via-cyan-300/34 to-transparent",
     imagePositionClassName: "object-center",
   },
-  accessories: {
+  "gaming-chairs": {
     image: "/images/hero/chaer.jpg?v=20260715-1050",
-    icon: PackageOpen,
+    icon: Armchair,
     accentClassName: "from-lime-300/70 via-cyan-300/34 to-transparent",
     imagePositionClassName: "object-center",
   },
@@ -72,7 +72,7 @@ const heroImageByCategory: Record<
 
 export function Hero({ locale, content, categories }: HeroProps) {
   const slides = useMemo<HeroSlide[]>(() => {
-    const prioritySlugs = ["keyboards", "mice", "headsets", "accessories"];
+    const prioritySlugs = ["keyboards", "mice", "headsets", "gaming-chairs"];
     const mapped = prioritySlugs.flatMap((slug): HeroSlide[] => {
       const category = categories.find((item) => item.slug === slug);
       const visual = heroImageByCategory[slug];
@@ -120,7 +120,7 @@ export function Hero({ locale, content, categories }: HeroProps) {
   return (
     <Section
       fullWidth
-      className="relative isolate overflow-hidden bg-transparent text-zinc-50"
+      className="theme-dark relative isolate overflow-hidden bg-transparent text-zinc-50"
       containerClassName="section-hero relative"
     >
       <style jsx>{`
@@ -156,7 +156,7 @@ export function Hero({ locale, content, categories }: HeroProps) {
           }
         }
       `}</style>
-      <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgba(8,10,18,0.12)_0%,rgba(8,10,18,0.08)_100%)]" />
+      <div className="absolute inset-0 -z-20 bg-[linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.12)_0%,rgba(var(--theme-surface-rgb),0.08)_100%)]" />
       <div className="absolute inset-0 -z-10 overflow-hidden">
         {slides.map((slide, index) => (
           <div
@@ -176,7 +176,7 @@ export function Hero({ locale, content, categories }: HeroProps) {
                 index === resolvedActiveIndex && "animate-[hero-slide-drift_14s_ease-in-out_infinite_alternate]",
               )}
             />
-            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,10,18,0.68)_0%,rgba(7,10,18,0.42)_24%,rgba(7,10,18,0.18)_46%,rgba(7,10,18,0.12)_100%)]" />
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(var(--theme-surface-rgb),0.68)_0%,rgba(var(--theme-surface-rgb),0.42)_24%,rgba(var(--theme-surface-rgb),0.18)_46%,rgba(var(--theme-surface-rgb),0.12)_100%)]" />
           </div>
         ))}
       </div>
@@ -186,7 +186,7 @@ export function Hero({ locale, content, categories }: HeroProps) {
           activeSlide.accentClassName,
         )}
       />
-      <div className="absolute inset-y-0 left-0 -z-10 w-[56%] bg-[linear-gradient(90deg,rgba(7,10,18,0.18)_0%,transparent_100%)]" />
+      <div className="absolute inset-y-0 left-0 -z-10 w-[56%] bg-[linear-gradient(90deg,rgba(var(--theme-surface-rgb),0.18)_0%,transparent_100%)]" />
       <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-cyan-300/85 to-transparent" />
       <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
 
@@ -217,7 +217,7 @@ export function Hero({ locale, content, categories }: HeroProps) {
           </div>
         </div>
 
-        <div className="relative self-end justify-self-stretch overflow-hidden border border-white/12 bg-[#080b12]/72 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.34)] backdrop-blur-xl lg:w-[22rem] lg:justify-self-end">
+        <div className="relative self-end justify-self-stretch overflow-hidden border border-white/12 bg-[rgba(var(--theme-surface-rgb),1)]/72 p-2 shadow-[0_24px_70px_rgba(0,0,0,0.34)] backdrop-blur-xl lg:w-[22rem] lg:justify-self-end">
           <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-cyan-200/70 to-transparent" />
           <div className="flex items-end justify-between gap-4 px-3 pb-3 pt-2">
             <div className="min-w-0">
@@ -250,7 +250,7 @@ export function Hero({ locale, content, categories }: HeroProps) {
                   className={cn(
                     "group relative flex min-h-[4.25rem] items-center gap-3 overflow-hidden border px-3 py-2.5 text-left outline-none transition duration-300 focus-visible:ring-2 focus-visible:ring-cyan-200/50 focus-visible:ring-inset",
                     isActive
-                      ? "border-cyan-200/34 bg-[linear-gradient(100deg,rgba(34,211,238,0.17),rgba(255,255,255,0.055)_55%,rgba(255,255,255,0.025))] shadow-[inset_3px_0_0_rgba(103,232,249,0.9),0_10px_30px_rgba(8,145,178,0.08)]"
+                      ? "border-cyan-200/34 bg-[linear-gradient(100deg,rgba(34,211,238,0.17),rgba(var(--theme-contrast-rgb),0.055)_55%,rgba(var(--theme-contrast-rgb),0.025))] shadow-[inset_3px_0_0_rgba(103,232,249,0.9),0_10px_30px_rgba(8,145,178,0.08)]"
                       : "border-transparent bg-white/[0.025] hover:border-white/12 hover:bg-white/[0.065]",
                   )}
                 >
@@ -259,7 +259,7 @@ export function Hero({ locale, content, categories }: HeroProps) {
                       "grid size-9 shrink-0 place-items-center border transition duration-300",
                       isActive
                         ? "border-cyan-200/36 bg-cyan-200/10 text-cyan-100 shadow-[0_0_20px_rgba(34,211,238,0.14)]"
-                        : "border-white/10 bg-black/20 text-zinc-400 group-hover:border-white/20 group-hover:text-zinc-100",
+                        : "border-white/10 bg-surface/20 text-zinc-400 group-hover:border-white/20 group-hover:text-zinc-100",
                     )}
                   >
                     <Icon className="size-4" aria-hidden="true" />

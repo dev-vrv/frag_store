@@ -24,8 +24,6 @@ interface CategorySlot {
   icon: LucideIcon;
   image?: string;
   accent: string;
-  fallbackSlugs?: string[];
-  fallbackTitle?: Record<Locale, string>;
 }
 
 const copy: Record<Locale, { eyebrow: string; title: string; all: string; open: string }> = {
@@ -64,12 +62,6 @@ const categorySlots: CategorySlot[] = [
   },
   {
     slugs: ["chairs", "gaming-chairs", "gaming_chairs"],
-    fallbackSlugs: ["accessories"],
-    fallbackTitle: {
-      ru: "Игровые кресла",
-      en: "Gaming chairs",
-      kg: "Оюн креслолору",
-    },
     icon: Armchair,
     image: "/images/hero/chaer.jpg?v=20260715-1050",
     accent: "from-lime-300/24 via-emerald-400/8",
@@ -98,21 +90,15 @@ export function MainCategories({ locale, categories }: MainCategoriesProps) {
   const content = copy[locale];
   const cards = categorySlots.flatMap((slot) => {
     const category = categories.find((item) => slot.slugs.includes(item.slug));
-    const fallbackCategory = slot.fallbackSlugs
-      ? categories.find((item) => slot.fallbackSlugs?.includes(item.slug))
-      : undefined;
-    const resolvedCategory = category ?? fallbackCategory;
 
-    if (!resolvedCategory) {
+    if (!category) {
       return [];
     }
 
     return [{
       ...slot,
-      category: resolvedCategory,
-      title: category
-        ? getLocalizedCategoryName(category, locale)
-        : slot.fallbackTitle?.[locale] ?? getLocalizedCategoryName(resolvedCategory, locale),
+      category,
+      title: getLocalizedCategoryName(category, locale),
     }];
   });
 
@@ -144,7 +130,7 @@ export function MainCategories({ locale, categories }: MainCategoriesProps) {
             key={`${category.slug}-${title}`}
             href={`${localizePath("/catalog", locale)}?category=${encodeURIComponent(category.slug)}`}
             aria-label={`${content.open}: ${title}`}
-            className="group relative isolate min-h-44 overflow-hidden border border-white/10 bg-[#111219]/88 p-5 transition duration-300 hover:-translate-y-1 hover:border-cyan-200/35 hover:shadow-[0_18px_55px_rgba(0,0,0,0.3)]"
+            className="theme-dark group relative isolate min-h-52 overflow-hidden border border-[rgba(255,255,255,0.15)] bg-[#08090e] p-5 transition duration-300 hover:-translate-y-1 hover:border-cyan-200/45 hover:shadow-[0_18px_55px_rgba(0,0,0,0.3)] sm:min-h-56"
           >
             {image ? (
               // Decorative category preview; the title remains the accessible label.
@@ -152,22 +138,23 @@ export function MainCategories({ locale, categories }: MainCategoriesProps) {
               <img
                 src={image}
                 alt=""
-                className="absolute inset-0 -z-20 h-full w-full object-cover opacity-28 transition duration-700 group-hover:scale-105 group-hover:opacity-40"
+                className="absolute inset-0 -z-20 h-full w-full object-cover transition duration-700 group-hover:scale-105"
               />
             ) : null}
-            <div className={cn("absolute inset-0 -z-10 bg-gradient-to-br to-[#101117]/96", accent)} />
-            <div className="absolute inset-0 -z-10 bg-[linear-gradient(110deg,rgba(8,9,14,0.9)_0%,rgba(8,9,14,0.5)_58%,rgba(8,9,14,0.24)_100%)]" />
+            <div className={cn("absolute inset-0 -z-10 bg-gradient-to-br to-transparent", accent)} />
+            <div className="absolute inset-0 -z-10 bg-[linear-gradient(110deg,rgba(0,0,0,0.58)_0%,rgba(0,0,0,0.14)_56%,rgba(0,0,0,0.02)_100%)]" />
+            <div className="absolute inset-0 -z-10 bg-[linear-gradient(0deg,rgba(0,0,0,0.72)_0%,rgba(0,0,0,0.2)_48%,transparent_74%)]" />
 
             <div className="flex h-full flex-col justify-between gap-8">
               <div className="flex items-start justify-between gap-4">
-                <span className="grid size-12 place-items-center border border-white/14 bg-black/25 text-white backdrop-blur-sm">
+                <span className="grid size-12 place-items-center border border-[rgba(255,255,255,0.25)] bg-black/50 text-[rgb(255,255,255)] shadow-[0_8px_24px_rgba(0,0,0,0.28)] backdrop-blur-sm">
                   <Icon className="size-6" aria-hidden="true" />
                 </span>
-                <ArrowUpRight className="size-5 text-zinc-400 transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-cyan-200" />
+                <ArrowUpRight className="size-5 text-[rgba(255,255,255,0.8)] drop-shadow-[0_2px_8px_rgba(0,0,0,0.9)] transition group-hover:-translate-y-0.5 group-hover:translate-x-0.5 group-hover:text-cyan-200" />
               </div>
-              <div>
-                <h3 className="font-display type-h4 uppercase text-white">{title}</h3>
-                <span className="font-tech type-caption mt-2 block uppercase tracking-[0.12em] text-zinc-300">
+              <div className="w-fit max-w-full border-l-2 border-cyan-300/80 bg-black/55 px-3 py-2.5 shadow-[0_10px_28px_rgba(0,0,0,0.24)] backdrop-blur-[3px]">
+                <h3 className="font-display type-h4 uppercase text-[rgb(255,255,255)] [text-shadow:0_2px_12px_rgba(0,0,0,0.9)]">{title}</h3>
+                <span className="font-tech type-caption mt-2 block uppercase tracking-[0.12em] text-[rgba(255,255,255,0.8)] [text-shadow:0_2px_10px_rgba(0,0,0,0.9)]">
                   {content.open}
                 </span>
               </div>

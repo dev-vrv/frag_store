@@ -111,7 +111,7 @@ function ProductVisual({ product }: { product: Product }) {
 
   return (
     <div className="flex h-full items-center justify-center">
-      <div className="grid size-28 place-items-center border border-red-300/25 bg-black/45 text-red-100 shadow-[0_0_46px_rgba(255,23,68,0.18)]">
+      <div className="grid size-28 place-items-center border border-red-300/25 bg-surface/45 text-red-100 shadow-[0_0_46px_rgba(255,23,68,0.18)]">
         <PackageCheck className="size-10" />
       </div>
     </div>
@@ -213,7 +213,7 @@ function ProductMediaGallery({
             <button
               type="button"
               onClick={() => onChange((safeIndex - 1 + mediaItems.length) % mediaItems.length)}
-              className="absolute left-4 top-1/2 z-20 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-white/16 bg-black/55 text-white backdrop-blur-md transition hover:border-white/30 hover:bg-black/70"
+              className="absolute left-4 top-1/2 z-20 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-white/16 bg-surface/55 text-white backdrop-blur-md transition hover:border-white/30 hover:bg-surface/70"
               aria-label="Previous media"
             >
               <ChevronLeft className="size-5" aria-hidden="true" />
@@ -221,7 +221,7 @@ function ProductMediaGallery({
             <button
               type="button"
               onClick={() => onChange((safeIndex + 1) % mediaItems.length)}
-              className="absolute right-4 top-1/2 z-20 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-white/16 bg-black/55 text-white backdrop-blur-md transition hover:border-white/30 hover:bg-black/70"
+              className="absolute right-4 top-1/2 z-20 grid size-11 -translate-y-1/2 place-items-center rounded-full border border-white/16 bg-surface/55 text-white backdrop-blur-md transition hover:border-white/30 hover:bg-surface/70"
               aria-label="Next media"
             >
               <ChevronRight className="size-5" aria-hidden="true" />
@@ -301,7 +301,7 @@ export function ProductDetailsDialog({
 
   return (
     <CyberDialog open={open} onOpenChange={onOpenChange}>
-      <CyberDialogContent className="flex h-[94svh] max-h-[94svh] flex-col overflow-hidden border-white/12 bg-[radial-gradient(circle_at_top_left,rgba(255,23,68,0.12),transparent_22%),radial-gradient(circle_at_top_right,rgba(251,191,36,0.05),transparent_18%),linear-gradient(180deg,rgba(10,8,10,0.985),rgba(4,4,6,0.995))] p-0 sm:max-w-6xl 2xl:max-w-[90rem]">
+      <CyberDialogContent className="flex h-[94svh] max-h-[94svh] flex-col overflow-hidden border-white/12 bg-[radial-gradient(circle_at_top_left,rgba(255,23,68,0.12),transparent_22%),radial-gradient(circle_at_top_right,rgba(251,191,36,0.05),transparent_18%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.985),rgba(var(--theme-surface-rgb),0.995))] p-0 sm:max-w-6xl 2xl:max-w-[90rem]">
         <CyberDialogHeader className="shrink-0 border-b border-white/10 px-6 pb-5 pt-6 sm:px-8">
           <CyberDialogDescription className="font-tech type-label text-cyan-200/70">
             {labels.detailsLead}
@@ -318,8 +318,8 @@ export function ProductDetailsDialog({
         ) : (
           <div className="grid min-h-0 flex-1 grid-rows-[minmax(0,1fr)_auto]">
             <div className="grid min-h-0 gap-0 lg:grid-cols-[minmax(0,1.22fr)_minmax(360px,0.88fr)]">
-              <div className="relative min-h-[24rem] border-b border-white/10 bg-[radial-gradient(circle_at_24%_18%,rgba(255,23,68,0.18),transparent_30%),radial-gradient(circle_at_78%_16%,rgba(251,191,36,0.10),transparent_26%),linear-gradient(145deg,rgba(16,10,14,0.99),rgba(5,5,7,1))] lg:min-h-[42rem] lg:border-b-0 lg:border-r">
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:28px_28px] opacity-30" />
+              <div className="relative min-h-[24rem] border-b border-white/10 bg-[radial-gradient(circle_at_24%_18%,rgba(255,23,68,0.18),transparent_30%),radial-gradient(circle_at_78%_16%,rgba(251,191,36,0.10),transparent_26%),linear-gradient(145deg,rgba(var(--theme-surface-rgb),0.99),rgba(var(--theme-surface-rgb),1))] lg:min-h-[42rem] lg:border-b-0 lg:border-r">
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(var(--theme-contrast-rgb),0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--theme-contrast-rgb),0.03)_1px,transparent_1px)] bg-[size:28px_28px] opacity-30" />
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,23,68,0.12),transparent_54%)]" />
                 <div className="relative z-10 h-full p-4 sm:p-6">
                   <div className="h-full overflow-hidden rounded-md border border-cyan-200/14 bg-transparent shadow-[0_0_46px_rgba(34,211,238,0.10)]">
@@ -427,7 +427,7 @@ export function ProductDetailsDialog({
                   </div>
                 </div>
 
-                <div className="border-t border-white/10 bg-[linear-gradient(180deg,rgba(10,10,12,0.76),rgba(4,4,6,0.94))] px-6 py-4 backdrop-blur-xl sm:px-8">
+                <div className="border-t border-white/10 bg-[linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.76),rgba(var(--theme-surface-rgb),0.94))] px-6 py-4 backdrop-blur-xl sm:px-8">
                   <div className="grid gap-3 sm:grid-cols-2">
                     <CyberButton variant="ghost" onClick={() => onOpenChange(false)}>
                       {labels.close}

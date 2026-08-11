@@ -64,7 +64,7 @@ export function TestUiOverlays() {
                   Overlay style check for spacing, border glow, and close button behavior.
                 </CyberDialogDescription>
               </CyberDialogHeader>
-              <div className="rounded-md border border-white/10 bg-black/35 p-4">
+              <div className="rounded-md border border-white/10 bg-surface/35 p-4">
                 <div className="flex items-center gap-3">
                   <Star className="size-5 text-lime-200" />
                   <span className="text-sm text-zinc-300">Modal body content slot</span>

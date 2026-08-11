@@ -71,7 +71,7 @@ export function Footer({ locale, dictionary, className }: FooterProps) {
   return (
     <footer
       className={cn(
-        "relative mt-auto border-t border-red-500/15 bg-[#111118]/84 px-4 py-8 text-zinc-300 backdrop-blur-xl sm:px-6 sm:py-10 lg:px-8",
+        "relative mt-auto border-t border-red-500/15 bg-zinc-950/85 px-4 py-8 text-zinc-300 backdrop-blur-xl sm:px-6 sm:py-10 lg:px-8",
         className,
       )}
     >

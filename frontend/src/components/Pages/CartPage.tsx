@@ -548,10 +548,10 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
   }
 
   return (
-    <main className="page-shell relative isolate overflow-hidden bg-[linear-gradient(180deg,#050505_0%,#0c0909_34%,#070506_100%)] px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative isolate overflow-hidden bg-[linear-gradient(180deg,rgba(var(--theme-surface-rgb),1)_0%,rgba(var(--theme-surface-rgb),1)_34%,rgba(var(--theme-surface-rgb),1)_100%)] px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
       <div className="absolute inset-0 -z-30 bg-[radial-gradient(circle_at_12%_16%,rgba(255,23,68,0.2),transparent_24%),radial-gradient(circle_at_88%_12%,rgba(34,211,238,0.14),transparent_24%),radial-gradient(circle_at_50%_88%,rgba(163,230,53,0.1),transparent_30%)]" />
-      <div className="pointer-events-none absolute inset-0 -z-20 opacity-40 [background-image:linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:52px_52px]" />
+      <div className="pointer-events-none absolute inset-0 -z-20 opacity-40 [background-image:linear-gradient(rgba(var(--theme-contrast-rgb),0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--theme-contrast-rgb),0.03)_1px,transparent_1px)] [background-size:52px_52px]" />
       <section className="relative z-10 w-full max-w-7xl mx-auto pb-16">
         <div className="flex flex-col gap-5 border-b border-white/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div>
@@ -571,7 +571,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
           <div className="py-16 text-sm text-zinc-500">{text.loading}</div>
         ) : items.length === 0 ? (
           <div className="mt-8 grid gap-5">
-            <CyberCard variant="glass" className="border border-white/10 bg-black/35">
+            <CyberCard variant="glass" className="border border-white/10 bg-surface/35">
               <CyberCardContent className="flex flex-col items-center gap-6 px-6 py-14 text-center sm:px-10 sm:py-16">
                 <div className="grid size-18 place-items-center rounded-full border border-red-300/20 bg-red-500/10 text-red-100 shadow-[0_0_34px_rgba(255,23,68,0.14)]">
                   <ShoppingCart className="size-8" />
@@ -673,14 +673,14 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                   <CyberCard
                     key={item.product_id}
                     variant="glass"
-                    className="group/cart-item overflow-visible !rounded-none border border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(255,94,77,0.12),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(251,191,36,0.08),transparent_26%),linear-gradient(180deg,rgba(15,15,17,0.96),rgba(10,10,12,0.98))] shadow-[0_20px_48px_rgba(0,0,0,0.28)] transition-[transform,border-color,box-shadow] duration-300 hover:border-red-300/20 hover:shadow-[0_26px_62px_rgba(0,0,0,0.34)]"
+                    className="group/cart-item overflow-visible !rounded-none border border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(255,94,77,0.12),transparent_24%),radial-gradient(circle_at_bottom_right,rgba(251,191,36,0.08),transparent_26%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.96),rgba(var(--theme-surface-rgb),0.98))] shadow-[0_20px_48px_rgba(0,0,0,0.28)] transition-[transform,border-color,box-shadow] duration-300 hover:border-red-300/20 hover:shadow-[0_26px_62px_rgba(0,0,0,0.34)]"
                   >
                     <CyberCardContent className="relative grid gap-4 overflow-visible p-4 sm:gap-5 sm:p-5 xl:grid-cols-[172px_minmax(0,1fr)] xl:items-start">
                       <div className="pointer-events-none absolute inset-x-8 top-0 h-px bg-gradient-to-r from-transparent via-red-300/40 to-transparent opacity-80" />
 
                       <div className="grid gap-3">
-                        <div className="relative overflow-hidden rounded-md border border-white/10 bg-[radial-gradient(circle_at_18%_16%,rgba(255,94,77,0.16),transparent_28%),radial-gradient(circle_at_78%_12%,rgba(251,191,36,0.1),transparent_24%),linear-gradient(160deg,rgba(22,11,12,0.98),rgba(9,7,8,1))]">
-                          <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.035)_1px,transparent_1px)] bg-[size:22px_22px] opacity-30" />
+                        <div className="relative overflow-hidden rounded-md border border-white/10 bg-[radial-gradient(circle_at_18%_16%,rgba(255,94,77,0.16),transparent_28%),radial-gradient(circle_at_78%_12%,rgba(251,191,36,0.1),transparent_24%),linear-gradient(160deg,rgba(var(--theme-surface-rgb),0.98),rgba(var(--theme-surface-rgb),1))]">
+                          <div className="absolute inset-0 bg-[linear-gradient(rgba(var(--theme-contrast-rgb),0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--theme-contrast-rgb),0.035)_1px,transparent_1px)] bg-[size:22px_22px] opacity-30" />
                           {discountPercent ? (
                             <div className="absolute left-3 top-3 z-20 rounded-full border border-amber-200/20 bg-amber-300/12 px-2.5 py-1 font-tech text-[10px] uppercase tracking-[0.16em] text-amber-100 backdrop-blur">
                               -{discountPercent}%
@@ -700,7 +700,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                           )}
                         </div>
 
-                        <div className="rounded-md border border-amber-200/14 bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,0.12),transparent_36%),linear-gradient(180deg,rgba(251,191,36,0.06),rgba(255,255,255,0.025))] p-4">
+                        <div className="rounded-md border border-amber-200/14 bg-[radial-gradient(circle_at_top_left,rgba(251,191,36,0.12),transparent_36%),linear-gradient(180deg,rgba(251,191,36,0.06),rgba(var(--theme-contrast-rgb),0.025))] p-4">
                           <div>
                             <p className="font-tech text-[10px] uppercase tracking-[0.16em] text-zinc-500">
                               {text.itemTotal}
@@ -759,7 +759,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                               <span className="inline-flex items-center gap-2 rounded-full border border-amber-200/14 bg-amber-200/[0.06] px-3 py-1 text-[10px] uppercase tracking-[0.16em] text-amber-100">
                                 {item.selected_color_hex ? (
                                   <span
-                                    className="size-2.5 rounded-full border border-white/20 shadow-[0_0_0_3px_rgba(255,255,255,0.03)]"
+                                    className="size-2.5 rounded-full border border-white/20 shadow-[0_0_0_3px_rgba(var(--theme-contrast-rgb),0.03)]"
                                     style={{ backgroundColor: item.selected_color_hex }}
                                   />
                                 ) : null}
@@ -793,7 +793,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                           </div>
 
                           <div className="grid gap-3 xl:grid-cols-[auto_minmax(0,1fr)] xl:items-center">
-                            <div className="inline-flex items-center overflow-hidden rounded-md border border-white/10 bg-black/40 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.02)]">
+                            <div className="inline-flex items-center overflow-hidden rounded-md border border-white/10 bg-surface/40 shadow-[inset_0_0_0_1px_rgba(var(--theme-contrast-rgb),0.02)]">
                               <button
                                 type="button"
                                 onClick={() =>
@@ -864,7 +864,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
             <div className="grid content-start gap-6 xl:sticky xl:top-32">
               <CyberCard
                 variant="glass"
-                className="overflow-hidden border border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(255,94,77,0.12),transparent_26%),radial-gradient(circle_at_top_right,rgba(251,191,36,0.08),transparent_24%),linear-gradient(180deg,rgba(15,15,17,0.96),rgba(10,10,12,0.98))] shadow-[0_20px_56px_rgba(0,0,0,0.28)]"
+                className="overflow-hidden border border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(255,94,77,0.12),transparent_26%),radial-gradient(circle_at_top_right,rgba(251,191,36,0.08),transparent_24%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.96),rgba(var(--theme-surface-rgb),0.98))] shadow-[0_20px_56px_rgba(0,0,0,0.28)]"
               >
                 <CyberCardContent className="space-y-5 p-6">
                   <div className="flex items-center justify-between gap-3">
@@ -909,7 +909,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                     </div>
                   ) : null}
 
-                  <div className="rounded-md border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-4 text-sm text-zinc-300">
+                  <div className="rounded-md border border-white/8 bg-[linear-gradient(180deg,rgba(var(--theme-contrast-rgb),0.04),rgba(var(--theme-contrast-rgb),0.02))] p-4 text-sm text-zinc-300">
                     <div className="space-y-3">
                     <SummaryRow label={text.items} value={summary?.quantity_total ?? items.reduce((total, item) => total + item.quantity, 0)} />
                     <SummaryRow
@@ -941,7 +941,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
 
               <CyberCard
                 variant="glass"
-                className="overflow-hidden border border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(255,94,77,0.12),transparent_26%),radial-gradient(circle_at_bottom_right,rgba(251,191,36,0.08),transparent_24%),linear-gradient(180deg,rgba(15,15,17,0.96),rgba(10,10,12,0.98))] shadow-[0_20px_56px_rgba(0,0,0,0.28)]"
+                className="overflow-hidden border border-white/10 bg-[radial-gradient(circle_at_top_left,rgba(255,94,77,0.12),transparent_26%),radial-gradient(circle_at_bottom_right,rgba(251,191,36,0.08),transparent_24%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.96),rgba(var(--theme-surface-rgb),0.98))] shadow-[0_20px_56px_rgba(0,0,0,0.28)]"
               >
                 <CyberCardContent className="p-6">
                   <form className="space-y-5" onSubmit={handleCheckoutSubmit}>
@@ -958,7 +958,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                       ) : null}
                     </div>
 
-                    <div className="grid gap-4 rounded-md border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-4 sm:p-5">
+                    <div className="grid gap-4 rounded-md border border-white/8 bg-[linear-gradient(180deg,rgba(var(--theme-contrast-rgb),0.04),rgba(var(--theme-contrast-rgb),0.02))] p-4 sm:p-5">
                       <CyberInput
                         label={text.customerName}
                         value={form.customer_name}
@@ -990,7 +990,7 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
                         </div>
                       </div>
 
-                      <div className="grid gap-4 rounded-md border border-white/8 bg-[linear-gradient(180deg,rgba(255,255,255,0.04),rgba(255,255,255,0.02))] p-4 sm:p-5">
+                      <div className="grid gap-4 rounded-md border border-white/8 bg-[linear-gradient(180deg,rgba(var(--theme-contrast-rgb),0.04),rgba(var(--theme-contrast-rgb),0.02))] p-4 sm:p-5">
                         <CyberNativeSelect
                           label={text.deliveryMethod}
                           value={form.delivery_method}
@@ -1066,12 +1066,12 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
         errorText={previewError || undefined}
       />
       {checkoutSuccess ? (
-        <div className="fixed inset-0 z-[80] flex items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_20%_18%,rgba(163,230,53,0.16),transparent_22%),radial-gradient(circle_at_82%_16%,rgba(34,211,238,0.12),transparent_20%),linear-gradient(180deg,rgba(5,5,7,0.82),rgba(3,3,5,0.94))] backdrop-blur-xl">
-          <div className="pointer-events-none absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(255,255,255,0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] [background-size:52px_52px]" />
+        <div className="fixed inset-0 z-[80] flex items-center justify-center overflow-hidden bg-[radial-gradient(circle_at_20%_18%,rgba(163,230,53,0.16),transparent_22%),radial-gradient(circle_at_82%_16%,rgba(34,211,238,0.12),transparent_20%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.82),rgba(var(--theme-surface-rgb),0.94))] backdrop-blur-xl">
+          <div className="pointer-events-none absolute inset-0 opacity-30 [background-image:linear-gradient(rgba(var(--theme-contrast-rgb),0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--theme-contrast-rgb),0.03)_1px,transparent_1px)] [background-size:52px_52px]" />
           <div className="pointer-events-none absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-[linear-gradient(90deg,transparent,rgba(190,242,100,0.34),transparent)]" />
           <div className="pointer-events-none absolute left-1/2 top-1/2 h-[32rem] w-[32rem] -translate-x-1/2 -translate-y-1/2 rounded-full border border-lime-300/14 opacity-40 animate-ping" />
 
-          <div className="relative z-10 mx-4 w-full max-w-2xl animate-[successOverlayReveal_700ms_cubic-bezier(0.16,1,0.3,1)_both] rounded-md border border-lime-300/18 bg-[radial-gradient(circle_at_top_left,rgba(163,230,53,0.14),transparent_26%),radial-gradient(circle_at_top_right,rgba(34,211,238,0.08),transparent_24%),linear-gradient(180deg,rgba(14,16,12,0.96),rgba(6,8,6,0.98))] p-6 shadow-[0_30px_90px_rgba(0,0,0,0.42)] sm:p-8">
+          <div className="relative z-10 mx-4 w-full max-w-2xl animate-[successOverlayReveal_700ms_cubic-bezier(0.16,1,0.3,1)_both] rounded-md border border-lime-300/18 bg-[radial-gradient(circle_at_top_left,rgba(163,230,53,0.14),transparent_26%),radial-gradient(circle_at_top_right,rgba(34,211,238,0.08),transparent_24%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),0.96),rgba(var(--theme-surface-rgb),0.98))] p-6 shadow-[0_30px_90px_rgba(0,0,0,0.42)] sm:p-8">
             <div className="flex flex-col items-center text-center">
               <div className="grid size-20 place-items-center rounded-full border border-lime-300/30 bg-lime-300/[0.10] text-lime-100 shadow-[0_0_42px_rgba(190,242,100,0.22)]">
                 <CheckCheck className="size-10" />
@@ -1085,13 +1085,13 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
             </div>
 
             <div className="mt-8 grid gap-3 sm:grid-cols-2">
-              <div className="rounded-md border border-white/10 bg-black/20 px-4 py-4">
+              <div className="rounded-md border border-white/10 bg-surface/20 px-4 py-4">
                 <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">
                   {text.orderNumber}
                 </p>
                 <p className="mt-2 font-display text-2xl text-white">{checkoutSuccess.number}</p>
               </div>
-              <div className="rounded-md border border-white/10 bg-black/20 px-4 py-4">
+              <div className="rounded-md border border-white/10 bg-surface/20 px-4 py-4">
                 <p className="font-tech text-[11px] uppercase tracking-[0.14em] text-zinc-500">
                   {text.total}
                 </p>

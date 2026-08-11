@@ -35,9 +35,9 @@ export async function BlogDetailPage({ locale, dictionary, slug }: BlogDetailPag
   const content = getLocalizedBlogPost(post, locale);
 
   return (
-    <main className="page-shell relative overflow-hidden bg-black px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative overflow-hidden bg-surface px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
-      <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_20%_18%,rgba(255,23,68,0.2),transparent_30%),radial-gradient(circle_at_80%_16%,rgba(34,211,238,0.12),transparent_28%),linear-gradient(180deg,#050507,#000)]" />
+      <div className="absolute inset-0 -z-20 bg-[radial-gradient(circle_at_20%_18%,rgba(255,23,68,0.2),transparent_30%),radial-gradient(circle_at_80%_16%,rgba(34,211,238,0.12),transparent_28%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),1),rgba(var(--theme-surface-rgb),1))]" />
       <div className="cyber-grid absolute inset-0 -z-10 opacity-60" />
 
       <article className="mx-auto w-full max-w-5xl">
@@ -77,7 +77,7 @@ export async function BlogDetailPage({ locale, dictionary, slug }: BlogDetailPag
               <video
                 src={post.video}
                 controls
-                className="aspect-video w-full rounded-md border border-white/10 bg-black"
+                className="aspect-video w-full rounded-md border border-white/10 bg-surface"
               />
             ) : null}
           </CyberCardContent>

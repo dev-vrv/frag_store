@@ -97,7 +97,7 @@ export function TestUiFormControls() {
                 disabled={Boolean(disabled)}
               />
             ))}
-            <div className="cyber-cut-small flex items-center gap-3 border border-lime-300/20 bg-black/35 p-3 text-xs text-zinc-500">
+            <div className="cyber-cut-small flex items-center gap-3 border border-lime-300/20 bg-surface/35 p-3 text-xs text-zinc-500">
               <SlidersHorizontal className="size-4 text-lime-200" />
               Form controls are native and keyboard accessible.
             </div>
