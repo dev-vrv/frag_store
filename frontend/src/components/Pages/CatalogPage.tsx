@@ -115,10 +115,9 @@ const paginationWindowSize = 10;
 type GridColumns = 1 | 2 | 3 | 4;
 
 const catalogFilterButtonClassName =
-  "font-tech group relative inline-flex min-h-[3rem] items-center overflow-hidden rounded-none border border-white/10 bg-zinc-950/55 text-zinc-200 outline-none [clip-path:polygon(0_0,calc(100%-8px)_0,100%_8px,100%_100%,8px_100%,0_calc(100%-8px))] transition-[transform,border-color,background-color,color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] after:pointer-events-none after:absolute after:inset-x-3 after:bottom-0 after:h-px after:origin-center after:scale-x-0 after:bg-red-200/85 after:transition-transform after:duration-200 after:ease-out hover:border-red-300/45 hover:bg-red-500/[0.08] hover:text-white hover:shadow-[0_0_22px_rgba(255,23,68,0.1)] hover:after:scale-x-100 active:translate-y-0 active:scale-[0.98] focus-visible:border-red-200/75 focus-visible:ring-2 focus-visible:ring-red-300/25 motion-reduce:transition-none motion-reduce:hover:transform-none motion-reduce:after:transition-none [&_svg]:relative [&_svg]:z-10";
+  "catalog-filter-option font-tech group relative inline-flex min-h-[3rem] items-center overflow-hidden rounded-none border outline-none [clip-path:polygon(0_0,calc(100%-8px)_0,100%_8px,100%_100%,8px_100%,0_calc(100%-8px))] transition-[transform,border-color,background-color,color,box-shadow] duration-200 ease-[cubic-bezier(0.22,1,0.36,1)] active:translate-y-0 active:scale-[0.98] motion-reduce:transition-none motion-reduce:hover:transform-none [&_svg]:relative [&_svg]:z-10";
 
-const catalogFilterActiveClassName =
-  "border-red-300/55 bg-red-500/14 text-white shadow-[inset_2px_0_0_rgba(248,113,113,0.8),0_0_24px_rgba(255,23,68,0.12)] after:scale-x-100";
+const catalogFilterActiveClassName = "catalog-filter-option-active";
 
 function parseInitialCategories(value?: string[]) {
   if (!value?.length) {
@@ -1047,35 +1046,36 @@ export function CatalogPage({
   }
 
   const filterPanel = (
-    <div className="space-y-6">
+    <div className="catalog-filter-panel space-y-6">
       <div className="space-y-4">
-        <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-red-100/80">
+        <p className="catalog-heading font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em]">
           {text.resultsTitle}
         </p>
-        <dl className="space-y-1.5 border border-red-300/20 bg-red-500/[0.04] px-3 py-3 font-tech text-[0.82rem] leading-5 [clip-path:polygon(0_0,calc(100%-8px)_0,100%_8px,100%_100%,8px_100%,0_calc(100%-8px))]">
+        <dl className="catalog-filter-summary space-y-1.5 border px-3 py-3 font-tech text-[0.82rem] leading-5">
           <div className="flex items-baseline justify-between gap-4">
-            <dt className="text-zinc-400">{text.results}:</dt>
-            <dd className="text-sm font-bold text-white">{filteredProducts.length}</dd>
+            <dt className="catalog-muted">{text.results}:</dt>
+            <dd className="catalog-heading text-sm font-bold">{filteredProducts.length}</dd>
           </div>
           <div className="flex items-baseline justify-between gap-4">
-            <dt className="text-zinc-400">{text.filters}:</dt>
-            <dd className="text-sm font-bold text-red-100">
+            <dt className="catalog-muted">{text.filters}:</dt>
+            <dd className="catalog-heading text-sm font-bold">
               {activeQuickFilterCount + selectedCategories.length + Number(brand !== "all")}
             </dd>
           </div>
           <div className="flex items-baseline justify-between gap-4">
-            <dt className="text-zinc-400">{text.page}:</dt>
-            <dd className="text-sm font-bold text-white">{safePageIndex}/{totalPages}</dd>
+            <dt className="catalog-muted">{text.page}:</dt>
+            <dd className="catalog-heading text-sm font-bold">{safePageIndex}/{totalPages}</dd>
           </div>
         </dl>
       </div>
 
-      <div className="space-y-4 [&_label]:text-[0.78rem] [&_label]:uppercase [&_label]:tracking-[0.1em] [&_label]:text-red-100/80">
+      <div className="catalog-filter-fields space-y-4 [&_label]:text-[0.78rem] [&_label]:uppercase [&_label]:tracking-[0.1em]">
         <CyberInput
-          className="text-sm placeholder:text-sm"
+          className="catalog-filter-field text-sm placeholder:text-sm"
+          labelClassName="catalog-heading"
           label={text.search}
           placeholder={text.searchPlaceholder}
-          icon={<Search aria-hidden="true" />}
+          icon={<Search className="catalog-filter-icon" aria-hidden="true" />}
           tone="red"
           value={query}
           onChange={(event) => {
@@ -1084,7 +1084,7 @@ export function CatalogPage({
           }}
         />
         <CyberNativeSelect
-          className="text-sm before:hidden"
+          className="catalog-filter-field text-sm before:hidden after:hidden"
           label={text.brand}
           tone="red"
           value={brand}
@@ -1095,7 +1095,7 @@ export function CatalogPage({
           options={brandOptions}
         />
         <CyberNativeSelect
-          className="text-sm before:hidden"
+          className="catalog-filter-field text-sm before:hidden after:hidden"
           label={text.sort}
           tone="red"
           value={sort}
@@ -1112,8 +1112,8 @@ export function CatalogPage({
         />
       </div>
 
-      <div className="space-y-4 border-t border-red-300/15 pt-4">
-        <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-red-100/70">
+      <div className="catalog-divider space-y-4 border-t pt-4">
+        <p className="catalog-heading font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em]">
           {text.filters}
         </p>
         <div className="grid grid-cols-2 gap-2">
@@ -1139,8 +1139,8 @@ export function CatalogPage({
         </div>
       </div>
 
-      <div className="space-y-4 border-t border-red-300/15 pt-4">
-        <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-red-100/70">
+      <div className="catalog-divider space-y-4 border-t pt-4">
+        <p className="catalog-heading font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em]">
           {text.quickFilters}
         </p>
         <div className="grid grid-cols-2 gap-2">
@@ -1168,8 +1168,8 @@ export function CatalogPage({
         </div>
       </div>
 
-      <div className="space-y-4 border-t border-red-300/15 pt-4">
-        <p className="font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em] text-red-100/70">
+      <div className="catalog-divider space-y-4 border-t pt-4">
+        <p className="catalog-heading font-tech text-[0.82rem] font-bold uppercase tracking-[0.1em]">
           {text.gridDensity}
         </p>
         <div className="flex items-center gap-2">
@@ -1184,9 +1184,7 @@ export function CatalogPage({
                 value === 2 && "hidden sm:inline-flex",
                 value === 3 && "hidden lg:inline-flex",
                 value === 4 && "hidden xl:inline-flex",
-                gridColumns === value
-                  ? catalogFilterActiveClassName
-                  : "border-white/10 bg-zinc-950/55",
+                gridColumns === value && catalogFilterActiveClassName,
               )}
               aria-pressed={gridColumns === value}
             >
@@ -1197,12 +1195,12 @@ export function CatalogPage({
       </div>
 
       {hasActiveFilters ? (
-        <div className="border-t border-red-300/15 pt-4">
+        <div className="catalog-divider border-t pt-4">
           <CyberButton
             type="button"
             variant="danger"
             size="sm"
-            className="w-full border-red-300/45 bg-red-500/[0.08] text-red-100 before:hidden hover:bg-red-500/20 hover:text-white"
+            className="catalog-filter-reset w-full before:hidden after:hidden"
             onClick={resetFilters}
           >
             {text.reset}
@@ -1213,7 +1211,7 @@ export function CatalogPage({
   );
 
   return (
-    <main className="page-shell relative overflow-x-clip bg-transparent px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="catalog-ui page-shell relative overflow-x-clip bg-transparent px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
       <div className="relative z-10">
         <section ref={catalogSectionRef} className="mx-auto w-full max-w-[100rem] py-8">
@@ -1233,16 +1231,16 @@ export function CatalogPage({
               <CyberSheet>
                 <CyberSheetTrigger asChild>
                   <CyberButton
-                    variant="danger"
-                    className="border-red-300/45 bg-zinc-950/65 text-zinc-100 before:hidden hover:border-red-200/70 hover:bg-red-500/16 hover:text-white"
+                    variant="ghost"
+                    className="catalog-filter-launcher before:hidden after:hidden"
                   >
                     <Filter aria-hidden="true" />
                     {text.filters}
                   </CyberButton>
                 </CyberSheetTrigger>
-                <CyberSheetContent side="left" className="w-[88vw] border-red-300/20 bg-zinc-950/95 p-5 sm:max-w-md">
-                  <CyberSheetHeader className="border-b border-red-300/15 pb-4">
-                    <CyberSheetTitle className="font-display text-2xl uppercase tracking-[0.05em] text-white">
+                <CyberSheetContent side="left" className="catalog-ui catalog-filter-sheet w-[88vw] p-5 sm:max-w-md">
+                  <CyberSheetHeader className="catalog-divider border-b pb-4">
+                    <CyberSheetTitle className="catalog-heading font-display text-2xl uppercase tracking-[0.05em]">
                       {text.filters}
                     </CyberSheetTitle>
                     <CyberSheetDescription>
@@ -1259,7 +1257,7 @@ export function CatalogPage({
             <aside className="hidden xl:block">
               <CyberCard
                 variant="glass"
-                className="sticky top-32 overflow-hidden border-red-300/18 bg-zinc-950/70 shadow-[0_0_42px_rgba(255,23,68,0.08)] before:bg-none before:opacity-0 after:bg-none after:opacity-0"
+                className="catalog-filter-shell sticky top-32 overflow-hidden before:hidden after:hidden"
               >
                 <CyberCardContent className="p-5">
                   {filterPanel}

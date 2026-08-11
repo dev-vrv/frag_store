@@ -125,18 +125,23 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
       <CyberCard
         ref={ref}
         data-radius={radius}
+        data-tone={tone}
         variant="product"
         hover={liftOnHover}
         className={cn(
           "flex h-full min-h-[35rem] flex-col overflow-hidden border-white/10 shadow-[var(--product-card-shadow)] hover:border-white/16 hover:shadow-[var(--product-card-hover-shadow)]",
           "!rounded-none",
+          isCatalogTone && "catalog-product-card",
           className,
         )}
         {...props}
       >
         <CyberCardContent className="relative flex flex-1 flex-col gap-2.5 p-3 sm:gap-3 sm:p-3.5">
           <div
-            className="relative aspect-[1/1] overflow-hidden rounded-none border border-white/10 bg-surface"
+            className={cn(
+              "relative aspect-[1/1] overflow-hidden rounded-none border border-white/10 bg-surface",
+              isCatalogTone && "catalog-product-card__media",
+            )}
           >
             {typeof image === "string" ? (
               // eslint-disable-next-line @next/next/no-img-element
@@ -182,11 +187,14 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
               onClick={onFavoriteClick}
               aria-pressed={favoriteActive}
               aria-label={favoriteLabel ?? labels.favorite}
+              data-active={favoriteActive}
               className={cn(
-                "absolute right-2.5 top-2.5 z-20 size-10 border bg-zinc-950/75 p-0 backdrop-blur-md focus-visible:ring-red-300/30 [&_svg]:size-5",
-                favoriteActive
-                  ? "border-red-300/75 bg-red-500/25 text-red-100 shadow-[0_0_24px_rgba(248,113,113,0.22)]"
-                  : "border-white/15 text-zinc-300 hover:border-red-300/65 hover:bg-red-500/18 hover:text-white",
+                "absolute right-2.5 top-2.5 z-20 size-10 border p-0 backdrop-blur-md [&_svg]:size-5",
+                isCatalogTone
+                  ? "product-favorite-toggle"
+                  : favoriteActive
+                    ? "border-red-300/75 bg-red-500/25 text-red-100 shadow-[0_0_24px_rgba(248,113,113,0.22)]"
+                    : "border-white/15 bg-zinc-950/75 text-zinc-300 hover:border-red-300/65 hover:bg-red-500/18 hover:text-white",
               )}
             >
               <Heart className={cn("size-5", favoriteActive && "fill-current")} aria-hidden="true" />
@@ -212,7 +220,12 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
                   "pointer-events-none absolute inset-x-2.5 bottom-2.5 z-20 translate-y-3 opacity-0 transition duration-300 group-hover:translate-y-0 group-hover:opacity-100 max-md:hidden",
                 )}
               >
-                <div className="rounded-none border border-white/16 bg-surface/88 p-2.5 shadow-[0_20px_40px_rgba(0,0,0,0.45)] backdrop-blur-md">
+                <div
+                  className={cn(
+                    "rounded-none border border-white/16 bg-surface/88 p-2.5 shadow-[0_20px_40px_rgba(0,0,0,0.45)] backdrop-blur-md",
+                    isCatalogTone && "catalog-product-card__hover-panel",
+                  )}
+                >
                   {hoverPanel}
                 </div>
               </div>
@@ -221,11 +234,21 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
 
           <div className="flex flex-1 flex-col gap-2">
             <div className="flex flex-col gap-1">
-              <h3 className="font-tech min-h-[2.6rem] text-balance text-center text-base font-bold leading-5 tracking-[0.01em] text-white">
+              <h3
+                className={cn(
+                  "font-tech min-h-[2.6rem] text-balance text-center text-base font-bold leading-5 tracking-[0.01em] text-white",
+                  isCatalogTone && "catalog-heading",
+                )}
+              >
                 {title}
               </h3>
               {description ? (
-                <p className="font-tech line-clamp-2 min-h-10 text-center text-xs leading-5 text-zinc-400">
+                <p
+                  className={cn(
+                    "font-tech line-clamp-2 min-h-10 text-center text-xs leading-5 text-zinc-400",
+                    isCatalogTone && "catalog-muted",
+                  )}
+                >
                   {description}
                 </p>
               ) : null}
@@ -242,6 +265,7 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
             <div
               className={cn(
                 "border-t border-white/10 px-0 pt-2.5",
+                isCatalogTone && "catalog-divider",
                 isFeaturedTone
                   ? "bg-transparent"
                   : "bg-transparent",
@@ -249,13 +273,13 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
             >
               <div className="flex min-h-[2.8rem] items-end justify-between gap-3">
                 <div className="space-y-0.5">
-                  <div className="font-tech type-caption uppercase tracking-[0.12em] text-zinc-500">
+                  <div className={cn("font-tech type-caption uppercase tracking-[0.12em] text-zinc-500", isCatalogTone && "catalog-muted")}>
                     {labels.price}
                   </div>
                   <div
                     className={cn(
                       "font-tech text-xl font-bold leading-none sm:text-[1.375rem]",
-                      isFeaturedTone || isCatalogTone ? "text-white" : "text-amber-100",
+                      isCatalogTone ? "catalog-heading" : isFeaturedTone ? "text-white" : "text-amber-100",
                     )}
                   >
                     {price}
@@ -278,6 +302,7 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
         <CyberCardFooter
           className={cn(
             "mt-auto grid grid-cols-1 gap-2 border-t border-white/8 bg-transparent px-3 pb-3 pt-2.5 sm:px-3.5 sm:pb-3.5",
+            isCatalogTone && "catalog-divider catalog-product-card__footer",
             !stackActions && (isCatalogTone ? "2xl:grid-cols-2" : "sm:grid-cols-2"),
           )}
         >
