@@ -19,7 +19,7 @@ export function ContactSection({ locale }: ContactSectionProps) {
       fullWidth
       className="relative isolate overflow-hidden bg-transparent text-zinc-50"
     >
-      <div className="absolute inset-0 -z-10 bg-surface/35 shadow-[inset_0_12px_30px_rgba(0,0,0,0.12),inset_0_-12px_30px_rgba(0,0,0,0.12)]" />
+      <div className="absolute inset-0 -z-10 bg-surface/35" />
       <div className="pointer-events-none absolute inset-0 -z-10 bg-[linear-gradient(rgba(var(--theme-contrast-rgb),0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--theme-contrast-rgb),0.03)_1px,transparent_1px)] bg-[size:42px_42px] opacity-45 [mask-image:linear-gradient(to_bottom,transparent,black_18%,black_82%,transparent)]" />
       <div className="absolute inset-x-0 top-0 h-px bg-white/15 shadow-[0_0_10px_rgba(0,0,0,0.1)]" />
 
