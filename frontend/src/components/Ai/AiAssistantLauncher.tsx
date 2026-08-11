@@ -166,8 +166,10 @@ export default function AiAssistantLauncher() {
       </button>
 
       <CyberDialog open={open} onOpenChange={setOpen}>
-        <CyberDialogContent className="assistant-ui assistant-panel flex h-[min(88vh,860px)] max-h-[88vh] w-[calc(100%-1rem)] max-w-6xl flex-col gap-0 overflow-hidden p-0 before:hidden">
-          <CyberDialogHeader className="assistant-divider shrink-0 border-b px-5 py-4 text-left sm:px-6">
+        <CyberDialogContent className="assistant-ui assistant-dialog-shell flex h-[min(88vh,860px)] max-h-[88vh] w-[calc(100%-1rem)] max-w-6xl flex-col gap-0 overflow-visible border-0 bg-transparent p-0 shadow-none before:hidden">
+          <div className="assistant-panel flex min-h-0 flex-1 flex-col">
+            <div className="assistant-panel__content flex min-h-0 flex-1 flex-col">
+              <CyberDialogHeader className="assistant-divider shrink-0 border-b px-5 py-4 text-left sm:px-6">
             <div className="flex flex-col gap-4">
               <div>
                 <CyberDialogTitle className="assistant-heading font-display text-2xl uppercase tracking-[0.08em] sm:text-3xl">
@@ -181,8 +183,12 @@ export default function AiAssistantLauncher() {
                 <p className="assistant-heading font-tech block text-sm font-semibold uppercase tracking-[0.1em]">
                   {text.typeLabel}
                 </p>
-                <div role="radiogroup" aria-label={text.typeLabel} className="mt-3 flex flex-wrap gap-2">
-                  {typeOptions.map((option) => {
+                <div
+                  role="radiogroup"
+                  aria-label={text.typeLabel}
+                  className="assistant-type-options mt-3 flex gap-2 overflow-x-auto pb-1"
+                >
+                  {typeOptions.map((option, index) => {
                     const isActive = option.value === requestType;
 
                     return (
@@ -193,9 +199,13 @@ export default function AiAssistantLauncher() {
                         aria-checked={isActive}
                         data-active={isActive}
                         onClick={() => setRequestType(option.value as AssistanceType)}
-                        className="assistant-type-option inline-flex min-h-10 items-center rounded-sm border px-3 py-2 text-left font-tech text-[11px] uppercase tracking-[0.1em] transition"
+                        className="assistant-type-option relative inline-flex min-h-12 min-w-44 flex-1 items-center gap-3 border px-3 py-2 text-left font-tech text-[11px] uppercase tracking-[0.08em] transition"
                       >
-                        {option.label}
+                        <span className="assistant-type-index" aria-hidden="true">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        <span className="min-w-0 flex-1 leading-4">{option.label}</span>
+                        <span className="assistant-type-indicator" aria-hidden="true" />
                       </button>
                     );
                   })}
@@ -283,6 +293,8 @@ export default function AiAssistantLauncher() {
                 </div>
               </div>
             </section>
+              </div>
+            </div>
           </div>
         </CyberDialogContent>
       </CyberDialog>

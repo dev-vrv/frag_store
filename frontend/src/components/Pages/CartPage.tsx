@@ -548,10 +548,8 @@ export function CartPage({ locale, dictionary, user }: CartPageProps) {
   }
 
   return (
-    <main className="page-shell relative isolate overflow-hidden bg-[linear-gradient(180deg,rgba(var(--theme-surface-rgb),1)_0%,rgba(var(--theme-surface-rgb),1)_34%,rgba(var(--theme-surface-rgb),1)_100%)] px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative isolate overflow-hidden bg-transparent px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
-      <div className="absolute inset-0 -z-30 bg-[radial-gradient(circle_at_12%_16%,rgba(255,23,68,0.2),transparent_24%),radial-gradient(circle_at_88%_12%,rgba(34,211,238,0.14),transparent_24%),radial-gradient(circle_at_50%_88%,rgba(163,230,53,0.1),transparent_30%)]" />
-      <div className="pointer-events-none absolute inset-0 -z-20 opacity-40 [background-image:linear-gradient(rgba(var(--theme-contrast-rgb),0.045)_1px,transparent_1px),linear-gradient(90deg,rgba(var(--theme-contrast-rgb),0.03)_1px,transparent_1px)] [background-size:52px_52px]" />
       <section className="relative z-10 w-full max-w-7xl mx-auto pb-16">
         <div className="flex flex-col gap-5 border-b border-white/10 pb-6 sm:flex-row sm:items-end sm:justify-between">
           <div>

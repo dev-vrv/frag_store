@@ -39,10 +39,10 @@ const productCardLabels = {
 } as const;
 
 const productDetailsButtonClassName =
-  "h-11 w-full border-zinc-700 !bg-black px-0 text-[9px] uppercase tracking-[0.08em] text-on-accent shadow-[0_8px_20px_rgba(0,0,0,0.24)] before:hidden hover:border-zinc-500 hover:!bg-black hover:text-on-accent hover:shadow-[0_10px_24px_rgba(0,0,0,0.32)] focus-visible:ring-zinc-500/40 [&_svg]:size-3.5";
+  "product-details-button h-11 w-full px-0 !text-[10px] font-medium uppercase tracking-[0.04em] shadow-[0_8px_20px_rgba(0,0,0,0.24)] before:hidden hover:shadow-[0_10px_24px_rgba(0,0,0,0.32)] focus-visible:ring-zinc-500/40 [&_svg]:size-[18px]";
 
 const productCtaButtonClassName =
-  "h-11 w-full border-lime-300 bg-lime-300 px-0 text-[9px] uppercase tracking-[0.08em] text-zinc-950 shadow-[0_0_24px_rgba(190,242,100,0.24)] hover:border-lime-200 hover:bg-lime-200 hover:text-zinc-950 hover:shadow-[0_0_34px_rgba(190,242,100,0.4)] focus-visible:ring-lime-300/45 [&_svg]:size-3.5";
+  "h-11 w-full border-lime-300 bg-lime-300 px-0 !text-[10px] font-medium uppercase tracking-[0.04em] text-zinc-950 shadow-[0_0_24px_rgba(190,242,100,0.24)] hover:border-lime-200 hover:bg-lime-200 hover:text-zinc-950 hover:shadow-[0_0_34px_rgba(190,242,100,0.4)] focus-visible:ring-lime-300/45 [&_svg]:size-[18px]";
 
 export interface CyberProductBadge {
   label: React.ReactNode;
@@ -183,13 +183,13 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
               aria-pressed={favoriteActive}
               aria-label={favoriteLabel ?? labels.favorite}
               className={cn(
-                "absolute right-2.5 top-2.5 z-20 size-10 border bg-zinc-950/75 p-0 backdrop-blur-md focus-visible:ring-red-300/30",
+                "absolute right-2.5 top-2.5 z-20 size-10 border bg-zinc-950/75 p-0 backdrop-blur-md focus-visible:ring-red-300/30 [&_svg]:size-5",
                 favoriteActive
                   ? "border-red-300/75 bg-red-500/25 text-red-100 shadow-[0_0_24px_rgba(248,113,113,0.22)]"
                   : "border-white/15 text-zinc-300 hover:border-red-300/65 hover:bg-red-500/18 hover:text-white",
               )}
             >
-              <Heart className={cn("size-4", favoriteActive && "fill-current")} aria-hidden="true" />
+              <Heart className={cn("size-5", favoriteActive && "fill-current")} aria-hidden="true" />
             </CyberButton>
             {onCompareClick ? (
               <CyberButton
@@ -199,15 +199,11 @@ const CyberProductCard = React.forwardRef<HTMLDivElement, CyberProductCardProps>
                 onClick={onCompareClick}
                 aria-pressed={compareActive}
                 aria-label={compareLabel}
+                data-active={compareActive}
                 disabled={compareDisabled}
-                className={cn(
-                  "absolute right-2.5 top-14 z-20 size-10 border bg-zinc-950/75 p-0 backdrop-blur-md focus-visible:ring-cyan-300/30",
-                  compareActive
-                    ? "border-cyan-200/75 bg-cyan-300/22 text-cyan-50 shadow-[0_0_24px_rgba(34,211,238,0.22)]"
-                    : "border-white/15 text-zinc-300 hover:border-cyan-300/65 hover:bg-cyan-300/18 hover:text-white",
-                )}
+                className="product-compare-toggle absolute right-2.5 top-14 z-20 size-10 border p-0 backdrop-blur-md [&_svg]:size-5"
               >
-                <Scale className="size-4" aria-hidden="true" />
+                <Scale className="size-5" aria-hidden="true" />
               </CyberButton>
             ) : null}
             {hoverPanel ? (

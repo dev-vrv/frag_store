@@ -25,7 +25,6 @@ const variantClasses: Record<GeometricBackdropVariant, string[]> = {
     "left-[14%] top-[48%] h-44 w-44 border border-red-200/10 opacity-36 [clip-path:polygon(50%_0%,100%_38%,82%_100%,18%_100%,0%_38%)]",
     "right-[18%] bottom-[12%] h-36 w-36 border border-fuchsia-300/10 opacity-30 [clip-path:polygon(50%_0%,100%_50%,50%_100%,0%_50%)]",
     "left-1/2 top-[10%] h-[28rem] w-[28rem] -translate-x-1/2 rounded-full border border-white/6 opacity-24",
-    "left-[32%] bottom-[18%] h-24 w-[20rem] -rotate-[10deg] bg-[linear-gradient(90deg,transparent,rgba(255,23,68,0.09),transparent)] blur-2xl",
   ],
   catalog: [
     "left-[14%] top-[52%] h-52 w-52 border border-red-200/12 opacity-48 [clip-path:polygon(50%_0%,100%_38%,82%_100%,18%_100%,0%_38%)]",

@@ -15,7 +15,6 @@ import {
 } from "lucide-react";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
-import { ContactCyberBackground } from "@/components/Pages/ContactsPage/ContactCyberBackground";
 import { ProfileDetailsForm } from "@/components/Pages/ProfileDetailsForm";
 import { ProfileOrdersPanel } from "@/components/Pages/ProfileOrdersPanel";
 import { ProfileLogoutButton } from "@/components/Pages/ProfileLogoutButton";
@@ -53,9 +52,8 @@ export function ProfilePage({ locale, dictionary, user }: ProfilePageProps) {
         : "Выключена";
 
   return (
-    <main className="page-shell relative isolate overflow-hidden bg-[radial-gradient(circle_at_top,rgba(var(--theme-contrast-rgb),0.06),transparent_22%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),1)_0%,rgba(var(--theme-surface-rgb),1)_38%,rgba(var(--theme-surface-rgb),1)_100%)] px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative isolate overflow-hidden bg-transparent px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
-      <ContactCyberBackground />
       <section className="relative z-10 w-full max-w-7xl mx-auto pb-16">
         <div className="grid items-start gap-6 xl:grid-cols-[380px_minmax(0,1fr)]">
           <div className="xl:self-start">

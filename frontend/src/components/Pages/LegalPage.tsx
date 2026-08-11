@@ -3,7 +3,6 @@ import { FileText } from "lucide-react";
 import { CyberBadge } from "@/components/cyber";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
-import { ContactCyberBackground } from "@/components/Pages/ContactsPage/ContactCyberBackground";
 import { ContactPanel } from "@/components/Pages/ContactsPage/ContactPanel";
 import { type Dictionary, type Locale } from "@/lib/i18n";
 
@@ -165,9 +164,8 @@ export function LegalPage({ locale, dictionary, page }: LegalPageProps) {
   const pageDictionary = dictionary.pages[page];
 
   return (
-    <main className="page-shell relative isolate overflow-hidden bg-surface px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative isolate overflow-hidden bg-transparent px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
-      <ContactCyberBackground />
 
       <section className="relative z-10 mx-auto w-full max-w-7xl">
         <CyberBadge variant="red" glow>

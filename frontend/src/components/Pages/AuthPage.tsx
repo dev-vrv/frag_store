@@ -123,34 +123,6 @@ export function AuthPage({ locale, dictionary }: AuthPageProps) {
         mode === "login" ? "selection:bg-red-400/30" : "selection:bg-fuchsia-400/30",
       )}
     >
-      <div className="absolute inset-0 -z-30">
-        <div
-          className={cn(
-            "absolute inset-0 bg-[radial-gradient(circle_at_18%_24%,rgba(255,23,68,0.3),transparent_31%),radial-gradient(circle_at_78%_18%,rgba(127,29,29,0.42),transparent_30%),radial-gradient(circle_at_58%_78%,rgba(217,70,239,0.08),transparent_24%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),1)_0%,rgba(var(--theme-surface-rgb),1)_48%,rgba(var(--theme-surface-rgb),1)_100%)] transition-opacity duration-700",
-            mode === "login" ? "opacity-100" : "opacity-0",
-          )}
-        />
-        <div
-          className={cn(
-            "absolute inset-0 bg-[radial-gradient(circle_at_16%_22%,rgba(34,211,238,0.18),transparent_28%),radial-gradient(circle_at_82%_16%,rgba(217,70,239,0.34),transparent_32%),radial-gradient(circle_at_62%_78%,rgba(59,130,246,0.14),transparent_24%),linear-gradient(180deg,rgba(var(--theme-surface-rgb),1)_0%,rgba(var(--theme-surface-rgb),1)_52%,rgba(var(--theme-surface-rgb),1)_100%)] transition-opacity duration-700",
-            mode === "register" ? "opacity-100" : "opacity-0",
-          )}
-        />
-      </div>
-      <div className="absolute inset-0 -z-20">
-        <div
-          className={cn(
-            "absolute inset-0 bg-[radial-gradient(circle_at_22%_30%,rgba(255,23,68,0.14),transparent_34%),radial-gradient(circle_at_72%_72%,rgba(190,242,100,0.08),transparent_24%)] transition-opacity duration-700",
-            mode === "login" ? "opacity-100" : "opacity-0",
-          )}
-        />
-        <div
-          className={cn(
-            "absolute inset-0 bg-[radial-gradient(circle_at_24%_28%,rgba(34,211,238,0.12),transparent_32%),radial-gradient(circle_at_76%_70%,rgba(217,70,239,0.14),transparent_24%)] transition-opacity duration-700",
-            mode === "register" ? "opacity-100" : "opacity-0",
-          )}
-        />
-      </div>
       <GeometricBackdrop
         className={cn("absolute inset-0 -z-20 transition-opacity duration-700", mode === "login" ? "opacity-100" : "opacity-0")}
         variant="auth-login"

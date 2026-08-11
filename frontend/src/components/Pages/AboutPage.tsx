@@ -6,7 +6,6 @@ import { CyberBadge } from "@/components/cyber";
 import { CyberButton } from "@/components/cyber";
 import { Footer } from "@/components/Footer/Footer";
 import { Header } from "@/components/Header/Header";
-import { ContactCyberBackground } from "@/components/Pages/ContactsPage/ContactCyberBackground";
 import { ContactPanel } from "@/components/Pages/ContactsPage/ContactPanel";
 import { type Dictionary, type Locale, localizePath } from "@/lib/i18n";
 
@@ -139,9 +138,8 @@ export function AboutPage({ locale, dictionary }: AboutPageProps) {
   const content = aboutContent[locale];
 
   return (
-    <main className="page-shell relative isolate overflow-hidden bg-surface px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative isolate overflow-hidden bg-transparent px-4 pt-36 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
-      <ContactCyberBackground />
 
       <section className="relative z-10 max-w-7xl mx-auto grid max-w-7xl gap-8 lg:grid-cols-[minmax(0,1fr)_24rem] lg:items-end">
         <div>

@@ -1213,7 +1213,7 @@ export function CatalogPage({
   );
 
   return (
-    <main className="page-shell relative overflow-x-clip bg-surface px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
+    <main className="page-shell relative overflow-x-clip bg-transparent px-4 pt-32 text-zinc-50 sm:px-6 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
       <div className="relative z-10">
         <section ref={catalogSectionRef} className="mx-auto w-full max-w-[100rem] py-8">
@@ -1430,10 +1430,12 @@ export function CatalogPage({
                       ) : null}
                     </div>
 
-                    <button
+                    <CyberButton
                       type="button"
+                      variant="ghost"
+                      size="sm"
                       onClick={() => setIsComparisonTrayCollapsed((current) => !current)}
-                      className="comparison-surface comparison-surface-interactive inline-flex min-h-9 shrink-0 items-center gap-2 rounded-md border px-3 py-2 text-xs uppercase tracking-[0.12em] transition"
+                      className="comparison-button h-9 min-h-9 shrink-0 px-2 text-[10px] uppercase tracking-[0.1em]"
                       aria-expanded={!isComparisonTrayCollapsed}
                       aria-label={isComparisonTrayCollapsed ? text.compareTrayExpand : text.compareTrayCollapse}
                     >
@@ -1443,7 +1445,7 @@ export function CatalogPage({
                         <ChevronDown className="size-3.5" aria-hidden="true" />
                       )}
                       <span>{isComparisonTrayCollapsed ? text.compareTrayExpand : text.compareTrayCollapse}</span>
-                    </button>
+                    </CyberButton>
                   </div>
 
                   {!isComparisonTrayCollapsed ? (
@@ -1477,17 +1479,27 @@ export function CatalogPage({
                       ) : null}
 
                       <div className="flex flex-wrap gap-2">
-                        {activeComparisonProducts.map((product) => (
-                          <button
-                            key={product.id}
-                            type="button"
-                            onClick={() => handleComparisonToggle(product)}
-                            className="comparison-surface comparison-surface-interactive inline-flex min-h-8 max-w-full items-center gap-2 rounded-md border px-2.5 py-1.5 text-left text-xs transition"
-                          >
-                            <span className="max-w-[12rem] truncate">{getLocalizedProductName(product, locale)}</span>
-                            <X className="comparison-muted size-3" aria-hidden="true" />
-                          </button>
-                        ))}
+                        {activeComparisonProducts.map((product, index) => {
+                          const productName = getLocalizedProductName(product, locale);
+
+                          return (
+                            <button
+                              key={product.id}
+                              type="button"
+                              onClick={() => handleComparisonToggle(product)}
+                              className="comparison-selected-item inline-flex min-h-11 max-w-full items-stretch border text-left text-xs transition"
+                              aria-label={`${text.compareDialog.removeProduct}: ${productName}`}
+                            >
+                              <span className="comparison-selected-index" aria-hidden="true">
+                                {String(index + 1).padStart(2, "0")}
+                              </span>
+                              <span className="max-w-[14rem] truncate px-3 py-3">{productName}</span>
+                              <span className="comparison-selected-remove" aria-hidden="true">
+                                <X className="size-3.5" />
+                              </span>
+                            </button>
+                          );
+                        })}
                       </div>
 
                       <div className="flex flex-col gap-2 sm:flex-row sm:flex-wrap sm:items-center sm:justify-end">

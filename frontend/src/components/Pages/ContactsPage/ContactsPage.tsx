@@ -3,7 +3,6 @@ import { MapPin } from "lucide-react";
 import { ContactFormCard } from "@/components/Contacts/ContactFormCard";
 import { ContactInfoCard } from "@/components/Contacts/ContactInfoCard";
 import { contactContent } from "@/components/Contacts/contact-content";
-import { ContactCyberBackground } from "@/components/Pages/ContactsPage/ContactCyberBackground";
 import { ContactPanel } from "@/components/Pages/ContactsPage/ContactPanel";
 import { CyberBadge } from "@/components/cyber";
 import { Header } from "@/components/Header/Header";
@@ -23,9 +22,8 @@ export function ContactsPage({
   const text = contactContent[locale];
 
   return (
-    <main className="page-shell relative isolate overflow-hidden bg-surface px-4 pt-32 text-zinc-50 sm:px-6 sm:pt-36 lg:px-8">
+    <main className="page-shell relative isolate overflow-hidden bg-transparent px-4 pt-32 text-zinc-50 sm:px-6 sm:pt-36 lg:px-8">
       <Header locale={locale} dictionary={dictionary.header} />
-      <ContactCyberBackground />
 
       <section className="relative z-10 mx-auto w-full max-w-7xl">
         <CyberBadge variant="neutral">
