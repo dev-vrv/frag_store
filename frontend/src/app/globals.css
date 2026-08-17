@@ -355,6 +355,10 @@
   filter: brightness(0.35) saturate(2.2) contrast(1.08);
 }
 
+:root[data-theme="light"] .theme-dark .brand-logo img {
+  filter: brightness(1.08) saturate(1.02);
+}
+
 html,
 body {
   min-height: 100%;

@@ -27,7 +27,7 @@ export interface HeaderProps {
 
 export function Header(props: HeaderProps) {
   return (
-    <Suspense fallback={<div className="fixed inset-x-0 top-0 z-50 h-20 border-b border-red-500/15 bg-zinc-950/80 backdrop-blur-xl" />}>
+    <Suspense fallback={<div className="theme-dark fixed inset-x-0 top-0 z-50 h-20 border-b border-red-500/15 bg-zinc-950/80 backdrop-blur-xl" />}>
       <HeaderContent {...props} />
     </Suspense>
   );
@@ -128,7 +128,7 @@ function HeaderContent({ locale, dictionary }: HeaderProps) {
   return (
     <header
       className={cn(
-        "fixed inset-x-0 top-0 z-50 border-b border-red-500/15 bg-zinc-950/80 backdrop-blur-xl transition-transform duration-300",
+        "theme-dark fixed inset-x-0 top-0 z-50 border-b border-red-500/15 bg-zinc-950/80 backdrop-blur-xl transition-transform duration-300",
         isHidden ? "-translate-y-full" : "translate-y-0",
       )}
     >

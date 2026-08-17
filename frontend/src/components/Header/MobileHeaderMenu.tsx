@@ -66,7 +66,7 @@ export function MobileHeaderMenu({
       </SheetTrigger>
       <SheetContent
         side="right"
-        className="w-[86vw] border-red-500/25 bg-surface/92 p-0 shadow-[0_0_44px_rgba(255,23,68,0.18)] backdrop-blur-xl"
+        className="theme-dark w-[86vw] border-red-500/25 bg-surface/92 p-0 shadow-[0_0_44px_rgba(255,23,68,0.18)] backdrop-blur-xl"
       >
         <div className="flex min-h-full flex-col">
           <SheetHeader className="border-b border-white/10 p-5">
